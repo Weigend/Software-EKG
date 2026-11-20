@@ -66,7 +66,7 @@ import java.util.stream.Collectors;
  *       top - the choice says what each way needs and gives.</li>
  *   <li>Where: one step per source in use. A Prometheus server is one address; the systems it
  *       monitors are found, assigned to the topics and selected. Hosts read directly are named
- *       ({@link SshPage}).</li>
+ *       ({@link SshPage} for Unix, {@link WindowsPage} for Windows).</li>
  * </ol>
  * Every source becomes a data source of its own in the same analysis. Everything the user
  * does not have to decide has a default: the usual source, the essential metrics, the update
@@ -115,8 +115,8 @@ public class NewAnalysisDialog extends Dialog<Void> {
 
     private final VBox sourceRows = new VBox(16);
 
-    /** The steps of the dialog. Which of the last two are taken depends on the sources chosen. */
-    private enum Step { TOPICS, SOURCES, PROMETHEUS, SSH }
+    /** The steps of the dialog. Which of the last three are taken depends on the sources chosen. */
+    private enum Step { TOPICS, SOURCES, PROMETHEUS, SSH, WINDOWS }
 
     private List<Step> steps = List.of(Step.TOPICS);
 
@@ -126,6 +126,13 @@ public class NewAnalysisDialog extends Dialog<Void> {
     private Node sourcePage;
     private Node connectionPage;
     private SshPage sshPage;
+    private WindowsPage windowsPage;
+
+    /**
+     * Why this AWB cannot read Windows performance counters - it does not run on Windows -
+     * or {@code null} if it can.
+     */
+    private final String windowsProblem;
 
     /** How many of the plans of this dialog are started already; a retry goes on after them. */
     private int plansStarted;
@@ -161,6 +168,7 @@ public class NewAnalysisDialog extends Dialog<Void> {
     public NewAnalysisDialog(DataCollectionService service, String existingAnalysis) {
         this.service = service;
         this.existingAnalysis = existingAnalysis;
+        this.windowsProblem = service.windowsCountersProblem();
 
         this.startText = existingAnalysis == null ? "Start Analysis" : "Add Source";
 
@@ -178,12 +186,14 @@ public class NewAnalysisDialog extends Dialog<Void> {
         sourcePage = buildSourcePage();
         connectionPage = buildContent();
         sshPage = new SshPage(service, existingAnalysis, this::updateStartButton);
+        windowsPage = new WindowsPage(service, existingAnalysis, this::updateStartButton);
         // the name is asked wherever the last step is; it is one name
         if (existingAnalysis == null) {
             sshPage.nameProperty().bindBidirectional(nameField.textProperty());
+            windowsPage.nameProperty().bindBidirectional(nameField.textProperty());
         }
         getDialogPane().setHeader(buildHeader());
-        StackPane pages = new StackPane(topicPage, sourcePage, connectionPage, sshPage.node());
+        StackPane pages = new StackPane(topicPage, sourcePage, connectionPage, sshPage.node(), windowsPage.node());
         pages.getStyleClass().add("ekg-pages");
         getDialogPane().setContent(pages);
         getDialogPane().getStyleClass().add("ekg-wizard");
@@ -277,19 +287,35 @@ public class NewAnalysisDialog extends Dialog<Void> {
         tile.setId("tile-" + topic.name());
         tile.getStyleClass().setAll("topic-tile");
 
-        // top right: the mark of a chosen topic, or the note that the topic is not there yet
-        Label corner = new Label(topic.isAvailable() ? "\u2713" : "coming soon");
-        corner.getStyleClass().add(topic.isAvailable() ? "tile-check" : "tile-badge");
-        if (topic.isAvailable()) {
+        // top right: the mark of a chosen topic, or the note why the topic cannot be chosen
+        boolean usable = usable(topic);
+        Label corner = new Label(usable ? "\u2713" : topic.isAvailable() ? unusableNote() : "coming soon");
+        corner.getStyleClass().add(usable ? "tile-check" : "tile-badge");
+        if (usable) {
             corner.visibleProperty().bind(tile.selectedProperty());
         }
         StackPane.setAlignment(corner, Pos.TOP_RIGHT);
 
         tile.setGraphic(new StackPane(content, corner));
         fixSize(tile);
-        tile.setDisable(!topic.isAvailable());
+        tile.setDisable(!usable);
         tile.selectedProperty().addListener((o, ov, nv) -> updateStartButton());
         return tile;
+    }
+
+    /** A topic can be chosen if it is built and one of the ways to collect it can be gone here. */
+    private boolean usable(AnalysisTopic topic) {
+        return topic.isAvailable() && topic.sources().stream().anyMatch(this::usable);
+    }
+
+    /** A way can be gone if it is built and - for Windows performance counters - this is a Windows. */
+    private boolean usable(AnalysisTopic.SourceOption option) {
+        return option.available() && (option.source() != AnalysisSource.WINDOWS_COUNTERS || windowsProblem == null);
+    }
+
+    /** The few words on a tile that is built but cannot be chosen on this machine. */
+    private static String unusableNote() {
+        return System.getProperty("os.name", "").startsWith("Win") ? "not installed" : "on Windows only";
     }
 
     //=================================================================================================================
@@ -389,6 +415,9 @@ public class NewAnalysisDialog extends Dialog<Void> {
             if (chosenSources.containsValue(AnalysisSource.SSH_TOP)) {
                 next.add(Step.SSH);
             }
+            if (chosenSources.containsValue(AnalysisSource.WINDOWS_COUNTERS)) {
+                next.add(Step.WINDOWS);
+            }
             steps = next;
         }
         stepIndex++;
@@ -401,6 +430,7 @@ public class NewAnalysisDialog extends Dialog<Void> {
         sourcePage.setVisible(step == Step.SOURCES);
         connectionPage.setVisible(step == Step.PROMETHEUS);
         sshPage.node().setVisible(step == Step.SSH);
+        windowsPage.node().setVisible(step == Step.WINDOWS);
 
         showTrail(step);
         String target = existingAnalysis == null ? "" : " The data is added to the analysis '" + existingAnalysis + "'.";
@@ -420,6 +450,9 @@ public class NewAnalysisDialog extends Dialog<Void> {
             case SSH -> describeStep("Which Linux / Unix hosts do you want to read?",
                     "They are read directly, by SSH and top: nothing to install, no Prometheus needed. "
                             + "Values are collected from now on, for as long as the analysis is running." + target);
+            case WINDOWS -> describeStep("Which Windows hosts do you want to read?",
+                    "They are read directly, through their performance counters: nothing to install. "
+                            + "Values are collected from now on, for as long as the analysis is running." + target);
         }
 
         backButton.setVisible(stepIndex > 0);
@@ -430,6 +463,8 @@ public class NewAnalysisDialog extends Dialog<Void> {
             showConnectionStep();
         } else if (step == Step.SSH) {
             sshPage.focus();
+        } else if (step == Step.WINDOWS) {
+            windowsPage.focus();
         }
         updateStartButton();
     }
@@ -461,7 +496,7 @@ public class NewAnalysisDialog extends Dialog<Void> {
                 ToggleButton tile = sourceTile(topic, option);
                 tile.setToggleGroup(choice);
                 options.getChildren().add(tile);
-                if (option.source().isAvailable() && (chosenSources.get(topic) == option.source()
+                if (usable(option) && (chosenSources.get(topic) == option.source()
                         || (!chosenSources.containsKey(topic) && choice.getSelectedToggle() == null))) {
                     tile.setSelected(true);
                     chosenSources.put(topic, option.source());
@@ -488,7 +523,9 @@ public class NewAnalysisDialog extends Dialog<Void> {
         title.getStyleClass().add("tile-title");
         Label kind = new Label(option.source().isAggregating() ? "one server for all" : "each system directly");
         kind.getStyleClass().add("tile-kind");
-        Label description = new Label(option.description());
+        boolean usable = usable(option);
+        // a way that is built but cannot be gone on this machine says why
+        Label description = new Label(option.available() && !usable ? windowsProblem : option.description());
         description.getStyleClass().add("tile-description");
         description.setStyle("-fx-text-alignment: left;");
         description.setWrapText(true);
@@ -504,9 +541,9 @@ public class NewAnalysisDialog extends Dialog<Void> {
         tile.getStyleClass().setAll("topic-tile");
         tile.setUserData(option.source());
 
-        Label corner = new Label(option.source().isAvailable() ? "\u2713" : "coming soon");
-        corner.getStyleClass().add(option.source().isAvailable() ? "tile-check" : "tile-badge");
-        if (option.source().isAvailable()) {
+        Label corner = new Label(usable ? "\u2713" : option.available() ? unusableNote() : "coming soon");
+        corner.getStyleClass().add(usable ? "tile-check" : "tile-badge");
+        if (usable) {
             corner.visibleProperty().bind(tile.selectedProperty());
         }
         StackPane.setAlignment(corner, Pos.TOP_RIGHT);
@@ -514,7 +551,7 @@ public class NewAnalysisDialog extends Dialog<Void> {
         tile.setGraphic(new StackPane(content, corner));
         tile.setAlignment(Pos.TOP_LEFT);
         fixSize(tile);
-        tile.setDisable(!option.source().isAvailable());
+        tile.setDisable(!usable);
         return tile;
     }
 
@@ -978,6 +1015,9 @@ public class NewAnalysisDialog extends Dialog<Void> {
         if (steps.contains(Step.SSH)) {
             plans.add(sshPage.plan(name));
         }
+        if (steps.contains(Step.WINDOWS)) {
+            plans.add(windowsPage.plan(name));
+        }
         if (plans.isEmpty()) {
             return;
         }
@@ -1023,6 +1063,8 @@ public class NewAnalysisDialog extends Dialog<Void> {
     private void showProgress(String text, boolean problem) {
         if (currentStep() == Step.SSH) {
             sshPage.showMessage(text, problem);
+        } else if (currentStep() == Step.WINDOWS) {
+            windowsPage.showMessage(text, problem);
         } else {
             statusLabel.setStyle(problem ? "-fx-text-fill: #b42318;" : "");
             statusLabel.setText(text);
@@ -1033,7 +1075,7 @@ public class NewAnalysisDialog extends Dialog<Void> {
         if (startButton == null) {
             return;
         }
-        if (steps == null || sshPage == null) {
+        if (steps == null || sshPage == null || windowsPage == null) {
             return;
         }
         switch (currentStep()) {
@@ -1047,6 +1089,10 @@ public class NewAnalysisDialog extends Dialog<Void> {
             }
             case SSH -> {
                 startButton.setDisable(!sshPage.isComplete());
+                return;
+            }
+            case WINDOWS -> {
+                startButton.setDisable(!windowsPage.isComplete());
                 return;
             }
             default -> {

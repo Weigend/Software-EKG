@@ -83,4 +83,51 @@ public class WindowsPerformanceMetricDefinitionAccessTest {
             Assert.assertNotNull(e.getMessage());
         }
     }
+
+    /**
+     * The names of the counters are known in English and in the language of this Windows, so a
+     * counter written in English is read whatever that language is.
+     */
+    @Test
+    public void testEnglishNamesAreReadOnThisWindows() throws Exception {
+
+        WindowsCounters.assumeAvailable();
+
+        WindowsPerformanceCounterAccess wpc = new WindowsPerformanceCounterAccess();
+        String[] english = wpc.englishNames();
+        Assert.assertNotNull(english);
+        java.util.List<String> names = Arrays.asList(english);
+        Assert.assertTrue("an even list of numbers and names: " + english.length, english.length > 1000 && english.length % 2 == 0);
+        int processor = names.indexOf("Processor");
+        Assert.assertTrue("the list has no 'Processor'", processor > 0);
+        String local = wpc.lookupName(Integer.parseInt(english[processor - 1]));
+        Assert.assertNotNull("the processor has no name on this Windows", local);
+        Assert.assertNull(wpc.lookupName(Integer.MAX_VALUE));
+
+        Assert.assertTrue(WindowsCounterProbe.isAvailable());
+        double[] values = WindowsCounterProbe.read("localhost", java.util.List.of(
+                "\\Memory\\Available Bytes", "\\System\\Threads", "\\No Such Object\\No Such Counter"));
+        Assert.assertTrue("available memory: " + Arrays.toString(values), values[0] > 0);
+        Assert.assertTrue("threads: " + Arrays.toString(values), values[1] > 0);
+        Assert.assertEquals("a counter that is not there has no value", -1, values[2], 0);
+    }
+
+    /**
+     * What the setup of a collection asks: which processes run here? This test runs in one.
+     */
+    @Test
+    public void testProbeFindsTheProcesses() throws Exception {
+
+        WindowsCounters.assumeAvailable();
+
+        java.util.List<String> counters = WindowsCounterProbe.expand("localhost", "\\Process(*)\\Working Set");
+        java.util.List<String> processes = counters.stream().map(WindowsCounterProbe::instanceOf)
+                .collect(java.util.stream.Collectors.toList());
+        Assert.assertTrue("no java among " + processes, processes.stream().anyMatch(name -> name.startsWith("java")));
+
+        double[] memory = WindowsCounterProbe.readPaths(counters);
+        Assert.assertEquals(counters.size(), memory.length);
+        Assert.assertTrue("no process uses memory: " + Arrays.toString(memory),
+                Arrays.stream(memory).anyMatch(value -> value > 0));
+    }
 }

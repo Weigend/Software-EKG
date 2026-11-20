@@ -22,7 +22,7 @@ public enum AnalysisSource {
 
     JMX("JMX", false, false),
 
-    WINDOWS_COUNTERS("Performance Counters", false, false),
+    WINDOWS_COUNTERS("Performance Counters", false, true),
 
     POSTGRES("PostgreSQL", false, false);
 

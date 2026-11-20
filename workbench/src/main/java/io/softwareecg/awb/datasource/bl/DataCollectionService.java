@@ -9,6 +9,7 @@ import io.softwareecg.awb.da.api.types.Embedded;
 import io.softwareecg.awb.datasource.bl.prometheus.PrometheusDiscovery;
 import io.softwareecg.awb.datasource.bl.ssh.SshDiscovery;
 import io.softwareecg.awb.datasource.bl.ssh.SshPlan;
+import io.softwareecg.awb.datasource.bl.windows.WindowsDiscovery;
 import io.softwareecg.awb.datasource.bl.prometheus.PrometheusEnvironment;
 import io.softwareecg.awb.project.api.ProjectDataAccessService;
 import io.softwareecg.awb.project.api.ProjectDataCollection;
@@ -137,6 +138,26 @@ public class DataCollectionService implements ProjectDataCollection {
      */
     public List<SshDiscovery.HostCheck> inspectHosts(List<SshPlan.Host> hosts, String username, String password) {
         return SshDiscovery.inspect(hosts, username, password);
+    }
+
+    /**
+     * Says why Windows performance counters cannot be read by this AWB: it does not run on
+     * Windows, or the library that reads them is missing.
+     *
+     * @return the reason in words for the user, {@code null} if they can be read
+     */
+    public String windowsCountersProblem() {
+        return WindowsDiscovery.problem();
+    }
+
+    /**
+     * Looks at Windows hosts that are to be read through their performance counters: whether
+     * that works from this machine, and which processes run there.
+     *
+     * @return one result per host; a host that cannot be read says why
+     */
+    public List<WindowsDiscovery.HostCheck> inspectWindowsHosts(List<SshPlan.Host> hosts) {
+        return WindowsDiscovery.inspect(hosts);
     }
 
     /**

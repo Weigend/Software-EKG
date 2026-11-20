@@ -51,6 +51,21 @@ JNIEXPORT void JNICALL Java_io_softwareecg_collector_source_wincount_WindowsPerf
 JNIEXPORT void JNICALL Java_io_softwareecg_collector_source_wincount_WindowsPerformanceCounterAccess_init
    (JNIEnv *, jclass);
 
+/*
+ * Class:     io_softwareecg_collector_source_wincount_WindowsPerformanceCounterAccess
+ * Method:    englishNames
+ * Signature: ()[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_io_softwareecg_collector_source_wincount_WindowsPerformanceCounterAccess_englishNames
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     io_softwareecg_collector_source_wincount_WindowsPerformanceCounterAccess
+ * Method:    lookupName
+ * Signature: (I)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_io_softwareecg_collector_source_wincount_WindowsPerformanceCounterAccess_lookupName
+  (JNIEnv *, jobject, jint);
 
 #ifdef __cplusplus
 }

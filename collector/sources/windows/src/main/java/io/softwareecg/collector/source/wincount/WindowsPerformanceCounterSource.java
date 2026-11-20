@@ -54,7 +54,27 @@ public class WindowsPerformanceCounterSource extends AbstractCounterSource imple
     /**
      * The native methods are encapsulated here.
      */
-    private final WindowsPerformanceCounterAccess nativeIf = new WindowsPerformanceCounterAccess();
+    private final WindowsPerformanceCounterAccess nativeIf;
+
+    /**
+     * Knows the counters by their English names, whatever the language of this Windows.
+     */
+    private final CounterNames names;
+
+    /**
+     * The source of the collector.
+     */
+    public WindowsPerformanceCounterSource() {
+        this(new WindowsPerformanceCounterAccess());
+    }
+
+    /**
+     * @param nativeIf the access to the counters. A seam for tests.
+     */
+    WindowsPerformanceCounterSource(WindowsPerformanceCounterAccess nativeIf) {
+        this.nativeIf = nativeIf;
+        this.names = new CounterNames(nativeIf);
+    }
 
     /**
      * Bulk query.
@@ -116,7 +136,8 @@ public class WindowsPerformanceCounterSource extends AbstractCounterSource imple
         MetricDefinition[] metricDefinitions = descriptor.getMetricDefinitions();
         Set<MetricDefinition> expandedMetricDefinition = new HashSet<>();
         for (MetricDefinition c : metricDefinitions) {
-            String wincounter = "\\\\" + getHostnameForWin7(descriptor.getNodeAddress()) + c.getDefinition();
+            // a counter can be written with its English names on a Windows of every language
+            String wincounter = "\\\\" + machineName(descriptor.getNodeAddress()) + names.localize(c.getDefinition());
             if (!c.useWildcard()) {
                 expandedMetricDefinition.add(new MetricDefinition(wincounter, c.getLabel()));
                 continue;
@@ -134,7 +155,8 @@ public class WindowsPerformanceCounterSource extends AbstractCounterSource imple
             }
 
             for (String newName : newNames) {
-                if (newName.equals(wincounter)) {
+                if (newName.equals(wincounter) || c.getRegexPostFilterExp() != null) {
+                    // with a filter the counters that fit it are taken, named as the label says
                     postFilterAwareAddMetric(expandedMetricDefinition, newName, c);
                 } else {
                     try {
@@ -163,7 +185,7 @@ public class WindowsPerformanceCounterSource extends AbstractCounterSource imple
      * @param hostIp the ip.
      * @return the localhost name if address is 127.0.0.1 or localhost.
      */
-    private String getHostnameForWin7(String hostIp) {
+    static String machineName(String hostIp) {
         if ("127.0.0.1".equals(hostIp) || "localhost".equals(hostIp)) {
             try {
                 return InetAddress.getLocalHost().getHostName();
