@@ -1,0 +1,22 @@
+name: Funktionswunsch
+description: Eine neue oder verbesserte Funktion vorschlagen
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Welches Problem soll gelöst werden?
+      description: Beschreibe den Analysefall, nicht nur die gewünschte Oberfläche.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Lösungsvorschlag
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Erwogene Alternativen

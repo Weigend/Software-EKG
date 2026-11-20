@@ -27,6 +27,12 @@ package io.softwareecg.collector.ssh;
 import org.junit.Test;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.util.Base64;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -83,21 +89,15 @@ public class ConnectionFactoryTest extends AbstractSshTest {
         assertThat(exceptionThrown, is(true));
         assertThat(connection.isAuthenticated(), is(false));
 
-        exceptionThrown = false;
-        try{
-            connection = ConnectionFactory.getInstance().getConnection("127.0.0.1", TEST_SERVER_PORT, "root", new File("privatekey-invalid.pem"), "");
+        Path privateKey = createTemporaryPrivateKey();
+        try {
+            connection = ConnectionFactory.getInstance().getConnection(
+                    "127.0.0.1", TEST_SERVER_PORT, "root", privateKey.toFile(), "");
             connection.connect();
-        } catch (AuthenticationFailedException e) {
-            exceptionThrown = true;
+            assertThat(connection.isAuthenticated(), is(true));
+        } finally {
+            Files.deleteIfExists(privateKey);
         }
-        // Note: The test server accepts any key, so authentication succeeds even with an "invalid" key
-        // In a real scenario, the server would reject the key
-        // assertThat(exceptionThrown, is(false));  // No exception expected  
-        // assertThat(connection.isAuthenticated(), is(false));  // Would fail with server accepting all keys
-
-        connection = ConnectionFactory.getInstance().getConnection("127.0.0.1", TEST_SERVER_PORT, "root", new File("privatekey.pem"), "");
-        connection.connect();
-        assertThat(connection.isAuthenticated(), is(true));
     }
 
     @Test
@@ -113,5 +113,18 @@ public class ConnectionFactoryTest extends AbstractSshTest {
 
         SshConnection connection3 = factory.getConnection("127.0.0.1", 1, "test1", "test2");
         assertThat(connection1, is(not(equalTo(connection3))));
+    }
+
+    private Path createTemporaryPrivateKey() throws Exception {
+        KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
+        generator.initialize(2048);
+        KeyPair keyPair = generator.generateKeyPair();
+        String encodedKey = Base64.getMimeEncoder(64, new byte[]{'\n'})
+                .encodeToString(keyPair.getPrivate().getEncoded());
+        String pem = "-----BEGIN PRIVATE KEY-----\n" + encodedKey
+                + "\n-----END PRIVATE KEY-----\n";
+        Path keyFile = Files.createTempFile("software-ekg-test-key-", ".pem");
+        Files.writeString(keyFile, pem, StandardCharsets.US_ASCII);
+        return keyFile;
     }
 }

@@ -4,6 +4,10 @@
 
 # Software-EKG 7x
 
+[![Build and Test](https://github.com/Weigend/Software-EKG/actions/workflows/build.yml/badge.svg)](https://github.com/Weigend/Software-EKG/actions/workflows/build.yml)
+[![Latest release](https://img.shields.io/github/v/release/Weigend/Software-EKG)](https://github.com/Weigend/Software-EKG/releases/latest)
+[![License](https://img.shields.io/github/license/Weigend/Software-EKG)](LICENSE)
+
 > Mit dem Software-EKG sucht ein Analyst die Nadel im Heuhaufen.
 
 Das Software-EKG ist eine Workbench für die vergleichende Analyse von Softwaresystemen. Der Name ist wörtlich gemeint: Wie ein EKG die Signale des Herzens über die Zeit aufzeichnet, zeichnet das Software-EKG gezielt die Messwerte der Systeme, Server und Anwendungen auf, die zusammen einen Anwendungscluster, ein verteiltes System oder einen Serververbund bilden. Legt man die Kurven übereinander, fällt auf, welche Komponente wann aus dem Takt gerät.
@@ -222,3 +226,7 @@ Eine neue Collector Source oder ein neues Repository ist weiterhin ein kleines P
 ## Lizenz
 
 Apache License 2.0, siehe [LICENSE](LICENSE) und [NOTICE](NOTICE).
+
+Sicherheitslücken bitte nicht als öffentliches Issue melden. Der vertrauliche Meldeweg und die
+unterstützten Versionen stehen in [SECURITY.md](SECURITY.md). Hinweise für Beiträge finden sich
+in [CONTRIBUTING.md](CONTRIBUTING.md).

@@ -1,0 +1,49 @@
+name: Fehler melden
+description: Einen reproduzierbaren Fehler in Software-EKG melden
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Danke für die Meldung. Entferne bitte Zugangsdaten und interne Systeminformationen.
+  - type: input
+    id: version
+    attributes:
+      label: Software-EKG-Version
+      placeholder: z. B. 7.1.0
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Umgebung
+      description: Betriebssystem, Architektur und JDK-Version
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduktionsschritte
+      description: Welche möglichst kleinen Schritte lösen den Fehler aus?
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Erwartetes Verhalten
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Tatsächliches Verhalten und Logs
+      description: Bereinigte Logauszüge oder Screenshots; keine Zugangsdaten oder Produktionsdaten.
+    validations:
+      required: true
+  - type: checkboxes
+    id: security
+    attributes:
+      label: Sicherheit
+      options:
+        - label: Diese Meldung enthält keine Sicherheitslücke; Sicherheitslücken melde ich nach SECURITY.md vertraulich.
+          required: true
