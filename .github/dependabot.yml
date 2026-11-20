@@ -6,9 +6,21 @@ updates:
       interval: weekly
     open-pull-requests-limit: 10
     groups:
+      # Minor and patch updates arrive together in one pull request. Major updates are
+      # left out of the group, so each of them gets its own pull request and can be
+      # tested and reverted on its own.
       maven-dependencies:
         patterns:
           - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      # The project is built with JDK 25 and the JavaFX 25 that the Liberica Full JDK
+      # bundles. JavaFX moves to the next major version together with the JDK.
+      - dependency-name: "org.openjfx:*"
+        update-types:
+          - "version-update:semver-major"
 
   - package-ecosystem: github-actions
     directory: /
