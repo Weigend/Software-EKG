@@ -72,11 +72,11 @@ Das Bild zeigt die CPU-Last des WebLogic-Java-Prozesses auf elf Knoten eines Clu
 
 | Eigenschaft | Umsetzung in Version 7 |
 | --- | --- |
-| Lange Zeiträume aus der Produktion anzeigen | Jede Serie liegt als Binärblock mit Start, Ende und Dimensionen im Speicher ([schema.xml](../awb/awb-da/awb-da-solr/src/main/solr/ekgdata/conf/schema.xml)); Solr oder ClickHouse als spaltenorientierte Ablage |
-| Datenmenge je Zoomstufe begrenzen | Vektorisierung bei der Anzeige: Value-Change behält bei konstantem Verlauf nur die Wechselpunkte, LTTB und Douglas-Peucker reduzieren auf eine feste Punktzahl je Serie ([simplification](../awb/awb-metricanalyzer/awb-metricanalyzer-bl/src/main/java/io/softwareecg/awb/metricanalyzer/bl/visualisation/simplification/)) |
+| Lange Zeiträume aus der Produktion anzeigen | Jede Serie liegt als Binärblock mit Start, Ende und Dimensionen im Speicher ([schema.xml](../workbench/src/main/solr/ekgdata/conf/schema.xml)); Solr oder ClickHouse als spaltenorientierte Ablage |
+| Datenmenge je Zoomstufe begrenzen | Vektorisierung bei der Anzeige: Value-Change behält bei konstantem Verlauf nur die Wechselpunkte, LTTB und Douglas-Peucker reduzieren auf eine feste Punktzahl je Serie ([simplification](../workbench/src/main/java/io/softwareecg/awb/metricanalyzer/bl/visualisation/simplification/)) |
 | Viele Serien in einem Bild | Wildcards auf Host, Namespace, Service, Pod, Container und weiteren Dimensionen |
 | Rohdaten statt verdichteter Schritte | Der Prometheus-Import holt die Samples über einen Bereichsselektor |
-| Agent an den Daten | AI-Chat mit Werkzeugen für Chart-Ausschnitt, Metrikliste, Zeitreihenabfrage und SSH-Kommandos ([tools](../awb/awb-aichat/awb-aichat-bl/src/main/java/io/softwareecg/awb/aichat/bl/tools/)) |
+| Agent an den Daten | AI-Chat mit Werkzeugen für Chart-Ausschnitt, Metrikliste, Zeitreihenabfrage und SSH-Kommandos ([tools](../workbench/src/main/java/io/softwareecg/awb/aichat/bl/tools/)) |
 | Stellen festhalten und weitergeben | Bookmarks und Bookmark-Gruppen, Export als PNG und Excel |
 
 Die Technik ist das Mittel, nicht die Position. Der Kern ist die vergleichende Analyse durch einen Menschen.

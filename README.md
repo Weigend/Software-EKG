@@ -4,23 +4,68 @@
 
 # Software-EKG 7x
 
-Software-EKG erfasst gezielt technische Messwerte und macht sie in einer JavaFX-Workbench als Zeitreihen analysierbar. Es ist kein Grafana-Ersatz, sondern ein Werkzeugkasten für konkrete Performance- und Diagnosefälle: Eine Datenquelle anbinden, nur die relevanten Werte sammeln, lokal oder in einer entfernten Datenbank speichern und unmittelbar untersuchen.
+> Mit dem Software-EKG sucht ein Analyst die Nadel im Heuhaufen.
 
-Dieses Repository ist die konsolidierte Variante von AWB, AWB-SDK und Collector. Es gibt keine Gitlinks oder voneinander versionierte EKG-Teilprojekte mehr. Implementierungsdetails der Workbench sind Java-Pakete statt Maven-Artefakte; echte Laufzeit- und Erweiterungsgrenzen des Collectors bleiben Module.
+Das Software-EKG ist eine Workbench für die vergleichende Analyse von Softwaresystemen. Der Name ist wörtlich gemeint: Wie ein EKG die Signale des Herzens über die Zeit aufzeichnet, zeichnet das Software-EKG gezielt die Messwerte der Systeme, Server und Anwendungen auf, die zusammen einen Anwendungscluster, ein verteiltes System oder einen Serververbund bilden. Legt man die Kurven übereinander, fällt auf, welche Komponente wann aus dem Takt gerät.
 
-![Software-EKG Workbench mit Explorer, Zeitreihen-Chart der JVM-Heap-Nutzung und About-Dialog](docs/images/fullscreen.png)
+![CPU-Last des WebLogic-Prozesses auf elf Knoten eines Clusters, eine Woche im März 2015](docs/images/beispiel-cpu-cluster-2015.png)
 
-## Wofür es gedacht ist
+Das Bild zeigt die CPU-Last desselben Java-Prozesses auf elf Knoten eines Clusters über eine Woche. Man sieht, dass die Anwendung nur tagsüber von Montag bis Freitag genutzt wird und dass ein Server die ganze Woche deutlich über den anderen liegt. Warum das so ist, sagt das Bild nicht. Es liefert aber die drei Angaben, auf die es ankommt: welcher Server, welcher Zeitraum und womit man ihn vergleicht. Die Ursache war am Ende ein fehlerhaftes Load Balancing im Client; der ganze Fall steht in [docs/positionierung.md](docs/positionierung.md#ein-beispiel).
 
-Das Software-EKG ist ein Expertenwerkzeug für den Software-Notarzt, den Performance Engineer oder den Troubleshooter: für jemanden, der schnell verstehen will, was wo läuft und welche Probleme die Systeme haben. Das Ziel ist eine Root-Cause-Analyse.
+## Die Fragen, um die es geht
 
-Der Name ist wörtlich gemeint: Wie ein EKG die Signale des Herzens über die Zeit aufzeichnet, zeichnet das Software-EKG gezielt die Messwerte der Systeme, Server und Anwendungen auf, die zusammen einen Anwendungscluster, ein verteiltes System oder einen Serververbund bilden. Legt man die Kurven nebeneinander, fällt auf, welche Komponente wann aus dem Takt gerät. So findet man die Nadel im Heuhaufen.
+Der Kern ist der Vergleich. Der Analyst findet Muster, nach denen er vorher nicht gesucht hat, und viele davon liegen innerhalb aller Grenzwerte, bei denen ein Alarm auslösen würde:
 
-Neben schon vorhandenen Monitoring- und Alerting-Lösungen ist das Software-EKG oft der Einstieg in das Verständnis von Produktionsproblemen, die komplexe verteilte Systeme verursachen. Es ersetzt nicht das zentrale Monitoring, sondern dient dem Analysten als Umgebung, um die relevanten Daten aus den betroffenen Systemen zu sammeln und auszuwerten, Hypothesen zu bilden und zeitliche Unterschiede zu sehen. Falls nötig, skaliert es über Milliarden von Datenpunkten.
+- Warum steigt der Heap bei drei von fünfzig Systemen stetig?
+- Warum tritt ein Lastmuster alle vierzehn Tage auf?
+- Warum hat sich das Verhalten nach einem bestimmten Release verändert?
+- Warum zeigen zwei eigentlich gleiche Systeme unterschiedliche Verläufe?
 
-In der Regel ist das der Einstieg in ein Analyseprojekt. Ausgehend davon wird festgelegt, was genau tiefer untersucht werden soll. Dann können Speicherprofiler, CPU-Profiler, Netzwerk-Tracing-Tools oder andere Visualisierungen gezielt für die Komponenten eingesetzt werden, die bereits in der Metrikanalyse auffällig sind.
+## Für wen
+
+Das Software-EKG ist ein Expertenwerkzeug für den Software-Notarzt, den Performance Engineer oder den Troubleshooter: für jemanden, der schnell verstehen will, was wo läuft und welche Probleme die Systeme haben.
+
+Neben schon vorhandenen Monitoring- und Alerting-Lösungen ist es oft der Einstieg in das Verständnis von Produktionsproblemen, die komplexe verteilte Systeme verursachen. Es dient dem Analysten als Umgebung, um die relevanten Daten aus den betroffenen Systemen zu sammeln und auszuwerten, Hypothesen zu bilden und zeitliche Unterschiede zu sehen. Falls nötig, skaliert es über Milliarden von Datenpunkten.
+
+Es ist der erste Schritt einer Root-Cause-Analyse, nicht ihr Ende: Das EKG zeigt, seit wann, wo und im Vergleich womit etwas auffällig ist.
+
+## So arbeitet man damit
+
+![Die Workbench mit Explorer, Zeitreihen-Chart der JVM-Heap-Nutzung, AI Assistant und About-Dialog](docs/images/fullscreen.png)
+
+1. **Sammeln.** Die Workbench importiert Zeitreihen aus Prometheus. Weitere Quellen liefert der Collector, etwa Systemmetriken und Logs per SSH, JMX, Jolokia und Windows Performance Counter. Die Daten liegen lokal im eingebetteten Solr; ausgewertet wird auf dem eigenen Rechner, nicht auf den Produktionssystemen.
+2. **Vergleichen.** Der Analyst legt viele Zeitreihen in ein Bild, per Wildcard auf Cluster, Host, Prozess und Metrik, verändert das Zeitfenster und nimmt weitere Systeme dazu. Eine klare Frage hat er am Anfang oft nicht; sie entsteht beim Vergleichen.
+3. **Festhalten.** Auffällige Stellen werden als Bookmarks gespeichert und als PNG oder Excel exportiert.
+4. **Prüfen.** Der eingebaute AI Assistant hilft, eine Hypothese an den Rohdaten zu prüfen, siehe [Die Rolle der AI](#die-rolle-der-ai).
+5. **Vertiefen.** Ausgehend davon wird festgelegt, was genau tiefer untersucht werden soll. Speicherprofiler, CPU-Profiler, Netzwerk-Tracing-Tools oder andere Visualisierungen kommen dann gezielt für die Komponenten zum Einsatz, die bereits in der Metrikanalyse auffällig sind.
+
+## Die Rolle der AI
+
+AI kommt an zwei Stellen ins Spiel:
+
+1. **Bei der Analyse.** Die Workbench unterstützt die Analyse der Zeitreihen direkt durch AI. Der eingebaute AI Assistant hat Zugriff auf alle gesammelten Daten: Er sieht den aktuellen Chart-Ausschnitt, kennt die Metriken und fragt Zeitreihen selbst ab. Bei Bedarf greift er per SSH auf die Systeme selbst zu, etwa um Logs oder Prozesse anzusehen; jedes Kommando führt er erst nach Freigabe durch den Analysten aus. Als Modell dient OpenAI, Anthropic, Ollama oder ein kompatibler Endpunkt.
+2. **Beim Erweitern.** Eine Collector Source ist ein kleines Plugin: Die mitgelieferte Mock-Quelle besteht aus einer Klasse mit rund 90 Zeilen und einem ServiceLoader-Eintrag. Ein Coding-Agent schreibt eine solche Source für eine proprietäre Metrik-Schnittstelle in Minuten. So lässt sich das Werkzeug erweitern, bis es die Metriken beliebiger Schnittstellen anzeigt, siehe [Erweiterungen](#erweiterungen).
+
+## Was es nicht ist
+
+- **Kein Ersatz für das zentrale Monitoring.** Dashboards und Alarme auf dem laufenden System bleiben Sache von Werkzeugen wie Grafana. Die Workbench hat eine laufende Anzeige, sie bestätigt aber vor allem, dass Daten ankommen.
+- **Kein Anomalie-Detektor.** Die Muster findet der Mensch im Vergleich.
+- **Kein Werkzeug, das die Ursache verspricht.** Das Bild führt zum richtigen Server und zur richtigen Frage. Die Antwort steht oft in keiner Zeitreihe; sie braucht Wissen über die Architektur.
+
+## Ausprobieren
+
+Fertige Pakete für Linux x64 mit eigener Java-Laufzeit liegen auf der [Release-Seite](https://github.com/Weigend/Software-EKG/releases/latest). Entpacken und starten:
+
+```bash
+bin/software-ekg.sh      # Workbench
+./ekg-collector.sh       # Collector mit Beispielwerten
+```
+
+Für Windows und macOS gibt es noch keine fertigen Pakete; dort wird aus dem Quellcode gebaut, siehe [Distributionen](#distributionen).
 
 ## Struktur
+
+Dieses Repository ist die konsolidierte Variante von AWB, AWB-SDK und Collector. Es gibt keine Gitlinks oder voneinander versionierte EKG-Teilprojekte mehr. Implementierungsdetails der Workbench sind Java-Pakete statt Maven-Artefakte; echte Laufzeit- und Erweiterungsgrenzen des Collectors bleiben Module.
 
 | Verzeichnis | Zweck |
 | --- | --- |
