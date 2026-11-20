@@ -154,6 +154,8 @@ Without `-Pdist` the distributions need an installed Java 25 (the workbench one 
 operating system of the build and needs no installed Java. For the workbench this JDK must
 contain JavaFX (Liberica Full JDK).
 
+The packages of a release are built by the workflow [Release](.github/workflows/release.yml) for Linux x64, macOS (Apple Silicon) and Windows x64: it runs when a tag `v<version>` is pushed, starts workbench and collector from each ZIP on its platform and attaches the ZIPs to a draft release.
+
 The version is defined in exactly one place, `revision` in the root `pom.xml`. Programs and
 scripts read it from the build (`build.properties`, `version.properties`) and do not state their own.
 

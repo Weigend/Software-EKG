@@ -1,0 +1,145 @@
+name: Release
+
+# Builds the distributions of workbench and collector, each with its own Java runtime, for
+# Linux, macOS and Windows, starts every one of them once on its platform and attaches them
+# to the GitHub release of the tag.
+#
+#   git tag -a v7.2.0 -m "Software-EKG 7.2.0" && git push origin v7.2.0
+#       builds and tests the ZIPs and puts them into a draft release for that tag (or adds
+#       them to the release if it exists already). The tag has to be on a commit whose
+#       "revision" in the root pom.xml is the version of the tag.
+#
+#   Run workflow (workflow_dispatch)
+#       builds and tests the ZIPs of the chosen branch and keeps them as artifacts of the run.
+
+on:
+  push:
+    tags: [ 'v*' ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    name: Package (${{ matrix.platform }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux-x64
+          - os: macos-latest
+            platform: macos-aarch64
+          - os: windows-latest
+            platform: windows-x64
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Check out Software-EKG
+      uses: actions/checkout@v7
+
+    - name: Set up JDK 25 with JavaFX
+      # jlink cuts the runtime of the workbench from this JDK, so it has to contain JavaFX.
+      uses: actions/setup-java@v6
+      with:
+        java-version: '25'
+        distribution: 'liberica'
+        java-package: 'jdk+fx'
+        cache: maven
+
+    - name: Determine the version
+      id: version
+      run: |
+        version="$(sed -n 's:.*<revision>\(.*\)</revision>.*:\1:p' pom.xml | head -n 1)"
+        if [ -z "$version" ]; then
+          echo "::error::No <revision> found in pom.xml."
+          exit 1
+        fi
+        if [ "$GITHUB_REF_TYPE" = "tag" ] && [ "$GITHUB_REF_NAME" != "v$version" ]; then
+          echo "::error::The tag $GITHUB_REF_NAME does not fit the revision $version in pom.xml. Tag the commit that sets the release version."
+          exit 1
+        fi
+        echo "version=$version" >> "$GITHUB_OUTPUT"
+        echo "Version $version for ${{ matrix.platform }}"
+
+    - name: Install wfx into the local Maven repository
+      run: ./install-wfx.sh
+
+    - name: Build the distributions
+      # The tests ran in the workflow "Build and Test"; here the packages are built.
+      run: mvn -B clean package -DskipTests -Pdist -Dbuild.revision="${GITHUB_SHA::7}"
+
+    - name: Collect the ZIPs
+      run: |
+        version="${{ steps.version.outputs.version }}"
+        mkdir -p dist
+        cp "workbench/target/software-ekg-workbench-$version.zip" "dist/software-ekg-workbench-$version-${{ matrix.platform }}.zip"
+        cp "collector/apps/cli/product/software-ekg-collector-$version.zip" "dist/software-ekg-collector-$version-${{ matrix.platform }}.zip"
+        ls -l dist
+
+    - name: Install Xvfb (virtual display for the workbench)
+      if: runner.os == 'Linux'
+      run: sudo apt-get update && sudo apt-get install -y xvfb
+
+    - name: Start workbench and collector from the ZIPs
+      run: |
+        version="${{ steps.version.outputs.version }}"
+        test=".github/scripts/smoke-test.sh"
+        workbench="dist/software-ekg-workbench-$version-${{ matrix.platform }}.zip"
+        collector="dist/software-ekg-collector-$version-${{ matrix.platform }}.zip"
+        if [ "$RUNNER_OS" = "Linux" ]; then
+          xvfb-run -a "$test" "$workbench" "$collector"
+        else
+          "$test" "$workbench" "$collector"
+        fi
+
+    - name: Upload the ZIPs
+      uses: actions/upload-artifact@v7
+      with:
+        name: software-ekg-${{ steps.version.outputs.version }}-${{ matrix.platform }}
+        path: dist/*.zip
+        if-no-files-found: error
+        compression-level: 0
+        retention-days: 14
+
+  release:
+    name: Attach to the GitHub release
+    needs: package
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    permissions:
+      contents: write
+
+    steps:
+    - name: Download the ZIPs of all platforms
+      uses: actions/download-artifact@v8
+      with:
+        path: dist
+        merge-multiple: true
+
+    - name: Attach the ZIPs to the release
+      env:
+        GH_TOKEN: ${{ github.token }}
+        TAG: ${{ github.ref_name }}
+      run: |
+        cd dist
+        sha256sum *.zip > SHA256SUMS.txt
+        cat SHA256SUMS.txt
+        if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+          gh release upload "$TAG" *.zip SHA256SUMS.txt --clobber --repo "$GITHUB_REPOSITORY"
+        else
+          # a draft: somebody writes the release notes and publishes it
+          gh release create "$TAG" *.zip SHA256SUMS.txt --draft --verify-tag \
+            --title "Software-EKG ${TAG#v}" \
+            --notes "Built by the release workflow. Add the release notes before publishing." \
+            --repo "$GITHUB_REPOSITORY"
+        fi

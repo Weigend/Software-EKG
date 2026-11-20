@@ -155,6 +155,8 @@ JavaFX). Mit `-Pdist` schneidet `jlink` die Laufzeit aus dem JDK, mit dem gebaut
 passt dann zum Betriebssystem des Builds und braucht kein installiertes Java. Für die Workbench
 muss dieses JDK JavaFX enthalten (Liberica Full JDK).
 
+Die Pakete eines Releases baut der Workflow [Release](.github/workflows/release.yml) für Linux x64, macOS (Apple Silicon) und Windows x64: Er läuft, wenn ein Tag `v<Version>` gepusht wird, startet Workbench und Collector aus jedem ZIP auf seiner Plattform und hängt die ZIPs an einen Release-Entwurf.
+
 Die Version steht an genau einer Stelle, `revision` im Root-`pom.xml`. Programme und Skripte
 lesen sie aus dem Build (`build.properties`, `version.properties`) und nennen keine eigene.
 
