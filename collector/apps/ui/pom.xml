@@ -14,7 +14,7 @@
     <name>Software-EKG - Collector - UI</name>
 
     <properties>
-        <javafx.version>25.0.5.1</javafx.version>
+        <javafx.version>27.0.1</javafx.version>
     </properties>
 
     <dependencies>
