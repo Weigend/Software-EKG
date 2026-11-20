@@ -16,7 +16,7 @@
     </stylesheets>
 
     <ImageView id="splash.png" fitHeight="492.0" fitWidth="700.0" layoutX="-15.0" layoutY="-9.0">
-        <Image url="@../io/softwareecg/awb/application/base/about/logo-7.0.png"/>
+        <Image url="@../io/softwareecg/awb/application/base/about/logo-7.1.png"/>
     </ImageView>
 
     <Label id="splash-progress-text" fx:id="progressText" blendMode="HARD_LIGHT" layoutX="35.0" layoutY="390.0"
