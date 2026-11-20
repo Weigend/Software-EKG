@@ -1,0 +1,158 @@
+top - 09:29:15 up 16:23,  4 users,  load average: 2.36, 2.34, 2.18
+Tasks: 150 total,   1 running, 149 sleeping,   0 stopped,   0 zombie
+Cpu(s):  0.5%us,  0.7%sy,  0.0%ni, 98.8%id,  0.1%wa,  0.0%hi,  0.0%si,  0.0%st
+Mem:   4143768k total,  2235132k used,  1908636k free,   133728k buffers
+Swap:  4610644k total,        0k used,  4610644k free,   958972k cached
+
+  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND            
+31247 root      20   0  669m  65m  47m S   99  1.6  39:49.56 adtf_devenv        
+10357 root      20   0  320m  43m 8996 S    8  1.1   4:00.74 X                  
+10925 root      20   0 36156  14m  10m S    4  0.4   0:50.50 kicker             
+30695 root      RT -10  295m 295m 278m S    4  7.3   0:35.14 sched              
+30706 root      RT -10  935m 934m 232m S    2 23.1   1:43.09 eb5100asyncio      
+30707 root      RT -10  189m 189m 184m S    2  4.7   0:58.29 eb5100out          
+    1 root      20   0  2056  628  540 S    0  0.0   0:02.58 init               
+    2 root      15  -5     0    0    0 S    0  0.0   0:00.00 kthreadd           
+    3 root      RT  -5     0    0    0 S    0  0.0   0:00.02 migration/0        
+    4 root      39  19     0    0    0 S    0  0.0   0:01.52 krcud/0            
+    5 root      RT  -5     0    0    0 S    0  0.0   0:42.22 ksoftirqd/0        
+    6 root      RT  -5     0    0    0 S    0  0.0   0:00.00 migration/1        
+    7 root      39  19     0    0    0 S    0  0.0   0:01.52 krcud/1            
+    8 root      RT  -5     0    0    0 S    0  0.0   0:13.74 ksoftirqd/1        
+    9 root      RT  -5     0    0    0 S    0  0.0   0:00.30 migration/2        
+   10 root      39  19     0    0    0 S    0  0.0   0:01.42 krcud/2            
+   11 root      RT  -5     0    0    0 S    0  0.0   0:06.96 ksoftirqd/2        
+   12 root      RT  -5     0    0    0 S    0  0.0   0:00.04 migration/3        
+   13 root      39  19     0    0    0 S    0  0.0   0:00.88 krcud/3            
+   14 root      RT  -5     0    0    0 S    0  0.0   0:06.20 ksoftirqd/3        
+   15 root      15  -5     0    0    0 S    0  0.0   0:00.88 events/0           
+   16 root      15  -5     0    0    0 S    0  0.0   0:01.22 events/1           
+   17 root      15  -5     0    0    0 S    0  0.0   0:00.76 events/2           
+   18 root      15  -5     0    0    0 S    0  0.0   0:03.22 events/3           
+   19 root      15  -5     0    0    0 S    0  0.0   0:00.40 khelper            
+   22 root     -90  -5     0    0    0 S    0  0.0   0:00.00 ltmrd              
+  124 root      15  -5     0    0    0 S    0  0.0   0:00.02 kblockd/0          
+  125 root      15  -5     0    0    0 S    0  0.0   0:00.02 kblockd/1          
+  126 root      15  -5     0    0    0 S    0  0.0   0:00.00 kblockd/2          
+  127 root      15  -5     0    0    0 S    0  0.0   0:00.00 kblockd/3          
+  128 root      15  -5     0    0    0 S    0  0.0   0:00.00 kacpid             
+  129 root      15  -5     0    0    0 S    0  0.0   0:00.00 kacpi_notify       
+  245 root      15  -5     0    0    0 S    0  0.0   0:00.00 ata/0              
+  246 root      15  -5     0    0    0 S    0  0.0   0:00.00 ata/1              
+  247 root      15  -5     0    0    0 S    0  0.0   0:00.00 ata/2              
+  248 root      15  -5     0    0    0 S    0  0.0   0:00.00 ata/3              
+  249 root      15  -5     0    0    0 S    0  0.0   0:00.00 ata_aux            
+  250 root      15  -5     0    0    0 S    0  0.0   0:00.00 ksuspend_usbd      
+  256 root      15  -5     0    0    0 S    0  0.0   0:00.00 khubd              
+  259 root      15  -5     0    0    0 S    0  0.0   0:00.00 kseriod            
+  314 root      20   0     0    0    0 S    0  0.0   0:00.00 pdflush            
+  315 root      20   0     0    0    0 S    0  0.0   0:01.58 pdflush            
+  316 root      15  -5     0    0    0 S    0  0.0   0:00.00 kswapd0            
+  317 root      15  -5     0    0    0 S    0  0.0   0:00.00 aio/0              
+  318 root      15  -5     0    0    0 S    0  0.0   0:00.00 aio/1              
+  319 root      15  -5     0    0    0 S    0  0.0   0:00.00 aio/2              
+  320 root      15  -5     0    0    0 S    0  0.0   0:00.00 aio/3              
+  323 root      15  -5     0    0    0 S    0  0.0   0:00.00 nfsiod             
+  325 root      15  -5     0    0    0 S    0  0.0   0:00.00 xfslogd/0          
+  326 root      15  -5     0    0    0 S    0  0.0   0:00.00 xfslogd/1          
+  327 root      15  -5     0    0    0 S    0  0.0   0:00.00 xfslogd/2          
+  328 root      15  -5     0    0    0 S    0  0.0   0:00.00 xfslogd/3          
+  329 root      15  -5     0    0    0 S    0  0.0   0:00.00 xfsdatad/0         
+  330 root      15  -5     0    0    0 S    0  0.0   0:00.00 xfsdatad/1         
+  331 root      15  -5     0    0    0 S    0  0.0   0:00.00 xfsdatad/2         
+  332 root      15  -5     0    0    0 S    0  0.0   0:00.00 xfsdatad/3         
+  333 root      15  -5     0    0    0 S    0  0.0   0:00.00 xfs_mru_cache      
+  334 root      15  -5     0    0    0 S    0  0.0   0:13.48 gfs2_scand         
+  335 root      15  -5     0    0    0 S    0  0.0   0:00.00 glock_workqueue    
+  336 root      15  -5     0    0    0 S    0  0.0   0:00.00 glock_workqueue    
+  337 root      15  -5     0    0    0 S    0  0.0   0:00.00 glock_workqueue    
+  338 root      15  -5     0    0    0 S    0  0.0   0:00.00 glock_workqueue    
+ 1047 root      15  -5     0    0    0 S    0  0.0   0:00.00 netxen             
+ 1050 root      15  -5     0    0    0 S    0  0.0   0:00.00 sfc_refill/0       
+ 1051 root      15  -5     0    0    0 S    0  0.0   0:00.00 sfc_refill/1       
+ 1052 root      15  -5     0    0    0 S    0  0.0   0:00.00 sfc_refill/2       
+ 1053 root      15  -5     0    0    0 S    0  0.0   0:00.00 sfc_refill/3       
+ 1084 root      15  -5     0    0    0 S    0  0.0   0:00.00 scsi_tgtd/0        
+ 1085 root      15  -5     0    0    0 S    0  0.0   0:00.00 scsi_tgtd/1        
+ 1086 root      15  -5     0    0    0 S    0  0.0   0:00.00 scsi_tgtd/2        
+ 1087 root      15  -5     0    0    0 S    0  0.0   0:00.00 scsi_tgtd/3        
+ 1100 root      15  -5     0    0    0 S    0  0.0   0:00.00 iscsi_eh           
+ 1131 root      15  -5     0    0    0 S    0  0.0   0:00.00 scsi_eh_0          
+ 1134 root      15  -5     0    0    0 S    0  0.0   0:00.00 scsi_eh_1          
+ 1137 root      15  -5     0    0    0 S    0  0.0   0:00.00 scsi_eh_2          
+ 1140 root      15  -5     0    0    0 S    0  0.0   0:00.00 scsi_eh_3          
+ 1143 root      15  -5     0    0    0 S    0  0.0   0:00.00 scsi_eh_4          
+ 1146 root      15  -5     0    0    0 S    0  0.0   0:00.00 scsi_eh_5          
+ 1241 root      15  -5     0    0    0 S    0  0.0   0:00.00 kpsmoused          
+ 1259 root      15  -5     0    0    0 S    0  0.0   0:00.00 rpciod/0           
+ 1260 root      15  -5     0    0    0 S    0  0.0   0:00.00 rpciod/1           
+ 1261 root      15  -5     0    0    0 S    0  0.0   0:00.00 rpciod/2           
+ 1262 root      15  -5     0    0    0 S    0  0.0   0:00.00 rpciod/3           
+ 1274 root      15  -5     0    0    0 S    0  0.0   0:01.78 kjournald          
+ 1367 root      16  -4  2432  892  376 S    0  0.0   0:00.18 udevd              
+ 3282 root      20   0     0    0    0 D    0  0.0   0:00.02 dpc thread         
+ 5840 root      20   0  2180  912  688 R    0  0.0   0:00.00 top                
+ 8184 root      15  -5     0    0    0 S    0  0.0   0:00.00 kstriped           
+ 8631 root      20   0  1712  608  512 S    0  0.0   0:00.26 syslogd            
+ 8638 root      20   0  1664  392  328 S    0  0.0   0:00.00 klogd              
+ 8651 rpc       20   0  1800  544  456 S    0  0.0   0:00.00 portmap            
+ 8672 rpcuser   20   0  1844  720  624 S    0  0.0   0:00.00 rpc.statd          
+ 8684 dbus      20   0  2740  736  580 S    0  0.0   0:00.00 dbus-daemon        
+ 8719 root      20   0  1664  532  448 S    0  0.0   0:00.00 acpid              
+ 8855 root      20   0  6984 1040  664 S    0  0.0   0:00.02 sshd               
+ 8874 root      20   0  9996 2800 2228 S    0  0.1   0:00.02 sshd               
+ 8877 root      20   0  9996 2872 2252 S    0  0.1   0:13.78 sshd               
+ 8878 root      20   0  2712  860  692 S    0  0.0   0:00.08 xinetd             
+ 8953 root      20   0  1728  384  276 S    0  0.0   0:00.00 nslm               
+ 8991 root      20   0  5252 1104  572 S    0  0.0   0:00.56 crond              
+ 9032 xfs       20   0  6448 4612 1172 S    0  0.1   0:00.44 xfs                
+ 9062 root      20   0  2236  420  304 S    0  0.0   0:00.00 atd                
+ 9162 root      20   0  2736  352  256 S    0  0.0   0:00.00 nstar.d            
+10030 root      20   0  1648  416  364 S    0  0.0   0:00.00 mingetty           
+10035 root      20   0  1648  416  364 S    0  0.0   0:00.00 mingetty           
+10037 root      20   0  1648  416  364 S    0  0.0   0:00.00 mingetty           
+10038 root      20   0  1648  416  364 S    0  0.0   0:00.00 mingetty           
+10039 root      20   0  1648  416  364 S    0  0.0   0:00.00 mingetty           
+10040 root      20   0  1648  416  364 S    0  0.0   0:00.00 mingetty           
+10043 root      20   0  3084  760  632 S    0  0.0   0:00.04 kdm                
+10405 root      20   0  4108 1376 1080 S    0  0.0   0:00.02 kdm                
+10786 root      20   0  4476 1092  952 S    0  0.0   0:00.06 startkde           
+10819 root      20   0  6472  596  276 S    0  0.0   0:00.14 ssh-agent          
+10855 root      20   0  2764  500  404 S    0  0.0   0:00.00 dbus-launch        
+10856 root      20   0  2740  380  252 S    0  0.0   0:00.00 dbus-daemon        
+10906 root      20   0 28204 3032 1816 S    0  0.1   0:00.06 kdeinit            
+10909 root      20   0 17288 1844 1428 S    0  0.0   0:00.02 dcopserver         
+10911 root      20   0 29420 5828 4796 S    0  0.1   0:00.22 klauncher          
+10913 root      20   0 33632  11m 9548 S    0  0.3   0:02.36 kded               
+10918 root      20   0  1644  316  260 S    0  0.0   0:00.04 kwrapper           
+10920 root      20   0 24388 6032 4828 S    0  0.1   0:00.04 ksmserver          
+10921 root      20   0 26372 9340 7616 S    0  0.2   0:00.42 kwin               
+10923 root      20   0 33416  12m 9580 S    0  0.3   0:01.60 kdesktop           
+10927 root      20   0 28320 4752 3512 S    0  0.1   0:00.00 kio_file           
+10932 root     -51   0 10120 5264 3844 S    0  0.1   0:01.04 artsd              
+10935 root      20   0 24380 6196 4984 S    0  0.1   0:00.02 kaccess            
+10936 root      20   0 33936  11m 9580 S    0  0.3   0:00.12 konsole            
+10968 root      20   0 28560 7624 6176 S    0  0.2   0:01.40 klipper            
+10980 root      20   0  4656 1436 1164 S    0  0.0   0:00.00 bash               
+30264 root      20   0  4472 1024  904 S    0  0.0   0:00.00 cfgsrv.sh          
+30279 root      20   0  4476  516  392 S    0  0.0   0:00.00 cfgsrv.sh          
+30281 root      10 -10  265m 155m 153m S    0  3.8   0:09.59 cfgsrv             
+30286 root      10 -10  3012 1224  952 S    0  0.0   0:00.06 logger             
+30289 root      10 -10  5800 2544 1340 S    0  0.1   0:00.00 ccurdbsrv          
+30291 root      10 -10  232m 2772 1404 S    0  0.1   0:00.02 guirpcsrv          
+30294 root      20   0  4472 1024  904 S    0  0.0   0:00.00 logsrv.sh          
+30313 root      20   0  4476  516  392 S    0  0.0   0:00.00 logsrv.sh          
+30315 root     -11   0  104m 104m 1700 S    0  2.6   0:01.62 logsrv             
+30317 root     -11   0  9132 9132 1572 S    0  0.2   0:00.00 dlreader           
+30698 root      RT -10  182m  888  784 S    0  0.0   0:18.34 null_rtw           
+30699 root      RT -10  194m 194m 185m S    0  4.8   0:11.94 canproc_tdl        
+30703 root      RT -10  246m 246m 229m S    0  6.1   0:48.96 canasyncio         
+30705 root      RT -10  185m 185m 183m S    0  4.6   0:05.02 canout             
+30708 root      RT -10  326m 326m 325m S    0  8.1   0:11.66 logsend            
+30713 root      RT -10  326m 326m 325m S    0  8.1   0:02.80 logtxin            
+30714 root      RT -10  326m 326m 325m S    0  8.1   0:07.84 logtxout           
+31241 root      20   0 10968 3628 2044 S    0  0.1   0:10.72 xterm              
+31246 root      20   0  4472 1000  884 S    0  0.0   0:00.04 bash               
+31282 root      20   0  4472  436  324 S    0  0.0   0:00.00 sh                 
+31283 root      20   0  212m 212m 183m S    0  5.3   0:02.76 claraHawk          
+

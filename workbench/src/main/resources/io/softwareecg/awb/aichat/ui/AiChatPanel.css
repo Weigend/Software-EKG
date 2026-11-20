@@ -1,0 +1,70 @@
+.ai-chat-panel {
+    -fx-background-color: #f8f9fa;
+}
+
+.ai-chat-header {
+    -fx-background-color: #e9ecef;
+    -fx-border-color: transparent transparent #dee2e6 transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.ai-chat-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+
+.ai-chat-model {
+    -fx-font-size: 11px;
+    -fx-text-fill: #6c757d;
+}
+
+.ai-chat-btn {
+    -fx-font-size: 11px;
+    -fx-padding: 2 8 2 8;
+}
+
+.ai-chat-history {
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: transparent;
+}
+.ai-chat-history > .viewport {
+    -fx-background-color: #f8f9fa;
+}
+
+.ai-chat-status {
+    -fx-font-size: 11px;
+    -fx-text-fill: #6c757d;
+    -fx-font-style: italic;
+}
+
+.ai-chat-send-btn {
+    -fx-font-size: 12px;
+}
+
+/* User message bubble — right-aligned, blue */
+.ai-chat-user-msg {
+    -fx-background-color: #d0e4f7;
+    -fx-background-radius: 10;
+    -fx-padding: 8 12 8 12;
+    -fx-font-size: 13px;
+    -fx-text-fill: #1a365d;
+}
+
+/* Assistant message bubble — left-aligned, white */
+.ai-chat-assistant-msg {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 10;
+    -fx-padding: 8 12 8 12;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+}
+
+/* Error message */
+.ai-chat-error-msg {
+    -fx-background-color: #f8d7da;
+    -fx-background-radius: 10;
+    -fx-padding: 8 12 8 12;
+    -fx-font-size: 12px;
+    -fx-text-fill: #721c24;
+}

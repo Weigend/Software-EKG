@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.softwareecg.collector</groupId>
+        <artifactId>collector-parent</artifactId>
+        <version>${revision}</version>
+        <relativePath>../../../build/collector-parent/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>collector-source-prometheus</artifactId>
+    <name>Software-EKG - Collector - Source - Prometheus</name>
+
+    <!-- Deliberately free of third-party runtime dependencies (JDK HTTP client, own JSON reader):
+         the source is also embedded into the AWB and must not drag library versions along. -->
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>collector-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Mockito is started as a regular Java agent. Otherwise it attaches itself to the
+                 running JVM, which newer JDKs warn about and restricted environments forbid. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>dependency-paths</id>
+                        <goals>
+                            <goal>properties</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>-javaagent:${org.mockito:mockito-core:jar}</argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

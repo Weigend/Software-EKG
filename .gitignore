@@ -1,0 +1,27 @@
+# WFX is an external framework installed locally by install-wfx.sh.
+wfx/
+
+# IDE
+.idea/
+*.iml
+
+# Maven
+target/
+product/
+*.log
+*.log.gz
+!**/src/test/resources/**/*.log.gz
+hostkey.ser
+
+# Large manual datasets do not belong in the source repository.
+/testdata/
+/collector/apps/cli/logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# flatten-maven-plugin
+.flattened-pom.xml
+
+.vscode/settings.json

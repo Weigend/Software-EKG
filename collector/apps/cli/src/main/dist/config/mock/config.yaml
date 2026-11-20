@@ -1,0 +1,29 @@
+# Software-EKG collector - invented values from the source "mock", written for the project
+# "MockProject". For trying out a repository without a system to measure.
+
+project: MockProject
+
+metricGroups:
+  mockMetrics:
+    type: mock
+    metrics:
+      - metric: '*mooooock*'
+        wildcard: true
+
+processGroups:
+  localMockProcess:
+    - name: MockProcess
+      source: mockProcAPI
+
+hostGroups:
+  local:
+    hosts:
+      - name: localhost
+        address: 127.0.0.1
+
+collectors:
+  - type: remote
+    metricGroup: mockMetrics
+    processGroup: localMockProcess
+    hostGroup: local
+    interval: 1s

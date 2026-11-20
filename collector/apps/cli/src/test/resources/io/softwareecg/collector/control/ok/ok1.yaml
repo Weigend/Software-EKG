@@ -1,0 +1,25 @@
+# Software-EKG collector configuration, converted from ok1.xml
+
+metricGroups:
+  mockMetrics:
+    type: mock
+    metrics:
+      - ABC
+
+processGroups:
+  local:
+    - name: _Total
+    - name: java
+
+hostGroups:
+  local:
+    hosts:
+      - name: localhost
+        address: 127.0.0.1
+
+collectors:
+  - type: remote
+    metricGroup: mockMetrics
+    processGroup: local
+    hostGroup: local
+    interval: 1s

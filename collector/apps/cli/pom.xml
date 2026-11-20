@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.softwareecg.collector</groupId>
+        <artifactId>collector-parent</artifactId>
+        <version>${revision}</version>
+        <relativePath>../../../build/collector-parent/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>collector-delivery</artifactId>
+
+    <packaging>jar</packaging>
+
+    <properties>
+        <!-- the name of the distribution: its directory and its ZIP -->
+        <collectorProductName>software-ekg-collector-${project.version}</collectorProductName>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>collector-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Add your new sources here -->
+        <!-- Comment any source which is not needed for your setup -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>collector-source-windows</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>collector-source-mock</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>collector-source-jolokia</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>collector-source-prometheus</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>collector-source-jmx</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>collector-source-unix</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>collector-source-log</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>collector-source-rlog</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Repository implementations used by the standalone collector. -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>collector-repository-csv</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>collector-repository-rdb-solr</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>collector-repository-rdb-elasticsearch</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.softwareecg.collector</groupId>
+            <artifactId>collector-core</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.4.0</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>product</directory>
+                            <includes>
+                                <include>**/*</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/main/assembly/collector-dir.xml</descriptor>
+                            </descriptors>
+                            <outputDirectory>product</outputDirectory>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <finalName>${collectorProductName}</finalName>
+                        </configuration>
+                        <id>collector-dir-id</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+    <profiles>
+        <!-- mvn package -Pdist: the distribution with its own Java runtime, as a ZIP in 'product'.
+             The runtime is cut from the JDK the build runs with and fits its platform. -->
+        <profile>
+            <id>dist</id>
+            <build>
+                <plugins>
+
+                    <!-- jlink cuts the runtime from the JDK Maven runs with (not the one on the PATH) -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>3.6.0</version>
+                        <executions>
+                            <execution>
+                                <id>create-jre</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>${java.home}/bin/jlink</executable>
+                                    <arguments>
+                                        <argument>--add-modules</argument>
+                                        <argument>java.base,java.logging,java.xml,java.desktop,java.naming,java.management,java.sql,java.instrument,java.security.jgss,java.net.http,jdk.crypto.ec,jdk.unsupported</argument>
+                                        <argument>--strip-debug</argument>
+                                        <argument>--no-header-files</argument>
+                                        <argument>--no-man-pages</argument>
+                                        <argument>--compress=zip-6</argument>
+                                        <argument>--output</argument>
+                                        <argument>${project.basedir}/product/${collectorProductName}/${collectorProductName}/jre</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <!-- jlink refuses to write into a runtime of an earlier build -->
+                                <id>remove-old-jre</id>
+                                <phase>prepare-package</phase>
+                                <goals><goal>run</goal></goals>
+                                <configuration>
+                                    <target>
+                                        <delete dir="${project.basedir}/product/${collectorProductName}/${collectorProductName}/jre"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>collector-zip</id>
+                                <phase>package</phase>
+                                <goals><goal>run</goal></goals>
+                                <configuration>
+                                    <target>
+                                        <!-- zipfileset keeps the executable bits of the scripts and the runtime -->
+                                        <zip destfile="${project.basedir}/product/${collectorProductName}.zip">
+                                            <zipfileset dir="${project.basedir}/product/${collectorProductName}"
+                                                        excludes="*/ekg-collector,*/ekg-collector.sh,*/jre/bin/**,*/jre/lib/jspawnhelper,*/jre/lib/jexec"/>
+                                            <zipfileset dir="${project.basedir}/product/${collectorProductName}" filemode="755"
+                                                        includes="*/ekg-collector,*/ekg-collector.sh,*/jre/bin/**,*/jre/lib/jspawnhelper,*/jre/lib/jexec"/>
+                                        </zip>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+ </project>

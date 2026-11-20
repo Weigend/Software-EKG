@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Created-By: Apache Maven
+Built-By: Johannes Weigend
+Main-Class: io.softwareecg.collector.StartCollector
+

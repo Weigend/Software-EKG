@@ -1,0 +1,44 @@
+<configuration scan="true" scanPeriod="10 minutes">
+
+    <!--
+    *******************************************************************************************************
+      this configuration will used than running the EKG Collector out of the IDE. It will not bundled!
+    *******************************************************************************************************
+    -->
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>collector.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>collector.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <!-- keep 10 days' worth of history -->
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>"%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+
+    </appender>
+
+    <logger name="org.eclipse.jetty" level="WARN"/>
+    <logger name="com.sshtools.j2ssh.connection" level="WARN"/>
+    <logger name="com.sshtools.j2ssh.session" level="WARN"/>
+    <logger name="com.sshtools.j2ssh.transport" level="WARN"/>
+    <logger name="org.apache" level="WARN" />
+    <logger name="httpclient" level="WARN" />
+
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>

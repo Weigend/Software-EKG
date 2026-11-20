@@ -1,0 +1,172 @@
+# Software-EKG collector - a configuration with all its parts explained.
+#
+# Copy it, adapt it and start the collector with it:
+#
+#     ./ekg-collector.sh config/current/config-template.yaml
+#
+# A configuration says three things and then combines them:
+#
+#     metricGroups     WHAT is measured
+#     processGroups    OF WHICH processes
+#     hostGroups       ON WHICH machines
+#     collectors       which metric group is read of which process group on which host group
+#
+# A collector yields one job for every host and every process of its groups. Ten hosts, two
+# processes, one collector: twenty jobs.
+#
+# The file is read strictly. A key that is not known - a typing error - is an error that names
+# the line, not a setting that silently has no effect.
+#
+# ------------------------------------------------------------------------------------------
+# Writing values
+# ------------------------------------------------------------------------------------------
+# Put metrics, sources and everything with special characters in single quotes: '\CPU\*',
+# '*:type=Memory,*', '${REF:hostAddress}:22'. Inside single quotes every character stands for
+# itself; in double quotes a backslash would start an escape.
+#
+# Durations are a number and a unit: 500ms, 15s, 5m, 1h, 1d.
+#
+# ------------------------------------------------------------------------------------------
+# Variables
+# ------------------------------------------------------------------------------------------
+#   ${ENV:NAME}        the environment variable NAME. The way to give passwords: they do not
+#                      belong in this file.
+#   ${JVMOPT:name}     the system property "name" of the collector (java -Dname=...)
+#   ${REF:...}         a value of the job at hand, usable in metrics, labels and in the name,
+#                      label and source of a process:
+#                        hostName, hostAddress       the host of the job (podName, podAddress
+#                                                    for a pod)
+#                        procName, procLabel,        the process of the job
+#                        procSource
+#   ${FILTER:n}        in the label of a metric: the n-th group of its regexPostFilter
+
+# The EKG project the series belong to. Optional; needed if the collector writes into a
+# repository the workbench reads directly.
+project: Template
+
+# ------------------------------------------------------------------------------------------
+# WHAT is measured: sets of metrics, each with an id.
+# ------------------------------------------------------------------------------------------
+metricGroups:
+
+  # the id of the group; the collectors below refer to it
+  solrMetrics:
+
+    # The source the metrics are read with. It decides how metrics and processes are written:
+    #   unix         Linux/Unix hosts with "top", over SSH   '\CPU\us', '\Process(java)\CPU'
+    #   unixio       ... with "iostat"                       '\Device(*)\*'
+    #   unixdf       ... with "df"                           '\Filesystem(*)\*'
+    #   prometheus   a Prometheus server                     'rate(node_cpu_seconds_total[1m])'
+    #   jolokia      JMX over HTTP (Jolokia agent)           'java.lang:type=Memory,*'
+    #   jmx          JMX directly
+    #   win          Windows performance counters            '\Processor(_Total)\*'
+    #   postgres, log, rlog, mock
+    type: jolokia
+
+    metrics:
+      # A metric is usually just its text. With wildcards it stands for every metric of the
+      # source that matches.
+      - '*Memory*'
+
+      # A metric with settings is written as a map:
+      #   metric           the metric
+      #   label            the name shown instead of the metric. Not for wildcards: all matches
+      #                    would get the same name.
+      #   regexPostFilter  a regular expression the names of the matches must fit; its groups
+      #                    are available to the label as ${FILTER:1}, ${FILTER:2} ...
+      #   wildcard         false takes the metric literally, even if it contains a *
+      - metric: 'java.lang:type=Threading,*'
+        label: 'threads ${FILTER:1}'
+        regexPostFilter: '.*Threading.*\.(.*)$'
+
+# ------------------------------------------------------------------------------------------
+# OF WHICH processes: sets of processes, each with an id.
+# ------------------------------------------------------------------------------------------
+processGroups:
+
+  local:
+    #   name    the process as its source knows it: the name of a program, part of a command
+    #           line (unix: 'java -Xmx1536m', the second match is 'java#1'), an alias for a
+    #           service
+    #   label   the name shown instead, if the real one is hard to read. Optional.
+    #   source  where the metrics of the process are read - what the source of the metric group
+    #           needs: host and port, a URL, a file. Usually built from the host of the job.
+    #   args    further arguments for the source. Optional.
+    - name: Solr
+      source: '${REF:hostAddress}:8983/jolokia'
+
+# ------------------------------------------------------------------------------------------
+# ON WHICH machines: sets of hosts, each with an id. Not needed for a collector of
+# 'type: sidecar' that reads the machine it runs on.
+# ------------------------------------------------------------------------------------------
+hostGroups:
+
+  local:
+    # The login for all hosts of the group, if the source needs one (SSH, a protected URL).
+    # A host can name its own.
+    # username: ekg
+    # password: '${ENV:EKG_PASSWORD}'
+
+    hosts:
+      # a host with a name to show and an address
+      - name: localhost
+        address: 127.0.0.1
+
+      # a host whose name is its address is just that
+      # - db-01.example.org
+
+      # a host with a login of its own
+      # - name: db-02
+      #   address: 10.0.0.12
+      #   username: other
+      #   password: '${ENV:EKG_DB02_PASSWORD}'
+
+# ------------------------------------------------------------------------------------------
+# The pods of a cluster (Kubernetes, OpenShift) instead of or in addition to hosts. Optional.
+# A collector of 'type: sidecar' refers to a pod group or to the id of a single pod as its
+# nodeGroup.
+# ------------------------------------------------------------------------------------------
+# platform:
+#   name: my-namespace                      # the namespace (Kubernetes) or project (OpenShift)
+#   serviceAddress: https://host:6443/api/v1/pods
+#   serviceUser: ekg
+#   servicePassword: '${ENV:EKG_PLATFORM_PASSWORD}'
+#   refreshInterval: 30s
+#   podGroups:
+#     shop:                                 # the id of the pod group
+#       service: shop                       # optional
+#       namespace: other-namespace          # optional, if not the one of the platform
+#       username: ekg                       # optional, the login for all pods of the group
+#       password: '${ENV:EKG_POD_PASSWORD}'
+#       pods:
+#         - id: shop-1                      # optional, to refer to this pod alone
+#           name: shop-1
+#           address: http://10.1.0.11
+#           containers:                     # optional, used rarely
+#             - id: app
+#               address: http://10.1.0.11:8080
+
+# ------------------------------------------------------------------------------------------
+# The collectors: here the parts come together.
+# ------------------------------------------------------------------------------------------
+collectors:
+
+  #   type            remote   the collector reads other machines: the hosts of 'hostGroup'.
+  #                            The default.
+  #                   sidecar  the collector runs next to what it reads. Without 'nodeGroup' it
+  #                            reads the machine it runs on; 'nodeGroup' names a host group, a
+  #                            pod group or a pod.
+  #   metricGroup     the id of a metric group
+  #   processGroup    the id of a process group
+  #   hostGroup       remote: the id of a host group
+  #   nodeGroup       sidecar: see above. Optional.
+  #   interval        how often the values are read
+  #   expandInterval  how often wildcards are resolved again, to find metrics, processes or
+  #                   systems that are new. Optional; without it they are resolved once, at
+  #                   the start.
+  #   at              a fixed time to read the values at, instead of an interval. Optional.
+  - type: remote
+    metricGroup: solrMetrics
+    processGroup: local
+    hostGroup: local
+    interval: 1s

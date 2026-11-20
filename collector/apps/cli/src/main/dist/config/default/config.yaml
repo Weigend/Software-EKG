@@ -1,0 +1,28 @@
+# Software-EKG collector - the configuration the collector starts with if none is named.
+#
+# It reads invented values from the source "mock": enough to see that the collector runs and
+# writes its series. For a configuration of your own start from current/config-template.yaml.
+
+metricGroups:
+  mockMetrics:
+    type: mock
+    metrics:
+      - ABC
+
+processGroups:
+  local:
+    - name: _Total
+    - name: java
+
+hostGroups:
+  local:
+    hosts:
+      - name: localhost
+        address: 127.0.0.1
+
+collectors:
+  - type: remote
+    metricGroup: mockMetrics
+    processGroup: local
+    hostGroup: local
+    interval: 1s

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW 2018 (64 Bit) -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="4mm" height="4mm" version="1.1"
+     style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+     viewBox="0 0 400 400"
+>
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .str2 {stroke:#C5C6C6;stroke-width:0;stroke-miterlimit:22.9256}
+    .str1 {stroke:#666666;stroke-width:0;stroke-miterlimit:22.9256}
+    .str0 {stroke:white;stroke-width:0;stroke-miterlimit:22.9256}
+    .fil0 {fill:none}
+    .fil4 {fill:#00B9F1}
+    .fil3 {fill:#00F2E6}
+    .fil1 {fill:#666666}
+    .fil5 {fill:#D63AFF}
+    .fil6 {fill:#FB015B}
+    .fil2 {fill:white}
+   ]]>
+  </style>
+ </defs>
+ <g id="Ebene_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <rect class="fil0 str0" x="0.21" y="0.64" width="399.57" height="399.14"/>
+  <polygon class="fil1 str1" points="162.9,42.44 210,42.44 210,123.4 185.87,155.15 162.9,123.4 "/>
+  <polygon class="fil2 str2" points="206.48,123.64 206.48,45.71 163.03,45.71 163.03,123.64 184.75,153.48 "/>
+  <rect class="fil1 str1" x="162.9" y="257.95" width="47.1" height="81.11"/>
+  <polygon class="fil2 str2" points="163.03,257.48 163.03,335.41 206.48,335.41 206.48,257.48 184.75,227.64 "/>
+  <polygon class="fil3" points="206.48,257.48 252.25,320.63 287.6,294.85 241.53,231.98 206.48,220.4 "/>
+  <polygon class="fil3" points="163.03,123.64 117.25,60.48 81.91,86.27 127.97,149.13 163.03,160.72 "/>
+  <polygon class="fil4" points="127.97,149.13 53.81,125.09 40.19,166.51 114.36,190.56 149.7,179.26 "/>
+  <polygon class="fil4" points="219.81,201.86 241.53,231.98 315.7,256.03 329.31,214.6 255.15,190.56 "/>
+  <polygon class="fil5" points="255.15,190.56 329.31,166.51 315.7,125.09 241.53,149.13 219.81,179.26 "/>
+  <polygon class="fil5" points="114.36,190.56 40.19,214.6 53.81,256.03 127.97,231.98 149.7,201.86 "/>
+  <polygon class="fil6" points="127.97,231.98 81.91,294.85 117.25,320.63 163.03,257.48 163.03,220.4 "/>
+  <polygon class="fil6" points="241.53,149.13 287.6,86.27 252.25,60.48 206.48,123.64 206.48,160.72 "/>
+ </g>
+</svg>

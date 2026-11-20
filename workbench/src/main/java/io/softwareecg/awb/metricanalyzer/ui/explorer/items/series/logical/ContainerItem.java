@@ -1,0 +1,24 @@
+package io.softwareecg.awb.metricanalyzer.ui.explorer.items.series.logical;
+
+import io.softwareecg.awb.metricanalyzer.ui.api.ContextAwareItem;
+import io.softwareecg.awb.metricanalyzer.ui.api.FilterContext;
+import io.softwareecg.awb.repository.api.EkgRepository;
+
+/**
+ * todo enter comment here
+ *
+ * @since 18.06.2018
+ */
+public class ContainerItem extends ContextAwareItem {
+    /**
+     * Creates a new Container item based on the given context and the project
+     *
+     * @param label      the name of the tree item that will used as displayed label in the view
+     * @param context    bean that define filters that relating to series data or the view flavor and control the item rendering
+     * @param repository the containing types.
+     */
+    public ContainerItem(String label, FilterContext context, EkgRepository repository) {
+        super(label, context, repository);
+        super.setGraphic(getIconProvider().getContainerItemIcon(this));
+    }
+}

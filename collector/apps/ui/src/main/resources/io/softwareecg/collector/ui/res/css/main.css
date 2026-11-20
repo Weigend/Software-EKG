@@ -1,0 +1,10 @@
+/*
+    Created on : 22.09.2014, 21:36:11
+    Author     : weigend
+*/
+
+.background {
+    -fx-background-image: url("../img/logo-5.png");
+    -fx-background-repeat: no-repeat no-repeat;
+    -fx-background-size: stretch;
+}

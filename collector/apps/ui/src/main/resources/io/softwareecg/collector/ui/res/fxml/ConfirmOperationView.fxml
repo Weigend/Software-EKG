@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="parent" prefHeight="240.0" prefWidth="320.0"
+            fx:controller="io.softwareecg.collector.ui.controller.ConfirmOperationViewController">
+    <children>
+        <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="240.0"
+                  prefWidth="320.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns:fx="http://javafx.com/fxml">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="66.0" minHeight="10.0" prefHeight="57.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="170.0" minHeight="10.0" prefHeight="107.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="115.0" minHeight="6.0" prefHeight="76.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <children>
+                <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="97.0"
+                          prefWidth="320.0" xmlns:fx="http://javafx.com/fxml">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="155.0" minWidth="10.0" prefWidth="106.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="243.0" minWidth="10.0" prefWidth="214.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="0.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <children>
+                        <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonPressed"
+                                prefHeight="69.0" prefWidth="107.0" text="Back">
+                            <effect>
+                                <Blend mode="MULTIPLY"/>
+                            </effect>
+                            <styleClass>
+                                <String fx:value="labeled"/>
+                                <String fx:value="infobarBackButton"/>
+                            </styleClass>
+                        </Button>
+                        <Label prefHeight="69.0" prefWidth="226.0" text="     Import/Export" GridPane.columnIndex="1">
+                            <styleClass>
+                                <String fx:value="label"/>
+                                <String fx:value="infobarLabel"/>
+                            </styleClass>
+                        </Label>
+                    </children>
+                    <styleClass>
+                        <String fx:value="heading"/>
+                        <String fx:value="infobarBackground"/>
+                    </styleClass>
+                </GridPane>
+                <Label id="buttonLabel" fx:id="infoLabel" maxHeight="1.7976931348623157E308"
+                       maxWidth="1.7976931348623157E308" prefHeight="99.0" prefWidth="320.0" styleClass="buttonLabel"
+                       text="    Info Text" GridPane.rowIndex="1">
+                    <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </GridPane.margin>
+                </Label>
+                <GridPane fx:id="zweiButtons" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                          GridPane.rowIndex="2" xmlns:fx="http://javafx.com/fxml">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <children>
+                        <Button fx:id="confirmButton" maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#confirm"
+                                prefHeight="137.0" prefWidth="376.0" text="Yes" GridPane.columnIndex="1">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" right="5.0"/>
+                            </GridPane.margin>
+                        </Button>
+                        <Button fx:id="noButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false" onAction="#backButtonPressed" prefHeight="126.0"
+                                prefWidth="225.0" text="No">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" left="5.0"/>
+                            </GridPane.margin>
+                        </Button>
+                    </children>
+                </GridPane>
+            </children>
+        </GridPane>
+    </children>
+</AnchorPane>

@@ -1,0 +1,44 @@
+/* default styles of each ImporterDialog */
+@import "/io/softwareecg/awb/sdk/importer/ui/dialogs/ImportDialogStyle.css";
+
+#txtRepositoryURL {
+    -fx-max-width: 9999;
+}
+
+#txtRepositoryURL:disabled {
+    -fx-background-color: #e6dcd2;
+    -fx-border-color: #ada29c;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-prompt-text-fill: #392520;
+}
+
+#cbRepositoryAuthType {
+    -fx-max-width: 9999;
+    -fx-min-height: 31;
+    -fx-max-height: 31;
+}
+
+.ekgComboboxButtonCell {
+    -fx-fit-to-height: false;
+    -fx-padding: 0 0 0 6;
+}
+
+.ekgComboboxListCell:disabled {
+    -fx-text-fill: #666868;
+    -fx-opacity: 0.2;
+}
+
+.combo-box:disabled .list-cell {
+    -fx-text-fill: #990000;
+    -fx-opacity: 0.9;
+}
+
+
+
+#btnValidateRepositoryDefinition {
+    -fx-background-image: url('icons/repository-check-question.png');
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 12;
+}

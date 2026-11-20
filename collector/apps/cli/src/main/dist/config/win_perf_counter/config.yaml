@@ -1,0 +1,36 @@
+# Software-EKG collector - Windows performance counters of the machine the collector runs on.
+# The names of the counters depend on the language of Windows; these are the German ones.
+
+metricGroups:
+  testcounter:
+    type: win
+    metrics:
+      - metric: \Prozess(%1)\*
+        wildcard: true
+  mock:
+    type: mock
+    metrics:
+      - ABC
+
+processGroups:
+  local:
+    - name: _Total
+    - name: java
+
+hostGroups:
+  local:
+    hosts:
+      - name: localhost
+        address: 127.0.0.1
+
+collectors:
+  - type: remote
+    metricGroup: testcounter
+    processGroup: local
+    hostGroup: local
+    interval: 1s
+  - type: remote
+    metricGroup: mock
+    processGroup: local
+    hostGroup: local
+    interval: 1s

@@ -1,0 +1,51 @@
+package io.softwareecg.collector.dt;
+
+/**
+ * todo insert comment here
+ *
+ * @since 09.08.2018
+ */
+public class CloudCollectorJobConfiguration extends CollectorJobConfiguration {
+
+    private final PlatformProjectInfo platformProjectInfo;
+
+    private final PodInfo podInfo;
+
+    private final ContainerInfo containerInfo;
+
+    /**
+     *
+     * @param ekgProjectName
+     * @param platformProjectInfo
+     * @param podInfo
+     * @param containerInfo
+     * @param processInfo
+     * @param metricGroupInfo
+     * @param metricDefinitions
+     */
+    public CloudCollectorJobConfiguration(String ekgProjectName, PlatformProjectInfo platformProjectInfo, PodInfo podInfo,
+                                          ContainerInfo containerInfo, ProcessInfo processInfo,
+                                          MetricGroupInfo metricGroupInfo, MetricDefinition[] metricDefinitions) {
+
+        super(ekgProjectName, containerInfo != null ? containerInfo : podInfo, processInfo, metricGroupInfo, metricDefinitions);
+
+        this.platformProjectInfo = platformProjectInfo;
+        this.podInfo = podInfo;
+        this.containerInfo = containerInfo;
+    }
+
+    //================================================================================================================
+    //  configuration API implementation of CollectorJobConfiguration type
+    //================================================================================================================
+
+    @Override
+    public CollectorJobConfiguration copy() {
+        return null;
+    }
+
+    @Override
+    public TimeSeriesHeader getTimeSeriesHeader() {
+        return null;
+    }
+
+}

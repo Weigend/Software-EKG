@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.softwareecg</groupId>
+        <artifactId>software-ekg</artifactId>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <groupId>io.softwareecg.awb</groupId>
+    <artifactId>workbench</artifactId>
+    <name>Software EKG Workbench</name>
+    <description>The complete desktop analysis workbench. Former API, BL, UI, importer and SDK artifacts are packages in this module.</description>
+
+    <properties>
+        <!-- the name of the distribution: its directory and its ZIP -->
+        <workbenchProductName>software-ekg-workbench-${project.version}</workbenchProductName>
+    </properties>
+
+    <dependencies>
+        <!-- Collector integration is a real runtime boundary. -->
+        <dependency>
+            <groupId>io.softwareecg.collector</groupId>
+            <artifactId>collector-core</artifactId>
+            <version>${revision}</version>
+            <!-- The workbench embeds the collector as a scheduler for its data sources. It needs
+                 neither the calculated counters (GraalJS, about 50 MB) nor the websocket connector
+                 of the stand-alone collector. A source that cannot be loaded without them is
+                 skipped by the collector's source registry. -->
+            <exclusions>
+                <exclusion><groupId>org.graalvm.polyglot</groupId><artifactId>polyglot</artifactId></exclusion>
+                <exclusion><groupId>org.graalvm.polyglot</groupId><artifactId>js</artifactId></exclusion>
+                <exclusion><groupId>org.graalvm.js</groupId><artifactId>js-scriptengine</artifactId></exclusion>
+                <exclusion><groupId>org.glassfish.tyrus</groupId><artifactId>tyrus-server</artifactId></exclusion>
+                <exclusion><groupId>org.glassfish.tyrus</groupId><artifactId>tyrus-client</artifactId></exclusion>
+                <exclusion><groupId>org.glassfish.tyrus</groupId><artifactId>tyrus-container-grizzly</artifactId></exclusion>
+                <exclusion><groupId>javax.websocket</groupId><artifactId>javax.websocket-api</artifactId></exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.softwareecg.collector</groupId>
+            <artifactId>collector-source-prometheus</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.softwareecg.collector</groupId>
+            <artifactId>collector-source-unix</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <!-- Core and injection -->
+        <dependency><groupId>io.avaje</groupId><artifactId>avaje-inject</artifactId></dependency>
+        <dependency><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId></dependency>
+        <dependency><groupId>ch.qos.logback</groupId><artifactId>logback-classic</artifactId></dependency>
+        <dependency><groupId>ch.qos.logback</groupId><artifactId>logback-core</artifactId></dependency>
+        <dependency><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId></dependency>
+        <dependency><groupId>org.apache.commons</groupId><artifactId>commons-collections4</artifactId></dependency>
+        <dependency><groupId>commons-io</groupId><artifactId>commons-io</artifactId></dependency>
+        <dependency><groupId>commons-validator</groupId><artifactId>commons-validator</artifactId></dependency>
+        <dependency><groupId>org.apache.commons</groupId><artifactId>commons-math3</artifactId><version>3.6.1</version></dependency>
+        <dependency><groupId>com.google.guava</groupId><artifactId>guava</artifactId><version>33.5.0-jre</version></dependency>
+
+        <!-- JavaFX and the application shell -->
+        <dependency><groupId>org.openjfx</groupId><artifactId>javafx-controls</artifactId></dependency>
+        <dependency><groupId>org.openjfx</groupId><artifactId>javafx-fxml</artifactId></dependency>
+        <dependency><groupId>org.openjfx</groupId><artifactId>javafx-swing</artifactId></dependency>
+        <dependency><groupId>org.controlsfx</groupId><artifactId>controlsfx</artifactId></dependency>
+        <dependency><groupId>io.softwareecg.wfx</groupId><artifactId>wfx-all</artifactId></dependency>
+        <dependency><groupId>com.github.afester.javafx</groupId><artifactId>FranzXaver</artifactId></dependency>
+        <dependency><groupId>org.apache.xmlgraphics</groupId><artifactId>batik-dom</artifactId></dependency>
+        <dependency><groupId>org.apache.xmlgraphics</groupId><artifactId>batik-anim</artifactId></dependency>
+        <dependency><groupId>org.apache.xmlgraphics</groupId><artifactId>batik-bridge</artifactId></dependency>
+
+        <!-- Jakarta APIs used by validation and legacy SDK contracts. -->
+        <dependency><groupId>jakarta.inject</groupId><artifactId>jakarta.inject-api</artifactId></dependency>
+        <dependency><groupId>jakarta.validation</groupId><artifactId>jakarta.validation-api</artifactId></dependency>
+        <dependency><groupId>jakarta.annotation</groupId><artifactId>jakarta.annotation-api</artifactId></dependency>
+        <dependency><groupId>jakarta.enterprise</groupId><artifactId>jakarta.enterprise.cdi-api</artifactId><version>4.0.1</version></dependency>
+        <dependency><groupId>jakarta.el</groupId><artifactId>jakarta.el-api</artifactId><version>5.0.1</version></dependency>
+        <dependency><groupId>org.glassfish</groupId><artifactId>jakarta.el</artifactId><version>5.0.0-M1</version></dependency>
+        <dependency><groupId>org.hibernate.validator</groupId><artifactId>hibernate-validator</artifactId><version>8.0.1.Final</version></dependency>
+        <dependency><groupId>org.glassfish.jersey.core</groupId><artifactId>jersey-server</artifactId><version>3.1.11</version></dependency>
+        <dependency><groupId>org.glassfish.jersey.ext</groupId><artifactId>jersey-bean-validation</artifactId><version>3.1.11</version></dependency>
+        <dependency><groupId>javax.annotation</groupId><artifactId>javax.annotation-api</artifactId></dependency>
+
+        <!-- Formats and remote sources -->
+        <dependency><groupId>com.fasterxml.jackson.core</groupId><artifactId>jackson-core</artifactId></dependency>
+        <dependency><groupId>com.fasterxml.jackson.core</groupId><artifactId>jackson-annotations</artifactId></dependency>
+        <dependency><groupId>com.fasterxml.jackson.core</groupId><artifactId>jackson-databind</artifactId></dependency>
+        <dependency><groupId>com.fasterxml.jackson.dataformat</groupId><artifactId>jackson-dataformat-yaml</artifactId></dependency>
+        <dependency><groupId>org.apache.httpcomponents</groupId><artifactId>httpclient</artifactId></dependency>
+        <dependency><groupId>org.apache.poi</groupId><artifactId>poi-ooxml</artifactId></dependency>
+        <dependency><groupId>de.siegmar</groupId><artifactId>fastcsv</artifactId><version>1.0.3</version></dependency>
+        <dependency><groupId>org.apache.sshd</groupId><artifactId>sshd-core</artifactId><version>2.14.0</version></dependency>
+        <dependency><groupId>net.i2p.crypto</groupId><artifactId>eddsa</artifactId><version>0.3.0</version></dependency>
+
+        <!-- Local and remote data stores supported by the workbench. -->
+        <dependency><groupId>com.h2database</groupId><artifactId>h2</artifactId><version>2.2.224</version></dependency>
+        <dependency><groupId>org.apache.solr</groupId><artifactId>solr-solrj</artifactId></dependency>
+        <dependency><groupId>org.apache.solr</groupId><artifactId>solr-core</artifactId></dependency>
+        <dependency><groupId>co.elastic.clients</groupId><artifactId>elasticsearch-java</artifactId></dependency>
+        <dependency><groupId>com.clickhouse</groupId><artifactId>clickhouse-jdbc</artifactId><classifier>all</classifier></dependency>
+        <dependency><groupId>com.zaxxer</groupId><artifactId>HikariCP</artifactId></dependency>
+        <dependency><groupId>org.apache.logging.log4j</groupId><artifactId>log4j-api</artifactId><version>2.24.3</version></dependency>
+        <dependency><groupId>org.apache.logging.log4j</groupId><artifactId>log4j-core</artifactId><version>2.24.3</version></dependency>
+        <dependency><groupId>com.carrotsearch</groupId><artifactId>hppc</artifactId><version>0.8.1</version></dependency>
+
+        <!-- Merged module tests. -->
+        <dependency><groupId>junit</groupId><artifactId>junit</artifactId><scope>test</scope></dependency>
+        <dependency><groupId>org.hamcrest</groupId><artifactId>hamcrest</artifactId><scope>test</scope></dependency>
+        <dependency><groupId>org.mockito</groupId><artifactId>mockito-core</artifactId><scope>test</scope></dependency>
+        <dependency><groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter</artifactId><version>5.11.4</version><scope>test</scope></dependency>
+        <dependency><groupId>org.junit.vintage</groupId><artifactId>junit-vintage-engine</artifactId><version>5.11.4</version><scope>test</scope></dependency>
+        <dependency><groupId>org.assertj</groupId><artifactId>assertj-core</artifactId><version>3.27.3</version><scope>test</scope></dependency>
+        <!-- The layers of the workbench are packages; this is what keeps them apart. -->
+        <dependency><groupId>com.tngtech.archunit</groupId><artifactId>archunit-junit5</artifactId><version>1.4.1</version><scope>test</scope></dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes><exclude>build.properties</exclude></excludes>
+            </resource>
+            <!-- the one file the build writes the version into -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes><include>build.properties</include></includes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-embedded-solr</id>
+                        <phase>process-resources</phase>
+                        <goals><goal>copy-resources</goal></goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/solr</outputDirectory>
+                            <resources><resource><directory>src/main/solr</directory></resource></resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.5.0</version>
+                <configuration>
+                    <mainClass>io.softwareecg.awb.application.base.EkgAvajeApplication</mainClass>
+                </configuration>
+            </plugin>
+            <!-- The workbench as a directory that starts with bin/software-ekg.sh:
+                 target/${workbenchProductName}/${workbenchProductName}. The profile 'dist' adds
+                 a Java runtime and packs it as a ZIP. -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>workbench-dir</id>
+                        <phase>package</phase>
+                        <goals><goal>single</goal></goals>
+                        <configuration>
+                            <descriptors><descriptor>src/main/assembly/workbench-dist.xml</descriptor></descriptors>
+                            <formats><format>dir</format></formats>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <finalName>${workbenchProductName}</finalName>
+                            <attach>false</attach>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <!-- mvn package -Pdist: the distribution with its own Java runtime, as a ZIP.
+             The runtime is cut from the JDK the build runs with and fits its platform; it
+             has JavaFX if that JDK has it (Liberica Full JDK). -->
+        <profile>
+            <id>dist</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>3.5.0</version>
+                        <executions>
+                            <execution>
+                                <id>create-jre</id>
+                                <phase>package</phase>
+                                <goals><goal>exec</goal></goals>
+                                <configuration>
+                                    <executable>${java.home}/bin/jlink</executable>
+                                    <arguments>
+                                        <argument>--add-modules</argument>
+                                        <argument>java.se,jdk.unsupported,jdk.crypto.ec,jdk.management,jdk.net,jdk.zipfs,jdk.localedata,jdk.charsets,jdk.security.auth,javafx.base,javafx.graphics,javafx.controls,javafx.fxml,javafx.swing</argument>
+                                        <argument>--strip-debug</argument>
+                                        <argument>--no-header-files</argument>
+                                        <argument>--no-man-pages</argument>
+                                        <argument>--compress=zip-6</argument>
+                                        <argument>--output</argument>
+                                        <argument>${project.build.directory}/${workbenchProductName}/${workbenchProductName}/jre</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <!-- jlink refuses to write into a runtime of an earlier build -->
+                                <id>remove-old-jre</id>
+                                <phase>prepare-package</phase>
+                                <goals><goal>run</goal></goals>
+                                <configuration>
+                                    <target>
+                                        <delete dir="${project.build.directory}/${workbenchProductName}/${workbenchProductName}/jre"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>workbench-zip</id>
+                                <phase>package</phase>
+                                <goals><goal>run</goal></goals>
+                                <configuration>
+                                    <target>
+                                        <!-- zipfileset keeps the executable bits of the scripts and the runtime -->
+                                        <zip destfile="${project.build.directory}/${workbenchProductName}.zip">
+                                            <zipfileset dir="${project.build.directory}/${workbenchProductName}"
+                                                        excludes="*/bin/*.sh,*/jre/bin/**,*/jre/lib/jspawnhelper,*/jre/lib/jexec"/>
+                                            <zipfileset dir="${project.build.directory}/${workbenchProductName}" filemode="755"
+                                                        includes="*/bin/*.sh,*/jre/bin/**,*/jre/lib/jspawnhelper,*/jre/lib/jexec"/>
+                                        </zip>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

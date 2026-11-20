@@ -1,0 +1,157 @@
+Could not chdir to home directory /www/s0022: No such file or directory !!!
+top - 20:51:03 up 99 days,  2:10,  3 users,  load average: 0.14, 0.13, 0.09
+Tasks: 148 total,   1 running, 147 sleeping,   0 stopped,   0 zombie
+Cpu(s):  1.0%us,  0.2%sy,  0.0%ni, 98.4%id,  0.3%wa,  0.0%hi,  0.1%si,  0.0%st
+Mem:     31923M total,    12666M used,    19257M free,      212M buffers
+Swap:    31249M total,        0M used,    31249M free,     3573M cached
+
+  PID USER      PR  NI  VIRT  RES  SHR S   %CPU %MEM    TIME+  COMMAND
+    1 root      20   0 10528  836  700 S      0  0.0   0:38.98 init [3]
+    2 root      20   0     0    0    0 S      0  0.0   0:00.22 [kthreadd]
+    3 root      20   0     0    0    0 S      0  0.0   1:47.55 [ksoftirqd/0]
+    6 root      RT   0     0    0    0 S      0  0.0   0:02.62 [migration/0]
+    7 root      RT   0     0    0    0 S      0  0.0   0:10.58 [watchdog/0]
+    8 root      RT   0     0    0    0 S      0  0.0   0:03.42 [migration/1]
+    9 root      20   0     0    0    0 S      0  0.0  22:52.44 [kworker/1:0]
+   10 root      20   0     0    0    0 S      0  0.0   1:28.58 [ksoftirqd/1]
+   12 root      RT   0     0    0    0 S      0  0.0   0:09.47 [watchdog/1]
+   13 root      RT   0     0    0    0 S      0  0.0   0:02.29 [migration/2]
+   15 root      20   0     0    0    0 S      0  0.0   1:33.44 [ksoftirqd/2]
+   16 root      RT   0     0    0    0 S      0  0.0   0:09.69 [watchdog/2]
+   17 root      RT   0     0    0    0 S      0  0.0   0:03.62 [migration/3]
+   19 root      20   0     0    0    0 S      0  0.0   1:07.30 [ksoftirqd/3]
+   20 root      RT   0     0    0    0 S      0  0.0   0:09.36 [watchdog/3]
+   21 root      RT   0     0    0    0 S      0  0.0   0:29.88 [migration/4]
+   22 root      20   0     0    0    0 S      0  0.0 118:25.61 [kworker/4:0]
+   23 root      20   0     0    0    0 S      0  0.0   0:40.13 [ksoftirqd/4]
+   24 root      RT   0     0    0    0 S      0  0.0   0:09.52 [watchdog/4]
+   25 root      RT   0     0    0    0 S      0  0.0   0:23.24 [migration/5]
+   26 root      20   0     0    0    0 S      0  0.0   2:20.79 [kworker/5:0]
+   27 root      20   0     0    0    0 S      0  0.0   1:15.28 [ksoftirqd/5]
+   28 root      RT   0     0    0    0 S      0  0.0   0:09.41 [watchdog/5]
+   29 root      RT   0     0    0    0 S      0  0.0   0:32.98 [migration/6]
+   30 root      20   0     0    0    0 S      0  0.0 141:38.60 [kworker/6:0]
+   31 root      20   0     0    0    0 S      0  0.0   0:45.68 [ksoftirqd/6]
+   32 root      RT   0     0    0    0 S      0  0.0   0:09.97 [watchdog/6]
+   33 root      RT   0     0    0    0 S      0  0.0   0:22.44 [migration/7]
+   34 root      20   0     0    0    0 S      0  0.0   7:17.83 [kworker/7:0]
+   35 root      20   0     0    0    0 S      0  0.0   0:19.59 [ksoftirqd/7]
+   36 root      RT   0     0    0    0 S      0  0.0   0:09.80 [watchdog/7]
+   37 root       0 -20     0    0    0 S      0  0.0   0:00.00 [cpuset]
+   38 root       0 -20     0    0    0 S      0  0.0   0:00.00 [khelper]
+   39 root       0 -20     0    0    0 S      0  0.0   0:00.00 [netns]
+   40 root      20   0     0    0    0 S      0  0.0   0:07.41 [sync_supers]
+   41 root      20   0     0    0    0 S      0  0.0   0:00.15 [bdi-default]
+   42 root       0 -20     0    0    0 S      0  0.0   0:00.00 [kintegrityd]
+   43 root       0 -20     0    0    0 S      0  0.0   0:00.00 [kblockd]
+   44 root       0 -20     0    0    0 S      0  0.0   0:00.00 [md]
+   45 root      20   0     0    0    0 S      0  0.0   0:00.00 [khungtaskd]
+   46 root      20   0     0    0    0 S      0  0.0 107:14.07 [kworker/6:1]
+   47 root      20   0     0    0    0 S      0  0.0   2:22.46 [kswapd0]
+   48 root      25   5     0    0    0 S      0  0.0   0:00.00 [ksmd]
+   49 root      39  19     0    0    0 S      0  0.0   0:15.23 [khugepaged]
+   50 root      20   0     0    0    0 S      0  0.0   0:00.00 [fsnotify_mark]
+   51 root       0 -20     0    0    0 S      0  0.0   0:00.00 [crypto]
+   53 root       0 -20     0    0    0 S      0  0.0   0:00.00 [kthrotld]
+   54 root       0 -20     0    0    0 S      0  0.0   0:00.00 [kpsmoused]
+   56 root      20   0     0    0    0 S      0  0.0   0:18.45 [kworker/1:2]
+  136 root       0 -20     0    0    0 S      0  0.0   0:00.00 [kmpath_rdacd]
+  151 root       0 -20     0    0    0 S      0  0.0   0:00.00 [kmpath_aluad]
+  237 root      20   0     0    0    0 S      0  0.0  59:38.96 [kworker/4:1]
+  269 root      20   0     0    0    0 S      0  0.0  40:18.79 [kworker/3:1]
+  283 root      20   0     0    0    0 S      0  0.0   3:39.01 [kworker/7:1]
+  288 root      20   0     0    0    0 S      0  0.0 114:15.92 [kworker/5:1]
+  365 root      20   0     0    0    0 S      0  0.0   0:00.00 [khubd]
+  472 root      20   0     0    0    0 S      0  0.0   0:55.60 [kjournald]
+  478 root      20   0     0    0    0 S      0  0.0   1:06.16 [flush-104:0]
+  558 root      16  -4 17256 1216  444 S      0  0.0   0:00.04 /sbin/udevd --daemon
+  723 root       0 -20     0    0    0 S      0  0.0   0:00.00 [ata_sff]
+  725 root       0 -20     0    0    0 S      0  0.0   0:00.00 [edac-poller]
+  801 root      20   0     0    0    0 S      0  0.0   0:00.01 [scsi_eh_0]
+  802 root      20   0     0    0    0 S      0  0.0   0:00.00 [scsi_eh_1]
+  847 root      20   0     0    0    0 S      0  0.0   0:00.00 [kworker/3:2]
+  882 root      20   0     0    0    0 S      0  0.0   0:00.00 [kauditd]
+  897 root      20   0 94768 3720 2820 S      0  0.0   0:00.03 sshd: u000049 [priv]
+  900 u000049   20   0 94892 2468 1492 S      0  0.0   0:00.07 sshd: u000049@notty
+  901 u000049   20   0 60488 2292 1676 S      0  0.0   0:00.03 /usr/lib64/ssh/sftp-server
+  931 root       0 -20     0    0    0 S      0  0.0   0:00.00 [kdmflush]
+  998 root       0 -20     0    0    0 S      0  0.0   0:00.00 [xfs_mru_cache]
+  999 root       0 -20     0    0    0 S      0  0.0   0:00.00 [xfslogd]
+ 1000 root      20   0     0    0    0 S      0  0.0   0:00.09 [xfsbufd/dm-0]
+ 1001 root       0 -20     0    0    0 S      0  0.0   0:00.00 [xfs-data/dm-0]
+ 1002 root       0 -20     0    0    0 S      0  0.0   0:00.00 [xfs-conv/dm-0]
+ 1003 root      20   0     0    0    0 S      0  0.0   4:24.85 [xfsaild/dm-0]
+ 1465 messageb  20   0 21308  692  444 S      0  0.0   0:04.86 /bin/dbus-daemon --system
+ 1534 root      20   0 86992 1424  668 S      0  0.0   4:16.56 hpasmlited -f /dev/hpilo
+ 1572 root      20   0 94768 3736 2844 S      0  0.0   0:00.02 sshd: u000047 [priv]
+ 1575 u000047   20   0 94892 2332 1408 S      0  0.0   0:00.18 sshd: u000047@pts/1
+ 1576 u000047   20   0 22180 2992 1696 S      0  0.0   0:00.02 -bash
+ 2508 root       0 -20     0    0    0 S      0  0.0   0:00.00 [bond0]
+ 2703 root      20   0 19812 1796  876 S      0  0.0   1:35.75 /sbin/syslog-ng -a /var/lib/stunnel/dev/log
+ 2706 root      20   0  8100 4280  348 S      0  0.0   0:00.01 /sbin/klogd -c 1 -x
+ 2724 root      20   0 44044 3640 2692 S      0  0.0   0:00.47 /opt/VRTSpbx/bin/pbx_exchange
+ 2887 u0009     20   0 17428 1372  836 S      0  0.0   4:10.37 /lfs/wwwmnt/nagi-p-nrpe/linux/sbin/nrpe_sles11_64 -c /lfs/wwwmnt/nagi-p-nrpe/linux/etc/nrpe.cfg -d
+ 2905 root      20   0  8352 4544  280 S      0  0.0   4:55.37 /sbin/haveged -w 1024 -v 1
+ 2921 root      20   0 53876 2300 1724 S      0  0.0   0:17.82 /usr/openv/netbackup/bin/vnetd -standalone
+ 2924 root      20   0 64428 3160 2352 S      0  0.0   0:20.98 /usr/openv/netbackup/bin/bpcd -standalone
+ 2963 root      20   0 12468  496  336 S      0  0.0   0:00.93 /lfs/ossec/bin/ossec-execd
+ 2984 root      20   0 18892 1020  716 S      0  0.0   0:03.93 /sbin/rpcbind
+ 3015 root       0 -20     0    0    0 S      0  0.0   0:00.00 [rpciod]
+ 3016 root       0 -20     0    0    0 S      0  0.0   0:00.00 [nfsiod]
+ 3029 root      20   0 44272  948  420 S      0  0.0   0:00.00 /usr/sbin/rpc.idmapd
+ 3035 root      20   0 23524 1632  960 S      0  0.0   0:00.04 rpc.statd --no-notify
+ 3052 root      20   0     0    0    0 S      0  0.0   0:00.00 [lockd]
+ 3071 root      18  -2 17252 1080  300 S      0  0.0   0:00.00 /sbin/udevd --daemon
+ 3072 root      18  -2 17252 1080  300 S      0  0.0   0:00.00 /sbin/udevd --daemon
+ 3130 root      39  19     0    0    0 S      0  0.0   1:30.65 [kipmi0]
+ 3152 root      20   0  9108  644  464 S      0  0.0  18:33.15 /usr/sbin/irqbalance
+ 3169 root      20   0 16808  956  712 S      0  0.0  17:48.42 /lfs/opt/lldpd/sbin/lldpd -r -c
+ 3171 nobody    20   0 16808  692  504 S      0  0.0   4:12.00 /lfs/opt/lldpd/sbin/lldpd -r -c
+ 3188 root      20   0 27068  816  412 S      0  0.0   0:00.00 /usr/sbin/mcelog --daemon --config-file /etc/mcelog/mcelog.conf
+ 3666 root      20   0 69244 1572  844 S      0  0.0   0:22.96 /usr/sbin/sshd -o PidFile=/var/run/sshd.init.pid
+ 3687 ntp       20   0 32260 1808 1288 S      0  0.0   2:23.40 /usr/sbin/ntpd -p /var/run/ntp/ntpd.pid -g -u ntp:ntp -i /var/lib/ntp -c /etc/ntp.conf
+ 3702 at        20   0 22976  400  220 S      0  0.0   0:00.02 /usr/sbin/atd
+ 3715 root      20   0 22928  540  356 S      0  0.0   2:03.54 /usr/sbin/nscd
+ 3740 u0000001  20   0  158m 6764 2068 S      0  0.0   1:35.99 /usr/sbin/stunnel
+ 3741 u0000001  20   0 29324 1008  424 S      0  0.0   0:01.59 /usr/sbin/stunnel
+ 3742 u0000001  20   0 29324 1008  424 S      0  0.0   0:00.56 /usr/sbin/stunnel
+ 3743 u0000001  20   0 29324 1008  424 S      0  0.0   0:00.98 /usr/sbin/stunnel
+ 3744 u0000001  20   0 29324 1008  424 S      0  0.0   0:01.00 /usr/sbin/stunnel
+ 3745 u0000001  20   0 29324 1012  424 S      0  0.0   0:00.93 /usr/sbin/stunnel
+ 3803 root      20   0 43692 2484 1924 S      0  0.0   0:18.95 /usr/lib/postfix/master
+ 3832 postfix   20   0 45912 2604 2024 S      0  0.0   0:03.07 qmgr -l -t fifo -u
+ 3853 root      20   0 22992  928  720 S      0  0.0   0:13.88 /usr/sbin/cron
+ 3880 root      20   0 12688  940  780 S      0  0.0   0:00.03 /sbin/mingetty --noclear tty1
+ 3881 root      20   0 12688  944  780 S      0  0.0   0:00.03 /sbin/mingetty tty2
+ 3882 root      20   0 12688  940  780 S      0  0.0   0:00.03 /sbin/mingetty tty3
+ 3883 root      20   0 12688  940  780 S      0  0.0   0:00.03 /sbin/mingetty tty4
+ 3884 root      20   0 12688  940  780 S      0  0.0   0:00.03 /sbin/mingetty tty5
+ 3885 root      20   0 12688  944  780 S      0  0.0   0:00.03 /sbin/mingetty tty6
+ 3988 root      20   0     0    0    0 S      0  0.0   9:05.19 [kworker/2:1]
+ 4508 u000048   20   0 13.2g 6.6g  34m S      0 21.2  68:36.68 java -server -Xmx12288m -Xms256m -XX:MaxPermSize=320m -XX:PermSize=128m -Dwls=crm2:i0_hostb06 -Dweblogic.Domain=crm2 -Dweblogic.Name=i0_hostb06 -Dweblogic.RootDirectory=/www/s013/clusterDomain -Dweblogic.log.FileName=/www/s013/logs/server/i0_hostb06_wls.log -Dbea.home=/wwws/weblogic/wls1212-p00-06/wlserver/server -Dweblogic.system.BootIdentityFile=/www/s013/clusterDomain/servers/AdminServer/security/boot.properties -Dweblogic.cluster.multicastAddress=237.0.0.197 -Dweblogic.management.server=https://hostb09.b
+ 6396 root      20   0     0    0    0 S      0  0.0   0:46.64 [kworker/0:2]
+ 6803 root      20   0     0    0    0 S      0  0.0  11:33.88 [kworker/2:0]
+ 9476 root      20   0 21180  920  664 S      0  0.0  65:25.95 /usr/sbin/cgrulesengd --logfile=/var/log/cgred
+10240 root      20   0     0    0    0 S      0  0.0   0:00.04 [kworker/u:1]
+14248 postfix   20   0 45752 2424 1892 S      0  0.0   0:00.00 pickup -l -t fifo -u
+14433 root      20   0 96956 3916 2908 S      0  0.0   0:11.15 sshd: u000047 [priv]
+14435 u000047   20   0 97000 2476 1332 S      0  0.0   0:36.99 sshd: u000047@pts/2
+14793 root      20   0     0    0    0 S      0  0.0   0:33.49 [kworker/0:0]
+16005 root      20   0 94768 3792 2888 S      0  0.0   0:00.84 sshd: u000008 [priv]
+16007 u000008   20   0 94876 2228 1296 S      0  0.0   0:00.88 sshd: u000008@notty
+21838 root      20   0 94768 3792 2896 S      0  0.0   0:16.60 sshd: u000008 [priv]
+21870 u000008   20   0 94876 2248 1296 S      0  0.0   0:18.74 sshd: u000008@notty
+22435 root      20   0     0    0    0 S      0  0.0   1:47.97 [flush-0:21]
+26823 root      20   0     0    0    0 S      0  0.0   0:00.00 [kworker/u:0]
+27656 root      20   0 94768 3736 2844 S      0  0.0   0:00.04 sshd: u000049 [priv]
+27673 u000049   20   0 94892 2432 1500 S      0  0.0   0:00.29 sshd: u000049@pts/0
+27674 u000049   20   0 22180 2904 1640 S      0  0.0   0:00.02 -bash
+27725 root      20   0 60732 2868 1920 S      0  0.0   0:00.10 sudo su -
+27726 root      20   0 49760 1604 1228 S      0  0.0   0:00.00 su -
+27727 root      20   0 22180 3024 1712 S      0  0.0   0:00.03 -bash
+27832 root      20   0 48580 1532 1176 S      0  0.0   0:00.00 su - u000048
+27833 u000048   20   0 22184 3136 1740 S      0  0.0   0:00.04 -bash
+28989 u000047   20   0 17108 1264  904 R      0  0.0   0:00.03 top -c -n 1 -b
+29586 root       0 -20 22960  12m 2448 S      0  0.0   0:12.74 /usr/bin/atop -a -w /var/log/atop/atop_20141201 600
+32167 u000048   20   0 13.2g 1.6g  31m S      0  5.1 105:37.21 java -server -Xmx12288m -Xms256m -XX:MaxPermSize=320m -XX:PermSize=128m -Dwls=crm2:i1_hostb06 -Dweblogic.Domain=crm2 -Dweblogic.Name=i1_hostb06 -Dweblogic.RootDirectory=/www/s013/clusterDomain -Dweblogic.log.FileName=/www/s013/logs/server/i1_hostb06_wls.log -Dbea.home=/wwws/weblogic/wls1212-p00-06/wlserver/server -Dweblogic.system.BootIdentityFile=/www/s013/clusterDomain/servers/AdminServer/security/boot.properties -Dweblogic.cluster.multicastAddress=237.0.0.197 -Dweblogic.management.server=https://hostb09.b
+

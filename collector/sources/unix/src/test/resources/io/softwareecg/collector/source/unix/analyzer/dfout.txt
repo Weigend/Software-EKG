@@ -1,0 +1,2 @@
+Filesystem                                       1M-blocks  Used Available Use% Mounted on
+nv01500767:/f01252/t007201/crmcockpits-i/shared1     25600  5580     20021  22% /lfs/wwwmnt/crmcockpits-i-shared1

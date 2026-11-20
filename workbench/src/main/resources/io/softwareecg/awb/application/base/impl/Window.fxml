@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:id="borderPane" center="$null" maxHeight="1.7976931348623157E308"
+            maxWidth="1.7976931348623157E308" prefHeight="1024.0" prefWidth="1280.0"
+>
+
+    <top>
+        <VBox fx:id="topContainer">
+            <MenuBar fx:id="menuBar" prefWidth="1834.0">
+
+                <!-- Analysis menu: starting an analysis and what belongs to it -->
+                <Menu fx:id="analysisMenu" mnemonicParsing="false" text="Analysis" id="file">
+                    <!-- menu items will added at runtime by the modules, above this separator -->
+                    <SeparatorMenuItem fx:id="analysisMenuEnd" />
+
+                    <!-- exit the workbench -->
+                    <MenuItem mnemonicParsing="false" text="Exit" onAction="#handleExitMenuItemAction" />
+                </Menu>
+
+                <!-- Import menu: one entry per importer module. The modules add themselves at
+                     runtime between the two markers, which they find by their ids; the markers
+                     themselves are not shown. -->
+                <Menu fx:id="importMenu" mnemonicParsing="false" text="Import" id="import">
+                    <SeparatorMenuItem id="importerMenuAreaStart" visible="false" />
+                    <SeparatorMenuItem id="importerMenuAreaEnd" visible="false" />
+
+                    <!-- below the importers: what else belongs to bringing data in by hand, added
+                         at runtime by the modules -->
+                    <SeparatorMenuItem />
+                </Menu>
+
+                <!-- Repository menu: the repositories the time series are stored in. The entries are
+                     added at runtime by the repository module. -->
+                <Menu fx:id="repositoryMenu" mnemonicParsing="false" text="Repository" id="repository" />
+
+                <!-- Window menu: the entries of the modules are added at runtime above the separator -->
+                <Menu fx:id="windowMenu" mnemonicParsing="false" text="Window" id="window">
+                    <SeparatorMenuItem fx:id="windowMenuEnd" />
+                    <MenuItem mnemonicParsing="false" onAction="#restoreDefault" text="Restore Default Layout"/>
+                </Menu>
+
+                <!-- Help menu -->
+                <Menu text="Help" id="help">
+                    <MenuItem onAction="#handleAboutMenuItemAction" text="About Software-EKG" />
+                </Menu>
+            </MenuBar>
+
+        </VBox>
+    </top>
+
+
+    <bottom>
+        <HBox alignment="CENTER_LEFT" style="-fx-background-color: #FFFFFF;">
+            <!-- this component is part of WFX and could resolved by IDE correctly -->
+            <!--suppress XmlPathReference -->
+            <fx:include fx:id="statusBar" source="/default/ProgressView.fxml" HBox.hgrow="ALWAYS" />
+
+            <!-- shown next to the progress bar while a background task that can be cancelled is running -->
+            <Button fx:id="cancelTaskButton" onAction="#handleCancelTaskAction" mnemonicParsing="false"
+                    managed="false" visible="false">
+                <HBox.margin>
+                    <Insets right="10.0" />
+                </HBox.margin>
+            </Button>
+        </HBox>
+    </bottom>
+
+
+</BorderPane>

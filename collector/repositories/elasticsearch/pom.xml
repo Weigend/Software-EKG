@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>io.softwareecg.collector</groupId>
+        <artifactId>collector-parent</artifactId>
+        <version>${revision}</version>
+        <relativePath>../../../build/collector-parent/pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>collector-repository-rdb-elasticsearch</artifactId>
+
+    <description>
+        Module that provides an implementation of the collector-repository-api based on the remote NoSQL database
+        ElasticSearch. The module also implement the collector-repository-rdb-api to manage the indices and data
+        batch optimization.
+    </description>
+
+
+    <dependencies>
+        <!-- the rdp-api module provides the necessary interfaces that are implemented by this component -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>collector-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- the rdp-api module provides the necessary interfaces that are implemented by this component -->
+        <dependency>
+            <groupId>io.softwareecg.collector</groupId>
+            <artifactId>collector-rdb</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!--
+         provides the API to access ElasticSearch instances via REST service interface
+        -->
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-client</artifactId>
+            <version>6.4.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-high-level-client</artifactId>
+            <version>6.4.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.9.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.5</version>
+        </dependency>
+    </dependencies>
+
+
+</project>

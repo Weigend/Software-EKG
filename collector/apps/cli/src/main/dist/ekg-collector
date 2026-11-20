@@ -1,0 +1,144 @@
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides:          ekg-collector
+# Required-Start:    $network $remote_fs
+# Required-Stop:     $network $remote_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Software-EKG collector
+# Description:       Runs the Software-EKG collector in the background.
+### END INIT INFO
+
+#
+# Runs the Software-EKG collector in the background:
+#
+#   ekg-collector start | stop | restart | status | version
+#
+# The script can be called where it lies or through a link, for example from /etc/init.d.
+#
+# Environment (for a service: set them in /etc/default/ekg-collector, which is read if it exists):
+#   EKG_COLLECTOR_CONFIG      the configuration (default: config/default/config.yaml)
+#   EKG_COLLECTOR_LOGDIR      where the collector writes (default: logs)
+#   EKG_COLLECTOR_JAVA_OPTS   options for the JVM (default: -Xmx386m). To have the collector
+#                             measured itself over Jolokia, add
+#                             -javaagent:lib/jolokia-jvm-1.6.0-agent.jar=port=8778,host=localhost
+#   JAVA_HOME                 the Java 25 runtime, unless the distribution brings one in "jre"
+#   and whatever the configuration refers to with ${ENV:NAME} - passwords, for example.
+
+if [ -r /etc/default/ekg-collector ]; then
+    set -a
+    . /etc/default/ekg-collector
+    set +a
+fi
+
+# $0 may be a link
+HERE="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
+
+CONFIG="${EKG_COLLECTOR_CONFIG:-$HERE/config/default/config.yaml}"
+LOGDIR="${EKG_COLLECTOR_LOGDIR:-$HERE/logs}"
+JAVA_OPTS="${EKG_COLLECTOR_JAVA_OPTS:--Xmx386m}"
+PID_FILE="$HERE/ekg-collector.pid"
+# what the JVM itself prints; everything else goes to the log files of the collector
+STDERR="$HERE/stderr.log"
+
+# What the JVM would warn about although it is intended: native code is loaded by the
+# JavaScript engine of the calculated metrics and by the Windows counters, and that engine
+# uses sun.misc.Unsafe and runs without a compiler of its own.
+QUIET="--enable-native-access=ALL-UNNAMED --sun-misc-unsafe-memory-access=allow -Dpolyglot.engine.WarnInterpreterOnly=false"
+
+if [ -x "$HERE/jre/bin/java" ]; then
+    JAVA="$HERE/jre/bin/java"
+elif [ -n "$JAVA_HOME" ] && [ -x "$JAVA_HOME/bin/java" ]; then
+    JAVA="$JAVA_HOME/bin/java"
+else
+    JAVA="$(command -v java)"
+fi
+
+# prints the pid of the collector if it runs
+running_pid() {
+    if [ -s "$PID_FILE" ]; then
+        local pid
+        pid="$(cat "$PID_FILE")"
+        if kill -0 "$pid" 2> /dev/null; then
+            echo "$pid"
+            return 0
+        fi
+    fi
+    return 1
+}
+
+start() {
+    local pid
+    if pid="$(running_pid)"; then
+        echo "The collector is running already (pid $pid)."
+        return 1
+    fi
+    if [ -z "$JAVA" ]; then
+        echo "No Java found. Install a JDK 25 or set JAVA_HOME." >&2
+        return 1
+    fi
+    if [ ! -f "$CONFIG" ]; then
+        echo "There is no configuration $CONFIG." >&2
+        return 1
+    fi
+    # relative paths of the configuration and of the repository are meant from here
+    cd "$HERE" || return 1
+    # shellcheck disable=SC2086
+    nohup "$JAVA" $JAVA_OPTS $QUIET \
+        -Dlogback.configurationFile="$HERE/config/logback.xml" \
+        -Dcollector.log.dir="$LOGDIR" \
+        -classpath "$HERE/config:$HERE/lib/*" \
+        io.softwareecg.collector.StartCollector "$CONFIG" "$LOGDIR" > /dev/null 2>> "$STDERR" &
+    echo $! > "$PID_FILE"
+    echo "Started the collector (pid $(cat "$PID_FILE")) with $CONFIG."
+}
+
+stop() {
+    local pid
+    if ! pid="$(running_pid)"; then
+        echo "The collector is not running."
+        rm -f "$PID_FILE"
+        return 0
+    fi
+    kill "$pid"
+    for _ in $(seq 1 30); do
+        if ! kill -0 "$pid" 2> /dev/null; then
+            rm -f "$PID_FILE"
+            echo "Stopped the collector."
+            return 0
+        fi
+        sleep 1
+    done
+    echo "The collector (pid $pid) did not stop within 30 seconds." >&2
+    return 1
+}
+
+case "${1:-}" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart|force-reload)
+        stop && start
+        ;;
+    status)
+        if pid="$(running_pid)"; then
+            echo "The collector is running (pid $pid)."
+        else
+            echo "The collector is not running."
+            exit 3
+        fi
+        ;;
+    version)
+        version="$(ls "$HERE"/lib/collector-core-*.jar 2> /dev/null | head -1)"
+        version="${version##*/collector-core-}"
+        echo "Software-EKG collector ${version%.jar}"
+        ;;
+    *)
+        echo "Usage: $(basename "$0") start | stop | restart | status | version"
+        exit 1
+        ;;
+esac

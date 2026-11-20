@@ -1,0 +1,58 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.2.0 https://maven.apache.org/xsd/assembly-2.2.0.xsd">
+    <!-- The workbench as a directory that can be started as it is: start scripts, libraries
+         and the configuration of the embedded Solr. The formats are set by the build. -->
+    <id>dist</id>
+    <includeBaseDirectory>true</includeBaseDirectory>
+    <baseDirectory>${workbenchProductName}</baseDirectory>
+
+    <files>
+        <file><source>../LICENSE</source><outputDirectory>.</outputDirectory></file>
+        <file><source>../NOTICE</source><outputDirectory>.</outputDirectory></file>
+    </files>
+
+    <fileSets>
+        <fileSet>
+            <directory>src/main/dist</directory>
+            <outputDirectory>.</outputDirectory>
+            <excludes>
+                <exclude>bin/*.sh</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>src/main/dist/bin</directory>
+            <outputDirectory>bin</outputDirectory>
+            <includes>
+                <include>*.sh</include>
+            </includes>
+            <fileMode>0755</fileMode>
+            <lineEnding>unix</lineEnding>
+        </fileSet>
+        <fileSet>
+            <directory>src/main/solr</directory>
+            <outputDirectory>solr</outputDirectory>
+        </fileSet>
+    </fileSets>
+
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>lib</outputDirectory>
+            <scope>runtime</scope>
+            <useProjectArtifact>true</useProjectArtifact>
+            <excludes>
+                <!-- JavaFX comes with the Java runtime; the jars of the build platform go to
+                     lib/javafx as a fallback for a runtime without it -->
+                <exclude>org.openjfx:*</exclude>
+            </excludes>
+        </dependencySet>
+        <dependencySet>
+            <outputDirectory>lib/javafx</outputDirectory>
+            <scope>runtime</scope>
+            <useProjectArtifact>false</useProjectArtifact>
+            <includes>
+                <include>org.openjfx:*</include>
+            </includes>
+        </dependencySet>
+    </dependencySets>
+</assembly>

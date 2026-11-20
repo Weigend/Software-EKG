@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
+
+    <logger name="org.apache.solr" level="INFO"/>
+    <logger name="org.apache.solr.update" level="WARN"/>
+    <logger name="org.apache.solr.core.SolrCore" level="OFF"/>
+    <logger name="org.apache.solr.core.SolrCore.Request" level="WARN"/>
+    <logger name="org.apache.http" level="INFO"/>
+    <logger name="com.espertech.esper" level="INFO"/>
+    <logger name="com.espertech.esper.core.service" level="WARN"/>
+    <logger name="com.espertech.esper.core.deploy.EPLModuleUtil" level="OFF"/>
+    <logger name="com.espertech.esper.event.bean.PropertyHelper" level="OFF"/>
+    <logger name="io.softwareecg.sdfx" level="INFO"/>
+    <logger name="org.apache.zookeeper.ClientCnxn" level="WARN"/>
+    <logger name="io.softwareecg.awb.da.solr.SolrRepositoryClient" level="WARN"/>
+
+    <!-- AI Chat debug log — tool calls, tool results, agent loop details -->
+    <appender name="AICHAT_FILE" class="ch.qos.logback.core.FileAppender">
+        <file>aichat-debug.log</file>
+        <append>false</append>
+        <encoder>
+            <pattern>%date{HH:mm:ss.SSS} %-5level - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="aichat.debug" level="DEBUG" additivity="false">
+        <appender-ref ref="AICHAT_FILE"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

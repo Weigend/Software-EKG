@@ -1,0 +1,77 @@
+# Software-EKG collector - the nodes of a cluster, read with "top" over SSH.
+#
+# All nodes share one login, named once at the host group. A host whose name is its address
+# is written as that name alone.
+
+project: CollectorSSH Monitoring
+
+metricGroups:
+  unix-process:
+    type: unix
+    metrics:
+      - metric: '\Process(${REF:procName})\PID'
+        regexPostFilter: ((?!collector).)*
+      - metric: '\Process(${REF:procName})\USER'
+        regexPostFilter: ((?!collector).)*
+      - metric: '\Process(${REF:procName})\PR'
+        regexPostFilter: ((?!collector).)*
+      - metric: '\Process(${REF:procName})\NI'
+        regexPostFilter: ((?!collector).)*
+      - metric: '\Process(${REF:procName})\VIRT'
+        regexPostFilter: ((?!collector).)*
+      - metric: '\Process(${REF:procName})\RES'
+        regexPostFilter: ((?!collector).)*
+      - metric: '\Process(${REF:procName})\SHR'
+        regexPostFilter: ((?!collector).)*
+      - metric: '\Process(${REF:procName})\S'
+        regexPostFilter: ((?!collector).)*
+      - metric: '\Process(${REF:procName})\TIME'
+        regexPostFilter: ((?!collector).)*
+      - metric: '\Process(${REF:procName})\CPU'
+        regexPostFilter: ((?!collector).)*
+      - metric: '\Process(${REF:procName})\MEM'
+        regexPostFilter: ((?!collector).)*
+  unix-system:
+    type: unix
+    metrics:
+      - metric: \Memory\*
+        wildcard: true
+      - metric: \Swap\*
+        wildcard: true
+      - metric: \Tasks\*
+        wildcard: true
+      - metric: \CPU\*
+        wildcard: true
+      - metric: \User\users
+        wildcard: true
+      - metric: \Uptime\up
+        wildcard: true
+      - metric: \Load\*
+        wildcard: true
+
+processGroups:
+  cluster-processes:
+    - name: sshd
+      source: '${REF:hostAddress}:22'
+
+hostGroups:
+  cluster-nodes:
+    username: cloudadmin
+    hosts:
+      - node0
+      - node1
+      - node2
+      - node3
+      - node4
+
+collectors:
+  - type: sidecar
+    metricGroup: unix-process
+    processGroup: cluster-processes
+    nodeGroup: cluster-nodes
+    interval: 5s
+  - type: sidecar
+    metricGroup: unix-system
+    processGroup: cluster-processes
+    nodeGroup: cluster-nodes
+    interval: 5s

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Console output -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Main application log file -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>software-ekg.log</file>
+        <append>false</append>
+        <encoder>
+            <pattern>%date [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- AI Chat debug log — tool calls, tool results, agent loop details -->
+    <appender name="AICHAT_FILE" class="ch.qos.logback.core.FileAppender">
+        <file>aichat-debug.log</file>
+        <append>false</append>
+        <encoder>
+            <pattern>%date{HH:mm:ss.SSS} %-5level - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Noisy libraries -->
+    <logger name="afester.javafx.svg" level="ERROR"/>
+    <logger name="org.apache.solr" level="INFO"/>
+    <logger name="org.apache.solr.update" level="WARN"/>
+    <logger name="org.apache.solr.core.SolrCore" level="OFF"/>
+    <logger name="org.apache.solr.core.SolrCore.Request" level="WARN"/>
+    <logger name="org.apache.solr.common.cloud.ConnectionManager" level="WARN"/>
+    <logger name="org.apache.solr.common.cloud.DefaultConnectionStrategy" level="WARN"/>
+    <logger name="org.apache.http" level="INFO"/>
+    <logger name="org.apache.zookeeper" level="INFO"/>
+    <logger name="org.apache.zookeeper.ClientCnxn" level="WARN"/>
+    <logger name="com.espertech.esper" level="INFO"/>
+    <logger name="com.espertech.esper.core.service" level="WARN"/>
+    <logger name="com.espertech.esper.core.deploy.EPLModuleUtil" level="OFF"/>
+    <logger name="com.espertech.esper.event.bean.PropertyHelper" level="OFF"/>
+    <logger name="io.softwareecg.sdfx" level="INFO"/>
+    <logger name="io.softwareecg.awb.da.solr.SolrRepositoryClient" level="WARN"/>
+
+    <!-- ClickHouse JDBC driver loggt jeden Verbindungsfehler als ERROR mit Stacktrace.
+         Bei nicht erreichbarem Server flutet das den Log; der Repository-Layer kuemmert
+         sich selbst um State-Tracking. -->
+    <logger name="com.clickhouse.client.http.ApacheHttpConnectionImpl" level="OFF"/>
+    <logger name="com.clickhouse.client" level="WARN"/>
+
+    <!-- Hikari Housekeeping (connection-adder, PoolBase) loggt bei jedem fehlgeschlagenen
+         Verbindungsaufbau im Hintergrund WARN + Stacktrace. Ist redundant zum State-Tracking
+         des Repository-Layers; daher komplett aus. Echte Fatale Pool-Probleme tauchen
+         dann beim Aufrufer als Exception auf. -->
+    <logger name="com.zaxxer.hikari.pool.HikariPool" level="OFF"/>
+    <logger name="com.zaxxer.hikari.pool.PoolBase" level="OFF"/>
+
+    <!-- AI Chat: separate file, no console output -->
+    <logger name="aichat.debug" level="DEBUG" additivity="false">
+        <appender-ref ref="AICHAT_FILE"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>

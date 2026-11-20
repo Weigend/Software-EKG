@@ -1,0 +1,158 @@
+top - 11:46:11 up 3 days, 14:35,  1 user,  load average: 0.72, 0.75, 0.83
+Tasks: 151 total,   1 running, 150 sleeping,   0 stopped,   0 zombie
+Cpu(s):  0.4%us,  0.3%sy,  0.0%ni, 84.4%id, 15.0%wa,  0.0%hi,  0.0%si,  0.0%st
+Mem:   1025656k total,   748136k used,   277520k free,    28256k buffers
+Swap:  1045500k total,   172988k used,   872512k free,   225140k cached
+
+  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND
+  962 root      20   0  171m 107m 9396 S  9.4 10.7   9:38.03 /usr/bin/X :0 -auth /var/run/lightdm/root/:0 -nolisten tcp vt7 -novtswitch -background none
+15122 root      20   0  5680 1336 1044 S  3.8  0.1   0:00.06 dnssd
+15144 hadoop    20   0  2816 1140  844 R  1.9  0.1   0:00.03 top -c -b -n 1 -
+    1 root      20   0  3332  924  448 S  0.0  0.1   0:01.62 /sbin/init
+    2 root      20   0     0    0    0 S  0.0  0.0   0:00.01 [kthreadd]
+    3 root      20   0     0    0    0 S  0.0  0.0   0:01.74 [ksoftirqd/0]
+    5 root      20   0     0    0    0 S  0.0  0.0   0:02.08 [kworker/u:0]
+    6 root      RT   0     0    0    0 S  0.0  0.0   0:00.00 [migration/0]
+    7 root       0 -20     0    0    0 S  0.0  0.0   0:00.00 [cpuset]
+    8 root       0 -20     0    0    0 S  0.0  0.0   0:00.00 [khelper]
+    9 root       0 -20     0    0    0 S  0.0  0.0   0:00.00 [netns]
+   10 root      20   0     0    0    0 S  0.0  0.0   0:00.23 [sync_supers]
+   11 root      20   0     0    0    0 S  0.0  0.0   0:00.00 [bdi-default]
+   12 root       0 -20     0    0    0 S  0.0  0.0   0:00.00 [kintegrityd]
+   13 root       0 -20     0    0    0 S  0.0  0.0   0:00.00 [kblockd]
+   14 root       0 -20     0    0    0 S  0.0  0.0   0:00.00 [ata_sff]
+   15 root      20   0     0    0    0 S  0.0  0.0   0:00.06 [khubd]
+   16 root       0 -20     0    0    0 S  0.0  0.0   0:00.00 [md]
+   19 root      20   0     0    0    0 S  0.0  0.0   0:00.10 [khungtaskd]
+   20 root      20   0     0    0    0 S  0.0  0.0   0:22.18 [kswapd0]
+   21 root      25   5     0    0    0 S  0.0  0.0   0:00.00 [ksmd]
+   22 root      39  19     0    0    0 S  0.0  0.0   0:00.00 [khugepaged]
+   23 root      20   0     0    0    0 S  0.0  0.0   0:00.00 [fsnotify_mark]
+   24 root      20   0     0    0    0 S  0.0  0.0   0:00.00 [ecryptfs-kthrea]
+   25 root       0 -20     0    0    0 S  0.0  0.0   0:00.00 [crypto]
+   33 root       0 -20     0    0    0 S  0.0  0.0   0:00.00 [kthrotld]
+   35 root      20   0     0    0    0 S  0.0  0.0   0:00.01 [scsi_eh_0]
+   36 root      20   0     0    0    0 S  0.0  0.0   0:04.72 [scsi_eh_1]
+   37 root      20   0     0    0    0 S  0.0  0.0   0:01.71 [kworker/u:3]
+  178 root       0 -20     0    0    0 S  0.0  0.0   0:00.00 [mpt_poll_0]
+  179 root       0 -20     0    0    0 S  0.0  0.0   0:00.00 [mpt/0]
+  224 root      20   0     0    0    0 S  0.0  0.0   0:03.49 [scsi_eh_2]
+  240 root      20   0     0    0    0 S  0.0  0.0   0:04.47 [jbd2/sda1-8]
+  241 root       0 -20     0    0    0 S  0.0  0.0   0:00.00 [ext4-dio-unwrit]
+  294 root      20   0  2648  524  420 S  0.0  0.1   0:00.08 upstart-udev-bridge --daemon
+  296 root      20   0  3100  384  288 S  0.0  0.0   0:00.12 udevd --daemon
+  391 root      20   0  6424  396  284 S  0.0  0.0   0:00.08 /usr/sbin/sshd -D
+  395 syslog    20   0 28932  148    0 S  0.0  0.0   0:06.88 rsyslogd -c5
+  401 messageb  20   0  4416 1416  684 S  0.0  0.1   0:14.34 dbus-daemon --system --fork --activation=upstart
+  423 root      20   0  6864  956  752 S  0.0  0.1   0:00.16 /usr/sbin/modem-manager
+  426 avahi     20   0  3432  704  540 S  0.0  0.1   0:03.23 avahi-daemon: running [hadoop1.local]
+  429 avahi     20   0  3316   28    0 S  0.0  0.0   0:00.00 avahi-daemon: chroot helper
+  432 root      20   0 18692 2268 1672 S  0.0  0.2   0:01.99 NetworkManager
+  437 root      20   0 24464 2272 1596 S  0.0  0.2   0:05.62 /usr/lib/policykit-1/polkitd
+  525 root      20   0  3096  632  368 S  0.0  0.1   0:00.13 udevd --daemon
+  526 root      20   0  3096  356  196 S  0.0  0.0   0:00.02 udevd --daemon
+  589 root       0 -20     0    0    0 S  0.0  0.0   0:00.00 [l2cap]
+  603 root       0 -20     0    0    0 S  0.0  0.0   0:00.00 [kpsmoused]
+  661 root      20   0 18232  964  720 S  0.0  0.1   0:00.64 smbd -F
+  675 root      20   0  2652   20    0 S  0.0  0.0   0:00.00 upstart-socket-bridge --daemon
+  684 root      20   0 18196   20    0 S  0.0  0.0   0:00.00 smbd -F
+  689 root       0 -20     0    0    0 S  0.0  0.0   0:00.00 [vmmemctl]
+  791 root      20   0  1968    4    0 S  0.0  0.0   0:00.00 /sbin/getty -8 38400 tty4
+  796 root      20   0  1968    8    4 S  0.0  0.0   0:00.00 /sbin/getty -8 38400 tty5
+  806 root      20   0  1968    8    4 S  0.0  0.0   0:00.00 /sbin/getty -8 38400 tty2
+  808 root      20   0  1968    8    4 S  0.0  0.0   0:00.00 /sbin/getty -8 38400 tty3
+  810 root      20   0  1968    8    4 S  0.0  0.0   0:00.00 /sbin/getty -8 38400 tty6
+  817 root      20   0  1984    4    0 S  0.0  0.0   0:00.00 acpid -c /etc/acpi/events -s /var/run/acpid.socket
+  818 daemon    20   0  2280   12    0 S  0.0  0.0   0:00.00 atd
+  819 root      20   0  2428  224  168 S  0.0  0.0   0:00.23 cron
+  864 root      20   0 10312  828  640 S  0.0  0.1   0:10.80 nmbd -D
+  892 root      20   0  4496  904  788 S  0.0  0.1   0:00.14 /usr/sbin/bluetoothd
+  898 root      10 -10     0    0    0 S  0.0  0.0   0:00.00 [krfcommd]
+  932 root      20   0  7432 1740 1164 S  0.0  0.2   0:05.64 /usr/sbin/cupsd -F
+  935 root      20   0 40136 1136  840 S  0.0  0.1   0:00.10 lightdm
+  942 colord    20   0 50032 1680 1216 S  0.0  0.2   0:00.85 /usr/lib/i386-linux-gnu/colord/colord
+ 1022 root      20   0     0    0    0 S  0.0  0.0   0:08.16 [flush-8:0]
+ 1079 root      20   0  1968    8    4 S  0.0  0.0   0:00.00 /sbin/getty -8 38400 tty1
+ 1314 root      20   0 30784    0    0 S  0.0  0.0   0:00.00 /usr/sbin/vmware-vmblock-fuse -o subtype=vmware-vmblock,default_permissions,allow_other /var/run/vmblock-fuse
+ 1336 root      20   0 14744 1676 1324 S  0.0  0.2   0:01.72 /usr/lib/accountsservice/accounts-daemon
+ 1341 root      20   0 25548 1860 1472 S  0.0  0.2   1:19.35 /usr/sbin/vmtoolsd
+ 1351 root      20   0 27812 1756 1652 S  0.0  0.2   0:02.29 /usr/sbin/console-kit-daemon --no-daemon
+ 1498 root      20   0 25960 1580 1228 S  0.0  0.2   0:00.26 /usr/lib/upower/upowerd
+ 1542 rtkit     21   1 19088  352  292 S  0.0  0.0   0:00.71 /usr/lib/rtkit/rtkit-daemon
+ 1596 root      20   0 12764  208  164 S  0.0  0.0   0:04.94 tpvmlpd2
+ 1640 hadoop    20   0 72052 2760 1536 S  0.0  0.3   0:01.30 /usr/bin/gnome-keyring-daemon --daemonize --login
+ 1649 hadoop    20   0 46576 2396 1748 S  0.0  0.2   0:00.68 gnome-session --session=ubuntu
+ 1685 hadoop    20   0  3856   16    0 S  0.0  0.0   0:00.42 /usr/bin/ssh-agent /usr/bin/dbus-launch --exit-with-session gnome-session --session=ubuntu
+ 1688 hadoop    20   0  3748    0    0 S  0.0  0.0   0:00.00 /usr/bin/dbus-launch --exit-with-session gnome-session --session=ubuntu
+ 1689 hadoop    20   0  6792 2464  816 S  0.0  0.2   0:48.17 //bin/dbus-daemon --fork --print-pid 8 --print-address 10 --session
+ 1691 hadoop    20   0  9148  952  792 S  0.0  0.1   0:00.10 /usr/lib/gvfs/gvfsd
+ 1700 hadoop    20   0 31588  280  200 S  0.0  0.0   0:00.00 /usr/lib/gvfs//gvfs-fuse-daemon /home/hadoop/.gvfs
+ 1711 hadoop    20   0  129m 4920 3304 S  0.0  0.5   0:08.00 /usr/lib/gnome-settings-daemon/gnome-settings-daemon
+ 1718 hadoop    20   0  9392 1256  856 S  0.0  0.1   0:01.28 /usr/lib/libgconf2-4/gconfd-2
+ 1720 hadoop    20   0 33672  348  348 S  0.0  0.0   0:00.00 /usr/lib/gnome-settings-daemon/gsd-printer
+ 1721 hadoop    20   0  129m 9300 6872 S  0.0  0.9   0:26.05 metacity
+ 1725 hadoop    20   0 38000 5580 4140 S  0.0  0.5   0:04.98 /usr/bin/gnome-screensaver --no-daemon
+ 1730 hadoop    20   0 77444 9924 6296 S  0.0  1.0   0:18.80 unity-2d-panel
+ 1731 hadoop    20   0  206m  17m   9m S  0.0  1.8   0:17.64 unity-2d-launcher
+ 1737 hadoop    20   0 97660 3312 2188 S  0.0  0.3   0:17.83 /usr/bin/pulseaudio --start --log-target=syslog
+ 1740 hadoop    20   0 13264  224  224 S  0.0  0.0   0:00.00 /usr/lib/pulseaudio/pulse/gconf-helper
+ 1742 hadoop    20   0 30340 1188 1060 S  0.0  0.1   0:00.24 /usr/lib/d-conf/dconf-service
+ 1746 hadoop    20   0 54180 3324 2464 S  0.0  0.3   0:00.36 bluetooth-applet
+ 1747 hadoop    20   0 29360 1576 1184 S  0.0  0.2   0:00.23 /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
+ 1749 hadoop    20   0  114m  20m 8912 S  0.0  2.1   2:20.70 nautilus -n
+ 1750 hadoop    20   0 45348 1724 1336 S  0.0  0.2   0:00.15 /usr/lib/gnome-settings-daemon/gnome-fallback-mount-helper
+ 1755 hadoop    20   0 43300 3476 2392 S  0.0  0.3   0:06.14 /usr/lib/bamf/bamfdaemon
+ 1756 hadoop    20   0 79240 3060 1808 S  0.0  0.3   0:00.47 nm-applet
+ 1757 hadoop    20   0 80364  15m 9920 S  0.0  1.6   1:35.79 /usr/lib/vmware-tools/sbin32/vmtoolsd -n vmusr --blockFd 3
+ 1771 hadoop    20   0 81544  15m 4528 S  0.0  1.5   0:37.08 /usr/lib/unity/unity-panel-service
+ 1776 hadoop    20   0 10076 1828 1428 S  0.0  0.2   0:00.10 /usr/lib/gvfs/gvfs-gdu-volume-monitor
+ 1778 root      20   0 14784 1920 1552 S  0.0  0.2   0:00.35 /usr/lib/udisks/udisks-daemon
+ 1780 root      20   0  6320  140   60 S  0.0  0.0   0:07.87 udisks-daemon: polling /dev/sr0
+ 1790 hadoop    20   0 54848 4984 3124 S  0.0  0.5   0:01.19 /usr/lib/notify-osd/notify-osd
+ 1793 hadoop    20   0  9236 1172  944 S  0.0  0.1   0:00.04 /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
+ 1796 hadoop    20   0 19320  576  520 S  0.0  0.1   0:00.02 /usr/lib/gvfs/gvfs-afc-volume-monitor
+ 1804 hadoop    20   0 63740 1220  952 S  0.0  0.1   0:00.16 /usr/lib/indicator-messages/indicator-messages-service
+ 1806 hadoop    20   0 68272 2332 1804 S  0.0  0.2   0:00.61 /usr/lib/indicator-datetime/indicator-datetime-service
+ 1809 hadoop    20   0 49692 1668 1272 S  0.0  0.2   0:00.13 /usr/lib/indicator-application/indicator-application-service
+ 1812 hadoop    20   0  128m 1528 1104 S  0.0  0.1   0:00.40 /usr/lib/indicator-sound/indicator-sound-service
+ 1819 hadoop    20   0 69108 1200  980 S  0.0  0.1   0:00.10 /usr/lib/indicator-session/indicator-session-service
+ 1849 hadoop    20   0  7732  596  464 S  0.0  0.1   0:00.06 /usr/lib/geoclue/geoclue-master
+ 1852 hadoop    20   0  9896 1676 1200 S  0.0  0.2   0:00.27 /usr/lib/gvfs/gvfsd-trash --spawner :1.1 /org/gtk/gvfs/exec_spaw/0
+ 1858 hadoop    20   0  9180  360  360 S  0.0  0.0   0:00.00 /usr/lib/gvfs/gvfsd-burn --spawner :1.1 /org/gtk/gvfs/exec_spaw/1
+ 1872 hadoop    20   0 25472  296  296 S  0.0  0.0   0:00.01 telepathy-indicator
+ 1875 hadoop    20   0  9116  944  744 S  0.0  0.1   0:00.11 /usr/lib/telepathy/mission-control-5
+ 1897 hadoop    20   0  8336 1016  784 S  0.0  0.1   0:00.11 /usr/lib/gvfs/gvfsd-metadata
+ 1919 hadoop    20   0 22336 2048 1492 S  0.0  0.2   0:00.13 /usr/lib/gnome-disk-utility/gdu-notification-daemon
+ 1922 hadoop    20   0 50192 2220 1680 S  0.0  0.2   0:00.80 zeitgeist-datahub
+ 1928 hadoop    20   0 34712 7600 3068 S  0.0  0.7   0:01.54 /usr/bin/python /usr/bin/zeitgeist-daemon
+ 1929 hadoop    20   0  4284    0    0 S  0.0  0.0   0:00.00 /bin/cat
+ 1939 hadoop    20   0 37112 2940 1700 S  0.0  0.3   0:02.78 /usr/bin/python /usr/share/system-config-printer/applet.py
+ 1944 hadoop    20   0 56336 3692 2464 S  0.0  0.4   0:02.05 update-notifier
+ 1960 root      20   0 17336  240  240 S  0.0  0.0   0:00.06 /usr/bin/python /usr/lib/system-service/system-service-d
+ 2090 hadoop    20   0 32368 1088  676 S  0.0  0.1   0:00.19 /usr/lib/deja-dup/deja-dup/deja-dup-monitor
+ 2729 hadoop    20   0  371m  46m  15m S  0.0  4.6   1:59.23 /usr/lib/firefox-7.0.1/firefox
+ 6729 hadoop    20   0  633m  28m 7268 S  0.0  2.8   0:12.21 /usr/lib/jvm/jdk1.7.0_02/bin/java -Xmx500m -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote -Dhadoop.log.dir=/home/hadoop/Desktop/hadoop-0.
+ 6939 hadoop    20   0  632m  32m 7292 S  0.0  3.3   0:14.27 /usr/lib/jvm/jdk1.7.0_02/bin/java -Xmx500m -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote -Dhadoop.log.dir=/home/hadoop/Desktop/hadoop-0.
+ 7035 hadoop    20   0  636m  37m 7272 S  0.0  3.7   0:12.68 /usr/lib/jvm/jdk1.7.0_02/bin/java -Xmx500m -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote -Dhadoop.log.dir=/home/hadoop/Desktop/hadoop-0.
+ 7235 hadoop    20   0  631m  34m 7284 S  0.0  3.5   0:13.44 /usr/lib/jvm/jdk1.7.0_02/bin/java -Xmx500m -Dhadoop.log.dir=/home/hadoop/Desktop/hadoop-0.20.2/bin/../logs -Dhadoop.log.file=hadoop-hadoop-tasktracker-h
+ 8351 hadoop    20   0  136m  83m  13m S  0.0  8.3   1:58.19 gedit /home/hadoop/Desktop/hadoop-0.20.2/output/part-r-00000
+12058 root      20   0     0    0    0 S  0.0  0.0   0:00.36 [kworker/0:0]
+12721 root      20   0     0    0    0 S  0.0  0.0   0:00.26 [kworker/0:2]
+13921 hadoop    20   0 75040 9760 5184 S  0.0  1.0   0:26.07 gnome-terminal
+13929 hadoop    20   0  2212    8    4 S  0.0  0.0   0:00.00 gnome-pty-helper
+13930 hadoop    20   0  7440 1864  844 S  0.0  0.2   0:02.03 bash
+15115 root      20   0     0    0    0 S  0.0  0.0   0:00.00 [kworker/0:1]
+15116 root      20   0 12768  524  416 S  0.0  0.1   0:00.00 tpvmlpd2
+15117 root      20   0  7996 1904 1480 S  0.0  0.2   0:00.01 lpinfo -v
+15118 root      20   0  5824 1448 1000 S  0.0  0.1   0:00.02 /usr/lib/cups/daemon/cups-deviced 1 0 15 7 requested-attributes=all
+15123 lp        20   0  5924 1000  764 S  0.0  0.1   0:00.00 hp
+15132 lp        20   0 19640 8536 3272 D  0.0  0.8   0:00.09 python /usr/lib/cups/backend/hpfax
+22175 hadoop    20   0  143m 6744 4244 S  0.0  0.7   0:03.06 /usr/bin/unity-2d-places
+22199 hadoop    20   0 67252 1576 1256 S  0.0  0.2   0:01.30 /usr/lib/unity-lens-applications/unity-applications-daemon
+22200 hadoop    20   0 51576 2916 2152 S  0.0  0.3   0:00.56 /usr/lib/unity-lens-files/unity-files-daemon
+22202 hadoop    20   0 51564 1196 1024 S  0.0  0.1   0:00.23 /usr/lib/unity-lens-music/unity-music-daemon
+22238 hadoop    20   0 49932  872  832 S  0.0  0.1   0:00.14 /usr/lib/unity-lens-music/unity-musicstore-daemon
+22268 hadoop    20   0  2040    4    0 S  0.0  0.0   0:00.01 /bin/sh /usr/bin/libreoffice /etc/samba/smb.conf
+22269 hadoop    20   0 33432  108  108 S  0.0  0.0   0:00.37 /usr/lib/libreoffice/program/oosplash.bin /etc/samba/smb.conf
+22281 hadoop    20   0  237m  14m 9028 S  0.0  1.4   0:20.04 /usr/lib/libreoffice/program/soffice.bin /etc/samba/smb.conf --splash-pipe=7
+24052 hadoop    20   0  108m  12m  10m S  0.0  1.3   0:02.17 /usr/bin/unity-2d-spread

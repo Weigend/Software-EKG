@@ -1,0 +1,784 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.softwareecg</groupId>
+    <artifactId>software-ekg</artifactId>
+    <version>${revision}</version>
+    <packaging>pom</packaging>
+    <name>Software EKG</name>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <description>Single-repository build for the workbench and the headless collector.</description>
+
+    <!-- global properties for the whole project  -->
+    <properties>
+        <revision>7.1.0-SNAPSHOT</revision>
+        <!-- what a build is made from, shown next to the version; a build server passes
+             -Dbuild.revision=<commit> -->
+        <build.revision>local</build.revision>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <solrVersion>9.10.1</solrVersion>
+        <poiVersion>5.5.1</poiVersion>
+        <wfxVersion>1.4.1</wfxVersion>
+        <slf4jVersion>2.0.17</slf4jVersion>
+        <jacksonVersion>2.19.0</jacksonVersion>
+        <java.version>25</java.version>
+        <javafx.version>25.0.5.1</javafx.version>
+        <avaje.version>11.4</avaje.version>
+        <!-- empty default; JaCoCo's prepare-agent overwrites this when metrics profile is active -->
+        <argLine/>
+    </properties>
+
+    <!-- Real deployment and extension boundaries only. The former 83-project reactor
+         represented implementation layers as artifacts; those layers now live as packages. -->
+    <modules>
+        <!-- The collector artifacts inherit their dependency management from this parent.
+             Keep it in the reactor so install/deploy publishes a usable consumer model. -->
+        <module>build/collector-parent</module>
+        <module>collector/core</module>
+        <module>collector/repositories/csv</module>
+        <module>collector/repositories/json</module>
+        <module>collector/repositories/rdb</module>
+        <module>collector/repositories/solr</module>
+        <module>collector/repositories/elasticsearch</module>
+        <module>collector/sources/jmx</module>
+        <module>collector/sources/jolokia</module>
+        <module>collector/sources/log</module>
+        <module>collector/sources/logevents</module>
+        <module>collector/sources/mock</module>
+        <module>collector/sources/prometheus</module>
+        <module>collector/sources/rlog</module>
+        <module>collector/sources/unix</module>
+        <module>collector/sources/windows</module>
+        <module>collector/apps/cli</module>
+        <module>collector/apps/ui</module>
+        <module>collector/apps/jolokia-agent</module>
+        <module>workbench</module>
+    </modules>
+
+
+    <!-- profiles to build the native the EKG bundle with the correct native JavaFX libs -->
+    <profiles>
+        <profile>
+            <id>linux</id>
+            <activation>
+                <os>
+                    <name>linux</name>
+                </os>
+            </activation>
+            <properties>
+                <javafx.platform>linux</javafx.platform>
+            </properties>
+        </profile>
+        <profile>
+            <id>macosx</id>
+            <activation>
+                <os>
+                    <name>mac os x</name>
+                </os>
+            </activation>
+            <properties>
+                <javafx.platform>mac</javafx.platform>
+            </properties>
+        </profile>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <javafx.platform>win</javafx.platform>
+            </properties>
+        </profile>
+        <!-- Software City metrics: activate with  mvn verify -Pmetrics  -->
+        <profile>
+            <id>metrics</id>
+            <build>
+                <plugins>
+
+                    <!-- JaCoCo: Code Coverage -->
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>jacoco-prepare</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>jacoco-report</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- Checkstyle: Code Style -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>checkstyle</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>checkstyle</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <failOnViolation>false</failOnViolation>
+                            <outputFileFormat>xml</outputFileFormat>
+                        </configuration>
+                    </plugin>
+
+                    <!-- PMD: Code Quality -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-pmd-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>pmd-analysis</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>pmd</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <failOnViolation>false</failOnViolation>
+                            <targetJdk>${java.version}</targetJdk>
+                        </configuration>
+                    </plugin>
+
+                    <!-- SpotBugs: Bug Detection -->
+                    <plugin>
+                        <groupId>com.github.spotbugs</groupId>
+                        <artifactId>spotbugs-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>spotbugs-analysis</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>spotbugs</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <failOnError>false</failOnError>
+                            <xmlOutput>true</xmlOutput>
+                        </configuration>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+
+    <!-- libraries we want to use with same version in all sub modules -->
+    <dependencyManagement>
+        <dependencies>
+
+            <!-- Avaje Inject (compile-time DI) -->
+            <dependency>
+                <groupId>io.avaje</groupId>
+                <artifactId>avaje-inject</artifactId>
+                <version>${avaje.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.avaje</groupId>
+                <artifactId>avaje-inject-generator</artifactId>
+                <version>${avaje.version}</version>
+            </dependency>
+
+            <!-- logging -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4jVersion}</version>
+            </dependency>
+
+            <!-- Apache commons libs -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.20.0</version>
+            </dependency>
+
+            <!-- used for common validations like URL validation -->
+            <dependency>
+                <groupId>commons-validator</groupId>
+                <artifactId>commons-validator</artifactId>
+                <version>1.10.1</version>
+            </dependency>
+
+            <!-- used for additional collection sets for e.g. ListOrderedSet in bl-api -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>4.5.0</version>
+            </dependency>
+
+            <!-- for file access for example at reading the CSVs in our data importer -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.21.0</version>
+            </dependency>
+
+            <!-- common libs of other vendors -->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>4.5.14</version>
+            </dependency>
+            <!-- Apache HttpClient/HttpCore 5 - aligned for ES 9.x and ClickHouse compatibility -->
+            <dependency>
+                <groupId>org.apache.httpcomponents.core5</groupId>
+                <artifactId>httpcore5</artifactId>
+                <version>5.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents.core5</groupId>
+                <artifactId>httpcore5-h2</artifactId>
+                <version>5.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents.client5</groupId>
+                <artifactId>httpclient5</artifactId>
+                <version>5.4</version>
+            </dependency>
+
+            <!-- Provides an SVGLoader that is used by the most of the EKG UI components to render SVG icons -->
+            <dependency>
+                <groupId>com.github.afester.javafx</groupId>
+                <artifactId>FranzXaver</artifactId>
+                <version>0.1</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.xmlgraphics</groupId>
+                        <artifactId>batik-dom</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.xmlgraphics</groupId>
+                        <artifactId>batik-anim</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.xmlgraphics</groupId>
+                        <artifactId>batik-bridge</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-bridge</artifactId>
+                <version>1.19</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-anim</artifactId>
+                <version>1.19</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-dom</artifactId>
+                <version>1.19</version>
+            </dependency>
+
+
+
+
+
+            <!-- WFX framework as UI frame - using all-in-one artifact -->
+            <dependency>
+                <groupId>io.softwareecg.wfx</groupId>
+                <artifactId>wfx-all</artifactId>
+                <version>${wfxVersion}</version>
+            </dependency>
+
+            <!-- Individual wfx modules for backwards compatibility -->
+            <dependency>
+                <groupId>io.softwareecg.wfx</groupId>
+                <artifactId>platform-api</artifactId>
+                <version>${wfxVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.softwareecg.wfx</groupId>
+                <artifactId>platform-core</artifactId>
+                <version>${wfxVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.softwareecg.wfx</groupId>
+                <artifactId>launcher</artifactId>
+                <version>${wfxVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.softwareecg.wfx</groupId>
+                <artifactId>windowmanager-api</artifactId>
+                <version>${wfxVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.softwareecg.wfx</groupId>
+                <artifactId>windowmanager-core</artifactId>
+                <version>${wfxVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.softwareecg.wfx</groupId>
+                <artifactId>lookup-api</artifactId>
+                <version>${wfxVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.softwareecg.wfx</groupId>
+                <artifactId>lookup-serviceloader</artifactId>
+                <version>${wfxVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.softwareecg.wfx</groupId>
+                <artifactId>ui-utils</artifactId>
+                <version>${wfxVersion}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>jakarta.inject</groupId>
+                <artifactId>jakarta.inject-api</artifactId>
+                <version>2.0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.validation</groupId>
+                <artifactId>jakarta.validation-api</artifactId>
+                <version>3.0.2</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.activation</groupId>
+                <artifactId>jakarta.activation-api</artifactId>
+                <version>2.1.2</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.annotation</groupId>
+                <artifactId>jakarta.annotation-api</artifactId>
+                <version>2.1.1</version>
+            </dependency>
+            <!-- javax.annotation-api for Solr/Jersey compatibility -->
+            <dependency>
+                <groupId>javax.annotation</groupId>
+                <artifactId>javax.annotation-api</artifactId>
+                <version>1.3.2</version>
+            </dependency>
+            <!-- All JavaFX modules that are outsources from the JDK since version 11 -->
+            <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-fxml</artifactId>
+                <version>${javafx.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-controls</artifactId>
+                <version>${javafx.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-swing</artifactId>
+                <version>${javafx.version}</version>
+            </dependency>
+
+
+            <!-- additional JavaFx controls complement the core JavaFX distribution -->
+            <dependency>
+                <groupId>org.controlsfx</groupId>
+                <artifactId>controlsfx</artifactId>
+                <version>11.2.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jfxtras</groupId>
+                <artifactId>jfxtras-controls</artifactId>
+                <version>17-r1</version>
+            </dependency>
+
+            <!-- object serialisation/deserialisation - parsing xmls/json -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jacksonVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jacksonVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jacksonVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-yaml</artifactId>
+                <version>${jacksonVersion}</version>
+            </dependency>
+            <!-- parsing Excel sheets -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${poiVersion}</version>
+            </dependency>
+
+            <!-- accessor for Excel sheets >=v2013 -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poiVersion}</version>
+            </dependency>
+
+
+            <!-- NoSQL Databases/SearchEngines that are used to store time project data an make analytics on it -->
+            <dependency>
+                <groupId>org.apache.solr</groupId>
+                <artifactId>solr-solrj</artifactId>
+                <version>${solrVersion}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.logging.log4j</groupId>
+                        <artifactId>log4j-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.logging.log4j</groupId>
+                        <artifactId>log4j-slf4j-impl</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.logging.log4j</groupId>
+                        <artifactId>log4j-slf4j2-impl</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.solr</groupId>
+                <artifactId>solr-core</artifactId>
+                <version>${solrVersion}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>jdk.tools</groupId>
+                        <artifactId>jdk.tools</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.logging.log4j</groupId>
+                        <artifactId>log4j-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.logging.log4j</groupId>
+                        <artifactId>log4j-slf4j-impl</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.logging.log4j</groupId>
+                        <artifactId>log4j-slf4j2-impl</artifactId>
+                    </exclusion>
+                    <!-- Jersey 2.x Jetty container conflicts with Jersey 3.x used by Solr 9.10.1 -->
+                    <exclusion>
+                        <groupId>org.glassfish.jersey.containers</groupId>
+                        <artifactId>jersey-container-jetty-http</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>co.elastic.clients</groupId>
+                <artifactId>elasticsearch-java</artifactId>
+                <version>9.0.0</version>
+            </dependency>
+
+            <!-- logback as default SLF4J binding for the application bundle -->
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>1.5.16</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>1.5.16</version>
+            </dependency>
+
+            <!-- ClickHouse JDBC driver for high-performance columnar time series storage -->
+            <dependency>
+                <groupId>com.clickhouse</groupId>
+                <artifactId>clickhouse-jdbc</artifactId>
+                <version>0.7.1</version>
+                <classifier>all</classifier>
+            </dependency>
+
+            <!-- HikariCP JDBC connection pool for ClickHouse -->
+            <dependency>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP</artifactId>
+                <version>6.2.1</version>
+            </dependency>
+
+            <!-- test frameworks -->
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest</artifactId>
+                <version>2.2</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.13.2</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>5.21.0</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.loadui</groupId>
+                <artifactId>testFx</artifactId>
+                <version>3.1.1</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+
+    <!--
+    we will define all maven plugins explicitly to prevent our project
+    get problems from implicit version change of the build tool itself
+    -->
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- ==== Apache Maven plugins we use ==== -->
+
+                <plugin>
+                    <!-- used to create source-jars that will stored beside the artifacts -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.3.1</version>
+                </plugin>
+                <plugin>
+                    <!-- used to compile the jars -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.14.1</version>
+                </plugin>
+                <plugin>
+                    <!-- used to bundle the AWB to an zip file -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>3.7.1</version>
+                </plugin>
+                <plugin>
+                    <!-- Used to measure code coverage -->
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.8.14</version>
+                </plugin>
+                <plugin>
+                    <!-- Used to delete the external integration test coverage file -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.4.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.5.4</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>3.1.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>3.6.0</version>
+                </plugin>
+                <plugin>
+                    <!-- Used to extract vanilla solr distribution and exclude unnecessary files -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>3.8.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>3.5.0</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>3.6.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                    <version>3.28.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.github.spotbugs</groupId>
+                    <artifactId>spotbugs-maven-plugin</artifactId>
+                    <version>4.9.8.5</version>
+                </plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>versions-maven-plugin</artifactId>
+					<version>2.18.0</version>
+				</plugin>
+                <plugin>
+                    <!-- creating jars and test-jars -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.4.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.3.1</version>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+
+
+        <plugins>
+
+            <!-- Fail fast with a clear message when Maven runs on a JDK older than the
+                 compile target, instead of javac's "release version 25 not supported". -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>enforce-build-jdk</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>[25,)</version>
+                                    <message>Software-EKG needs JDK 25 or newer to build. Maven is running on ${java.home} - switch the JDK (e.g. 'sdk env' in the aggregator directory).</message>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- provides the path of every dependency as a property, used for the Mockito agent below -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>dependency-paths</id>
+                        <goals>
+                            <goal>properties</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*ManualTest.java</exclude>
+                    </excludes>
+                    <!-- Mockito is started as a regular Java agent. Otherwise it attaches itself to the
+                         running JVM, which newer JDKs warn about and restricted environments forbid. -->
+                    <argLine>
+                        @{argLine}
+                        -javaagent:${org.mockito:mockito-core:jar}
+                        --add-opens java.base/java.lang=ALL-UNNAMED
+                        --add-opens java.base/java.lang.reflect=ALL-UNNAMED
+                        --add-opens java.base/java.util=ALL-UNNAMED
+                        --add-opens java.base/java.util.regex=ALL-UNNAMED
+                    </argLine>
+                </configuration>
+                <version>3.5.4</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <release>${java.version}</release>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+
+                    <compilerArgs>
+                        <!--s<arg>-module-path</arg>
+                        uppress UnresolvedMavenProperty (filled by Groovy script)
+                        <arg>${root-path}/_javafx-sdk/jmods_11</arg>
+                        <arg>-add-modules</arg>
+                        <arg>javafx.controls</arg>-->
+                    </compilerArgs>
+
+                    <!-- Avaje Inject annotation processor — runs in every child
+                         module so that @Singleton/@Factory classes are discovered
+                         and a per-jar AvajeModule is generated. Per-module poms
+                         can still append additional processors via
+                         combine.children="append". -->
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>io.avaje</groupId>
+                            <artifactId>avaje-inject-generator</artifactId>
+                            <version>${avaje.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+
+    <!-- Repositories removed - working locally only -->
+</project>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.softwareecg.collector</groupId>
+        <artifactId>collector-parent</artifactId>
+        <version>${revision}</version>
+        <relativePath>../../../build/collector-parent/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>collector-repository-json</artifactId>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>collector-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- used as lightweight framework to serialize time projectName data to json -->
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+
+        <!--
+        not used as logger - instead Rolling-Fileapender and other framework
+        classes used to write out the CSVs depending on date and size
+        -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+
+        <!-- use module to get the TestConfigFactory using to create configs for testing -->
+        <dependency>
+            <groupId>io.softwareecg.collector</groupId>
+            <artifactId>collector-core</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+ </project>

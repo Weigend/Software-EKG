@@ -1,0 +1,10 @@
+# Visual Studio build output
+Release/
+x64/
+Debug/
+
+# Visual Studio user files
+*.suo
+*.user
+*.ncb
+*.aps

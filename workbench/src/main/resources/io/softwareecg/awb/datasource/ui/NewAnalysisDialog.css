@@ -1,0 +1,187 @@
+/* The dialogs for the data sources of an analysis. */
+
+/* The frame of the dialog, as the other dialogs of the EKG have it: a blue header, a light
+   content area and a slightly darker button bar. */
+
+.ekg-header {
+    -fx-background-color: #3184c8;
+    -fx-padding: 14 18 12 14;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: black;
+    -fx-min-height: 96;
+    -fx-pref-height: 96;
+}
+
+.ekg-header .header-title {
+    -fx-font-size: 1.3em;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.ekg-header .header-hint {
+    -fx-text-fill: white;
+    -fx-opacity: 0.92;
+}
+
+.ekg-header .header-trail {
+    -fx-text-fill: white;
+    -fx-opacity: 0.6;
+}
+
+.ekg-header .header-trail-current {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-color: white;
+    -fx-border-width: 0 0 2 0;
+}
+
+.ekg-wizard > .content {
+    -fx-background-color: #F7F7F7;
+    -fx-padding: 0;
+}
+
+.ekg-wizard > .button-bar {
+    -fx-background-color: #f0f0f0;
+    -fx-border-width: 1 0 0 0;
+    -fx-border-color: #dbdbdb;
+}
+
+.ekg-wizard > .button-bar > .container {
+    -fx-padding: 10 14 10 14;
+}
+
+/* The same frame for a dialog that keeps the header of the dialog pane. */
+.ekg-dialog > .header-panel {
+    -fx-background-color: #3184c8;
+    -fx-padding: 14 30 14 14;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: black;
+}
+
+.ekg-dialog > .header-panel .label {
+    -fx-text-fill: white;
+    -fx-font-size: 1.1em;
+}
+
+.ekg-dialog > .content {
+    -fx-background-color: #F7F7F7;
+}
+
+.ekg-dialog > .button-bar {
+    -fx-background-color: #f0f0f0;
+}
+
+/* A band over a section of a page, as the headlines of the other dialogs. */
+.section-band {
+    -fx-background-color: #e7e7e7;
+    -fx-text-fill: #424349;
+    -fx-font-weight: bold;
+    -fx-padding: 3 6 3 6;
+}
+
+.topic-tile {
+    -fx-background-color: #c4cad1, white;
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 8, 7;
+    -fx-padding: 8;
+    -fx-cursor: hand;
+}
+
+.topic-tile:hover {
+    -fx-background-color: #3184c8, #f4f8fc;
+}
+
+.topic-tile:focused {
+    -fx-background-color: #3184c8, white;
+}
+
+.topic-tile:selected {
+    -fx-background-color: #3184c8, #e6f0f9;
+    -fx-background-insets: 0, 2;
+    -fx-background-radius: 8, 6;
+}
+
+/* a topic that is planned: visible, but clearly not yet to be had */
+.topic-tile:disabled {
+    -fx-opacity: 1;
+    -fx-background-color: #d8dde2, #f4f5f7;
+    -fx-cursor: default;
+}
+
+.topic-tile:disabled .tile-title,
+.topic-tile:disabled .tile-description {
+    -fx-text-fill: #9aa3ad;
+}
+
+.topic-tile:disabled .topic-icon {
+    -fx-stroke: #b3bac2;
+}
+
+.tile-title {
+    -fx-font-size: 1.15em;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1f2933;
+}
+
+.tile-description {
+    -fx-font-size: 0.9em;
+    -fx-text-fill: #5b6672;
+    -fx-text-alignment: center;
+}
+
+.tile-kind {
+    -fx-font-size: 0.85em;
+    -fx-text-fill: #3184c8;
+    -fx-font-weight: bold;
+}
+
+.topic-tile:disabled .tile-kind {
+    -fx-text-fill: #9aa3ad;
+}
+
+.tile-badge {
+    -fx-font-size: 0.8em;
+    -fx-text-fill: #6b7580;
+    -fx-background-color: #e3e7eb;
+    -fx-background-radius: 8;
+    -fx-padding: 1 7 1 7;
+}
+
+.tile-check {
+    -fx-font-size: 0.95em;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-color: #3184c8;
+    -fx-background-radius: 10;
+    -fx-padding: 0 5 0 5;
+}
+
+.topic-icon {
+    -fx-fill: transparent;
+    -fx-stroke: #3d4a57;
+    -fx-stroke-width: 2;
+    -fx-stroke-line-cap: round;
+    -fx-stroke-line-join: round;
+}
+
+.topic-tile:selected .topic-icon {
+    -fx-stroke: #3184c8;
+}
+
+.explore-tile .tile-title {
+    -fx-font-size: 1.05em;
+}
+
+/* what was found for a topic, in the connection step */
+.found-topic {
+    -fx-font-size: 1.1em;
+    -fx-font-weight: bold;
+}
+
+.found-nothing {
+    -fx-text-fill: #8a6100;
+}
+
+.found-detail {
+    -fx-text-fill: derive(-fx-text-base-color, 35%);
+}

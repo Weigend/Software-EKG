@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.softwareecg.collector</groupId>
+        <artifactId>collector-parent</artifactId>
+        <version>${revision}</version>
+        <relativePath>../../../build/collector-parent/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>collector-repository-rdb-solr</artifactId>
+
+    <description>
+        Module that provides an implementation of the collector-repository-api based on the remote NoSQL database
+        Apache Solr. The module also implement the collector-repository-rdb-api to manage the indices and data
+        batch optimization.
+    </description>
+
+    <dependencies>
+
+        <!-- the rdp-api module provides the necessary interfaces that are implemented by this component -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>collector-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- the rdp-api module provides the necessary interfaces that are implemented by this component -->
+        <dependency>
+            <groupId>io.softwareecg.collector</groupId>
+            <artifactId>collector-rdb</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- native Solr client used to communicate with Solr server -->
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-solrj</artifactId>
+            <version>9.10.1</version>
+        </dependency>
+
+        <!-- required for ZooKeeper-based CloudSolrClient (SolrCloud mode) -->
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-solrj-zookeeper</artifactId>
+            <version>9.10.1</version>
+        </dependency>
+
+        <!-- required for SolrClientCache (moved from solr-solrj in 9.x) -->
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-solrj-streaming</artifactId>
+            <version>9.10.1</version>
+        </dependency>
+    </dependencies>
+ </project>

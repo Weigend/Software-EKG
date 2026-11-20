@@ -1,0 +1,138 @@
+# Software-EKG collector - a Solr server on this machine, read over Jolokia (JMX over HTTP).
+#
+# Shows labels built from the name of a metric: 'regexPostFilter' picks the metrics and cuts
+# their names into groups, ${FILTER:n} in the label stands for the n-th group.
+
+metricGroups:
+  jmx_jvm:
+    type: jolokia
+    metrics:
+      - metric: 'java.lang:type=Memory,*'
+        wildcard: true
+      - metric: 'java.lang:type=GarbageCollector,*'
+        wildcard: true
+      - metric: 'java.lang:type=OperatingSystem,*'
+        wildcard: true
+      - metric: 'java.lang:type=ClassLoading,*'
+        wildcard: true
+      - metric: 'java.lang:type=Threading,*'
+        wildcard: true
+      - metric: 'java.nio:type=*,*'
+        wildcard: true
+  solr_collection_stats_UPDATE:
+    type: jolokia
+    metrics:
+      - metric: solr:*
+        label: '${FILTER:1}_${FILTER:2}_${FILTER:3}_${FILTER:4}/${FILTER:5}.${FILTER:6}'
+        regexPostFilter: 'solr:category=UPDATE,dom1=core,dom2=(.*),dom3=(.*),dom4=(.*),name=(.*),scope=(/?[^/]*)/([^/]*)/$'
+        wildcard: true
+  solr_collection_stats_CACHE:
+    type: jolokia
+    metrics:
+      - metric: solr:*
+        label: '${FILTER:1}_${FILTER:2}_${FILTER:3}_${FILTER:4}/${FILTER:5}.${FILTER:6}'
+        regexPostFilter: 'solr:category=CACHE,dom1=core,dom2=(.*),dom3=(.*),dom4=(.*),name=(.*),scope=(/?[^/]*)/([^/]*)/$'
+        wildcard: true
+  solr_collection_stats_QUERY:
+    type: jolokia
+    metrics:
+      - metric: solr:*
+        label: '${FILTER:1}_${FILTER:2}_${FILTER:3}_${FILTER:4}/${FILTER:5}.${FILTER:6}'
+        regexPostFilter: 'solr:category=QUERY,dom1=core,dom2=(.*),dom3=(.*),dom4=(.*),name=(.*),scope=/([^/]*)/([^/]*)/$'
+        wildcard: true
+  solr_collection_stats_INDEX:
+    type: jolokia
+    metrics:
+      - metric: solr:*
+        label: 'Shard_IndexSize_${FILTER:1}_${FILTER:2}_${FILTER:3}'
+        regexPostFilter: 'solr:category=INDEX,dom1=core,dom2=(.*),dom3=(.*),dom4=(.*),name=sizeInBytes/Value/'
+        wildcard: true
+  solr_http_stats:
+    type: jolokia
+    metrics:
+      - metric: 'solr:dom1=jetty,name0=org,name1=eclipse,name2=jetty,name3=server,name4=handler,name5=DefaultHandler,name=1xx-responses/Count'
+        label: Count_1xx-Responses_Absolute
+      - metric: 'solr:dom1=jetty,name0=org,name1=eclipse,name2=jetty,name3=server,name4=handler,name5=DefaultHandler,name=1xx-responses/OneMinuteRate'
+        label: Count_1xx-Responses_lastMinute
+      - metric: 'solr:dom1=jetty,name0=org,name1=eclipse,name2=jetty,name3=server,name4=handler,name5=DefaultHandler,name=2xx-responses/Count'
+        label: Count_2xx-Responses_Absolute
+      - metric: 'solr:dom1=jetty,name0=org,name1=eclipse,name2=jetty,name3=server,name4=handler,name5=DefaultHandler,name=2xx-responses/OneMinuteRate'
+        label: Count_2xx-Responses_lastMinute
+      - metric: 'solr:dom1=jetty,name0=org,name1=eclipse,name2=jetty,name3=server,name4=handler,name5=DefaultHandler,name=3xx-responses/Count'
+        label: Count_3xx-Responses_Absolute
+      - metric: 'solr:dom1=jetty,name0=org,name1=eclipse,name2=jetty,name3=server,name4=handler,name5=DefaultHandler,name=3xx-responses/OneMinuteRate'
+        label: Count_3xx-Responses_lastMinute
+      - metric: 'solr:dom1=jetty,name0=org,name1=eclipse,name2=jetty,name3=server,name4=handler,name5=DefaultHandler,name=4xx-responses/Count'
+        label: Count_4xx-Responses_Absolute
+      - metric: 'solr:dom1=jetty,name0=org,name1=eclipse,name2=jetty,name3=server,name4=handler,name5=DefaultHandler,name=4xx-responses/OneMinuteRate'
+        label: Count_4xx-Responses_lastMinute
+      - metric: 'solr:dom1=jetty,name0=org,name1=eclipse,name2=jetty,name3=server,name4=handler,name5=DefaultHandler,name=5xx-responses/Count'
+        label: Count_5xx-Responses_Absolute
+      - metric: 'solr:dom1=jetty,name0=org,name1=eclipse,name2=jetty,name3=server,name4=handler,name5=DefaultHandler,name=5xx-responses/OneMinuteRate'
+        label: Count_5xx-Responses_lastMinute
+      - metric: 'solr:dom1=jetty,name0=org,name1=eclipse,name2=jetty,name3=server,name4=handler,name5=DefaultHandler,name=post-requests/Count'
+        label: POST_requests_Absolute
+      - metric: 'solr:dom1=jetty,name0=org,name1=eclipse,name2=jetty,name3=server,name4=handler,name5=DefaultHandler,name=post-requests/OneMinuteRate'
+        label: POST_requests_lastMinute
+      - metric: 'solr:dom1=jetty,name0=org,name1=eclipse,name2=jetty,name3=server,name4=handler,name5=DefaultHandler,name=get-requests/Count'
+        label: GET_requests_Absolute
+      - metric: 'solr:dom1=jetty,name0=org,name1=eclipse,name2=jetty,name3=server,name4=handler,name5=DefaultHandler,name=get-requests/OneMinuteRate'
+        label: GET_requests_lastMinute
+  solr_cache:
+    type: jolokia
+    metrics:
+      - metric: solr:*
+        label: 'Solr_${FILTER:1}'
+        regexPostFilter: '.*(fieldCache/.*[^/]+)/?'
+        wildcard: true
+
+processGroups:
+  local:
+    - name: Solr
+      source: '${REF:hostAddress}:7777/jolokia/'
+
+hostGroups:
+  local:
+    hosts:
+      - name: localhost
+        address: http://127.0.0.1
+
+collectors:
+  - type: sidecar
+    metricGroup: solr_collection_stats_CACHE
+    processGroup: local
+    nodeGroup: local
+    interval: 2s
+  - type: sidecar
+    metricGroup: solr_collection_stats_QUERY
+    processGroup: local
+    nodeGroup: local
+    interval: 2s
+  - type: sidecar
+    metricGroup: solr_collection_stats_INDEX
+    processGroup: local
+    nodeGroup: local
+    interval: 2s
+  - type: sidecar
+    metricGroup: solr_collection_stats_UPDATE
+    processGroup: local
+    nodeGroup: local
+    interval: 2s
+  - type: sidecar
+    metricGroup: jmx_jvm
+    processGroup: local
+    nodeGroup: local
+    interval: 2s
+    expandInterval: 20m
+  - type: sidecar
+    metricGroup: solr_http_stats
+    processGroup: local
+    nodeGroup: local
+    interval: 2s
+    expandInterval: 20m
+  - type: sidecar
+    metricGroup: solr_cache
+    processGroup: local
+    nodeGroup: local
+    interval: 2s
+    expandInterval: 20m

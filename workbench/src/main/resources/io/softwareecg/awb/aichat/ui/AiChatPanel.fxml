@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="600.0" prefWidth="350.0"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="io.softwareecg.awb.aichat.ui.AiChatController"
+            styleClass="ai-chat-panel">
+
+    <!-- Header with model info and controls -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="ai-chat-header">
+            <padding>
+                <Insets top="5.0" right="5.0" bottom="5.0" left="5.0"/>
+            </padding>
+            <Label text="AI Assistant" styleClass="ai-chat-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="modelLabel" text="llama3.1" styleClass="ai-chat-model"/>
+            <Button fx:id="resetButton" text="Clear" onAction="#onReset" styleClass="ai-chat-btn"/>
+        </HBox>
+    </top>
+
+    <!-- Chat history -->
+    <center>
+        <ScrollPane fx:id="chatScrollPane" fitToWidth="true" hbarPolicy="NEVER"
+                    styleClass="ai-chat-history" BorderPane.alignment="CENTER">
+            <VBox fx:id="messageContainer" spacing="10.0">
+                <padding>
+                    <Insets top="10.0" right="10.0" bottom="10.0" left="10.0"/>
+                </padding>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <!-- Input area -->
+    <bottom>
+        <VBox spacing="5.0">
+            <padding>
+                <Insets top="5.0" right="5.0" bottom="5.0" left="5.0"/>
+            </padding>
+            <Label fx:id="statusLabel" text="" styleClass="ai-chat-status" managed="false" visible="false"/>
+            <HBox spacing="5.0" alignment="CENTER_LEFT">
+                <TextArea fx:id="inputArea" promptText="Frage stellen..." prefRowCount="2"
+                          wrapText="true" HBox.hgrow="ALWAYS" onKeyPressed="#onInputKeyPressed"/>
+                <Button fx:id="sendButton" text="Senden" onAction="#onSend"
+                        defaultButton="true" styleClass="ai-chat-send-btn" prefHeight="50.0"/>
+            </HBox>
+        </VBox>
+    </bottom>
+</BorderPane>

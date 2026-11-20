@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>io.softwareecg.collector</groupId>
+        <artifactId>collector-parent</artifactId>
+        <version>${revision}</version>
+        <relativePath>../../../build/collector-parent/pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>collector-rdb</artifactId>
+
+    <description>
+        Base module that provides the API and some common stuff for repository implementations that using a
+        remote database (Solr/ElasticSearch).
+        The module provides some basic stuff like the compact the written data as as nightly batch
+        or the creation of an empty database if not exists.
+    </description>
+
+    <dependencies>
+        <!-- provides basic properties used to configure the RDB modules used this API module -->
+        <dependency>
+            <groupId>io.softwareecg.collector</groupId>
+            <artifactId>collector-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

@@ -1,0 +1,2 @@
+io.softwareecg.collector.repository.csv.CsvRepositoryFactory
+io.softwareecg.collector.repository.archive.ArchiveRepositoryFactory

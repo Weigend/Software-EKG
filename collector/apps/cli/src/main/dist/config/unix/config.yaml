@@ -1,0 +1,116 @@
+# Software-EKG collector - Linux and Unix hosts, read with "top" over SSH.
+#
+# Three metric groups show the ways to name metrics of the source "unix":
+#   unix-process               the values of single processes; ${REF:procName} is the name of
+#                              the process of the process group
+#   unix-global-with-wildcard  the values of the host, everything top prints
+#   unix-global-none-wildcard  the values of the host, named one by one
+#
+# The password of the login is not written here. The collector takes it from the environment:
+#   EKG_SSH_PASSWORD=... ./ekg-collector.sh config/unix/config.yaml
+
+metricGroups:
+  unix-process:
+    type: unix
+    metrics:
+      - metric: '\Process(${REF:procName})\PID'
+        regexPostFilter: ((?!collector).)*
+      - metric: '\Process(${REF:procName})\USER'
+        regexPostFilter: ((?!collector).)*
+      - metric: '\Process(${REF:procName})\PR'
+        regexPostFilter: ((?!collector).)*
+      - metric: '\Process(${REF:procName})\NI'
+        regexPostFilter: ((?!collector).)*
+      - metric: '\Process(${REF:procName})\VIRT'
+        regexPostFilter: ((?!collector).)*
+      - metric: '\Process(${REF:procName})\RES'
+        regexPostFilter: ((?!collector).)*
+      - metric: '\Process(${REF:procName})\SHR'
+        regexPostFilter: ((?!collector).)*
+      - metric: '\Process(${REF:procName})\S'
+        regexPostFilter: ((?!collector).)*
+      - metric: '\Process(${REF:procName})\TIME'
+        regexPostFilter: ((?!collector).)*
+      - metric: '\Process(${REF:procName})\CPU'
+        regexPostFilter: ((?!collector).)*
+      - metric: '\Process(${REF:procName})\MEM'
+        regexPostFilter: ((?!collector).)*
+  unix-global-with-wildcard:
+    type: unix
+    metrics:
+      - metric: \Memory\*
+        wildcard: true
+      - metric: \Swap\*
+        wildcard: true
+      - metric: \Tasks\*
+        wildcard: true
+      - metric: \CPU\*
+        wildcard: true
+      - metric: \User\users
+        wildcard: true
+      - metric: \Uptime\up
+        wildcard: true
+      - metric: \Load\*
+        wildcard: true
+  unix-global-none-wildcard:
+    type: unix
+    metrics:
+      - \Memory\total
+      - \Memory\used
+      - \Memory\free
+      - \Memory\total
+      - \Memory\free
+      - \Memory\buffers
+      - \Swap\total
+      - \Swap\used
+      - \Swap\free
+      - \Swap\total
+      - \Swap\free
+      - \Swap\cached
+      - \Tasks\total
+      - \Tasks\running
+      - \Tasks\sleeping
+      - \Tasks\stopped
+      - \Tasks\zombie
+      - \CPU\us
+      - \CPU\sy
+      - \CPU\ni
+      - \CPU\id
+      - \CPU\hi
+      - \CPU\si
+      - \CPU\st
+      - \User\users
+      - \Uptime\up
+      - \Load\one
+      - \Load\five
+      - \Load\fifteen
+
+processGroups:
+  podProcesses:
+    - name: sshd
+      source: '${REF:hostAddress}:22'
+
+hostGroups:
+  sample-host-group:
+    hosts:
+      - name: test-host
+        address: 192.168.0.67
+        username: ekg
+        password: '${ENV:EKG_SSH_PASSWORD}'
+
+collectors:
+  - type: sidecar
+    metricGroup: unix-process
+    processGroup: podProcesses
+    nodeGroup: sample-host-group
+    interval: 2s
+  - type: sidecar
+    metricGroup: unix-global-none-wildcard
+    processGroup: podProcesses
+    nodeGroup: sample-host-group
+    interval: 2s
+  - type: sidecar
+    metricGroup: unix-global-with-wildcard
+    processGroup: podProcesses
+    nodeGroup: sample-host-group
+    interval: 2s

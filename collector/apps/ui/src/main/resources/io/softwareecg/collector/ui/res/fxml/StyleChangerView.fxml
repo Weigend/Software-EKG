@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane id="backgroundPane" fx:id="parent" blendMode="SRC_ATOP" prefHeight="240.0" prefWidth="320.0"
+          xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="io.softwareecg.collector.ui.controller.StyleChangerViewController">
+    <children>
+        <GridPane styleClass="backgroundPane">
+            <children>
+                <HBox id="infobarBackground" prefHeight="100.0" prefWidth="200.0" styleClass="infobarBackground">
+                    <children>
+                        <Button id="infobarBackButton" fx:id="backButton" contentDisplay="CENTER"
+                                maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false" onAction="#zurueckButtonPressed" prefHeight="69.0"
+                                prefWidth="107.0" text="Back" textAlignment="CENTER" GridPane.columnIndex="1"
+                                GridPane.rowIndex="1">
+                            <effect>
+                                <Blend mode="MULTIPLY"/>
+                            </effect>
+                            <styleClass>
+                                <String fx:value="button"/>
+                                <String fx:value="infobarBackButton"/>
+                            </styleClass>
+                        </Button>
+                        <Label id="infobarLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                               prefHeight="69.0" prefWidth="229.0" text="Change Style">
+                            <styleClass>
+                                <String fx:value="label"/>
+                                <String fx:value="infobarLabel"/>
+                            </styleClass>
+                        </Label>
+                    </children>
+                </HBox>
+                <ListView fx:id="stylesListView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1"/>
+            </children>
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="-Infinity"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="183.0" minHeight="10.0" prefHeight="171.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+        </GridPane>
+    </children>
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="230.0" vgrow="SOMETIMES"/>
+    </rowConstraints>
+</GridPane>

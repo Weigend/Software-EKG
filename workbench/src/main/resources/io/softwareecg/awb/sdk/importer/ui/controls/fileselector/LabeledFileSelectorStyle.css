@@ -1,0 +1,32 @@
+/* default styles of each ImporterDialog */
+@import "/io/softwareecg/awb/sdk/importer/ui/dialogs/ImportDialogStyle.css";
+
+
+#btnBrowse {
+    -fx-background-radius: 0 3 3 0, 0 2 2 0, 0 1 1 0;
+}
+
+.button {
+    -fx-background-radius:0;
+}
+
+.split-menu-button {
+    -fx-background-radius: 0;
+}
+
+
+#btnBrowse label {
+    -fx-background-radius: 10 0 0 5, 40 0 0 4, 3 0 0 3;
+    -fx-background-color: yellow;
+}
+
+#btnBrowse:invalid {
+    -fx-border-width: 1 1 1 0;
+    -fx-border-radius: 0 0 2 2, 0, 0, 0;
+    -fx-background-color: #990000;
+    -fx-effect: dropshadow(three-pass-box, rgba(180, 71, 52, 0.75), 0.5, 0, 0, 0.5);
+}
+
+#txtFilePath {
+    -fx-translate-x: 3;
+}

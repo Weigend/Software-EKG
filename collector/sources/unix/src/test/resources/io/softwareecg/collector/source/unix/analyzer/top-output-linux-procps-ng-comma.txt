@@ -1,0 +1,8 @@
+top - 15:42:21 up 2 days,  5:09,  1 user,  load average: 1,24, 1,28, 1,68
+Tasks: 771 total,   1 running, 767 sleeping,   0 stopped,   3 zombie
+%CPU(s):  1,6 us,  0,9 sy,  0,0 ni, 97,3 id,  0,2 wa,  0,0 hi,  0,0 si,  0,0 st
+GiB Mem :     94,3 total,     57,4 free,     14,2 used,     26,0 buff/cache
+GiB Swap:     49,1 total,     49,1 free,      0,0 used.     80,0 avail Mem
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+      1 root      20   0  168940  12680   8396 S   0,0   0,0   0:09.71 /sbin/init splash
