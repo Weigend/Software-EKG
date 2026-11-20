@@ -60,16 +60,18 @@ AI comes into play in two places:
 
 ## Try it
 
-Ready-made packages for Linux x64 with their own Java runtime are available on the [release page](https://github.com/Weigend/Software-EKG/releases/latest). Unpack and start:
+Ready-made packages for Linux x64, macOS (Apple Silicon) and Windows x64, each with its own Java runtime, are available on the [release page](https://github.com/Weigend/Software-EKG/releases/latest). Unpack and start:
 
-```bash
-bin/software-ekg.sh      # workbench
-./ekg-collector.sh       # collector with sample values
-```
+| | Linux, macOS | Windows |
+| --- | --- | --- |
+| Workbench | `bin/software-ekg.sh` | `bin\software-ekg.bat` |
+| Collector with sample values | `./ekg-collector.sh` | `ekg-collector.cmd` |
 
-The start scripts check what they need and say what is missing: Java 25, JavaFX, and for the workbench on Linux a desktop session and GTK 3. `bin/software-ekg.sh --check` and `./ekg-collector.sh --check` run only these checks.
+On Linux and macOS the start scripts check what they need and say what is missing: Java 25, JavaFX, and for the workbench on Linux a desktop session and GTK 3. `bin/software-ekg.sh --check` and `./ekg-collector.sh --check` run only these checks.
 
-There are no ready-made packages for Windows and macOS yet; there you build from source, see [Distributions](#distributions).
+The packages are not signed. macOS quarantines what a browser downloads and then refuses to start the Java runtime in the ZIP; `xattr -dr com.apple.quarantine <unpacked directory>` lifts that.
+
+For other platforms, such as macOS on Intel, build from source, see [Distributions](#distributions).
 
 ## Structure
 

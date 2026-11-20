@@ -84,6 +84,10 @@ try_java() {
     case "$version" in
         '' | *[!0-9]*)
             REJECTED="$REJECTED\n  $java ($origin): does not start on this machine ($(uname -s) $(uname -m))"
+            if [ "$(uname -s)" = "Darwin" ] && [ "$java" = "$HERE/jre/bin/java" ]; then
+                # Gatekeeper: what a browser downloaded is quarantined, and the runtime is not notarised
+                REJECTED="$REJECTED\n    If the ZIP was downloaded with a browser, macOS may be blocking this runtime. Allow it with:\n      xattr -dr com.apple.quarantine \"$HERE\""
+            fi
             ;;
         *)
             if [ "$version" -lt "$MIN_JAVA" ]; then

@@ -60,16 +60,18 @@ AI kommt an zwei Stellen ins Spiel:
 
 ## Ausprobieren
 
-Fertige Pakete für Linux x64 mit eigener Java-Laufzeit liegen auf der [Release-Seite](https://github.com/Weigend/Software-EKG/releases/latest). Entpacken und starten:
+Fertige Pakete für Linux x64, macOS (Apple Silicon) und Windows x64, jeweils mit eigener Java-Laufzeit, liegen auf der [Release-Seite](https://github.com/Weigend/Software-EKG/releases/latest). Entpacken und starten:
 
-```bash
-bin/software-ekg.sh      # Workbench
-./ekg-collector.sh       # Collector mit Beispielwerten
-```
+| | Linux, macOS | Windows |
+| --- | --- | --- |
+| Workbench | `bin/software-ekg.sh` | `bin\software-ekg.bat` |
+| Collector mit Beispielwerten | `./ekg-collector.sh` | `ekg-collector.cmd` |
 
-Die Startskripte prüfen, was sie brauchen, und sagen, was fehlt: Java 25, JavaFX und für die Workbench unter Linux eine Desktop-Sitzung und GTK 3. `bin/software-ekg.sh --check` und `./ekg-collector.sh --check` führen nur diese Prüfungen aus.
+Unter Linux und macOS prüfen die Startskripte, was sie brauchen, und sagen, was fehlt: Java 25, JavaFX und für die Workbench unter Linux eine Desktop-Sitzung und GTK 3. `bin/software-ekg.sh --check` und `./ekg-collector.sh --check` führen nur diese Prüfungen aus.
 
-Für Windows und macOS gibt es noch keine fertigen Pakete; dort wird aus dem Quellcode gebaut, siehe [Distributionen](#distributionen).
+Die Pakete sind nicht signiert. macOS stellt unter Quarantäne, was ein Browser herunterlädt, und verweigert dann den Start der Java-Laufzeit im ZIP; `xattr -dr com.apple.quarantine <entpacktes Verzeichnis>` hebt das auf.
+
+Für andere Plattformen, etwa macOS auf Intel, wird aus dem Quellcode gebaut, siehe [Distributionen](#distributionen).
 
 ## Struktur
 
