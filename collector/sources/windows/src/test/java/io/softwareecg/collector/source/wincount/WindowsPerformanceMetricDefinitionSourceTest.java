@@ -18,7 +18,6 @@ import io.softwareecg.collector.source.CounterSeries;
 import io.softwareecg.collector.source.CounterSource;
 import io.softwareecg.collector.source.CounterWildcardSupport;
 import org.junit.Assert;
-import org.junit.Assume;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -61,7 +60,7 @@ public class WindowsPerformanceMetricDefinitionSourceTest {
     @Test
     public void testGetCounter() throws Exception {
 
-        Assume.assumeTrue(isWindows());
+        WindowsCounters.assumeAvailable();
 
         CounterSource source = new WindowsPerformanceCounterSource();
         CounterWildcardSupport support = (CounterWildcardSupport) source;
@@ -76,7 +75,7 @@ public class WindowsPerformanceMetricDefinitionSourceTest {
 
     @Test
     public void testAuthenticate() throws Exception {
-        Assume.assumeTrue(isWindows());
+        WindowsCounters.assumeAvailable();
 
         WindowsPerformanceCounterAccess source = new WindowsPerformanceCounterAccess();
         try {
@@ -90,7 +89,7 @@ public class WindowsPerformanceMetricDefinitionSourceTest {
     @Test
     public void testResolveWildcards() {
 
-        Assume.assumeTrue(isWindows());
+        WindowsCounters.assumeAvailable();
 
         CounterSource source = new WindowsPerformanceCounterSource();
         CounterWildcardSupport support = (CounterWildcardSupport) source;
@@ -108,7 +107,4 @@ public class WindowsPerformanceMetricDefinitionSourceTest {
         Assert.assertEquals(source.getId(), "win");
     }
 
-    private boolean isWindows() {
-        return System.getProperty("os.name").startsWith("Win");
-    }
 }

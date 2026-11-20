@@ -29,17 +29,70 @@
     </dependencies>
 
 
-    <!-- we need to specify the test directory otherwise the performance metricDefinition libs will not found -->
+    <properties>
+        <!-- where the profile 'wpc' puts the native library; the distributions of collector
+             and workbench take it from here into their bin/dlls -->
+        <wpc.directory>${project.build.directory}/native</wpc.directory>
+        <!-- true: a test on Windows fails if the native library cannot be loaded -->
+        <wpc.required>false</wpc.required>
+        <!-- the bash that runs wpc/build.sh. On Windows it has to be the one of Git for Windows:
+             -Dwpc.bash=... if another one comes first on the PATH. -->
+        <wpc.bash>bash</wpc.bash>
+    </properties>
+
     <build>
         <plugins>
+            <!-- the tests load the native library from where the profile 'wpc' builds it -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <argLine>-Djava.library.path=${project.build.testOutputDirectory}</argLine>
+                    <argLine>-Djava.library.path=${wpc.directory} -Dwpc.required=${wpc.required} --enable-native-access=ALL-UNNAMED</argLine>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!-- mvn -Pwpc: builds wpcaccess, the native library that reads the Windows performance
+             counters, with mingw-w64 - on Windows and as a cross build elsewhere. See
+             wpc/README.md. Without the profile the build needs no C++ compiler and the
+             distributions come without the library. -->
+        <profile>
+            <id>wpc</id>
+            <properties>
+                <wpc.required>true</wpc.required>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>3.6.0</version>
+                        <executions>
+                            <execution>
+                                <id>build-wpcaccess</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>${wpc.bash}</executable>
+                                    <arguments>
+                                        <argument>${project.basedir}/wpc/build.sh</argument>
+                                        <argument>${wpc.directory}</argument>
+                                    </arguments>
+                                    <environmentVariables>
+                                        <!-- the JDK Maven runs with, as for the rest of the build -->
+                                        <WPC_JAVA_HOME>${java.home}</WPC_JAVA_HOME>
+                                    </environmentVariables>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
  </project>

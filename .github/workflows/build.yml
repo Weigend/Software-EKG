@@ -53,3 +53,55 @@ jobs:
         path: '**/target/surefire-reports/*.xml'
         if-no-files-found: warn
         retention-days: 14
+
+  windows-counters:
+    # The collector reads Windows performance counters through a native library (wpcaccess).
+    # It is built here with the mingw-w64 of the runner and tested against the counters of the
+    # runner; the Linux build above has nothing to test it with.
+    name: Windows performance counters
+    runs-on: windows-latest
+    timeout-minutes: 30
+
+    concurrency:
+      group: windows-counters-${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Check out Software-EKG
+      uses: actions/checkout@v7
+
+    - name: Set up JDK 25
+      uses: actions/setup-java@v6
+      with:
+        java-version: '25'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Build the native library and test it
+      # -Pwpc builds the library and makes a library that cannot be loaded a failure instead
+      # of a reason to skip. Only the tests of the source "win" run; the modules it needs are
+      # built without theirs.
+      run: >
+        mvn -B -Pwpc -pl collector/sources/windows -am verify
+        -Dtest='Windows*Test' -Dsurefire.failIfNoSpecifiedTests=false
+
+    - name: Upload the native library
+      uses: actions/upload-artifact@v7
+      with:
+        name: wpcaccess-windows-x64
+        path: collector/sources/windows/target/native/*.dll
+        if-no-files-found: error
+        retention-days: 14
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v7
+      if: always()
+      with:
+        name: test-results-windows-counters
+        path: 'collector/sources/windows/target/surefire-reports/*'
+        if-no-files-found: warn
+        retention-days: 14

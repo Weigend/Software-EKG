@@ -7,6 +7,9 @@
 #
 # Runs on Linux, macOS and Windows (Git Bash). The workbench needs a display; on Linux call
 # this through xvfb-run.
+#
+# On Windows both distributions have to bring the native library of the Windows performance
+# counters, and the collector has to read counters with it.
 
 set -euo pipefail
 
@@ -14,6 +17,11 @@ WORKBENCH_ZIP="$1"
 COLLECTOR_ZIP="$2"
 WORKBENCH_SECONDS="${WORKBENCH_SECONDS:-60}"
 COLLECTOR_SECONDS="${COLLECTOR_SECONDS:-25}"
+COUNTER_SECONDS="${COUNTER_SECONDS:-20}"
+SCRIPTS="$(cd "$(dirname "$0")" && pwd)"
+# the native library of the Windows performance counters, in bin/dlls of a distribution
+WPC_DLL="wpcaccess-5.1.0-x64.dll"
+WPC_CHECK="io.softwareecg.collector.source.wincount.WindowsPerformanceCounterCheck"
 
 case "$(uname -s)" in
     MINGW* | MSYS* | CYGWIN*) PLATFORM=windows ;;
@@ -83,6 +91,42 @@ CSV="$(find "$COLLECTOR_LOGS" -name '*.csv' | head -n 1)"
 [ "$(wc -l < "$CSV")" -ge 3 ] || fail "The collector wrote no measurements into $CSV."
 echo "The collector ran and wrote $(wc -l < "$CSV") lines into $(basename "$CSV")."
 echo "::endgroup::"
+
+# --- Windows performance counters ------------------------------------------------------------
+
+if [ "$PLATFORM" = windows ]; then
+    echo "::group::Windows performance counters"
+    [ -f "$COL/bin/dlls/$WPC_DLL" ] || fail "The collector distribution has no bin/dlls/$WPC_DLL."
+    [ -f "$WB/bin/dlls/$WPC_DLL" ] || fail "The workbench distribution has no bin/dlls/$WPC_DLL."
+
+    # the collector, started as a user would: it has to find the library and read counters
+    COUNTER_LOGS="$WORK/counter-logs"
+    COUNTER_OUT="$WORK/counters.out"
+    (cd "$COL" && cmd.exe //c "ekg-collector.cmd $(native "$SCRIPTS/windows-counters.yaml") $(native "$COUNTER_LOGS")" > "$COUNTER_OUT" 2>&1) &
+    sleep "$COUNTER_SECONDS"
+    java_running && COUNTERS_ALIVE=1 || COUNTERS_ALIVE=
+    taskkill //F //IM java.exe //T > /dev/null 2>&1 || true
+    tail -n 40 "$COUNTER_OUT" || true
+    [ -n "$COUNTERS_ALIVE" ] || fail "The collector stopped within $COUNTER_SECONDS seconds while reading Windows performance counters."
+    grep -q "Native library ${WPC_DLL%.dll} loaded" "$COUNTER_OUT" || fail "The collector did not load $WPC_DLL."
+    CSV="$(find "$COUNTER_LOGS" -name '*_windows.csv' | head -n 1)"
+    [ -n "$CSV" ] || fail "The collector wrote no Windows performance counters."
+    head -n 4 "$CSV"
+    head -n 1 "$CSV" | grep -q -F 'System\Threads' || fail "The counter \\System\\Threads is missing in $CSV."
+    # the wildcard \Processor(_Total)\* has to be resolved into its counters
+    head -n 1 "$CSV" | grep -q -F '% Processor Time' || fail "The wildcard \\Processor(_Total)\\* was not resolved in $CSV."
+    # a line of measurements: the time, then one value for each counter; -1 says "no value"
+    MEASURED="$(tr -d '\r' < "$CSV" | awk -F ';' 'NR > 1 { for (i = 2; i <= NF; i++) if ($i + 0 > 0) { n++; break } } END { print n + 0 }')"
+    [ "$MEASURED" -ge 3 ] || fail "The collector read no values of the Windows performance counters ($MEASURED lines with a value in $CSV)."
+    echo "The collector read Windows performance counters: $MEASURED lines with values."
+
+    # The workbench embeds the collector. Its runtime and its libraries have to work with the
+    # library as well; software-ekg.bat puts bin\dlls on the PATH, as it is done here.
+    (cd "$WB" && PATH="$WB/bin/dlls:$PATH" "$WB/jre/bin/java" --enable-native-access=ALL-UNNAMED \
+        -cp "$(native "$WB/lib")\\*" "$WPC_CHECK" '\System\Threads' '\Memory\Available Bytes') \
+        || fail "The runtime of the workbench cannot read Windows performance counters."
+    echo "::endgroup::"
+fi
 
 # --- workbench -------------------------------------------------------------------------------
 

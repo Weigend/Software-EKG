@@ -1,0 +1,33 @@
+# Software-EKG collector - Windows performance counters of the machine the collector runs on,
+# for the test of the Windows distribution (smoke-test.sh). The names of the counters are the
+# English ones of the GitHub runners.
+
+project: WindowsCounters
+
+metricGroups:
+  windows:
+    type: win
+    metrics:
+      - metric: '\System\Threads'
+        wildcard: false
+      - metric: '\Memory\Available Bytes'
+        wildcard: false
+      - metric: '\Processor(_Total)\*'
+        wildcard: true
+
+processGroups:
+  machine:
+    - name: machine
+
+hostGroups:
+  local:
+    hosts:
+      - name: localhost
+        address: 127.0.0.1
+
+collectors:
+  - type: remote
+    metricGroup: windows
+    processGroup: machine
+    hostGroup: local
+    interval: 1s
