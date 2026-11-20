@@ -67,6 +67,8 @@ bin/software-ekg.sh      # Workbench
 ./ekg-collector.sh       # Collector mit Beispielwerten
 ```
 
+Die Startskripte prüfen, was sie brauchen, und sagen, was fehlt: Java 25, JavaFX und für die Workbench unter Linux eine Desktop-Sitzung und GTK 3. `bin/software-ekg.sh --check` und `./ekg-collector.sh --check` führen nur diese Prüfungen aus.
+
 Für Windows und macOS gibt es noch keine fertigen Pakete; dort wird aus dem Quellcode gebaut, siehe [Distributionen](#distributionen).
 
 ## Struktur

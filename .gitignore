@@ -24,4 +24,7 @@ Thumbs.db
 # flatten-maven-plugin
 .flattened-pom.xml
 
+# Release archives collected for upload
+/release/
+
 .vscode/settings.json
