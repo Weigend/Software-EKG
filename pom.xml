@@ -30,7 +30,7 @@
         <poiVersion>5.5.1</poiVersion>
         <wfxVersion>1.4.1</wfxVersion>
         <slf4jVersion>2.0.17</slf4jVersion>
-        <jacksonVersion>2.19.0</jacksonVersion>
+        <jacksonVersion>2.23.0</jacksonVersion>
         <java.version>25</java.version>
         <javafx.version>25.0.5.1</javafx.version>
         <avaje.version>11.4</avaje.version>
@@ -218,28 +218,28 @@
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>3.20.0</version>
+                <version>3.22.0</version>
             </dependency>
 
             <!-- used for common validations like URL validation -->
             <dependency>
                 <groupId>commons-validator</groupId>
                 <artifactId>commons-validator</artifactId>
-                <version>1.10.1</version>
+                <version>1.11.0</version>
             </dependency>
 
             <!-- used for additional collection sets for e.g. ListOrderedSet in bl-api -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-collections4</artifactId>
-                <version>4.5.0</version>
+                <version>4.6.0</version>
             </dependency>
 
             <!-- for file access for example at reading the CSVs in our data importer -->
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
-                <version>2.21.0</version>
+                <version>2.22.0</version>
             </dependency>
 
             <!-- common libs of other vendors -->
@@ -252,17 +252,17 @@
             <dependency>
                 <groupId>org.apache.httpcomponents.core5</groupId>
                 <artifactId>httpcore5</artifactId>
-                <version>5.3</version>
+                <version>5.5</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents.core5</groupId>
                 <artifactId>httpcore5-h2</artifactId>
-                <version>5.3</version>
+                <version>5.5</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents.client5</groupId>
                 <artifactId>httpclient5</artifactId>
-                <version>5.4</version>
+                <version>5.6.5</version>
             </dependency>
 
             <!-- Provides an SVGLoader that is used by the most of the EKG UI components to render SVG icons -->
@@ -290,19 +290,19 @@
             <dependency>
                 <groupId>org.apache.xmlgraphics</groupId>
                 <artifactId>batik-bridge</artifactId>
-                <version>1.19</version>
+                <version>1.20</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.xmlgraphics</groupId>
                 <artifactId>batik-anim</artifactId>
-                <version>1.19</version>
+                <version>1.20</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.xmlgraphics</groupId>
                 <artifactId>batik-dom</artifactId>
-                <version>1.19</version>
+                <version>1.20</version>
             </dependency>
 
 
@@ -367,12 +367,12 @@
             <dependency>
                 <groupId>jakarta.validation</groupId>
                 <artifactId>jakarta.validation-api</artifactId>
-                <version>3.0.2</version>
+                <version>3.1.1</version>
             </dependency>
             <dependency>
                 <groupId>jakarta.activation</groupId>
                 <artifactId>jakarta.activation-api</artifactId>
-                <version>2.1.2</version>
+                <version>2.1.4</version>
             </dependency>
             <dependency>
                 <groupId>jakarta.annotation</groupId>
@@ -407,7 +407,7 @@
             <dependency>
                 <groupId>org.controlsfx</groupId>
                 <artifactId>controlsfx</artifactId>
-                <version>11.2.3</version>
+                <version>11.2.6</version>
             </dependency>
             <dependency>
                 <groupId>org.jfxtras</groupId>
@@ -503,26 +503,26 @@
             <dependency>
                 <groupId>co.elastic.clients</groupId>
                 <artifactId>elasticsearch-java</artifactId>
-                <version>9.0.0</version>
+                <version>9.5.6</version>
             </dependency>
 
             <!-- logback as default SLF4J binding for the application bundle -->
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
-                <version>1.5.16</version>
+                <version>1.6.7</version>
             </dependency>
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-core</artifactId>
-                <version>1.5.16</version>
+                <version>1.6.7</version>
             </dependency>
 
             <!-- ClickHouse JDBC driver for high-performance columnar time series storage -->
             <dependency>
                 <groupId>com.clickhouse</groupId>
                 <artifactId>clickhouse-jdbc</artifactId>
-                <version>0.7.1</version>
+                <version>0.11.2</version>
                 <classifier>all</classifier>
             </dependency>
 
@@ -549,13 +549,13 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
-                <version>5.21.0</version>
+                <version>5.24.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.loadui</groupId>
                 <artifactId>testFx</artifactId>
-                <version>3.1.1</version>
+                <version>3.1.2</version>
             </dependency>
 
         </dependencies>
@@ -575,57 +575,57 @@
                     <!-- used to create source-jars that will stored beside the artifacts -->
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>3.3.1</version>
+                    <version>3.4.0</version>
                 </plugin>
                 <plugin>
                     <!-- used to compile the jars -->
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.14.1</version>
+                    <version>3.16.0</version>
                 </plugin>
                 <plugin>
                     <!-- used to bundle the AWB to an zip file -->
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
-                    <version>3.7.1</version>
+                    <version>3.8.0</version>
                 </plugin>
                 <plugin>
                     <!-- Used to measure code coverage -->
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.14</version>
+                    <version>0.8.16</version>
                 </plugin>
                 <plugin>
                     <!-- Used to delete the external integration test coverage file -->
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.4.0</version>
+                    <version>3.5.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.5.4</version>
+                    <version>3.6.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
-                    <version>3.1.1</version>
+                    <version>3.3.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
-                    <version>3.6.0</version>
+                    <version>3.8.0</version>
                 </plugin>
                 <plugin>
                     <!-- Used to extract vanilla solr distribution and exclude unnecessary files -->
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.8.1</version>
+                    <version>3.11.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>3.5.0</version>
+                    <version>3.7.0</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-checkstyle-plugin</artifactId>
@@ -639,23 +639,23 @@
                 <plugin>
                     <groupId>com.github.spotbugs</groupId>
                     <artifactId>spotbugs-maven-plugin</artifactId>
-                    <version>4.9.8.5</version>
+                    <version>4.10.5.0</version>
                 </plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>versions-maven-plugin</artifactId>
-					<version>2.18.0</version>
+					<version>2.25.2</version>
 				</plugin>
                 <plugin>
                     <!-- creating jars and test-jars -->
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.4.2</version>
+                    <version>3.5.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.3.1</version>
+                    <version>3.5.0</version>
                 </plugin>
 
             </plugins>
@@ -718,7 +718,7 @@
                         --add-opens java.base/java.util.regex=ALL-UNNAMED
                     </argLine>
                 </configuration>
-                <version>3.5.4</version>
+                <version>3.6.1</version>
             </plugin>
 
             <plugin>
@@ -754,7 +754,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
-                <version>1.6.0</version>
+                <version>1.9.0</version>
                 <configuration>
                     <updatePomFile>true</updatePomFile>
                     <flattenMode>resolveCiFriendliesOnly</flattenMode>
