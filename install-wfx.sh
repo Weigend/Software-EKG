@@ -21,7 +21,16 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WFX_REPO="https://github.com/Weigend/wfx.git"
 WFX_DIR="${WFX_DIR:-$SCRIPT_DIR/wfx}"
-M2_REPO="${M2_REPO:-$HOME/.m2/repository}"
+
+# Where Maven installs to. Maven itself is asked: settings.xml may move the local repository,
+# and an environment variable M2_REPO, as some CI images set it, says nothing about that.
+M2_REPO=""
+if command -v mvn > /dev/null 2>&1; then
+    M2_REPO="$(cd "${TMPDIR:-/tmp}" && mvn -q -B help:evaluate -Dexpression=settings.localRepository -DforceStdout 2> /dev/null || true)"
+fi
+if [ -z "$M2_REPO" ] || [ ! -d "$M2_REPO" ]; then
+    M2_REPO="$HOME/.m2/repository"
+fi
 
 FORCE=0
 RUN_TESTS=0
