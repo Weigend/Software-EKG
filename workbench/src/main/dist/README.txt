@@ -7,7 +7,14 @@ Start
   Windows:         bin\software-ekg.bat
 
 Needs Java 25 with JavaFX, for example the Liberica Full JDK. A distribution built with
-"mvn package -Pdist" brings its own runtime in the directory "jre" and needs nothing else.
+"mvn package -Pdist" brings its own runtime in the directory "jre"; it fits the operating
+system and processor it was built on. On another machine the start script uses the Java in
+JAVA_HOME or in the PATH instead.
+
+On Linux the workbench needs a desktop session and GTK 3. The start script checks all of
+this and says what is missing. To only run the checks:
+
+  bin/software-ekg.sh --check
 
 More memory for large analyses:   EKG_JAVA_OPTS=-Xmx8g bin/software-ekg.sh
 

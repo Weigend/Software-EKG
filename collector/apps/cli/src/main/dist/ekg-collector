@@ -47,13 +47,55 @@ STDERR="$HERE/stderr.log"
 # uses sun.misc.Unsafe and runs without a compiler of its own.
 QUIET="--enable-native-access=ALL-UNNAMED --sun-misc-unsafe-memory-access=allow -Dpolyglot.engine.WarnInterpreterOnly=false"
 
-if [ -x "$HERE/jre/bin/java" ]; then
-    JAVA="$HERE/jre/bin/java"
-elif [ -n "$JAVA_HOME" ] && [ -x "$JAVA_HOME/bin/java" ]; then
-    JAVA="$JAVA_HOME/bin/java"
-else
-    JAVA="$(command -v java)"
-fi
+MIN_JAVA=25
+JAVA=""
+REJECTED=""
+
+# Takes the Java given if it starts and is new enough, and notes why not otherwise.
+try_java() {
+    local java="$1" origin="$2" version
+    if [ -n "$JAVA" ] || [ ! -x "$java" ]; then
+        return 0
+    fi
+    version="$("$java" -XshowSettings:properties -version 2>&1 | sed -n 's/^ *java\.specification\.version = //p' | head -n 1)"
+    version="${version#1.}"
+    version="${version%%.*}"
+    case "$version" in
+        '' | *[!0-9]*)
+            REJECTED="$REJECTED\n  $java ($origin): does not start on this machine ($(uname -s) $(uname -m))"
+            ;;
+        *)
+            if [ "$version" -lt "$MIN_JAVA" ]; then
+                REJECTED="$REJECTED\n  $java ($origin): is Java $version"
+            else
+                JAVA="$java"
+            fi
+            ;;
+    esac
+}
+
+# the runtime of the distribution, then JAVA_HOME, then the PATH; one that does not start on
+# this machine or is older than Java 25 is skipped
+find_java() {
+    try_java "$HERE/jre/bin/java" "the runtime of this distribution"
+    if [ -n "$JAVA_HOME" ]; then
+        if [ -x "$JAVA_HOME/bin/java" ]; then
+            try_java "$JAVA_HOME/bin/java" "JAVA_HOME"
+        else
+            REJECTED="$REJECTED\n  JAVA_HOME=$JAVA_HOME: there is no bin/java in it"
+        fi
+    fi
+    if command -v java > /dev/null 2>&1; then
+        try_java "$(command -v java)" "PATH"
+    fi
+    if [ -z "$JAVA" ]; then
+        if [ -z "$REJECTED" ]; then
+            REJECTED="\n  none: no \"jre\" directory in $HERE, JAVA_HOME is not set, no java in the PATH"
+        fi
+        printf '%b\n' "The collector needs Java $MIN_JAVA or newer. Found:$REJECTED\n\nInstall a JDK $MIN_JAVA and set JAVA_HOME, for a service in /etc/default/ekg-collector." >&2
+        return 1
+    fi
+}
 
 # prints the pid of the collector if it runs
 running_pid() {
@@ -74,12 +116,17 @@ start() {
         echo "The collector is running already (pid $pid)."
         return 1
     fi
-    if [ -z "$JAVA" ]; then
-        echo "No Java found. Install a JDK 25 or set JAVA_HOME." >&2
-        return 1
-    fi
+    find_java || return 1
     if [ ! -f "$CONFIG" ]; then
         echo "There is no configuration $CONFIG." >&2
+        return 1
+    fi
+    if ! mkdir -p "$LOGDIR" 2> /dev/null || [ ! -w "$LOGDIR" ]; then
+        echo "The log directory $LOGDIR cannot be written. Set EKG_COLLECTOR_LOGDIR to another one." >&2
+        return 1
+    fi
+    if ! touch "$PID_FILE" "$STDERR" 2> /dev/null; then
+        echo "$HERE cannot be written; the collector keeps its pid and the output of the JVM there." >&2
         return 1
     fi
     # relative paths of the configuration and of the repository are meant from here
@@ -90,8 +137,17 @@ start() {
         -Dcollector.log.dir="$LOGDIR" \
         -classpath "$HERE/config:$HERE/lib/*" \
         io.softwareecg.collector.StartCollector "$CONFIG" "$LOGDIR" > /dev/null 2>> "$STDERR" &
-    echo $! > "$PID_FILE"
-    echo "Started the collector (pid $(cat "$PID_FILE")) with $CONFIG."
+    pid=$!
+    echo "$pid" > "$PID_FILE"
+    # a JVM that cannot start - wrong option, no memory - is gone within a moment
+    sleep 2
+    if ! kill -0 "$pid" 2> /dev/null; then
+        rm -f "$PID_FILE"
+        echo "The collector stopped right after its start. The last output of the JVM ($STDERR):" >&2
+        tail -n 20 "$STDERR" >&2
+        return 1
+    fi
+    echo "Started the collector (pid $pid) with $CONFIG."
 }
 
 stop() {
