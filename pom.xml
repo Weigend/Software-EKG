@@ -33,7 +33,7 @@
         <jacksonVersion>2.19.0</jacksonVersion>
         <java.version>25</java.version>
         <javafx.version>25.0.5.1</javafx.version>
-        <avaje.version>11.4</avaje.version>
+        <avaje.version>12.7</avaje.version>
         <!-- empty default; JaCoCo's prepare-agent overwrites this when metrics profile is active -->
         <argLine/>
     </properties>
