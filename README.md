@@ -10,6 +10,16 @@ Dieses Repository ist die konsolidierte Variante von AWB, AWB-SDK und Collector.
 
 ![Software-EKG Workbench mit Explorer, Zeitreihen-Chart der JVM-Heap-Nutzung und About-Dialog](docs/images/fullscreen.png)
 
+## Wofür es gedacht ist
+
+Das Software-EKG ist ein Expertenwerkzeug für den Software-Notarzt, den Performance Engineer oder den Troubleshooter: für jemanden, der schnell verstehen will, was wo läuft und welche Probleme die Systeme haben. Das Ziel ist eine Root-Cause-Analyse.
+
+Der Name ist wörtlich gemeint: Wie ein EKG die Signale des Herzens über die Zeit aufzeichnet, zeichnet das Software-EKG gezielt die Messwerte der Systeme, Server und Anwendungen auf, die zusammen einen Anwendungscluster, ein verteiltes System oder einen Serververbund bilden. Legt man die Kurven nebeneinander, fällt auf, welche Komponente wann aus dem Takt gerät. So findet man die Nadel im Heuhaufen.
+
+Neben schon vorhandenen Monitoring- und Alerting-Lösungen ist das Software-EKG oft der Einstieg in das Verständnis von Produktionsproblemen, die komplexe verteilte Systeme verursachen. Es ersetzt nicht das zentrale Monitoring, sondern dient dem Analysten als Umgebung, um die relevanten Daten aus den betroffenen Systemen zu sammeln und auszuwerten, Hypothesen zu bilden und zeitliche Unterschiede zu sehen. Falls nötig, skaliert es über Milliarden von Datenpunkten.
+
+In der Regel ist das der Einstieg in ein Analyseprojekt. Ausgehend davon wird festgelegt, was genau tiefer untersucht werden soll. Dann können Speicherprofiler, CPU-Profiler, Netzwerk-Tracing-Tools oder andere Visualisierungen gezielt für die Komponenten eingesetzt werden, die bereits in der Metrikanalyse auffällig sind.
+
 ## Struktur
 
 | Verzeichnis | Zweck |
