@@ -81,7 +81,7 @@ public class WindowsPerformanceCounterAccess {
                 System.loadLibrary(WPACCESS_32_DLL);
                 LOGGER.info(NATIVE_LIBRARY + WPACCESS_32_DLL + LOADED);
             }
-            init();
+            initOnce();
             available = true;
         } catch (UnsatisfiedLinkError e) {
             LOGGER.warn(NATIVE_LIBRARY + WPACCESS_32_DLL + "/" + WPACCESS_64_DLL + " can not found: " + e.getMessage());
@@ -98,6 +98,13 @@ public class WindowsPerformanceCounterAccess {
         return available;
     }
 
+
+    /**
+     * Inits the dll. Every object of this class does so; they must not do it at the same time.
+     */
+    private static synchronized void initOnce() {
+        init();
+    }
 
     /**
      * Inits the dll.
@@ -144,9 +151,25 @@ public class WindowsPerformanceCounterAccess {
 
 
     /**
-     * Cleanup. This is currently not used.
+     * Closes a query made by {@link #queryCounter(long, String[], double[])}.
      *
      * @param lastQueryHandle the last query handle.
      */
     public native void deleteQuery(long lastQueryHandle);
+
+    /**
+     * The English names of all performance objects and counters with their indexes, as Windows
+     * keeps them: index, name, index, name ...
+     *
+     * @return the list, or {@code null} if it cannot be read
+     */
+    public native String[] englishNames();
+
+    /**
+     * The name of a performance object or counter in the language of this Windows.
+     *
+     * @param index the index of the name, the same on a Windows of every language
+     * @return the name, or {@code null} if there is none with this index
+     */
+    public native String lookupName(int index);
 }

@@ -10,6 +10,9 @@ import io.softwareecg.awb.datasource.bl.prometheus.PrometheusEnvironment.Group;
 import io.softwareecg.awb.datasource.bl.ssh.SshDiscovery;
 import io.softwareecg.awb.datasource.bl.ssh.SshPlan;
 import io.softwareecg.awb.datasource.bl.ssh.TopMetric;
+import io.softwareecg.awb.datasource.bl.windows.WindowsDiscovery;
+import io.softwareecg.awb.datasource.bl.windows.WindowsMetric;
+import io.softwareecg.awb.datasource.bl.windows.WindowsPlan;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.QueryContextEvent;
 import io.softwareecg.awb.project.api.model.Project;
 import io.softwareecg.awb.repository.api.EkgRepository;
@@ -133,7 +136,8 @@ public class NewAnalysisDialogTest {
         show(null);
 
         for (AnalysisTopic topic : AnalysisTopic.values()) {
-            assertEquals(topic + " can be chosen exactly if it is built", !topic.isAvailable(),
+            // Windows is built, but its counters cannot be read by the machine of this test
+            assertEquals(topic + " can be chosen exactly if it is built", !topic.isAvailable() || topic == AnalysisTopic.WINDOWS,
                     (boolean) onFx(() -> tile(topic).isDisabled()));
         }
         assertTrue("the planned topics are there to be seen", onFx(() -> tile(AnalysisTopic.KUBERNETES).isVisible()));
@@ -293,6 +297,111 @@ public class NewAnalysisDialogTest {
         eventBus.publish(new ProjectDataChangedEvent(this, "local", "Databases", 2L));
         await(() -> !charts.isEmpty(), "the first chart to open");
         assertEquals("linux", charts.get(0).getFilterParams().getHostGroupName());
+        assertEquals("cpu_usage_percent", charts.get(0).getFilterParams().getMetricName());
+    }
+
+    @Test
+    public void windowsCountersAreOfferedWhereTheyCanBeRead() throws Exception {
+        show(null);
+        assertTrue("not on a machine that cannot read them", onFx(() -> tile(AnalysisTopic.WINDOWS).isDisabled()));
+        assertTrue("the tile says why", onFx(() -> tile(AnalysisTopic.WINDOWS).lookupAll(".tile-badge").stream()
+                .anyMatch(node -> !((Label) node).getText().equals("coming soon"))));
+        closeDialog();
+
+        service.windowsProblem = null;
+        show(null);
+        assertFalse(onFx(() -> tile(AnalysisTopic.WINDOWS).isDisabled()));
+        onFx(() -> {
+            tile(AnalysisTopic.WINDOWS).setSelected(true);
+            button("#continue").fire();
+            return null;
+        });
+        assertTrue("the Prometheus server knows no Windows hosts yet", onFx(() -> source("WINDOWS-PROMETHEUS").isDisabled()));
+        assertFalse(onFx(() -> source("WINDOWS-WINDOWS_COUNTERS").isDisabled()));
+        assertTrue("the way that can be gone is chosen", onFx(() -> source("WINDOWS-WINDOWS_COUNTERS").isSelected()));
+    }
+
+    @Test
+    public void windowsHostsAreNamedCheckedAndMultipliedOut() throws Exception {
+        List<QueryContextEvent> charts = new CopyOnWriteArrayList<>();
+        eventBus.subscribe(QueryContextEvent.class, charts::add);
+        service.windowsProblem = null;
+        show(null);
+        onFx(() -> {
+            tile(AnalysisTopic.WINDOWS).setSelected(true);
+            button("#continue").fire();     // to the sources
+            button("#continue").fire();     // to the hosts
+            return null;
+        });
+
+        assertEquals("Which Windows hosts do you want to read?", text("#stepTitle"));
+        assertTrue(onFx(() -> visible("#windowsHosts")));
+        assertFalse(onFx(() -> visible("#sshHosts")));
+        String thisMachine = WindowsPage.thisMachine();
+        assertEquals("the machine of the AWB is proposed", thisMachine, areaText("#windowsHosts"));
+        assertEquals("1 host:  " + thisMachine, text("#windowsHostsFound"));
+        assertEquals("1 host \u00d7 (the host itself)  =  1 collector job, at least 11 series", text("#windowsSummary"));
+        assertEquals("the name is proposed from the first host", thisMachine, text("#windowsAnalysisName"));
+        assertFalse("with the defaults the analysis can be started", onFx(() -> button("#startAnalysis").isDisabled()));
+
+        // other hosts, read from this one
+        typeArea("#windowsHosts", "srv-[01-03]");
+        assertEquals("3 hosts:  srv-01, srv-02, srv-03", text("#windowsHostsFound"));
+        assertEquals("srv-01", text("#windowsAnalysisName"));
+
+        // the check reads the hosts the way the collector will and offers what runs on them
+        onFx(() -> {
+            button("#checkWindowsHosts").fire();
+            return null;
+        });
+        await(() -> onFx(() -> dialog.getDialogPane().lookup("#windowsProcess-java") != null), "the hosts to be checked");
+        assertEquals("2 of 3 hosts can be read:", text("#windowsHostCheckSummary"));
+        assertTrue(onFx(() -> ((Pane) dialog.getDialogPane().lookup("#windowsHostResults")).getChildren().stream()
+                .anyMatch(node -> ((Label) node).getText().contains("srv-02") && ((Label) node).getText().contains("Remote Registry"))));
+        assertEquals("several processes of a program are counted", "java  \u00d72",
+                onFx(() -> ((CheckBox) dialog.getDialogPane().lookup("#windowsProcess-java")).getText()));
+
+        onFx(() -> {
+            ((CheckBox) dialog.getDialogPane().lookup("#windowsProcess-java")).setSelected(true);
+            ((CheckBox) dialog.getDialogPane().lookup("#windowsMetric-CPU_QUEUE")).setSelected(false);
+            ((CheckBox) dialog.getDialogPane().lookup("#windowsMetric-NETWORK_RECEIVE")).setSelected(false);
+            ((CheckBox) dialog.getDialogPane().lookup("#windowsMetric-NETWORK_TRANSMIT")).setSelected(false);
+            return null;
+        });
+        type("#windowsMoreProcesses", "sqlservr.exe");
+        type("#windowsAnalysisName", "Windows Servers");
+        assertEquals("3 hosts \u00d7 (the host itself + 2 processes)  =  9 collector jobs, 36 series", text("#windowsSummary"));
+
+        // what the metrics do not cover is named as a counter; what is no counter is said so
+        typeArea("#windowsCounters", "\\Memory\\Cache Bytes, cpu");
+        assertTrue(text("#windowsCountersFound"), text("#windowsCountersFound").startsWith("Not a counter: cpu"));
+        assertTrue(onFx(() -> button("#startAnalysis").isDisabled()));
+        typeArea("#windowsCounters", "\\Memory\\Cache Bytes\n\\LogicalDisk(*)\\% Free Space");
+        assertEquals("2 counters", text("#windowsCountersFound"));
+        assertEquals("3 hosts \u00d7 (the host itself + 2 processes)  =  9 collector jobs, at least 42 series", text("#windowsSummary"));
+
+        onFx(() -> {
+            button("#startAnalysis").fire();
+            return null;
+        });
+        await(() -> !service.startedAny.isEmpty(), "the analysis to be started");
+
+        WindowsPlan plan = (WindowsPlan) service.startedAny.get(0);
+        assertEquals("Windows Servers", plan.projectName());
+        assertEquals("windows", plan.hostGroup());
+        assertEquals(List.of("srv-01", "srv-02", "srv-03"), plan.hosts().stream().map(SshPlan.Host::name).collect(Collectors.toList()));
+        assertEquals("the program is named as the counters name it", List.of("java", "sqlservr"), plan.processes());
+        assertEquals(8, plan.systemMetrics().size());
+        assertFalse(plan.systemMetrics().contains(WindowsMetric.CPU_QUEUE));
+        assertEquals(List.of(WindowsMetric.PROCESS_CPU, WindowsMetric.PROCESS_MEMORY), plan.processMetrics());
+        assertEquals(List.of("\\Memory\\Cache Bytes", "\\LogicalDisk(*)\\% Free Space"), plan.counters());
+        assertEquals(Duration.ofSeconds(15), plan.interval());
+        await(() -> !onFx(dialog::isShowing), "the dialog to close");
+
+        // the first chart shows the same metric as for hosts of every other source
+        eventBus.publish(new ProjectDataChangedEvent(this, "local", "Windows Servers", 2L));
+        await(() -> !charts.isEmpty(), "the first chart to open");
+        assertEquals("windows", charts.get(0).getFilterParams().getHostGroupName());
         assertEquals("cpu_usage_percent", charts.get(0).getFilterParams().getMetricName());
     }
 
@@ -592,6 +701,10 @@ public class NewAnalysisDialogTest {
         });
     }
 
+    private String areaText(String selector) throws Exception {
+        return onFx(() -> ((javafx.scene.control.TextArea) dialog.getDialogPane().lookup(selector)).getText());
+    }
+
     private void type(String selector, String text) throws Exception {
         onFx(() -> {
             ((TextField) dialog.getDialogPane().lookup(selector)).setText(text);
@@ -688,6 +801,8 @@ public class NewAnalysisDialogTest {
         final List<CollectionPlan> addedAny = new CopyOnWriteArrayList<>();
         volatile RuntimeException addFailure;
         volatile String inspectedAs;
+        /** Why the machine of the test cannot read Windows performance counters; {@code null}: it can. */
+        volatile String windowsProblem = "Windows performance counters are read by a workbench that runs on Windows.";
         volatile RuntimeException discoverFailure;
         volatile List<Group> groups = List.of(NODE, API);
         volatile int discoveries;
@@ -737,6 +852,20 @@ public class NewAnalysisDialogTest {
                     : new SshDiscovery.HostCheck(host, true, null, List.of(
                             new SshDiscovery.ProcessCandidate("java", 2, 20.0, 3.0),
                             new SshDiscovery.ProcessCandidate("postgres", 1, 5.0, 1.0)))).toList();
+        }
+
+        @Override
+        public String windowsCountersProblem() {
+            return windowsProblem;
+        }
+
+        @Override
+        public List<WindowsDiscovery.HostCheck> inspectWindowsHosts(List<SshPlan.Host> hosts) {
+            return hosts.stream().map(host -> host.name().equals("srv-02")
+                    ? new WindowsDiscovery.HostCheck(host, false, "is the service 'Remote Registry' running?", List.of())
+                    : new WindowsDiscovery.HostCheck(host, true, null, List.of(
+                            new WindowsDiscovery.ProcessCandidate("sqlservr", 1, 2e9),
+                            new WindowsDiscovery.ProcessCandidate("java", 1, 9e8)))).toList();
         }
 
         @Override

@@ -17,7 +17,7 @@ set -euo pipefail
 DLL_NAME="wpcaccess-5.1.0-x64.dll"
 SOURCE="io_softwareecg_collector_source_wincount_WindowsPerformanceCounterAccess.cpp"
 JNI_PREFIX="Java_io_softwareecg_collector_source_wincount_WindowsPerformanceCounterAccess_"
-JNI_FUNCTIONS="init getCounter authenticate resolveWildcards queryCounter deleteQuery"
+JNI_FUNCTIONS="init getCounter authenticate resolveWildcards queryCounter deleteQuery englishNames lookupName"
 
 fail() {
     echo "build.sh: $1" >&2

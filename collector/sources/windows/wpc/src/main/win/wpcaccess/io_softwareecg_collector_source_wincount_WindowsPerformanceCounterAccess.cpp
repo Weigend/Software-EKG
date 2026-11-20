@@ -27,11 +27,16 @@ using namespace std;
 
 CRITICAL_SECTION cs;
 
+// set once the critical section exists: init is called for every Java object
+static volatile LONG csInitialized = 0;
+
 /*
  * Class:     io_softwareecg_collector_source_wincount_WindowsPerformanceCounterAccess
  */
 JNIEXPORT void JNICALL Java_io_softwareecg_collector_source_wincount_WindowsPerformanceCounterAccess_init (JNIEnv * env, jclass clazz) {
-	InitializeCriticalSection(&cs);
+	if (InterlockedCompareExchange(&csInitialized, 1, 0) == 0) {
+		InitializeCriticalSection(&cs);
+	}
 }
 
 //______________________________________________________________________________
@@ -327,16 +332,26 @@ JNICALL Java_io_softwareecg_collector_source_wincount_WindowsPerformanceCounterA
 
 	jdouble *elements = env -> GetDoubleArrayElements(resultArray, 0);
 
+	// the counters of the query; declared before the first 'goto exit'
+	vector<HCOUNTER> * counterV = NULL;
+
     int counterStringsLength = env -> GetArrayLength(counterStrings);
 	if (counterStringsLength == 0) {
 		goto exit;
 	}
 
-	// check if handle is already in map
-    if (query2Counter.find(hQueryHandle) == query2Counter.end()) {
+	// check if handle is already in map. The map is shared by the threads of all jobs.
+	EnterCriticalSection(&cs);
+	{
+		map<HQUERY, vector<HCOUNTER>*>::iterator known = query2Counter.find(hQueryHandle);
+		if (known != query2Counter.end()) {
+			counterV = known->second;
+		}
+	}
+	LeaveCriticalSection(&cs);
 
-		// cout << "Query handle '" << hQueryHandle << "' not found. Creating new query." << endl;
-		
+    if (counterV == NULL) {
+
 		// new query 
         pdhStatus = PdhOpenQuery(NULL, 0, & hQueryHandle);
 
@@ -347,8 +362,7 @@ JNICALL Java_io_softwareecg_collector_source_wincount_WindowsPerformanceCounterA
             goto exit;
         }
 
-		vector<HCOUNTER> * counterV = new vector<HCOUNTER>();
-		query2Counter[hQueryHandle] = counterV;
+		counterV = new vector<HCOUNTER>();
 
         for (int i = 0; i < counterStringsLength; i++) {
             jstring jstr = (jstring) env -> GetObjectArrayElement(counterStrings, i);
@@ -367,10 +381,14 @@ JNICALL Java_io_softwareecg_collector_source_wincount_WindowsPerformanceCounterA
             delete[] szCounterPath;
 			
             if (pdhStatus != ERROR_SUCCESS) {
-                cerr << "Can not add counter '" << szCounterPath << "' to query" << endl;
+                cerr << "Can not add counter " << i << " to query" << endl;
             }
             counterV->push_back(hCounter); 
         }	
+
+		EnterCriticalSection(&cs);
+		query2Counter[hQueryHandle] = counterV;
+		LeaveCriticalSection(&cs);
     }
 
     // request all values for the query
@@ -384,9 +402,14 @@ JNICALL Java_io_softwareecg_collector_source_wincount_WindowsPerformanceCounterA
     for (int i = 0; i < counterStringsLength; i++) {
         PDH_FMT_COUNTERVALUE pValue = {0};
         DWORD dwType;
-        pdhStatus = ::PdhGetFormattedCounterValue(query2Counter[hQueryHandle]->at(i), PDH_FMT_DOUBLE | PDH_FMT_NOCAP100, &dwType, &pValue);
+        // a query knows the counters it was made with; one asked for beyond them has no value
+        if ((size_t) i < counterV->size()) {
+            pdhStatus = ::PdhGetFormattedCounterValue(counterV->at(i), PDH_FMT_DOUBLE | PDH_FMT_NOCAP100, &dwType, &pValue);
+        } else {
+            pdhStatus = PDH_INVALID_HANDLE;
+        }
         double result = pValue.doubleValue;
-        if (pdhStatus != ERROR_SUCCESS) {
+        if (pdhStatus != (PDH_STATUS) ERROR_SUCCESS) {
             result = -1; // error 
         }
         // store result in result array
@@ -406,10 +429,117 @@ JNIEXPORT void
 JNICALL Java_io_softwareecg_collector_source_wincount_WindowsPerformanceCounterAccess_deleteQuery
         (JNIEnv*env, jobject thisObject, jlong queryHandle) {
     HQUERY hQueryHandle = (HQUERY) queryHandle;
+    vector<HCOUNTER> * counterV = NULL;
 
-	// count is 0 if there is no query
-    if (!query2Counter.count(hQueryHandle)) {	
-		query2Counter.erase(hQueryHandle);
-		::PdhCloseQuery(hQueryHandle);
-	}
+    // only a query that was made here is closed, and only once
+    EnterCriticalSection(&cs);
+    {
+        map<HQUERY, vector<HCOUNTER>*>::iterator known = query2Counter.find(hQueryHandle);
+        if (known != query2Counter.end()) {
+            counterV = known->second;
+            query2Counter.erase(known);
+        }
+    }
+    LeaveCriticalSection(&cs);
+
+    if (counterV != NULL) {
+        ::PdhCloseQuery(hQueryHandle);
+        delete counterV;
+    }
+}
+
+
+//______________________________________________________________________________
+//
+// The names of the performance objects and counters. A counter path is written
+// in the language of the Windows it is read on; these two functions let the
+// Java side turn the English names into the ones of this machine.
+//______________________________________________________________________________
+
+/*
+* Class:     io_softwareecg_collector_source_wincount_WindowsPerformanceCounterAccess
+* Method:    englishNames
+* Signature: ()[Ljava/lang/String;
+*
+* The English names of all objects and counters with their indexes, as Windows
+* keeps them: index, name, index, name ... NULL if they cannot be read.
+*/
+JNIEXPORT jobjectArray
+JNICALL Java_io_softwareecg_collector_source_wincount_WindowsPerformanceCounterAccess_englishNames
+        (JNIEnv*env, jobject thisObject) {
+
+    jobjectArray result = NULL;
+    HKEY key = NULL;
+    wchar_t * buffer = NULL;
+    DWORD bytes = 0;
+    DWORD type = 0;
+    LONG status = ERROR_SUCCESS;
+    size_t chars = 0;
+    int count = 0;
+    int index = 0;
+    jclass stringClass = NULL;
+
+    // 009 is English; the key exists on a Windows of every language
+    status = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
+            L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Perflib\\009", 0, KEY_READ, &key);
+    if (status != ERROR_SUCCESS) {
+        return NULL;
+    }
+    status = RegQueryValueExW(key, L"Counter", NULL, &type, NULL, &bytes);
+    if ((status != ERROR_SUCCESS && status != ERROR_MORE_DATA) || type != REG_MULTI_SZ || bytes == 0) {
+        goto exit;
+    }
+    // two more characters: the registry does not promise the terminators of a list of strings
+    chars = bytes / sizeof(wchar_t);
+    buffer = (wchar_t *) calloc(chars + 2, sizeof(wchar_t));
+    if (buffer == NULL) {
+        goto exit;
+    }
+    status = RegQueryValueExW(key, L"Counter", NULL, &type, (LPBYTE) buffer, &bytes);
+    if (status != ERROR_SUCCESS) {
+        goto exit;
+    }
+
+    for (wchar_t * p = buffer; *p != L'\0'; p += wcslen(p) + 1) {
+        count++;
+    }
+    stringClass = env -> FindClass("java/lang/String");
+    result = env -> NewObjectArray(count, stringClass, NULL);
+    if (result == NULL) {
+        goto exit;
+    }
+    for (wchar_t * p = buffer; *p != L'\0' && index < count; p += wcslen(p) + 1) {
+        jstring s = env -> NewString((const jchar *) p, (jsize) wcslen(p));
+        env -> SetObjectArrayElement(result, index++, s);
+        env -> DeleteLocalRef(s);
+    }
+
+    exit:
+    if (buffer != NULL) {
+        free(buffer);
+    }
+    RegCloseKey(key);
+    return result;
+}
+
+/*
+* Class:     io_softwareecg_collector_source_wincount_WindowsPerformanceCounterAccess
+* Method:    lookupName
+* Signature: (I)Ljava/lang/String;
+*
+* The name of the object or counter with this index in the language of this
+* Windows. NULL if there is none.
+*/
+JNIEXPORT jstring
+JNICALL Java_io_softwareecg_collector_source_wincount_WindowsPerformanceCounterAccess_lookupName
+        (JNIEnv*env, jobject thisObject, jint index) {
+
+    wchar_t name[PDH_MAX_COUNTER_NAME];
+    DWORD size = PDH_MAX_COUNTER_NAME;
+    name[0] = L'\0';
+    PDH_STATUS pdhStatus = PdhLookupPerfNameByIndexW(NULL, (DWORD) index, name, &size);
+    if (pdhStatus != (PDH_STATUS) ERROR_SUCCESS || name[0] == L'\0') {
+        return NULL;
+    }
+    return env -> NewString((const jchar *) name, (jsize) wcslen(name));
 }

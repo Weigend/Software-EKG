@@ -32,6 +32,14 @@ There is no 32 bit library any more: Software-EKG needs Java 25, and that has no
 The Visual Studio project in `src/main/win` is the former way to build the library and is not
 used by the build.
 
+## Counter names
+
+Windows names its performance objects and counters in its own language, but numbers them the
+same everywhere. The library tells the collector the English names with their numbers and the
+name of a number on this machine; with that the source `win` reads a counter written in English
+- `\Processor(_Total)\% Processor Time` - on a Windows of every language. A counter written in
+the language of the machine works as before.
+
 ## Testing
 
 The tests of the module read counters of the machine they run on. They are skipped on other
@@ -39,7 +47,8 @@ systems than Windows, and on Windows if the library is not built. With `-Pwpc` a
 cannot be loaded is a failure.
 
 On GitHub the job "Windows performance counters" of the workflow "Build and Test" builds the
-library on a Windows runner and runs these tests. The workflow "Release" starts the Windows
+library on a Windows runner and runs these tests, and those of the workbench that collect from
+the runner what its wizard for Windows hosts sets up. The workflow "Release" starts the Windows
 distributions and lets the collector read counters (`.github/scripts/smoke-test.sh`).
 
 ## Where the library ends up
@@ -51,6 +60,9 @@ Windows:
 |---|---|---|
 | collector | `bin\dlls\wpcaccess-5.1.0-x64.dll` | `ekg-collector.cmd` sets `java.library.path` |
 | workbench (embedded collector) | `bin\dlls\wpcaccess-5.1.0-x64.dll` | `bin\software-ekg.bat` puts the directory on the `PATH` |
+
+In the workbench the library is what makes the topic "Windows Server" of a new analysis
+available: its hosts are read through their performance counters.
 
 Without the library a collector starts as usual and logs that the Windows counters are not
 available.

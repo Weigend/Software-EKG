@@ -15,7 +15,7 @@ public enum AnalysisTopic {
 
     LINUX(Category.INFRASTRUCTURE, "Linux / Unix", "Servers: CPU, load, memory, disk, network", true),
 
-    WINDOWS(Category.INFRASTRUCTURE, "Windows Server", "Servers: CPU, memory, disk, network", false),
+    WINDOWS(Category.INFRASTRUCTURE, "Windows Server", "Servers: CPU, memory, disk, network", true),
 
     KUBERNETES(Category.INFRASTRUCTURE, "Kubernetes", "Clusters: namespaces, pods, containers", false),
 
@@ -90,13 +90,22 @@ public enum AnalysisTopic {
      *
      * @param source      where the data comes from
      * @param description what this way needs and gives for this topic, in a sentence or two
+     * @param available   {@code false} for a way that is planned but cannot be chosen yet. A
+     *                    source can be built for one topic and not yet for another.
      */
-    public record SourceOption(AnalysisSource source, String description) {
+    public record SourceOption(AnalysisSource source, String description, boolean available) {
+
+        /**
+         * A way that can be chosen if its source is built.
+         */
+        public SourceOption(AnalysisSource source, String description) {
+            this(source, description, source.isAvailable());
+        }
     }
 
     /**
      * @return the ways this topic can be collected, the usual one first. Ways that are planned
-     *         but not built are part of the list ({@link AnalysisSource#isAvailable()}).
+     *         but not built are part of the list ({@link SourceOption#available()}).
      */
     public List<SourceOption> sources() {
         return switch (this) {
@@ -114,8 +123,11 @@ public enum AnalysisTopic {
                     new SourceOption(AnalysisSource.JOLOKIA, "Each JVM is read directly over HTTP."),
                     new SourceOption(AnalysisSource.JMX, "Each JVM is read directly over JMX."));
             case WINDOWS -> List.of(
-                    new SourceOption(AnalysisSource.PROMETHEUS, "One server that collects from all hosts (windows exporter)."),
-                    new SourceOption(AnalysisSource.WINDOWS_COUNTERS, "Each host is read directly."));
+                    // the server is there, but not yet what tells Windows hosts from others on it
+                    new SourceOption(AnalysisSource.PROMETHEUS, "One server that collects from all hosts (windows exporter).", false),
+                    new SourceOption(AnalysisSource.WINDOWS_COUNTERS,
+                            "Each host is read through its performance counters, from Windows. "
+                                    + "Shows single processes too. No history."));
             case DATABASES -> List.of(
                     new SourceOption(AnalysisSource.PROMETHEUS, "One server that collects from the database exporters."),
                     new SourceOption(AnalysisSource.POSTGRES, "Each database is asked directly."));

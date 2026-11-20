@@ -101,6 +101,36 @@ public class WindowsPerformanceMetricDefinitionSourceTest {
     }
 
 
+    /**
+     * Counters written in English are expanded with the names of the machine, and a filter
+     * names the counters found. Runs on every system: the Windows is a fake.
+     */
+    @Test
+    public void testEnglishCountersAndFilteredLabels() throws Exception {
+        String machine = java.net.InetAddress.getLocalHost().getHostName();
+        FakeCounterAccess windows = new FakeCounterAccess();
+        windows.expansions.put("\\\\" + machine + "\\Netzwerkschnittstelle(*)\\Empfangene Bytes/s", java.util.List.of(
+                "\\\\" + machine + "\\Netzwerkschnittstelle(Intel[R] 82574L)\\Empfangene Bytes/s",
+                "\\\\" + machine + "\\Netzwerkschnittstelle(Loopback)\\Empfangene Bytes/s"));
+        WindowsPerformanceCounterSource source = new WindowsPerformanceCounterSource(windows);
+
+        MetricDefinition[] expanded = source.replaceWildcardCounter(jobConfig.copyWithMetrics(new MetricDefinition[]{
+                new MetricDefinition("\\Processor(_Total)\\% Processor Time", "cpu_usage_percent"),
+                new MetricDefinition("\\Network Interface(*)\\Bytes Received/sec", "network_receive ${FILTER:1}",
+                        ".*\\((.*)\\)\\\\[^\\\\]*", true),
+        })).getExpandedDefinitions();
+
+        java.util.Map<String, String> counterByLabel = new java.util.TreeMap<>();
+        for (MetricDefinition definition : expanded) {
+            counterByLabel.put(definition.getLabel(), definition.getDefinition());
+        }
+        assertEquals(java.util.Map.of(
+                "cpu_usage_percent", "\\\\" + machine + "\\Prozessor(_Total)\\Prozessorzeit (%)",
+                "network_receive Intel[R] 82574L", "\\\\" + machine + "\\Netzwerkschnittstelle(Intel[R] 82574L)\\Empfangene Bytes/s",
+                "network_receive Loopback", "\\\\" + machine + "\\Netzwerkschnittstelle(Loopback)\\Empfangene Bytes/s"),
+                counterByLabel);
+    }
+
     @Test
     public void testGetId() throws Exception {
         WindowsPerformanceCounterSource source = new WindowsPerformanceCounterSource();
