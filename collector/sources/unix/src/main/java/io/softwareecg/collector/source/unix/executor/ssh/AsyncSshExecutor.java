@@ -12,7 +12,7 @@
 //______________________________________________________________________________
 package io.softwareecg.collector.source.unix.executor.ssh;
 
-import io.softwareecg.commons.ssh.ExecSession;
+import io.softwareecg.collector.ssh.ExecSession;
 import io.softwareecg.collector.source.unix.UnixSourceConfig;
 import io.softwareecg.collector.source.unix.executor.AsyncCommandExecutor;
 

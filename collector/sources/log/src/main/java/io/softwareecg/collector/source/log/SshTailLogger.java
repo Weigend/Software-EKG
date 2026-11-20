@@ -12,9 +12,9 @@
 //______________________________________________________________________________
 package io.softwareecg.collector.source.log;
 
-import io.softwareecg.commons.ssh.ConnectionFactory;
-import io.softwareecg.commons.ssh.ExecSession;
-import io.softwareecg.commons.ssh.SshConnection;
+import io.softwareecg.collector.ssh.ConnectionFactory;
+import io.softwareecg.collector.ssh.ExecSession;
+import io.softwareecg.collector.ssh.SshConnection;
 import io.softwareecg.collector.common.LoggerFactory;
 import io.softwareecg.collector.common.Registry;
 import io.softwareecg.collector.config.CounterDescriptor;

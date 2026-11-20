@@ -12,8 +12,8 @@
 //______________________________________________________________________________
 package io.softwareecg.collector.source.unix.executor.ssh;
 
-import io.softwareecg.commons.ssh.ConnectionFactory;
-import io.softwareecg.commons.ssh.SshConnection;
+import io.softwareecg.collector.ssh.ConnectionFactory;
+import io.softwareecg.collector.ssh.SshConnection;
 import io.softwareecg.collector.common.LoggerFactory;
 import io.softwareecg.collector.source.unix.UnixSourceConfig;
 import org.slf4j.Logger;

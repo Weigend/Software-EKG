@@ -392,7 +392,7 @@ Ziel: V6 beheben (CDI/WFX in "Utils").
 
 1. Neues Modul `awb-commons-utils` (rein JDK + slf4j + Apache Commons + commons-io). Erbe-`<dependencies>` aus `awb-commons` minus Weld + WFX.
 2. Neues Modul `awb-commons-cdi` (CDI/Lookup-Glue: `BeanProvider.java` + `module/`-Package falls CDI-affin).
-3. `awb-commons-ssh` als Optional-Modul, weil `sshd-core` + `eddsa` nur von Aichat-BL gebraucht werden (siehe `aichat-bl/pom.xml:48-57`).
+3. `awb-ssh` als Optional-Modul, weil `sshd-core` + `eddsa` nur von Aichat-BL gebraucht werden (siehe `aichat-bl/pom.xml:48-57`).
 4. Alle Konsumenten passen die Dep entsprechend an.
 
 Falls Aufwand zu groß: Mindestens den `BeanProvider` aus `awb-commons` herausziehen und entweder in `awb-application-api` (wenn nur dort gebraucht) oder neuen `awb-commons-cdi` schieben — dann kann der Rest von `awb-commons` die Weld+WFX-Deps verlieren.

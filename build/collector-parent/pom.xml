@@ -90,24 +90,6 @@
                 <version>1.2.3</version>
             </dependency>
 
-            <!-- ssh client used by some of the collector sources -->
-            <dependency>
-                <groupId>io.softwareecg.commons</groupId>
-                <artifactId>commons-ssh</artifactId>
-                <version>${sshVersion}</version>
-                <!-- we don't want the log4j stuff because we're using logback over slf4j -->
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-log4j12</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>log4j</groupId>
-                        <artifactId>log4j</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
             <!-- GraalJS as JavaScript engine replacement for Nashorn (removed in Java 15+).
                  Since GraalJS 23.1 the supported Maven coordinates are org.graalvm.polyglot:polyglot (API)
                  plus org.graalvm.polyglot:js (type pom, pulls in language + Truffle runtime).
