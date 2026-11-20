@@ -25,8 +25,8 @@
         classes used to write out the CSVs depending on date and size
         -->
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
+            <groupId>ch.qos.reload4j</groupId>
+            <artifactId>reload4j</artifactId>
         </dependency>
 
         <!-- use module to get the TestConfigFactory using to create configs for testing -->

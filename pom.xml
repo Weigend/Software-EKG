@@ -30,7 +30,7 @@
         <poiVersion>5.5.1</poiVersion>
         <wfxVersion>1.4.1</wfxVersion>
         <slf4jVersion>2.0.17</slf4jVersion>
-        <jacksonVersion>2.19.0</jacksonVersion>
+        <jacksonVersion>2.21.8</jacksonVersion>
         <java.version>25</java.version>
         <javafx.version>25.0.5.1</javafx.version>
         <avaje.version>11.4</avaje.version>
@@ -252,17 +252,17 @@
             <dependency>
                 <groupId>org.apache.httpcomponents.core5</groupId>
                 <artifactId>httpcore5</artifactId>
-                <version>5.3</version>
+                <version>5.4.4</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents.core5</groupId>
                 <artifactId>httpcore5-h2</artifactId>
-                <version>5.3</version>
+                <version>5.4.4</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents.client5</groupId>
                 <artifactId>httpclient5</artifactId>
-                <version>5.4</version>
+                <version>5.6.5</version>
             </dependency>
 
             <!-- Provides an SVGLoader that is used by the most of the EKG UI components to render SVG icons -->
@@ -416,25 +416,15 @@
             </dependency>
 
             <!-- object serialisation/deserialisation - parsing xmls/json -->
+            <!-- The BOM sets every Jackson artifact, also those that come in transitively
+                 (Solr, Elasticsearch). Since 2.20 jackson-annotations has a version of its own
+                 without a patch number, so one property for all artifacts no longer works. -->
             <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-core</artifactId>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
                 <version>${jacksonVersion}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-annotations</artifactId>
-                <version>${jacksonVersion}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jacksonVersion}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.dataformat</groupId>
-                <artifactId>jackson-dataformat-yaml</artifactId>
-                <version>${jacksonVersion}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <!-- parsing Excel sheets -->
             <dependency>
@@ -510,12 +500,53 @@
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
-                <version>1.5.16</version>
+                <version>1.5.38</version>
             </dependency>
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-core</artifactId>
-                <version>1.5.16</version>
+                <version>1.5.38</version>
+            </dependency>
+
+            <!-- Versions of libraries that only come in transitively, raised to releases without
+                 known vulnerabilities: Netty, ZooKeeper and Snappy through Solr, Xalan and
+                 XML Graphics Commons through FranzXaver. -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-bom</artifactId>
+                <version>4.1.141.Final</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper</artifactId>
+                <version>3.9.7</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper-jute</artifactId>
+                <version>3.9.7</version>
+            </dependency>
+            <dependency>
+                <groupId>org.xerial.snappy</groupId>
+                <artifactId>snappy-java</artifactId>
+                <version>1.1.10.12</version>
+            </dependency>
+            <dependency>
+                <groupId>xalan</groupId>
+                <artifactId>xalan</artifactId>
+                <version>2.7.3</version>
+            </dependency>
+            <dependency>
+                <groupId>xalan</groupId>
+                <artifactId>serializer</artifactId>
+                <version>2.7.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>xmlgraphics-commons</artifactId>
+                <version>2.11</version>
             </dependency>
 
             <!-- ClickHouse JDBC driver for high-performance columnar time series storage -->
