@@ -1,97 +1,99 @@
-# Konsolidierung zum Single Repository
+# Consolidation into a single repository
 
-## Ziel
+**English** | [Deutsch](single-repository.de.md)
 
-Der 7x-Aufbau optimiert auf den tatsächlichen Einsatz von Software-EKG: Für einen konkreten Diagnosefall wird eine Datenquelle angebunden, der Collector sammelt die benötigten Messwerte und die Workbench stellt sie als Zeitreihen dar. Eine Erweiterung soll mit wenig Kontext und ohne koordinierte Releases mehrerer EKG-Repositories möglich sein.
+## Goal
 
-Das ist keine fachliche Neuentwicklung. Paketnamen, Persistenzformate, ServiceLoader-Verträge und Anwendungs-Einstiegspunkte bleiben soweit möglich erhalten. Geändert wurde die Build- und Besitzstruktur. Die Collector-Konfiguration ist seit der Konsolidierung YAML statt XML (siehe unten); vorhandene XML-Dateien werden weiter gelesen.
+The 7x structure is optimised for how Software-EKG is actually used: for a specific diagnostic case a data source is connected, the collector gathers the required measurements and the workbench displays them as time series. An extension should be possible with little context and without coordinated releases of several EKG repositories.
 
-## Architekturentscheidung
+This is not a functional rewrite. Package names, persistence formats, ServiceLoader contracts and application entry points are kept as far as possible. What changed is the build and ownership structure. Since the consolidation, the collector configuration is YAML instead of XML (see below); existing XML files are still read.
 
-Eine Modulgrenze bleibt nur bestehen, wenn mindestens einer dieser Gründe vorliegt:
+## Architecture decision
 
-1. Das Ergebnis ist eine separat start- oder deploybare Anwendung.
-2. Code wird zur Laufzeit als Collector-Plugin gefunden.
-3. Ein optionaler Adapter bringt einen deutlich eigenen Dependency-Stack mit.
+A module boundary remains only if at least one of these reasons applies:
 
-UI-, Business- und API-Layer innerhalb der Workbench erfüllen diese Kriterien nicht. Sie werden durch Pakete getrennt und gemeinsam kompiliert. Beim Collector sind Source- und Repository-Adapter dagegen echte Erweiterungsgrenzen und bleiben eigene JARs.
+1. The result is an application that can be started or deployed separately.
+2. Code is discovered at runtime as a collector plugin.
+3. An optional adapter brings a clearly separate dependency stack.
 
-## Zuordnung alt zu neu
+The UI, business and API layers inside the workbench do not meet these criteria. They are separated by packages and compiled together. In the collector, by contrast, source and repository adapters are real extension boundaries and remain separate JARs.
 
-| Bisher | Jetzt | Begründung |
+## Mapping old to new
+
+| Before | Now | Reason |
 | --- | --- | --- |
-| Aggregator mit vier Gitlinks | ein Git-Repository und ein Maven-Reactor | eine Änderung, ein Review, eine Version |
-| `ssh` | `collector/core` | ausschließlich Infrastruktur des Collectors und der Unix-Anbindungen |
-| Collector Common, Config, Memory, Connector, Repository API, Source Common und Control | `collector/core` | stark gekoppelte Laufzeitbasis ohne eigenständigen Deploymentwert |
-| Collector Source-Implementierungen | `collector/sources/*` | echte, per ServiceLoader ladbare Plugins |
-| CSV, JSON, RDB, Solr und Elasticsearch | `collector/repositories/*` | optionale Speicheradapter mit unterschiedlichen Abhängigkeiten |
-| Collector Delivery | `collector/apps/cli` | eigenständig startbares Produkt |
-| Collector UI und Jolokia WAR | `collector/apps/ui`, `collector/apps/jolokia-agent` | eigenständige Deployments |
-| AWB API, BL, UI, Chart, Importer, Application und Distribution | `workbench` | eine Desktop-Anwendung; Schichten sind Pakete, keine Releases |
-| Laufzeitklassen des AWB-SDK | `workbench` | interne Verträge der einzigen Anwendung |
-| SDK-Testsupport | `workbench/src/test` | Testfixture statt ausgeliefertem Produktartefakt |
+| Aggregator with four gitlinks | one Git repository and one Maven reactor | one change, one review, one version |
+| `ssh` | `collector/core` | exclusively infrastructure of the collector and the Unix connectors |
+| Collector Common, Config, Memory, Connector, Repository API, Source Common and Control | `collector/core` | tightly coupled runtime base without independent deployment value |
+| Collector source implementations | `collector/sources/*` | real plugins loaded via ServiceLoader |
+| CSV, JSON, RDB, Solr and Elasticsearch | `collector/repositories/*` | optional storage adapters with different dependencies |
+| Collector Delivery | `collector/apps/cli` | product that can be started on its own |
+| Collector UI and Jolokia WAR | `collector/apps/ui`, `collector/apps/jolokia-agent` | independent deployments |
+| AWB API, BL, UI, Chart, Importer, Application and Distribution | `workbench` | one desktop application; layers are packages, not releases |
+| Runtime classes of the AWB-SDK | `workbench` | internal contracts of the only application |
+| SDK test support | `workbench/src/test` | test fixture instead of a shipped product artifact |
 
-Der Reactor umfasst damit 19 Produktmodule beziehungsweise 20 Maven-Projekte einschließlich des Root-Projekts, statt zuvor 83 Projekten.
+The reactor thus comprises 19 product modules, or 20 Maven projects including the root project, instead of 83 projects before.
 
-## Bewusst nicht übernommen
+## Deliberately not carried over
 
-- Das SDK-Archetype wurde entfernt. Es erzeugte externe Importer-Projekte für eine Erweiterungsform, die nicht mehr angeboten wird.
-- Das leere PostgreSQL-Source-Modul wurde entfernt.
-- Die nicht in die Anwendung eingebundenen AWB-Sandbox-Programme (einmalige
-  Konverter, Repository-Analyse und experimentelle Prometheus-Clients) wurden
-  nicht als Produktcode übernommen.
-- Die alten betriebssystemspezifischen AWB-ZIP-Wrapper wurden nicht übernommen.
-  Die Distribution der Workbench entsteht direkt aus dem einen `workbench`-Modul
-  (Verzeichnis mit Startskripten; mit dem Profil `dist` zusätzlich Java-Laufzeit
-  und ZIP), statt wieder drei Anwendungsmodule einzuführen.
-- Klon-Skripte, Gitlinks und die CI-Logik zum Zusammensuchen separater EKG-Repositories wurden entfernt.
-- Historische manuelle Root-Testdaten wurden nicht dupliziert. Testdaten, die automatisierte Tests benötigen, liegen weiterhin beim jeweiligen Modul.
-- Generierte Build-Ausgaben, alte Logs und lokale IDE-/Agent-Einstellungen gehören nicht zum neuen Repository.
+- The SDK archetype was removed. It generated external importer projects for a form of extension that is no longer offered.
+- The empty PostgreSQL source module was removed.
+- The AWB sandbox programs that were not integrated into the application (one-off
+  converters, repository analysis and experimental Prometheus clients) were not
+  carried over as product code.
+- The old operating-system-specific AWB ZIP wrappers were not carried over.
+  The distribution of the workbench is created directly from the single `workbench` module
+  (directory with start scripts; with the `dist` profile additionally a Java runtime
+  and a ZIP), instead of introducing three application modules again.
+- Clone scripts, gitlinks and the CI logic for gathering separate EKG repositories were removed.
+- Historical manual root test data was not duplicated. Test data needed by automated tests still lives with the respective module.
+- Generated build output, old logs and local IDE/agent settings do not belong in the new repository.
 
-WFX bleibt bewusst extern. Es ist ein allgemeines JavaFX-Framework mit eigenem Lebenszyklus und wird als versionierte Maven-Abhängigkeit verwendet. `install-wfx.sh` stellt diese Abhängigkeit auf einer neuen Entwicklungsmaschine bereit.
+WFX deliberately stays external. It is a general JavaFX framework with its own life cycle and is used as a versioned Maven dependency. `install-wfx.sh` provides this dependency on a new development machine.
 
-## Was Module nicht mehr erzwingen
+## What modules no longer enforce
 
-Mit den Maven-Modulen der Workbench entfiel auch, was sie nebenbei sicherstellten. Das ist
-ausdrücklich ersetzt:
+With the Maven modules of the workbench, what they ensured as a side effect disappeared as well.
+This has been replaced explicitly:
 
-- **Schichten.** `LayerArchitectureTest` (ArchUnit) prüft die Paketgrenzen: Geschäftslogik ohne
-  JavaFX, Oberfläche nicht an der Geschäftslogik vorbei auf die Datenhaltung, Datenhaltung ohne
-  Oberfläche. Generierte Avaje-Module sind ausgenommen, weil sie alle Schichten verdrahten.
-- **Abhängigkeiten.** Die Workbench bindet `collector-core` ohne dessen JavaScript-Engine
-  (GraalJS) und WebSocket-Server ein. Beide braucht nur der eigenständige Collector: GraalJS für
-  berechnete Metriken (Quelle `calc`), und auch dort wird die Engine erst gestartet, wenn eine
-  solche Metrik abgefragt wird.
-- **Daten außerhalb des Builds.** Der Solr-Index liegt unter `~/.ekg/solr`, nicht unter
-  `target/`. Die Solr-Konfiguration wird bei jedem Start aus der Anwendung dorthin kopiert.
-- **Eine Version.** `revision` im Root-POM; Programme und Skripte lesen sie aus dem Build.
+- **Layers.** `LayerArchitectureTest` (ArchUnit) checks the package boundaries: business logic
+  without JavaFX, no access from the UI to the data layer that bypasses the business logic, data
+  layer without UI. Generated Avaje modules are exempt because they wire all layers together.
+- **Dependencies.** The workbench includes `collector-core` without its JavaScript engine
+  (GraalJS) and WebSocket server. Only the standalone collector needs both: GraalJS for
+  calculated metrics (source `calc`), and even there the engine is only started when such a
+  metric is queried.
+- **Data outside the build.** The Solr index is located under `~/.ekg/solr`, not under
+  `target/`. The Solr configuration is copied there from the application on every start.
+- **One version.** `revision` in the root POM; programs and scripts read it from the build.
 
-## Collector-Konfiguration als YAML
+## Collector configuration as YAML
 
-Die Konfiguration des Collectors ist ein formatneutrales Modell
-(`io.softwareecg.collector.config.model`), das als YAML gelesen und geschrieben wird. Das XSD,
-die daraus generierten JAXB-Klassen und die Abhängigkeit auf JAXB sind entfallen. Geprüft wird
-beim Lesen: unbekannte und doppelte Schlüssel, fehlende Angaben und Verweise auf Gruppen, die es
-nicht gibt, jeweils mit Ort. XML-Dateien ab Collector 6.1 werden über einen kleinen Leser ohne
-JAXB in dasselbe Modell überführt; das ältere Format (`CounterGroups`) wird nicht mehr gelesen.
-Die Workbench baut für ihre Datenquellen das Modell auf, statt Text zusammenzusetzen.
+The configuration of the collector is a format-neutral model
+(`io.softwareecg.collector.config.model`) that is read and written as YAML. The XSD, the JAXB
+classes generated from it and the dependency on JAXB have been dropped. Validation happens when
+reading: unknown and duplicate keys, missing values and references to groups that do not exist,
+each with its location. XML files from Collector 6.1 on are converted into the same model by a
+small reader without JAXB; the older format (`CounterGroups`) is no longer read. For its data
+sources, the workbench builds the model instead of assembling text.
 
-## Erweiterungsmodell
+## Extension model
 
-### Collector Source
+### Collector source
 
-Eine Source implementiert die bestehenden Collector-Verträge und registriert ihre Implementierung über `META-INF/services`. Sie kann anschließend sowohl in der Headless-Distribution als auch – nach Aufnahme als Dependency – in der Workbench verwendet werden. Diese Grenze ist sinnvoll für kundenspezifische APIs, Geräte, Roboter, Switches oder proprietäre Plattformen.
+A source implements the existing collector contracts and registers its implementation via `META-INF/services`. It can then be used both in the headless distribution and – once added as a dependency – in the workbench. This boundary makes sense for customer-specific APIs, devices, robots, switches or proprietary platforms.
 
-### Workbench-Importer
+### Workbench importer
 
-Importer sind Teil der Workbench. Neue Importer werden im passenden `io.softwareecg.awb.importer`-Paket ergänzt und im selben Reactor getestet. Damit entfallen SDK-Versionierung, Archetype, separates Deployment und binäre Kompatibilitätsversprechen zwischen eng gekoppelten Komponenten.
+Importers are part of the workbench. New importers are added in the appropriate `io.softwareecg.awb.importer` package and tested in the same reactor. This removes SDK versioning, the archetype, separate deployment and binary compatibility promises between tightly coupled components.
 
-## Verifikation der Migration
+## Verification of the migration
 
-Die Migration wird über drei Ebenen abgesichert:
+The migration is safeguarded on three levels:
 
-- der gesamte Reactor kompiliert und paketiert aus einem Root-POM;
-- die Tests aller Source-, Repository-, Collector- und Workbench-Komponenten laufen in der neuen Struktur;
-- CLI-Integrationstests prüfen die Laufzeitauflösung der Collector-Plugins, Workbench-Tests die eingebettete Prometheus-Erfassung, Speicherung, Importer und JavaFX-Komponenten.
+- the whole reactor compiles and packages from one root POM;
+- the tests of all source, repository, collector and workbench components run in the new structure;
+- CLI integration tests check the runtime resolution of the collector plugins, workbench tests check the embedded Prometheus collection, storage, importers and JavaFX components.
 
-Die alten Java-Paketnamen wurden absichtlich nicht flächig umbenannt. Das reduziert das Migrationsrisiko und hält Konfigurationen und Reflection-Zugriffe kompatibel. Eine spätere Paketbereinigung kann unabhängig davon erfolgen und sollte nur fachliche Grenzen verbessern, nicht erneut Maven-Module simulieren.
+The old Java package names were deliberately not renamed across the board. This reduces the migration risk and keeps configurations and reflection access compatible. A later package clean-up can happen independently and should only improve functional boundaries, not simulate Maven modules again.

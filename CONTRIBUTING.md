@@ -1,13 +1,15 @@
-# Zu Software-EKG beitragen
+# Contributing to Software-EKG
 
-Danke für dein Interesse an Software-EKG. Kleine, klar abgegrenzte Fehlerkorrekturen und
-Dokumentationsverbesserungen sind besonders willkommen. Für größere Änderungen bitte zuerst ein
-Issue eröffnen, damit Ziel, Architektur und Wartungsaufwand abgestimmt werden können.
+**English** | [Deutsch](CONTRIBUTING.de.md)
 
-## Entwicklungsumgebung
+Thank you for your interest in Software-EKG. Small, clearly scoped bug fixes and documentation
+improvements are especially welcome. For larger changes, please open an issue first so that
+goal, architecture and maintenance effort can be agreed on.
 
-Benötigt werden JDK 25 mit JavaFX 25, Maven 3.9 oder neuer sowie unter Linux ein Display oder
-`xvfb-run`. Die externe WFX-Abhängigkeit wird einmalig installiert:
+## Development environment
+
+You need JDK 25 with JavaFX 25, Maven 3.9 or newer and, on Linux, a display or `xvfb-run`. The
+external WFX dependency is installed once:
 
 ```bash
 ./install-wfx.sh
@@ -15,24 +17,24 @@ mvn clean package
 xvfb-run -a mvn test
 ```
 
-Weitere Build- und Startvarianten stehen im [README](README.md#bauen-und-testen).
+Further build and start variants are described in the [README](README.md#build-and-test).
 
-## Pull Requests
+## Pull requests
 
-- Halte Änderungen möglichst klein und thematisch geschlossen.
-- Ergänze oder aktualisiere Tests für verändertes Verhalten.
-- Führe vor dem Pull Request `xvfb-run -a mvn verify` aus.
-- Dokumentiere sichtbare Änderungen und neue Konfigurationsoptionen.
-- Committe keine Zugangsdaten, privaten Schlüssel, Produktionsdaten oder generierten Build-Dateien.
-- Akzeptiere, dass Collector-Erweiterungspunkte derzeit keine dauerhaft stabile Drittanbieter-API
-  versprechen; inkompatible Änderungen werden möglichst in den Release Notes dokumentiert.
+- Keep changes as small and thematically self-contained as possible.
+- Add or update tests for changed behaviour.
+- Run `xvfb-run -a mvn verify` before opening the pull request.
+- Document visible changes and new configuration options.
+- Do not commit credentials, private keys, production data or generated build files.
+- Accept that collector extension points currently do not promise a permanently stable
+  third-party API; incompatible changes are documented in the release notes where possible.
 
-Mit einem Beitrag erklärst du dich damit einverstanden, dass er unter der Apache License 2.0 des
-Projekts veröffentlicht wird.
+By contributing, you agree that your contribution is published under the project's Apache
+License 2.0.
 
-## Fehler und Funktionswünsche
+## Bugs and feature requests
 
-Nutze die passenden GitHub-Issue-Formulare und füge Version, Betriebssystem, JDK-Version,
-Reproduktionsschritte und relevante Logauszüge hinzu. Entferne vorher Kennwörter, Tokens,
-Hostnamen und andere vertrauliche Informationen. Sicherheitslücken werden nach
-[SECURITY.md](SECURITY.md) vertraulich gemeldet.
+Use the appropriate GitHub issue forms and include version, operating system, JDK version,
+steps to reproduce and relevant log excerpts. Remove passwords, tokens, host names and other
+confidential information first. Security vulnerabilities are reported confidentially as
+described in [SECURITY.md](SECURITY.md).

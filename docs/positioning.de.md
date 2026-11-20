@@ -1,5 +1,7 @@
 # Positionierung Software-EKG
 
+[English](positioning.md) | **Deutsch**
+
 Stand: 18.11.2026. Dieses Dokument hält fest, wofür das Software-EKG da ist und wofür nicht. Es ist das Ergebnis einer Diskussion, kein Umbauplan: Was daraus gebaut oder gestrichen wird, ist noch nicht entschieden.
 
 ## Position

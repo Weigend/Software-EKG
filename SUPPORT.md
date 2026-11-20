@@ -1,11 +1,12 @@
 # Support
 
-Für reproduzierbare Fehler und konkrete Funktionswünsche stehen die GitHub-Issue-Formulare zur
-Verfügung. Fragen zur Nutzung können als GitHub Discussion gestellt werden, sofern Discussions
-für das Repository aktiviert sind.
+**English** | [Deutsch](SUPPORT.de.md)
 
-Bitte gib Version, Betriebssystem und JDK-Version an. Bereinige Logs und Konfigurationen vor dem
-Hochladen um Zugangsdaten, Tokens, interne Hostnamen und Produktionsdaten.
+For reproducible bugs and specific feature requests, use the GitHub issue forms. Questions about
+usage can be asked as a GitHub Discussion, provided Discussions are enabled for the repository.
 
-Das öffentliche Repository bietet keinen garantierten Reaktions- oder Lösungszeitraum. Melde
-Sicherheitslücken ausschließlich nach [SECURITY.md](SECURITY.md).
+Please state version, operating system and JDK version. Before uploading, clean logs and
+configurations of credentials, tokens, internal host names and production data.
+
+The public repository does not offer a guaranteed response or resolution time. Report security
+vulnerabilities exclusively as described in [SECURITY.md](SECURITY.md).

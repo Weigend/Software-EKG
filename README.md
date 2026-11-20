@@ -2,168 +2,169 @@
   <img src="docs/images/logo.png" alt="Software-EKG" width="420">
 </p>
 
+<p align="center"><b>English</b> | <a href="README.de.md">Deutsch</a></p>
+
 # Software-EKG 7x
 
 [![Build and Test](https://github.com/Weigend/Software-EKG/actions/workflows/build.yml/badge.svg)](https://github.com/Weigend/Software-EKG/actions/workflows/build.yml)
 [![Latest release](https://img.shields.io/github/v/release/Weigend/Software-EKG)](https://github.com/Weigend/Software-EKG/releases/latest)
 [![License](https://img.shields.io/github/license/Weigend/Software-EKG)](LICENSE)
 
-> Mit dem Software-EKG sucht ein Analyst die Nadel im Heuhaufen.
+> With Software-EKG, an analyst looks for the needle in the haystack.
 
-Das Software-EKG ist eine Workbench für die vergleichende Analyse von Softwaresystemen. Der Name ist wörtlich gemeint: Wie ein EKG die Signale des Herzens über die Zeit aufzeichnet, zeichnet das Software-EKG gezielt die Messwerte der Systeme, Server und Anwendungen auf, die zusammen einen Anwendungscluster, ein verteiltes System oder einen Serververbund bilden. Legt man die Kurven übereinander, fällt auf, welche Komponente wann aus dem Takt gerät.
+Software-EKG is a workbench for the comparative analysis of software systems. The name is meant literally: EKG is the German abbreviation for an electrocardiogram (ECG). Just as an ECG records the signals of the heart over time, Software-EKG records selected measurements of the systems, servers and applications that together form an application cluster, a distributed system or a group of servers. Put the curves on top of each other and you see which component falls out of rhythm, and when.
 
-![CPU-Last des WebLogic-Prozesses auf elf Knoten eines Clusters, eine Woche im März 2015](docs/images/beispiel-cpu-cluster-2015.png)
+![CPU load of the WebLogic process on eleven nodes of a cluster, one week in March 2015](docs/images/beispiel-cpu-cluster-2015.png)
 
-Das Bild zeigt die CPU-Last desselben Java-Prozesses auf elf Knoten eines Clusters über eine Woche. Man sieht, dass die Anwendung nur tagsüber von Montag bis Freitag genutzt wird und dass ein Server die ganze Woche deutlich über den anderen liegt. Warum das so ist, sagt das Bild nicht. Es liefert aber die drei Angaben, auf die es ankommt: welcher Server, welcher Zeitraum und womit man ihn vergleicht. Die Ursache war am Ende ein fehlerhaftes Load Balancing im Client; der ganze Fall steht in [docs/positionierung.md](docs/positionierung.md#ein-beispiel).
+The picture shows the CPU load of the same Java process on eleven nodes of a cluster over one week. You can see that the application is only used during the day from Monday to Friday, and that one server stays well above the others all week. The picture does not say why. It does give the three facts that matter: which server, which period, and what to compare it with. In the end the cause was faulty load balancing in the client; the whole case is described in [docs/positioning.md](docs/positioning.md#an-example).
 
-## Die Fragen, um die es geht
+## The questions it is about
 
-Der Kern ist der Vergleich. Der Analyst findet Muster, nach denen er vorher nicht gesucht hat, und viele davon liegen innerhalb aller Grenzwerte, bei denen ein Alarm auslösen würde:
+The core is comparison. The analyst finds patterns they were not looking for, and many of them lie within every threshold that would trigger an alert:
 
-- Warum steigt der Heap bei drei von fünfzig Systemen stetig?
-- Warum tritt ein Lastmuster alle vierzehn Tage auf?
-- Warum hat sich das Verhalten nach einem bestimmten Release verändert?
-- Warum zeigen zwei eigentlich gleiche Systeme unterschiedliche Verläufe?
+- Why does the heap grow steadily on three out of fifty systems?
+- Why does a load pattern occur every fourteen days?
+- Why did the behaviour change after a particular release?
+- Why do two systems that should be identical show different curves?
 
-## Für wen
+## Who it is for
 
-Das Software-EKG ist ein Expertenwerkzeug für den Software-Notarzt, den Performance Engineer oder den Troubleshooter: für jemanden, der schnell verstehen will, was wo läuft und welche Probleme die Systeme haben.
+Software-EKG is an expert tool for the software emergency doctor, the performance engineer or the troubleshooter: for someone who needs to understand quickly what is running where and which problems the systems have.
 
-Neben schon vorhandenen Monitoring- und Alerting-Lösungen ist es oft der Einstieg in das Verständnis von Produktionsproblemen, die komplexe verteilte Systeme verursachen. Es dient dem Analysten als Umgebung, um die relevanten Daten aus den betroffenen Systemen zu sammeln und auszuwerten, Hypothesen zu bilden und zeitliche Unterschiede zu sehen. Falls nötig, skaliert es über Milliarden von Datenpunkten.
+Alongside existing monitoring and alerting solutions, it is often the entry point for understanding production problems caused by complex distributed systems. It gives the analyst an environment for collecting and evaluating the relevant data from the affected systems, forming hypotheses and seeing differences over time. If necessary, it scales to billions of data points.
 
-Es ist der erste Schritt einer Root-Cause-Analyse, nicht ihr Ende: Das EKG zeigt, seit wann, wo und im Vergleich womit etwas auffällig ist.
+It is the first step of a root cause analysis, not the end of it: Software-EKG shows since when, where and compared with what something is conspicuous.
 
-## So arbeitet man damit
+## How you work with it
 
-![Die Workbench mit Explorer, Zeitreihen-Chart der JVM-Heap-Nutzung, AI Assistant und About-Dialog](docs/images/fullscreen.png)
+![The workbench with explorer, time series chart of JVM heap usage, AI Assistant and About dialog](docs/images/fullscreen.png)
 
-1. **Sammeln.** Die Workbench importiert Zeitreihen aus Prometheus. Weitere Quellen liefert der Collector, etwa Systemmetriken und Logs per SSH, JMX, Jolokia und Windows Performance Counter. Die Daten liegen lokal im eingebetteten Solr; ausgewertet wird auf dem eigenen Rechner, nicht auf den Produktionssystemen.
-2. **Vergleichen.** Der Analyst legt viele Zeitreihen in ein Bild, per Wildcard auf Cluster, Host, Prozess und Metrik, verändert das Zeitfenster und nimmt weitere Systeme dazu. Eine klare Frage hat er am Anfang oft nicht; sie entsteht beim Vergleichen.
-3. **Festhalten.** Auffällige Stellen werden als Bookmarks gespeichert und als PNG oder Excel exportiert.
-4. **Prüfen.** Der eingebaute AI Assistant hilft, eine Hypothese an den Rohdaten zu prüfen, siehe [Die Rolle der AI](#die-rolle-der-ai).
-5. **Vertiefen.** Ausgehend davon wird festgelegt, was genau tiefer untersucht werden soll. Speicherprofiler, CPU-Profiler, Netzwerk-Tracing-Tools oder andere Visualisierungen kommen dann gezielt für die Komponenten zum Einsatz, die bereits in der Metrikanalyse auffällig sind.
+1. **Collect.** The workbench imports time series from Prometheus. The collector supplies further sources, such as system metrics and logs via SSH, JMX, Jolokia and Windows performance counters. The data is stored locally in the embedded Solr; the analysis runs on your own machine, not on the production systems.
+2. **Compare.** The analyst puts many time series into one picture, using wildcards on cluster, host, process and metric, changes the time window and adds further systems. Often there is no clear question at the start; it emerges while comparing.
+3. **Record.** Conspicuous places are saved as bookmarks and exported as PNG or Excel.
+4. **Verify.** The built-in AI Assistant helps to check a hypothesis against the raw data, see [The role of AI](#the-role-of-ai).
+5. **Go deeper.** Based on this, you decide what exactly to investigate further. Memory profilers, CPU profilers, network tracing tools or other visualisations are then used specifically for the components that already stood out in the metric analysis.
 
-## Die Rolle der AI
+## The role of AI
 
-AI kommt an zwei Stellen ins Spiel:
+AI comes into play in two places:
 
-1. **Bei der Analyse.** Die Workbench unterstützt die Analyse der Zeitreihen direkt durch AI. Der eingebaute AI Assistant hat Zugriff auf alle gesammelten Daten: Er sieht den aktuellen Chart-Ausschnitt, kennt die Metriken und fragt Zeitreihen selbst ab. Bei Bedarf greift er per SSH auf die Systeme selbst zu, etwa um Logs oder Prozesse anzusehen; jedes Kommando führt er erst nach Freigabe durch den Analysten aus. Als Modell dient OpenAI, Anthropic, Ollama oder ein kompatibler Endpunkt.
-2. **Beim Erweitern.** Eine Collector Source ist ein kleines Plugin: Die mitgelieferte Mock-Quelle besteht aus einer Klasse mit rund 90 Zeilen und einem ServiceLoader-Eintrag. Ein Coding-Agent schreibt eine solche Source für eine proprietäre Metrik-Schnittstelle in Minuten. So lässt sich das Werkzeug erweitern, bis es die Metriken beliebiger Schnittstellen anzeigt, siehe [Erweiterungen](#erweiterungen).
+1. **During the analysis.** The workbench supports the analysis of time series directly with AI. The built-in AI Assistant has access to all collected data: it sees the current chart section, knows the metrics and queries time series itself. If needed, it accesses the systems themselves via SSH, for example to look at logs or processes; it runs each command only after the analyst has approved it. The model can be OpenAI, Anthropic, Ollama or any compatible endpoint.
+2. **When extending the tool.** A collector source is a small plugin: the bundled mock source consists of one class with about 90 lines and a ServiceLoader entry. A coding agent writes such a source for a proprietary metrics interface in minutes. This way the tool can be extended until it displays the metrics of any interface, see [Extensions](#extensions).
 
-## Was es nicht ist
+## What it is not
 
-- **Kein Ersatz für das zentrale Monitoring.** Dashboards und Alarme auf dem laufenden System bleiben Sache von Werkzeugen wie Grafana. Die Workbench hat eine laufende Anzeige, sie bestätigt aber vor allem, dass Daten ankommen.
-- **Kein Anomalie-Detektor.** Die Muster findet der Mensch im Vergleich.
-- **Kein Werkzeug, das die Ursache verspricht.** Das Bild führt zum richtigen Server und zur richtigen Frage. Die Antwort steht oft in keiner Zeitreihe; sie braucht Wissen über die Architektur.
+- **Not a replacement for central monitoring.** Dashboards and alerts on the running system remain the job of tools such as Grafana. The workbench has a live display, but it mainly confirms that data is arriving.
+- **Not an anomaly detector.** The patterns are found by a human, by comparison.
+- **Not a tool that promises the cause.** The picture leads to the right server and to the right question. The answer is often not in any time series; it takes knowledge of the architecture.
 
-## Ausprobieren
+## Try it
 
-Fertige Pakete für Linux x64 mit eigener Java-Laufzeit liegen auf der [Release-Seite](https://github.com/Weigend/Software-EKG/releases/latest). Entpacken und starten:
+Ready-made packages for Linux x64 with their own Java runtime are available on the [release page](https://github.com/Weigend/Software-EKG/releases/latest). Unpack and start:
 
 ```bash
-bin/software-ekg.sh      # Workbench
-./ekg-collector.sh       # Collector mit Beispielwerten
+bin/software-ekg.sh      # workbench
+./ekg-collector.sh       # collector with sample values
 ```
 
-Für Windows und macOS gibt es noch keine fertigen Pakete; dort wird aus dem Quellcode gebaut, siehe [Distributionen](#distributionen).
+There are no ready-made packages for Windows and macOS yet; there you build from source, see [Distributions](#distributions).
 
-## Struktur
+## Structure
 
-Dieses Repository ist die konsolidierte Variante von AWB, AWB-SDK und Collector. Es gibt keine Gitlinks oder voneinander versionierte EKG-Teilprojekte mehr. Implementierungsdetails der Workbench sind Java-Pakete statt Maven-Artefakte; echte Laufzeit- und Erweiterungsgrenzen des Collectors bleiben Module.
+This repository is the consolidated variant of AWB, AWB-SDK and Collector. There are no gitlinks or separately versioned EKG subprojects any more. Implementation details of the workbench are Java packages instead of Maven artifacts; real runtime and extension boundaries of the collector remain modules.
 
-| Verzeichnis | Zweck |
+| Directory | Purpose |
 | --- | --- |
-| `workbench` | Eine JavaFX-Anwendung mit UI, Chart Engine, Importern, lokaler Speicherung und eingebettetem Collector |
-| `collector/core` | Konfiguration, Collector Engine, SSH, Speicher- und Source-Verträge |
-| `collector/sources/*` | Per ServiceLoader ladbare Datenquellen, etwa Prometheus, Unix, Windows, JMX und Logs |
-| `collector/repositories/*` | CSV-, JSON-, Solr- und Elasticsearch-Speicheradapter einschließlich Kompression |
-| `collector/apps/cli` | Headless Collector und dessen Distribution |
-| `collector/apps/ui` | Bestehende eigenständige Collector-UI |
-| `collector/apps/jolokia-agent` | Jolokia-Agent als WAR |
-| `build/collector-parent` | Gemeinsame interne Build-Konfiguration der Collector-Module |
+| `workbench` | One JavaFX application with UI, chart engine, importers, local storage and embedded collector |
+| `collector/core` | Configuration, collector engine, SSH, storage and source contracts |
+| `collector/sources/*` | Data sources loaded via ServiceLoader, such as Prometheus, Unix, Windows, JMX and logs |
+| `collector/repositories/*` | CSV, JSON, Solr and Elasticsearch storage adapters including compression |
+| `collector/apps/cli` | Headless collector and its distribution |
+| `collector/apps/ui` | Existing standalone collector UI |
+| `collector/apps/jolokia-agent` | Jolokia agent as a WAR |
+| `build/collector-parent` | Shared internal build configuration of the collector modules |
 
-Die historische Zuordnung und die bewusst entfernten Teile sind in [docs/architecture/single-repository.md](docs/architecture/single-repository.md) dokumentiert.
+The historical mapping and the parts that were deliberately removed are documented in [docs/architecture/single-repository.md](docs/architecture/single-repository.md).
 
-## Voraussetzungen
+## Prerequisites
 
-- JDK 25 mit JavaFX 25 (zum Beispiel Liberica Full JDK)
-- Maven 3.9 oder neuer
-- ein Display für JavaFX-Tests; in headless Linux-Umgebungen funktioniert `xvfb-run`
-- WFX 1.4.1 im lokalen Maven-Repository
+- JDK 25 with JavaFX 25 (for example Liberica Full JDK)
+- Maven 3.9 or newer
+- a display for JavaFX tests; in headless Linux environments `xvfb-run` works
+- WFX 1.4.1 in the local Maven repository
 
-WFX ist ein eigenständiges UI-Framework und bleibt eine normale externe Abhängigkeit. Die passende Version wird einmalig installiert:
+WFX is an independent UI framework and remains a normal external dependency. The matching version is installed once:
 
 ```bash
 ./install-wfx.sh
 ```
 
-## Bauen und testen
+## Build and test
 
 ```bash
-# kompletter Build
+# complete build
 mvn clean package
 
-# kompletter Testlauf unter Linux
+# complete test run on Linux
 xvfb-run -a mvn test
 
-# schneller Build ohne Tests
+# fast build without tests
 mvn clean package -DskipTests
 ```
 
-`.mvn/jvm.config` gibt Maven zwei JVM-Optionen mit, damit Java 25 nicht bei jedem Aufruf vor
-Bibliotheken warnt, die Maven selbst mitbringt (jansi, guava).
+`.mvn/jvm.config` passes two JVM options to Maven so that Java 25 does not warn on every call
+about libraries that Maven itself ships (jansi, guava).
 
-Die Core-Tests öffnen lokale SSH- und WebSocket-Ports. In eingeschränkten CI-Schritten können sie getrennt ausgeführt werden:
+The core tests open local SSH and WebSocket ports. In restricted CI steps they can be run separately:
 
 ```bash
 mvn test -Dskip.core.tests=true
 mvn -pl collector/core test
 ```
 
-## Starten
+## Run
 
-Aus dem Quellbaum, jeweils mit vorherigem Build (ohne Tests):
-
-```bash
-./run-workbench.sh                  # Workbench
-./run-collector.sh                  # Collector mit Beispielwerten (Quelle "mock")
-./run-collector.sh meine.yaml       # Collector mit eigener Konfiguration
-```
-
-Mit `--no-build` als erstem Argument starten beide, was zuletzt gebaut wurde. Die Skripte
-verwenden die Startskripte der Distributionen; es gibt also nur einen Weg, wie die Programme
-gestartet werden.
-
-## Distributionen
+From the source tree, each with a preceding build (without tests):
 
 ```bash
-mvn package -DskipTests           # startbare Verzeichnisse
-mvn package -DskipTests -Pdist    # zusätzlich mit eigener Java-Laufzeit und als ZIP
+./run-workbench.sh                  # workbench
+./run-collector.sh                  # collector with sample values (source "mock")
+./run-collector.sh my.yaml          # collector with your own configuration
 ```
 
-| | Verzeichnis | ZIP (`-Pdist`) | Start |
+With `--no-build` as the first argument, both start whatever was built last. The scripts use the
+start scripts of the distributions, so there is only one way in which the programs are started.
+
+## Distributions
+
+```bash
+mvn package -DskipTests           # runnable directories
+mvn package -DskipTests -Pdist    # additionally with their own Java runtime and as a ZIP
+```
+
+| | Directory | ZIP (`-Pdist`) | Start |
 | --- | --- | --- | --- |
-| Workbench | `workbench/target/software-ekg-workbench-<Version>/` | `workbench/target/software-ekg-workbench-<Version>.zip` | `bin/software-ekg.sh`, `bin\software-ekg.bat` |
-| Collector | `collector/apps/cli/product/software-ekg-collector-<Version>/` | `collector/apps/cli/product/software-ekg-collector-<Version>.zip` | `ekg-collector.sh`, `ekg-collector.cmd`; als Dienst `ekg-collector start\|stop\|status` |
+| Workbench | `workbench/target/software-ekg-workbench-<version>/` | `workbench/target/software-ekg-workbench-<version>.zip` | `bin/software-ekg.sh`, `bin\software-ekg.bat` |
+| Collector | `collector/apps/cli/product/software-ekg-collector-<version>/` | `collector/apps/cli/product/software-ekg-collector-<version>.zip` | `ekg-collector.sh`, `ekg-collector.cmd`; as a service `ekg-collector start\|stop\|status` |
 
-Ohne `-Pdist` brauchen die Distributionen ein installiertes Java 25 (die Workbench eines mit
-JavaFX). Mit `-Pdist` schneidet `jlink` die Laufzeit aus dem JDK, mit dem gebaut wird; das ZIP
-passt dann zum Betriebssystem des Builds und braucht kein installiertes Java. Für die Workbench
-muss dieses JDK JavaFX enthalten (Liberica Full JDK).
+Without `-Pdist` the distributions need an installed Java 25 (the workbench one with JavaFX). With
+`-Pdist`, `jlink` cuts the runtime out of the JDK used for the build; the ZIP then matches the
+operating system of the build and needs no installed Java. For the workbench this JDK must
+contain JavaFX (Liberica Full JDK).
 
-Die Version steht an genau einer Stelle, `revision` im Root-`pom.xml`. Programme und Skripte
-lesen sie aus dem Build (`build.properties`, `version.properties`) und nennen keine eigene.
+The version is defined in exactly one place, `revision` in the root `pom.xml`. Programs and
+scripts read it from the build (`build.properties`, `version.properties`) and do not state their own.
 
-## Collector-Konfiguration
+## Collector configuration
 
-Eine Konfiguration ist eine YAML-Datei mit vier Teilen: *was* gemessen wird (`metricGroups`),
-*von welchen Prozessen* (`processGroups`), *auf welchen Maschinen* (`hostGroups`) und den
-`collectors`, die die drei kombinieren:
+A configuration is a YAML file with four parts: *what* is measured (`metricGroups`), *from which
+processes* (`processGroups`), *on which machines* (`hostGroups`), and the `collectors` that
+combine the three:
 
 ```yaml
 metricGroups:
   host:
-    type: unix                      # die Quelle: top über SSH
+    type: unix                      # the source: top via SSH
     metrics:
       - '\CPU\us'
       - '\Load\one'
@@ -176,7 +177,7 @@ processGroups:
 hostGroups:
   db:
     username: ekg
-    password: '${ENV:EKG_SSH_PASSWORD}'   # Passwörter stehen nie in der Datei
+    password: '${ENV:EKG_SSH_PASSWORD}'   # passwords are never stored in the file
     hosts: [db-01, db-02]
 
 collectors:
@@ -186,47 +187,47 @@ collectors:
     interval: 15s
 ```
 
-Alle Einstellungen erklärt `config/current/config-template.yaml` in der Collector-Distribution;
-daneben liegen Beispiele je Quelle. Die Datei wird streng gelesen: Ein unbekannter Schlüssel ist
-ein Fehler mit Zeilenangabe, keine stillschweigend wirkungslose Einstellung.
+All settings are explained in `config/current/config-template.yaml` in the collector
+distribution; examples for each source are next to it. The file is read strictly: an unknown key
+is an error with a line number, not a setting that silently has no effect.
 
-Konfigurationen im XML-Format früherer Versionen (`config.xml`, ab Collector 6.1) werden weiterhin
-gelesen und lassen sich umwandeln:
+Configurations in the XML format of earlier versions (`config.xml`, from Collector 6.1 on) are
+still read and can be converted:
 
 ```bash
-./ekg-collector.sh --convert config.xml      # schreibt config.yaml daneben
+./ekg-collector.sh --convert config.xml      # writes config.yaml next to it
 ```
 
-Die Workbench erzeugt für ihre Datenquellen dieselben YAML-Dateien (Export im Dialog
-"Data Sources") und liest ältere, als XML gespeicherte weiter.
+The workbench generates the same YAML files for its data sources (export in the "Data Sources"
+dialog) and still reads older ones stored as XML.
 
-## Daten der Workbench
+## Workbench data
 
-Projekte, Zeitreihen und Zugangsdaten liegen im Benutzerverzeichnis, nie im Quellbaum oder in
-der Distribution:
+Projects, time series and credentials are stored in the user's home directory, never in the
+source tree or in the distribution:
 
-| Ort | Inhalt |
+| Location | Content |
 | --- | --- |
-| `~/.ekg/metadata.mv.db` | Projekte, Repositories, Lesezeichen, Datenquellen |
-| `~/.ekg/solr` | Zeitreihen (eingebettetes Solr); verlegbar mit `EKG_SOLR_HOME` |
-| `~/.ekg/logs` | Logdateien beim Start über `software-ekg.sh` |
+| `~/.ekg/metadata.mv.db` | Projects, repositories, bookmarks, data sources |
+| `~/.ekg/solr` | Time series (embedded Solr); can be moved with `EKG_SOLR_HOME` |
+| `~/.ekg/logs` | Log files when started via `software-ekg.sh` |
 
-Ein `mvn clean` löscht deshalb keine Messdaten mehr.
+A `mvn clean` therefore no longer deletes any measurement data.
 
-## Architekturregeln
+## Architecture rules
 
-Die Workbench ist ein Modul; ihre Schichten sind Pakete. Dass die Paketgrenzen halten - keine
-JavaFX-Typen in der Geschäftslogik, kein Zugriff der Oberfläche an der Geschäftslogik vorbei auf
-die Datenhaltung -, prüft `LayerArchitectureTest` (ArchUnit) bei jedem Testlauf.
+The workbench is one module; its layers are packages. That the package boundaries hold - no
+JavaFX types in the business logic, no access from the UI to the data layer that bypasses the
+business logic - is checked by `LayerArchitectureTest` (ArchUnit) on every test run.
 
-## Erweiterungen
+## Extensions
 
-Eine neue Collector Source oder ein neues Repository ist weiterhin ein kleines Plugin mit ServiceLoader-Registrierung. Ein neuer Workbench-Importer wird dagegen direkt als Paket in `workbench` implementiert. Das frühere öffentliche SDK und sein Archetype sind entfallen, weil sie eine stabile Drittanbieter-API suggerierten, die für den heutigen, dienstleistungsnahen Einsatz nicht benötigt wird.
+A new collector source or a new repository is still a small plugin with ServiceLoader registration. A new workbench importer, by contrast, is implemented directly as a package in `workbench`. The former public SDK and its archetype have been dropped because they suggested a stable third-party API that is not needed for today's service-oriented use.
 
-## Lizenz
+## License
 
-Apache License 2.0, siehe [LICENSE](LICENSE) und [NOTICE](NOTICE).
+Apache License 2.0, see [LICENSE](LICENSE) and [NOTICE](NOTICE).
 
-Sicherheitslücken bitte nicht als öffentliches Issue melden. Der vertrauliche Meldeweg und die
-unterstützten Versionen stehen in [SECURITY.md](SECURITY.md). Hinweise für Beiträge finden sich
-in [CONTRIBUTING.md](CONTRIBUTING.md).
+Please do not report security vulnerabilities as a public issue. The confidential reporting
+channel and the supported versions are described in [SECURITY.md](SECURITY.md). Notes for
+contributors can be found in [CONTRIBUTING.md](CONTRIBUTING.md).
