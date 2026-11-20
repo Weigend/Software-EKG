@@ -4,7 +4,7 @@
 
 <p align="center"><a href="README.md">English</a> | <b>Deutsch</b></p>
 
-# Software-EKG 7x
+# Software-EKG
 
 [![Build and Test](https://github.com/Weigend/Software-EKG/actions/workflows/build.yml/badge.svg)](https://github.com/Weigend/Software-EKG/actions/workflows/build.yml)
 [![Latest release](https://img.shields.io/github/v/release/Weigend/Software-EKG)](https://github.com/Weigend/Software-EKG/releases/latest)
