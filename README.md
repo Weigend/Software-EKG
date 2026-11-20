@@ -1,8 +1,14 @@
+<p align="center">
+  <img src="docs/images/logo.png" alt="Software-EKG" width="420">
+</p>
+
 # Software-EKG 7x
 
 Software-EKG erfasst gezielt technische Messwerte und macht sie in einer JavaFX-Workbench als Zeitreihen analysierbar. Es ist kein Grafana-Ersatz, sondern ein Werkzeugkasten für konkrete Performance- und Diagnosefälle: Eine Datenquelle anbinden, nur die relevanten Werte sammeln, lokal oder in einer entfernten Datenbank speichern und unmittelbar untersuchen.
 
 Dieses Repository ist die konsolidierte Variante von AWB, AWB-SDK, Collector und Commons-SSH. Es gibt keine Gitlinks oder voneinander versionierte EKG-Teilprojekte mehr. Implementierungsdetails der Workbench sind Java-Pakete statt Maven-Artefakte; echte Laufzeit- und Erweiterungsgrenzen des Collectors bleiben Module.
+
+![Software-EKG Workbench mit Explorer, Zeitreihen-Chart der JVM-Heap-Nutzung und About-Dialog](docs/images/fullscreen.png)
 
 ## Struktur
 
