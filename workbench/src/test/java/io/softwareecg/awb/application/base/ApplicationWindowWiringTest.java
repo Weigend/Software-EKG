@@ -3,7 +3,9 @@ package io.softwareecg.awb.application.base;
 import io.avaje.inject.spi.AvajeModule;
 import io.avaje.inject.spi.InjectExtension;
 import io.softwareecg.awb.application.base.impl.EkgApplicationController;
+import io.softwareecg.wfx.lookup.api.Priorities;
 import io.softwareecg.wfx.windowmanager.api.ApplicationWindow;
+import io.softwareecg.wfx.windowmanager.windows.DefaultApplicationWindow;
 import org.junit.jupiter.api.Test;
 
 import java.util.ServiceLoader;
@@ -23,6 +25,17 @@ class ApplicationWindowWiringTest {
                 .contains(ApplicationWindow.class, EkgApplicationController.class);
         assertThat(awbModule.autoProvides()).doesNotContain(EkgApplicationController.class);
         assertThat(awbModule.requires()).contains(EkgApplicationController.class);
+    }
+
+    /**
+     * WFX shows the first {@link ApplicationWindow} in the order of {@link Priorities}. With
+     * equal priorities that order is the order of the jars on the classpath, and on Windows
+     * the plain WFX window came first.
+     */
+    @Test
+    void awbWindowTakesPrecedenceOverThePlainWfxWindow() {
+        assertThat(Priorities.of(EkgApplicationController.class))
+                .isLessThan(Priorities.of(DefaultApplicationWindow.class));
     }
 
     private static AvajeModule loadModule(String className) {

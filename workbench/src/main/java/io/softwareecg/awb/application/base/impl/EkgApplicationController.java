@@ -64,6 +64,11 @@ import java.util.Set;
  *
  */
 @ApplicationBootstrap
+// WFX shows the first ApplicationWindow it finds and registers one of its own, the plain
+// DefaultApplicationWindow. Without a priority the order of the two is the order of the jars
+// on the classpath, which the file system decides: on Windows the plain window came first,
+// and every module that asked this controller for a menu found it never initialised.
+@jakarta.annotation.Priority(1)
 public class EkgApplicationController extends DefaultApplicationWindow
         implements io.softwareecg.awb.application.api.EkgApplicationController {
 
