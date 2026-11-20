@@ -2,7 +2,8 @@ name: Release
 
 # Builds the distributions of workbench and collector, each with its own Java runtime, for
 # Linux, macOS and Windows, starts every one of them once on its platform and attaches them
-# to the GitHub release of the tag.
+# to the GitHub release of the tag. The Windows distributions bring the native library of the
+# Windows performance counters; their start reads counters with it.
 #
 #   git tag -a v7.2.0 -m "Software-EKG 7.2.0" && git push origin v7.2.0
 #       builds and tests the ZIPs and puts them into a draft release for that tag (or adds
@@ -73,8 +74,13 @@ jobs:
       run: ./install-wfx.sh
 
     - name: Build the distributions
-      # The tests ran in the workflow "Build and Test"; here the packages are built.
-      run: mvn -B clean package -DskipTests -Pdist -Dbuild.revision="${GITHUB_SHA::7}"
+      # The tests ran in the workflow "Build and Test"; here the packages are built. On Windows
+      # the profile "wpc" builds the native library of the Windows performance counters with
+      # the mingw-w64 of the runner; it goes into bin\dlls of both distributions.
+      run: |
+        profiles=dist
+        if [ "$RUNNER_OS" = "Windows" ]; then profiles=dist,wpc; fi
+        mvn -B clean package -DskipTests -P"$profiles" -Dbuild.revision="${GITHUB_SHA::7}"
 
     - name: Collect the ZIPs
       run: |

@@ -33,6 +33,15 @@
             <directory>src/main/solr</directory>
             <outputDirectory>solr</outputDirectory>
         </fileSet>
+        <!-- The native library of the collector source "win", if the build made it (profile
+             'wpc' of collector/sources/windows); software-ekg.bat puts bin\dlls on the PATH. -->
+        <fileSet>
+            <directory>../collector/sources/windows/target/native</directory>
+            <outputDirectory>bin/dlls</outputDirectory>
+            <includes>
+                <include>*.dll</include>
+            </includes>
+        </fileSet>
     </fileSets>
 
     <dependencySets>

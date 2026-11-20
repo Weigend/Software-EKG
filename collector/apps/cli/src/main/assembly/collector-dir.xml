@@ -33,6 +33,15 @@
             <fileMode>0755</fileMode>
             <lineEnding>unix</lineEnding>
         </fileSet>
+        <!-- The native library of the source "win", if the build made it (profile 'wpc' of
+             collector/sources/windows); ekg-collector.cmd puts bin\dlls on the library path. -->
+        <fileSet>
+            <directory>../../sources/windows/target/native</directory>
+            <outputDirectory>bin/dlls</outputDirectory>
+            <includes>
+                <include>*.dll</include>
+            </includes>
+        </fileSet>
     </fileSets>
 
     <dependencySets>

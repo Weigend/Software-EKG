@@ -51,6 +51,13 @@
             <artifactId>collector-source-unix</artifactId>
             <version>${revision}</version>
         </dependency>
+        <!-- Windows performance counters. Usable on Windows with the native library in bin\dlls
+             of the distribution (profile 'wpc'); elsewhere the source is there and does nothing. -->
+        <dependency>
+            <groupId>io.softwareecg.collector</groupId>
+            <artifactId>collector-source-windows</artifactId>
+            <version>${revision}</version>
+        </dependency>
 
         <!-- Core and injection -->
         <dependency><groupId>io.avaje</groupId><artifactId>avaje-inject</artifactId></dependency>

@@ -236,9 +236,12 @@ JNICALL Java_io_softwareecg_collector_source_wincount_WindowsPerformanceCounterA
 
     DWORD flags = 0;
     DWORD size = 0;
-	char * MESSAGE = 0;
+	const char * MESSAGE = 0;
 	PDH_STATUS pdhStatus = 0;
 	PWSTR path = NULL;
+	// declared before the first 'goto exit': a jump must not cross an initialization
+	int count = 0;
+	int i = 0;
 
 	// PdhExpandWildCardPath has to be called twice. This is not a error. 
     // see http://msdn.microsoft.com/en-us/library/aa372606(VS.85).aspx
@@ -261,6 +264,10 @@ JNICALL Java_io_softwareecg_collector_source_wincount_WindowsPerformanceCounterA
 		}
         goto exit;
     }
+	if (path == NULL) {
+		// nothing was expanded: there is no buffer to read, the caller gets no result
+		goto exit;
+	}
 
 	// Process buffer and store each element in the result array.
 
@@ -268,7 +275,6 @@ JNICALL Java_io_softwareecg_collector_source_wincount_WindowsPerformanceCounterA
     // null-terminator characters; however, on earlier systems, the buffer is
     // not terminated with two null-terminator characters. This covers both cases.
 
-	int count = 0;
 	for (PWSTR p = path; ((p != p + size) && (*p != L'\0')); p += wcslen(p) + 1) 
     {
 		count++;
@@ -277,7 +283,6 @@ JNICALL Java_io_softwareecg_collector_source_wincount_WindowsPerformanceCounterA
             env -> FindClass("java/lang/String"),
             env -> NewStringUTF(""));
 
-	int i = 0;
 	for (PWSTR p = path; ((p != p + size) && (*p != L'\0')); p += wcslen(p) + 1) 
     {
 		jstring s = env -> NewString((jchar *)p, wcslen(p));
@@ -351,7 +356,8 @@ JNICALL Java_io_softwareecg_collector_source_wincount_WindowsPerformanceCounterA
             LPCWSTR szCounterPath = toLPCWSTR(env, jstr);
 			env -> DeleteLocalRef(jstr);
 
-            HCOUNTER hCounter;
+            // stays NULL if the counter cannot be added: its value is then read as an error (-1)
+            HCOUNTER hCounter = NULL;
             // Add one counter that will provide the data.
             pdhStatus = PdhAddCounter(hQueryHandle,
                     szCounterPath,

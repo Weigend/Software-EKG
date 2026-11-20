@@ -22,6 +22,10 @@ if exist "%HERE%\jre\bin\java.exe" (
     set "JAVA=java"
 )
 
+rem The embedded collector reads the Windows performance counters with a native library; Java
+rem looks for it on the PATH.
+set "PATH=%HERE%\bin\dlls;%PATH%"
+
 set "LOG_DIR=%USERPROFILE%\.ekg\logs"
 if not exist "%LOG_DIR%" mkdir "%LOG_DIR%"
 cd /d "%LOG_DIR%"

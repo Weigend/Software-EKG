@@ -14,10 +14,10 @@ package io.softwareecg.collector.source.wincount;
 
 
 import org.junit.Assert;
-import org.junit.Assume;
 import org.junit.Test;
 
 import java.net.InetAddress;
+import java.util.Arrays;
 
 /**
  * Tests the low level WPC DLL.
@@ -28,7 +28,7 @@ public class WindowsPerformanceMetricDefinitionAccessTest {
     @Test
     public void testGetCounter() throws Exception {
 
-        Assume.assumeTrue(System.getProperty("os.name").startsWith("Win"));
+        WindowsCounters.assumeAvailable();
 
         WindowsPerformanceCounterAccess wpc = new WindowsPerformanceCounterAccess();
 
@@ -38,5 +38,49 @@ public class WindowsPerformanceMetricDefinitionAccessTest {
         // A complete list of all performance counters are given by the command: "typeperf -q"
         double value = wpc.getCounter("\\\\" + hostname + "\\System\\Threads");
         Assert.assertTrue(value > 0);
+    }
+
+    /**
+     * Expands a wildcard and reads all its counters with one query, the way the collector does.
+     * The object "System" has the same name on an English and on a German Windows.
+     */
+    @Test
+    public void testResolveWildcardsAndQueryCounter() throws Exception {
+
+        WindowsCounters.assumeAvailable();
+
+        WindowsPerformanceCounterAccess wpc = new WindowsPerformanceCounterAccess();
+        String prefix = "\\\\" + InetAddress.getLocalHost().getHostName() + "\\System\\";
+
+        String[] counters = wpc.resolveWildcards(prefix + "*");
+        Assert.assertNotNull(counters);
+        Assert.assertTrue("only " + counters.length + " counters of the object System", counters.length > 1);
+        for (String counter : counters) {
+            Assert.assertTrue(counter, counter.startsWith(prefix));
+        }
+
+        double[] values = new double[counters.length];
+        long handle = wpc.queryCounter(0, counters, values);
+        Assert.assertNotEquals(0, handle);
+        // a second query: rates have a value only from then on, and the handle is used again
+        Assert.assertEquals(handle, wpc.queryCounter(handle, counters, values));
+        Assert.assertTrue("no counter of the object System has a value: " + Arrays.toString(values),
+                Arrays.stream(values).anyMatch(value -> value > 0));
+    }
+
+    @Test
+    public void testResolveWildcardsOfUnknownObject() throws Exception {
+
+        WindowsCounters.assumeAvailable();
+
+        WindowsPerformanceCounterAccess wpc = new WindowsPerformanceCounterAccess();
+        String path = "\\\\" + InetAddress.getLocalHost().getHostName() + "\\NoSuchObjectOfSoftwareEkg\\*";
+        try {
+            // nothing to expand: no result or an error, but no crash
+            String[] counters = wpc.resolveWildcards(path);
+            Assert.assertTrue(counters == null || counters.length == 0);
+        } catch (RuntimeException e) {
+            Assert.assertNotNull(e.getMessage());
+        }
     }
 }

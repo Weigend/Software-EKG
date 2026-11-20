@@ -54,9 +54,19 @@ public class WindowsPerformanceCounterAccess {
 
 
     /**
+     * True if the native library is loaded and the native methods can be called.
+     */
+    private boolean available;
+
+    /**
      * Loading.
      */
     protected WindowsPerformanceCounterAccess() {
+        if (!System.getProperty("os.name", "").startsWith("Win")) {
+            // every collector has this source on its classpath; elsewhere it is just not usable
+            LOGGER.debug("Not on Windows: the Windows performance counters are not available.");
+            return;
+        }
         try {
             // check if we have a 64 bit JVM here, so we load the 64 bit dll
             String jvmBitSize = System.getProperty("sun.arch.data.model");
@@ -72,9 +82,20 @@ public class WindowsPerformanceCounterAccess {
                 LOGGER.info(NATIVE_LIBRARY + WPACCESS_32_DLL + LOADED);
             }
             init();
+            available = true;
         } catch (UnsatisfiedLinkError e) {
-            LOGGER.warn(NATIVE_LIBRARY + WPACCESS_32_DLL + "/" + WPACCESS_64_DLL + " can not found.");
+            LOGGER.warn(NATIVE_LIBRARY + WPACCESS_32_DLL + "/" + WPACCESS_64_DLL + " can not found: " + e.getMessage());
         }
+    }
+
+    /**
+     * Says whether the native library is loaded. Without it every native method of this class
+     * throws an {@link UnsatisfiedLinkError}.
+     *
+     * @return true if the Windows performance counters can be read.
+     */
+    public boolean isAvailable() {
+        return available;
     }
 
 
