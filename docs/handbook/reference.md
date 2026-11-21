@@ -30,17 +30,17 @@ always pass one as an argument.
 | Path | Meaning |
 | --- | --- |
 | `project` | Workbench project assigned to rows |
-| `metricGroups.<id>` | metrics of one kind; any number of groups |
+| `metricGroups.<id>` | metrics of one kind; any number of groups. The id becomes the dimension *metric group* |
 | `metricGroups.<id>.type` | source ID, exactly one per group |
 | `metricGroups.<id>.metrics[]` | string or metric object |
 | `metrics[].metric` | source-specific counter/expression/regex |
 | `metrics[].label` | displayed series name |
 | `metrics[].regexPostFilter` | filter after wildcard expansion |
 | `metrics[].wildcard` | `true` expands a `*`; omitted or `false` takes the metric literally |
-| `processGroups.<id>[]` | the processes or endpoints read on every host; any number of groups |
+| `processGroups.<id>[]` | the processes or endpoints read on every host; any number of groups. The id becomes the dimension *process group* |
 | `processGroups.<id>[].name` | source-visible process/endpoint name |
 | `.label`, `.source`, `.args` | display name, endpoint/file, source arguments |
-| `hostGroups.<id>` | servers that are alike; any number of groups |
+| `hostGroups.<id>` | servers that are alike; any number of groups. The id becomes the dimension *host group* |
 | `hostGroups.<id>.username/password` | group credential defaults |
 | `hostGroups.<id>.hosts[]` | string host or name/address/credential object |
 | `platform` | cluster name/API credentials/refresh/pod groups |

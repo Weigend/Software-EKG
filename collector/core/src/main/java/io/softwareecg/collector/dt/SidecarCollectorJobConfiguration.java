@@ -120,6 +120,7 @@ public class SidecarCollectorJobConfiguration extends CollectorJobConfiguration 
         timeSeriesHeader.setEkgProjectName(ekgProjectName);
         timeSeriesHeader.setMetricGroupId(getMetricGroupId());
         timeSeriesHeader.setProcessLabel(getProcessLabel());
+        timeSeriesHeader.setProcessGroupId(getProcessGroupId());
 
         return timeSeriesHeader;
     }

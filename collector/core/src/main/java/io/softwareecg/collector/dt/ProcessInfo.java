@@ -21,6 +21,11 @@ package io.softwareecg.collector.dt;
 public class ProcessInfo {
 
     /**
+     * The id of the group the process belongs to in the configuration.
+     */
+    private final String processGroupId;
+
+    /**
      * The process name / process matching expression
      */
     private String processName;
@@ -51,10 +56,28 @@ public class ProcessInfo {
      * @param additionalArguments optional call args that will used to parametrize the processes
      */
     public ProcessInfo(String processName, String processLabel, String source, String additionalArguments) {
+        this(null, processName, processLabel, source, additionalArguments);
+    }
+
+    /**
+     * @param processGroupId the id of the group the process belongs to in the configuration, or
+     *                       {@code null} if it is not known. It is kept with every series, so that
+     *                       the processes of a group can be looked at together later.
+     */
+    public ProcessInfo(String processGroupId, String processName, String processLabel, String source,
+                       String additionalArguments) {
+        this.processGroupId = processGroupId;
         this.processName = processName;
         this.processLabel = processLabel;
         this.source = source != null ? source.trim() : null;
         this.additionalArguments = additionalArguments;
+    }
+
+    /**
+     * @return the id of the group the process belongs to in the configuration, or {@code null}
+     */
+    public String getProcessGroupId() {
+        return processGroupId;
     }
 
     /**
@@ -113,6 +136,6 @@ public class ProcessInfo {
     }
 
     public ProcessInfo copy() {
-        return new ProcessInfo(processName, processLabel, source, additionalArguments);
+        return new ProcessInfo(processGroupId, processName, processLabel, source, additionalArguments);
     }
 }

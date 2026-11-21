@@ -36,6 +36,7 @@ public class CsvLog4jLayout extends PatternLayout {
             "\"service\":\"#SERVICE#\", " +
             "\"pod\":\"#POD#\", " +
             "\"container\":\"#CONTAINER#\", " +
+            "\"processGroup\":\"#PROCESS_GROUP#\", " +
             "\"process\":\"#PROCESS#\", " +
             "\"measurement\":\"#MEASUREMENT#\", " +
             "\"metricGroup\":\"#METRIC_GROUP#\" " +
@@ -113,6 +114,7 @@ public class CsvLog4jLayout extends PatternLayout {
                 .replace("#SERVICE#", extractNullSaveEscapedValue(timeSeriesHeader.getService()))
                 .replace("#POD#", extractNullSaveEscapedValue(timeSeriesHeader.getPodName()))
                 .replace("#CONTAINER#", extractNullSaveEscapedValue(timeSeriesHeader.getContainerId()))
+                .replace("#PROCESS_GROUP#", extractNullSaveEscapedValue(timeSeriesHeader.getProcessGroupId()))
                 .replace("#PROCESS#", extractNullSaveEscapedValue(timeSeriesHeader.getProcessLabel()))
                 .replace("#MEASUREMENT#", extractNullSaveEscapedValue(measurement))
                 .replace("#METRIC_GROUP#", extractNullSaveEscapedValue(timeSeriesHeader.getMetricGroupId()));

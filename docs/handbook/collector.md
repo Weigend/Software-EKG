@@ -209,10 +209,14 @@ events of the same servers are two metric groups and two collectors.
 
 ### Groups are also what you compare by
 
-The ids of the host group and of the metric group are stored with every series. In the Workbench
-they are the dimensions *host group* and *metric group*: one selection shows a metric for all
-hosts of a group in one chart. Name the groups by what they are (`app-servers`, `jvm`), not by an
-incident or a date.
+The ids of the host group, the process group and the metric group are stored with every series.
+In the Workbench they are the dimensions *host group*, *process group* and *metric group*: one
+selection shows a metric for all hosts of a group in one chart, and the explorer shows the
+processes below their group. Name the groups by what they are (`app-servers`, `app-jvm`, `jvm`),
+not by an incident or a date.
+
+The CSV repository writes all three. The Solr and Elasticsearch repositories write the host
+group and the metric group, not yet the process group.
 
 ### Reading the file
 

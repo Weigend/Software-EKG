@@ -1,14 +1,18 @@
 package io.softwareecg.awb.importer.csv.et;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * An simple data entity that represents the metadata information
  * the EKG-Collector uses in 6.1 format to describe labels/filter dimension
  * that belongs to the measured metric values.
+ * <p>
+ * What a newer collector adds to the metadata is ignored instead of making the file unreadable.
  *
  * @since 08.12.2018
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Collector61Metadata {
 
     private double logFormatVersion;
@@ -48,6 +52,14 @@ public class Collector61Metadata {
         return metadata.getContainer();
     }
 
+    /**
+     * @return the id of the process group of the collector configuration; {@code null} for a
+     *         file of a collector that did not write it yet
+     */
+    public String getProcessGroup() {
+        return metadata.getProcessGroup();
+    }
+
     public String getProcess() {
         return metadata.getProcess();
     }
@@ -61,6 +73,7 @@ public class Collector61Metadata {
     }
 
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     private static class DimensionData {
 
         private String ekgProjectName;
@@ -76,6 +89,8 @@ public class Collector61Metadata {
         private String pod;
 
         private String container;
+
+        private String processGroup;
 
         private String process;
 
@@ -109,6 +124,10 @@ public class Collector61Metadata {
 
         public String getContainer() {
             return container;
+        }
+
+        public String getProcessGroup() {
+            return processGroup;
         }
 
         public String getProcess() {

@@ -231,6 +231,28 @@ public class Csv4jRepositoryTest {
     }
 
     @Test
+    public void theHeaderNamesTheGroupsOfTheJob() throws IOException {
+        TimeSeriesHeader job = new TimeSeriesHeader();
+        job.setEkgProjectName("Shop");
+        job.setHostGroupId("app-servers");
+        job.setHostName("app-01");
+        job.setProcessGroupId("app-jvm");
+        job.setProcessLabel("Checkout API");
+        job.setMetricGroupId("jvm");
+        Csv4jRepository repository = new Csv4jRepository("measurement", new File(folder.getRoot(), "job").getPath(),
+                daily("30MB", "0"));
+        repository.createMeasurement(job, new String[]{"heap"});
+        repository.addValueSetToMeasurement(new Date(NOON), new Double[]{1.0});
+
+        String header = lines("job_2026-11-21.csv").get(0);
+        assertTrue(header, header.contains("\"hostGroupName\":\"app-servers\""));
+        assertTrue(header, header.contains("\"processGroup\":\"app-jvm\""));
+        assertTrue(header, header.contains("\"process\":\"Checkout API\""));
+        assertTrue(header, header.contains("\"metricGroup\":\"jvm\""));
+        assertTrue(header, header.endsWith("}};heap;"));
+    }
+
+    @Test
     public void aStorageWithoutRowsWritesNoFile() {
         repository(daily("30MB", "0"), "logins").cleanUp();
 

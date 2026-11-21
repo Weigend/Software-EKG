@@ -1,5 +1,6 @@
 package io.softwareecg.awb.importer.csv.bl;
 
+import io.softwareecg.awb.sdk.awbapi.repository.FilterDimension;
 import io.softwareecg.awb.sdk.datamodel.RawSeriesData;
 import org.junit.Test;
 
@@ -102,6 +103,32 @@ public class CsvMetricsParserNGTest {
         assertEquals(columns.length - 1, series.length);
         assertEquals("\\Process(java)\\RES", series[series.length - 1].getMetricName());
         assertFalse("the last column has its values", series[series.length - 1].getValues().isEmpty());
+    }
+
+    /**
+     * The collector writes the group of the process into the header; the import makes it the
+     * dimension of that name. What a later collector may add to the header is no reason to
+     * reject the file.
+     */
+    @Test
+    public void theGroupOfTheProcessIsADimension() throws Exception {
+        RawSeriesData[] series = new CsvMetricsParserNG().parse(getCsvFile("collector-with-process-group_2026-11-21.csv"));
+
+        assertEquals(2, series.length);
+        for (RawSeriesData one : series) {
+            assertEquals("app-servers", one.getLabel(FilterDimension.HOST_GROUP.name()));
+            assertEquals("app-01", one.getLabel(FilterDimension.HOST.name()));
+            assertEquals("app-jvm", one.getLabel(FilterDimension.PROCESS_GROUP.name()));
+            assertEquals("Checkout API", one.getLabel(FilterDimension.PROCESS.name()));
+            assertEquals("jvm", one.getLabel(FilterDimension.METRIC_GROUP.name()));
+        }
+        assertEquals("threads", series[1].getLabel(FilterDimension.METRIC_NAME.name()));
+        assertEquals(41, series[1].getValues().get(1).getValue(), 0.0);
+
+        // a file of a collector that did not write the group yet
+        RawSeriesData[] older = new CsvMetricsParserNG().parse(getCsvFile("collector72-log-events_2026-11-20.csv"));
+        assertEquals("checkout", older[0].getLabel(FilterDimension.PROCESS.name()));
+        assertEquals(null, older[0].getLabel(FilterDimension.PROCESS_GROUP.name()));
     }
 
     private File getCsvFile(String fileName) throws Exception {

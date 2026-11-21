@@ -32,6 +32,11 @@ public class TimeSeriesHeader {
     private String processLabel;
 
     /**
+     * the unique id of the process group the process belongs to in the configuration
+     */
+    private String processGroupId;
+
+    /**
      * the unique id of the metric group used in the configuration
      */
     private String metricGroupId;
@@ -96,6 +101,14 @@ public class TimeSeriesHeader {
 
     public void setProcessLabel(String processLabel) {
         this.processLabel = processLabel;
+    }
+
+    public String getProcessGroupId() {
+        return processGroupId;
+    }
+
+    public void setProcessGroupId(String processGroupId) {
+        this.processGroupId = processGroupId;
     }
 
     public String getMetricGroupId() {
@@ -170,6 +183,7 @@ public class TimeSeriesHeader {
     public String toString() {
         return new StringJoiner(", ", TimeSeriesHeader.class.getSimpleName() + "[", "]")
                 .add("ekgProjectName='" + ekgProjectName + "'")
+                .add("processGroupId='" + processGroupId + "'")
                 .add("processLabel='" + processLabel + "'")
                 .add("metricGroupId='" + metricGroupId + "'")
                 .add("hostGroupId='" + hostGroupId + "'")

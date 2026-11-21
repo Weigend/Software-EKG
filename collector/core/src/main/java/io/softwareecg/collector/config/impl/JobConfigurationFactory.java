@@ -59,7 +59,7 @@ final class JobConfigurationFactory {
                             config.project(),
                             new HostInfo(host.name(), host.address(), collector.hostGroup(),
                                     hostGroup.usernameOf(host), hostGroup.passwordOf(host)),
-                            processInfo(process),
+                            processInfo(collector.processGroup(), process),
                             metricGroupInfo(collector, metricGroup),
                             metricDefinitions(metricGroup)));
                 }
@@ -104,14 +104,14 @@ final class JobConfigurationFactory {
                     platformProjectInfo(platform),
                     podInfo(platform, node.podGroupId, node.podGroup, node.pod),
                     (ContainerInfo) null,
-                    processInfo(process),
+                    processInfo(collector.processGroup(), process),
                     metricGroupInfo(collector, metricGroup),
                     metricDefinitions(metricGroup));
         }
         return new SidecarCollectorJobConfiguration(
                 config.project(),
                 node.info,
-                processInfo(process),
+                processInfo(collector.processGroup(), process),
                 metricGroupInfo(collector, metricGroup),
                 metricDefinitions(metricGroup));
     }
@@ -209,8 +209,8 @@ final class JobConfigurationFactory {
     // common parts of a job
     // ---------------------------------------------------------------------------------------------
 
-    private static ProcessInfo processInfo(ProcessDef process) {
-        return new ProcessInfo(process.name(), process.label(), process.source(), process.args());
+    private static ProcessInfo processInfo(String processGroupId, ProcessDef process) {
+        return new ProcessInfo(processGroupId, process.name(), process.label(), process.source(), process.args());
     }
 
     private static MetricGroupInfo metricGroupInfo(CollectorDef collector, MetricGroup metricGroup) {

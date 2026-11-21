@@ -136,6 +136,14 @@ public abstract class CollectorJobConfiguration implements Cloneable, CounterDes
     // the implementation of CounterDescriptor API that provides a more restricted view on the job configuration
     //================================================================================================================
 
+    /**
+     * @return the id of the group the process of this job belongs to in the configuration, or
+     *         {@code null} if the job was not made from a configuration
+     */
+    public String getProcessGroupId() {
+        return processInfo.getProcessGroupId();
+    }
+
     @Override
     public String getProcessLabel() {
         String label = processInfo.getProcessLabel();

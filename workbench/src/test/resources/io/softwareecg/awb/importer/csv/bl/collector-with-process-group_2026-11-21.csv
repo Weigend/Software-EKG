@@ -1,0 +1,3 @@
+{"logFormatVersion":6.1, "metadata":{"ekgProjectName":"Shop", "hostGroupName":"app-servers", "hostName":"app-01", "namespace":"", "service":"", "pod":"", "container":"", "processGroup":"app-jvm", "process":"Checkout API", "measurement":"2026-11-21-12-00-00", "metricGroup":"jvm", "addedByALaterCollector":"something" }};heap;threads;
+1795273200000;512;40
+1795273215000;530;41

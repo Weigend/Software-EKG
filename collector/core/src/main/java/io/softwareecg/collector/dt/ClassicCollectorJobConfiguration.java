@@ -78,6 +78,7 @@ public class ClassicCollectorJobConfiguration extends CollectorJobConfiguration 
         timeSeriesHeader.setEkgProjectName(ekgProjectName);
         timeSeriesHeader.setMetricGroupId(getMetricGroupId());
         timeSeriesHeader.setProcessLabel(getProcessLabel());
+        timeSeriesHeader.setProcessGroupId(getProcessGroupId());
 
         return timeSeriesHeader;
     }

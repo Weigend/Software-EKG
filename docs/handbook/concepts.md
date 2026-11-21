@@ -89,8 +89,8 @@ four collector entries cover every server of both kinds; a server that is added 
 line in its group.
 
 The groups are also what the analysis compares by. A host group holds servers for which a
-common chart makes sense, and its name and the name of the metric group are dimensions of every
-series. The worked example is in the
+common chart makes sense, and its name and the names of the process group and the metric group
+are dimensions of every series. The worked example is in the
 [Collector guide](collector.md#many-groups-multiplied-out).
 
 The Workbench then treats all resulting series alike: explore dimensions, select a time range,
@@ -100,8 +100,8 @@ overlay series, aggregate, bookmark and export.
 
 Software-EKG combines a pluggable source pipeline with a comparison-oriented collection model.
 Metric, process and host groups are defined independently and expanded into concrete collection
-jobs. Every series keeps its host group and metric group, with its host, process and metric, as
-dimensions for later analysis. Other collectors commonly provide source plugins
+jobs. Every series keeps the groups of its host, its process and its metrics, with the host, the
+process and the metric themselves, as dimensions for later analysis. Other collectors commonly provide source plugins
 or host templates; Software-EKG connects both ideas to build a focused, heterogeneous and offline
 investigation dataset.
 

@@ -142,6 +142,7 @@ public class CsvMetricsParserNG {
         addLabelIfNotEmpty(seriesLabels, FilterDimension.POD, metadata.getPod());
         addLabelIfNotEmpty(seriesLabels, FilterDimension.CONTAINER, metadata.getContainer());
         addLabelIfNotEmpty(seriesLabels, FilterDimension.MEASUREMENT, metadata.getMeasurement());
+        addLabelIfNotEmpty(seriesLabels, FilterDimension.PROCESS_GROUP, metadata.getProcessGroup());
         addLabelIfNotEmpty(seriesLabels, FilterDimension.PROCESS, metadata.getProcess());
         addLabelIfNotEmpty(seriesLabels, FilterDimension.METRIC_GROUP, metadata.getMetricGroup());
 

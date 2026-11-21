@@ -103,6 +103,23 @@ public class CollectorConfigurationsTest {
     }
 
     @Test
+    public void aJobKnowsTheGroupsOfItsHostItsProcessAndItsMetricsAndSoDoItsSeries() {
+        List<ClassicCollectorJobConfiguration> jobs =
+                CollectorConfigurations.fromString(SERVERS).getClassicCollectorJobConfiguration();
+
+        ClassicCollectorJobConfiguration system = job(jobs, "db-01", "global");
+        assertEquals("system", system.getProcessGroupId());
+        assertEquals("db", system.getTimeSeriesHeader().getHostGroupId());
+        assertEquals("system", system.getTimeSeriesHeader().getProcessGroupId());
+        assertEquals("host", system.getTimeSeriesHeader().getMetricGroupId());
+
+        ClassicCollectorJobConfiguration process = job(jobs, "db-02", "java#1");
+        assertEquals("java", process.getTimeSeriesHeader().getProcessGroupId());
+        assertEquals("the group survives a copy of the job, as a job makes one when its series change",
+                "java", ((ClassicCollectorJobConfiguration) process.copy()).getTimeSeriesHeader().getProcessGroupId());
+    }
+
+    @Test
     public void aHostTakesTheLoginOfItsGroupUnlessItHasItsOwn() {
         List<ClassicCollectorJobConfiguration> jobs = CollectorConfigurations.fromString(SERVERS).getClassicCollectorJobConfiguration();
 

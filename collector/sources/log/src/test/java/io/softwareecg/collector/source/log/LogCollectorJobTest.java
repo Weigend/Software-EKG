@@ -82,6 +82,7 @@ public class LogCollectorJobTest {
         assertNull(job.lastError());
         assertEquals(List.of("logins", "slowest request"), output.metricLabels);
         assertEquals("this-machine", output.header.getHostName());
+        assertEquals("the group of the process is known to the storage", "checkout", output.header.getProcessGroupId());
 
         assertEquals("every line is counted once", written, output.sum(0), 0);
         assertEquals("the slowest request of all intervals", 124, output.max(1), 0);

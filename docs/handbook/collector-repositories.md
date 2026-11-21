@@ -101,7 +101,9 @@ Csv4jRepository.MaxBackupIndex=0
 - A row goes into the file of **its own time**, not of the moment it is written. What a source
   delivers of yesterday, with a `lookback` for example, is in the file of yesterday. Periods
   begin and end in the time zone of the Collector.
-- Every file begins with the header and can be read by itself.
+- Every file begins with the header and can be read by itself. The header names the job: its
+  project, host group and host, process group and process, and metric group. The process group
+  is new in it; a Workbench of an earlier version than this Collector does not read such a file.
 - Nothing is renamed, and with the defaults nothing is deleted. A Collector that runs for long
   needs room for it: at most `MaxFileSize` per file, but any number of files. Set
   `MaxBackupIndex` if the directory must not grow without bound, and know that the oldest values
