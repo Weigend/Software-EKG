@@ -105,6 +105,10 @@ collectors:
     interval: 15s
 ```
 
+This is the smallest case: one group of each kind and one collector. A real configuration has
+several host groups and metric groups and combines them; see
+[Many groups, multiplied out](collector.md#many-groups-multiplied-out).
+
 Keep secrets outside YAML and start the Collector in the foreground:
 
 ```bash

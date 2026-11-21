@@ -89,43 +89,134 @@ New configurations should use YAML.
 
 ## Configuration model
 
+A configuration does not describe servers one by one. It describes **groups**, and a list of
+**collectors** that combine them. The combinations are multiplied out into jobs.
+
+| Part | What it groups |
+| --- | --- |
+| `hostGroups` | Servers that are alike: the Windows servers, the frontend servers, the backend servers. Alike means that the same things are worth measuring on each of them and that comparing them in one chart makes sense. A group also holds the login its hosts share. |
+| `metricGroups` | Metrics of one kind: the JVM metrics read over JMX, the operating-system metrics read with `top`, the events of a log. A metric group has exactly one `type`, the source its metrics are read with. |
+| `processGroups` | The processes or endpoints the metrics are read of, on every host of a group. |
+| `collectors` | One entry combines one metric group, one process group and one host group, and says how often they are read. |
+
+### Many groups, multiplied out
+
+That there are several groups of each kind is the construction principle. A kind of server
+usually needs more than one kind of metric, and a kind of metric is usually wanted for more than
+one kind of server. Application servers get JVM metrics and operating-system metrics. Other
+backend services get operating-system metrics and disk I/O. The operating-system metrics are
+written once and used for both:
+
 ```yaml
 project: Checkout incident
 
-metricGroups:       # what and through which source
+metricGroups:                 # WHAT, one source per group
   jvm:
-    type: jolokia
+    type: jmx
     metrics:
-      - metric: 'java.lang:type=Memory,*'
+      - 'MXBean(java.lang:type=Memory).HeapMemoryUsage.used'
+      - 'MXBean(java.lang:type=Threading).ThreadCount'
+  os:
+    type: unix
+    metrics:
+      - '\CPU\us'
+      - '\Load\one'
+      - '\Memory\used'
+  disk-io:
+    type: unixio
+    metrics:
+      - metric: '\Device(*)\*'
         wildcard: true
 
-processGroups:      # endpoint or process interpretation
-  services:
+processGroups:                # OF WHICH processes or endpoints
+  app-jvm:
     - name: checkout
       label: Checkout API
-      source: 'http://${REF:hostAddress}:8778/jolokia/'
-      args: optional-source-specific-text
+      source: 'service:jmx:rmi:///jndi/rmi://${REF:hostAddress}:9010/jmxrmi'
+  system:
+    - name: global
+      source: '${REF:hostAddress}:22'
 
-hostGroups:         # where
-  production:
+hostGroups:                   # ON WHICH servers, grouped by what they are
+  app-servers:
     username: observer
     password: '${ENV:EKG_PASSWORD}'
     hosts:
-      - name: checkout-01
-        address: 10.20.1.11
+      - app-01.example.org
+      - app-02.example.org
+      - app-03.example.org
+  backend-services:
+    username: observer
+    password: '${ENV:EKG_PASSWORD}'
+    hosts:
+      - name: db-01
+        address: 10.20.2.11
+      - name: mq-01
+        address: 10.20.2.21
 
-collectors:         # combine and schedule
-  - type: remote
-    metricGroup: jvm
-    processGroup: services
-    hostGroup: production
+collectors:                   # the combinations
+  - metricGroup: jvm          # application servers: JVM ...
+    processGroup: app-jvm
+    hostGroup: app-servers
     interval: 15s
+  - metricGroup: os           # ... and operating system
+    processGroup: system
+    hostGroup: app-servers
+    interval: 15s
+  - metricGroup: os           # backend services: operating system ...
+    processGroup: system
+    hostGroup: backend-services
+    interval: 15s
+  - metricGroup: disk-io      # ... and disk I/O
+    processGroup: system
+    hostGroup: backend-services
+    interval: 1m
     expandInterval: 20m
 ```
 
-One collector entry produces a job for every process × host in its referenced groups. The YAML
-reader rejects unknown keys, duplicate keys, missing references and wrong value types with a line
-and path. Durations accept `ms`, `s`, `m`, `h` or `d`; a bare number means milliseconds.
+Every collector yields one job for every host and every process of its groups. A job reads all
+metrics of its metric group, of one process, on one host:
+
+| Collector | Hosts × processes | Jobs |
+| --- | --- | --- |
+| `jvm` on `app-servers` | 3 × 1 | 3 |
+| `os` on `app-servers` | 3 × 1 | 3 |
+| `os` on `backend-services` | 2 × 1 | 2 |
+| `disk-io` on `backend-services` | 2 × 1 | 2 |
+
+Ten jobs come out of four collector entries, and the number of series is the jobs times their
+metrics, with wildcards expanded for every job. The configuration grows by its groups, not by its
+servers:
+
+- a fourth application server is one more line in `app-servers`, and it is read by every
+  collector that names the group;
+- a second process to watch on every application server is one more entry in `app-jvm`;
+- another kind of metric for all backend services is one more metric group and one more
+  collector entry.
+
+A host group may be named by any number of collectors, and so may a metric group and a process
+group. What cannot be done is to put two sources into one metric group: JVM metrics and
+operating-system metrics of the same servers are two metric groups and two collectors.
+
+Log events are meant to fit in the same way, as one more metric group that is combined with both
+host groups. The source `log` is not complete yet; see
+[Log files and events](collector-sources.md#log-files-and-events).
+
+### Groups are also what you compare by
+
+The ids of the host group and of the metric group are stored with every series. In the Workbench
+they are the dimensions *host group* and *metric group*: one selection shows a metric for all
+hosts of a group in one chart. Name the groups by what they are (`app-servers`, `jvm`), not by an
+incident or a date.
+
+### Reading the file
+
+The YAML reader rejects unknown keys, duplicate keys, missing references and wrong value types
+with a line and path. Durations accept `ms`, `s`, `m`, `h` or `d`; a bare number means
+milliseconds. A host is written as its address alone, or with `name`, `address` and a login of
+its own. A process has a `name`, and optionally a `label` to show instead, the `source` its
+metrics are read from and `args` for the source. A collector is of `type: remote` unless it says
+`sidecar`.
 
 ### Metrics and wildcards
 

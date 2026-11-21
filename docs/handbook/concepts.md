@@ -55,12 +55,29 @@ host, process group, process, measurement, metric group and metric. Cloud-native
 namespace, service, pod and container. A project selects a view flavour and can rename dimensions
 for a domain—for example an importer can display *Country* instead of *Host*.
 
-The Collector configuration mirrors the question:
+## Groups, multiplied out
 
-1. `metricGroups`: **what** should be measured and through which source adapter?
-2. `processGroups`: **of which process or endpoint** should it be read?
-3. `hostGroups` or `platform`: **on which systems**?
-4. `collectors`: **how often** should a combination run?
+The Collector configuration is built from groups, and there are several of each kind:
+
+1. `hostGroups` put servers together that are alike. That can be as simple as "the Windows
+   servers", or it follows the architecture: the frontend servers, the backend servers.
+2. `metricGroups` put metrics of one kind together, read through one source: the JVM metrics
+   over JMX, the operating-system metrics from `top`, the events of a log.
+3. `processGroups` name the processes or endpoints the metrics are read of.
+4. `collectors` combine one group of each kind and say **how often** the combination is read.
+
+The multiplicity is the construction principle. A kind of server needs several kinds of
+metrics, and a kind of metric is wanted for several kinds of servers: JVM and operating-system
+metrics for the application servers, operating-system metrics and disk I/O for the other backend
+services. Each combination is one collector entry, and the Collector multiplies it out into one
+job for every host and every process of the groups. Three metric groups, two host groups and
+four collector entries cover every server of both kinds; a server that is added later is one
+line in its group.
+
+The groups are also what the analysis compares by. A host group holds servers for which a
+common chart makes sense, and its name and the name of the metric group are dimensions of every
+series. The worked example is in the
+[Collector guide](collector.md#many-groups-multiplied-out).
 
 The Workbench then treats all resulting series alike: explore dimensions, select a time range,
 overlay series, aggregate, bookmark and export.
