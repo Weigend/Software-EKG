@@ -7,10 +7,9 @@
 
 Monitoring platforms such as Prometheus and Grafana, Zabbix and similar systems can provide broad,
 well-designed monitoring of a whole environment. An investigation nevertheless has a different
-scope. A
-long-running monitoring system either collects a great volume of data, or deliberately omits the
-specialised exporter, agent item, JVM attribute, log event or high-frequency value that only
-becomes relevant to one incident. Software-EKG reuses the useful monitoring series, adds those
+scope. A long-running monitoring system either collects a great volume of data, or deliberately
+omits the specialised exporter, agent item, JVM attribute, log event or high-frequency value that
+only becomes relevant to one incident. Software-EKG reuses the useful monitoring series, adds those
 missing pieces from sources such as `top`, JMX, logs or the CSV files of an earlier collection,
 and limits the result to the current analysis scope. For the time of the investigation it can
 therefore sample deeper, more precisely or faster than would be sensible for permanent
@@ -100,10 +99,11 @@ overlay series, aggregate, bookmark and export.
 
 Software-EKG combines a pluggable source pipeline with a comparison-oriented collection model.
 Metric, process and host groups are defined independently and expanded into concrete collection
-jobs. Every series keeps the groups of its host, its process and its metrics, with the host, the
-process and the metric themselves, as dimensions for later analysis. Other collectors commonly provide source plugins
-or host templates; Software-EKG connects both ideas to build a focused, heterogeneous and offline
-investigation dataset.
+jobs. Every series keeps its groups as dimensions for later analysis: the group of its host, of
+its process and of its metrics, beside the host, the process and the metric themselves.
+
+Other collectors commonly provide source plugins or host templates. Software-EKG connects both
+ideas to build a focused, heterogeneous and offline investigation dataset.
 
 > Define independently what to measure, where to measure it and what to compare.
 

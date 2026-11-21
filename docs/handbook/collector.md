@@ -3,9 +3,10 @@
 [Handbook home](README.md) · [Source modules](collector-sources.md) ·
 [Repositories](collector-repositories.md) · [Reference](reference.md)
 
-The Collector is the headless acquisition process. It expands a declarative YAML configuration
+The Collector is the standalone acquisition process. It expands a declarative YAML configuration
 into jobs, periodically reads source adapters and writes timestamped rows through one repository
-adapter. It can run beside a workload (`sidecar`) or reach multiple systems (`remote`).
+adapter. It can run beside a workload (`sidecar`) or reach multiple systems (`remote`). It runs
+headless by default and can show what it is doing on a [local display](#the-display).
 
 ## Command line and service
 
@@ -54,6 +55,7 @@ the script reads if it exists.
 | `EKG_COLLECTOR_CONFIG` | the configuration | `config/default/config.yaml` |
 | `EKG_COLLECTOR_LOGDIR` | where the Collector writes | `logs` |
 | `EKG_COLLECTOR_JAVA_OPTS` | options for the JVM | `-Xmx386m` |
+| `EKG_COLLECTOR_UI` | `1` shows [the display](#the-display); it also needs `DISPLAY` in the environment | off |
 | `JAVA_HOME` | the Java 25 runtime, unless the distribution has one in `jre` | |
 
 The script keeps the process id in `ekg-collector.pid` and the output of the JVM in `stderr.log`,

@@ -1,9 +1,13 @@
 # Software-EKG Handbook
 
+Software-EKG builds focused, reproducible time-series datasets for investigations across
+otherwise disconnected sources.
+
 This handbook describes the user-visible and deliberately extensible features of the current
-Software-EKG repository. It covers the Workbench, the headless Collector, their data formats and
-the extension contracts that are reachable intentionally. Screens and names may still contain
-German text where the current JavaFX application does.
+Software-EKG repository. It covers the Workbench, the Collector (a standalone acquisition
+process with an optional local display), their data formats and the extension contracts that are
+reachable intentionally. Screens and names may still contain German text where the current JavaFX
+application does.
 
 ![Software-EKG Workbench](../images/fullscreen.png)
 

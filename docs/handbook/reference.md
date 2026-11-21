@@ -118,6 +118,7 @@ and options.
 | `EKG_JAVA_OPTS` | extra Workbench JVM options |
 | `EKG_COLLECTOR_JAVA_OPTS` | Collector JVM options; replaces launcher memory defaults |
 | `EKG_COLLECTOR_CONFIG`, `EKG_COLLECTOR_LOGDIR` | configuration and log directory of `ekg-collector start` |
+| `EKG_COLLECTOR_UI` | `1` lets `ekg-collector start` show the display of the Collector; needs `DISPLAY` as well |
 | `/etc/default/ekg-collector` | environment of the background Collector, read if it exists |
 | `collectorPropertiesPath` | JVM property or environment variable: where `collector.properties` is |
 | `collectorRepositoryPropertiesPath` | the same for `remote-repository-config.properties` |
