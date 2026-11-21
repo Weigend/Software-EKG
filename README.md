@@ -45,11 +45,14 @@ It is the first step of a root cause analysis, not the end of it: Software-EKG s
 4. **Verify.** The built-in AI Assistant helps to check a hypothesis against the raw data, see [The role of AI](#the-role-of-ai).
 5. **Go deeper.** Based on this, you decide what exactly to investigate further. Memory profilers, CPU profilers, network tracing tools or other visualisations are then used specifically for the components that already stood out in the metric analysis.
 
+The complete English user and extension documentation is available in the
+[Software-EKG Handbook](docs/handbook/README.md).
+
 ## The role of AI
 
 AI comes into play in two places:
 
-1. **During the analysis.** The workbench supports the analysis of time series directly with AI. The built-in AI Assistant has access to all collected data: it sees the current chart section, knows the metrics and queries time series itself. If needed, it accesses the systems themselves via SSH, for example to look at logs or processes; it runs each command only after the analyst has approved it. The model can be OpenAI, Anthropic, Ollama or any compatible endpoint.
+1. **During the analysis.** The workbench supports the analysis of time series directly with AI. The built-in AI Assistant has access to all collected data: it sees the current chart section, knows the metrics and queries time series itself. If needed, it accesses the systems themselves via SSH, for example to look at logs or processes; it runs each command only after the analyst has approved it. The assistant talks to an OpenAI-compatible endpoint. At present this is OpenRouter with a Claude model, and the API key is read from the environment variable `OPENROUTER_API_KEY`; the model cannot be chosen in the application yet.
 2. **When extending the tool.** A collector source is a small plugin: the bundled mock source consists of one class with about 90 lines and a ServiceLoader entry. A coding agent writes such a source for a proprietary metrics interface in minutes. This way the tool can be extended until it displays the metrics of any interface, see [Extensions](#extensions).
 
 ## What it is not

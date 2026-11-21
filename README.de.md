@@ -45,11 +45,14 @@ Es ist der erste Schritt einer Root-Cause-Analyse, nicht ihr Ende: Das EKG zeigt
 4. **Prüfen.** Der eingebaute AI Assistant hilft, eine Hypothese an den Rohdaten zu prüfen, siehe [Die Rolle der AI](#die-rolle-der-ai).
 5. **Vertiefen.** Ausgehend davon wird festgelegt, was genau tiefer untersucht werden soll. Speicherprofiler, CPU-Profiler, Netzwerk-Tracing-Tools oder andere Visualisierungen kommen dann gezielt für die Komponenten zum Einsatz, die bereits in der Metrikanalyse auffällig sind.
 
+Die vollständige Anwender- und Erweiterungsdokumentation steht im
+[Software-EKG-Handbuch](docs/handbook/README.md) (auf Englisch).
+
 ## Die Rolle der AI
 
 AI kommt an zwei Stellen ins Spiel:
 
-1. **Bei der Analyse.** Die Workbench unterstützt die Analyse der Zeitreihen direkt durch AI. Der eingebaute AI Assistant hat Zugriff auf alle gesammelten Daten: Er sieht den aktuellen Chart-Ausschnitt, kennt die Metriken und fragt Zeitreihen selbst ab. Bei Bedarf greift er per SSH auf die Systeme selbst zu, etwa um Logs oder Prozesse anzusehen; jedes Kommando führt er erst nach Freigabe durch den Analysten aus. Als Modell dient OpenAI, Anthropic, Ollama oder ein kompatibler Endpunkt.
+1. **Bei der Analyse.** Die Workbench unterstützt die Analyse der Zeitreihen direkt durch AI. Der eingebaute AI Assistant hat Zugriff auf alle gesammelten Daten: Er sieht den aktuellen Chart-Ausschnitt, kennt die Metriken und fragt Zeitreihen selbst ab. Bei Bedarf greift er per SSH auf die Systeme selbst zu, etwa um Logs oder Prozesse anzusehen; jedes Kommando führt er erst nach Freigabe durch den Analysten aus. Der Assistant spricht mit einem OpenAI-kompatiblen Endpunkt. Derzeit ist das OpenRouter mit einem Claude-Modell, der API-Schlüssel kommt aus der Umgebungsvariablen `OPENROUTER_API_KEY`; das Modell lässt sich in der Anwendung noch nicht wählen.
 2. **Beim Erweitern.** Eine Collector Source ist ein kleines Plugin: Die mitgelieferte Mock-Quelle besteht aus einer Klasse mit rund 90 Zeilen und einem ServiceLoader-Eintrag. Ein Coding-Agent schreibt eine solche Source für eine proprietäre Metrik-Schnittstelle in Minuten. So lässt sich das Werkzeug erweitern, bis es die Metriken beliebiger Schnittstellen anzeigt, siehe [Erweiterungen](#erweiterungen).
 
 ## Was es nicht ist
