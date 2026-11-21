@@ -55,27 +55,35 @@ metricGroups:
     # The source the metrics are read with. It decides how metrics and processes are written:
     #   unix         Linux/Unix hosts with "top", over SSH   '\CPU\us', '\Process(java)\CPU'
     #   unixio       ... with "iostat"                       '\Device(*)\*'
-    #   unixdf       ... with "df"                           '\Filesystem(*)\*'
+    #   unixdf       ... with "df", for the path given as    'Used', 'Use%'
+    #                'args' of the process
     #   prometheus   a Prometheus server                     'rate(node_cpu_seconds_total[1m])'
     #   jolokia      JMX over HTTP (Jolokia agent)           'java.lang:type=Memory,*'
     #   jmx          JMX directly
     #   win          Windows performance counters            '\Processor(_Total)\*'
-    #   postgres, log, rlog, mock
+    #   calc         calculated from other metrics           'value("\CPU\us") + value("\CPU\sy")'
+    #   mock         invented values, to try a configuration
+    #   ekgjolokia, log, rlog
     type: jolokia
 
     metrics:
-      # A metric is usually just its text. With wildcards it stands for every metric of the
-      # source that matches.
-      - '*Memory*'
+      # A metric is usually just its text. It is read as it is written, even if it contains
+      # a *.
+      - 'java.lang:type=Threading/ThreadCount'
 
       # A metric with settings is written as a map:
       #   metric           the metric
+      #   wildcard         true: the metric stands for every metric of the source that matches
+      #                    its *. Without it the metric is taken literally. (Not needed for
+      #                    prometheus: an expression yields all its series anyway.)
       #   label            the name shown instead of the metric. Not for wildcards: all matches
       #                    would get the same name.
       #   regexPostFilter  a regular expression the names of the matches must fit; its groups
       #                    are available to the label as ${FILTER:1}, ${FILTER:2} ...
-      #   wildcard         false takes the metric literally, even if it contains a *
+      - metric: 'java.lang:type=Memory,*'
+        wildcard: true
       - metric: 'java.lang:type=Threading,*'
+        wildcard: true
         label: 'threads ${FILTER:1}'
         regexPostFilter: '.*Threading.*\.(.*)$'
 

@@ -1,11 +1,12 @@
 # Software-EKG collector - Windows performance counters of the machine the collector runs on.
-# The names of the counters depend on the language of Windows; these are the German ones.
+# The counters are written with their English names; they are read on a Windows of every
+# language. ${REF:procName} stands for the process of the job.
 
 metricGroups:
   testcounter:
     type: win
     metrics:
-      - metric: \Prozess(%1)\*
+      - metric: '\Process(${REF:procName})\*'
         wildcard: true
   mock:
     type: mock
