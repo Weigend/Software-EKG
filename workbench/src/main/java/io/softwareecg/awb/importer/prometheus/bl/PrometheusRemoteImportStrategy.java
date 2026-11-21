@@ -6,7 +6,6 @@ import io.softwareecg.awb.importer.prometheus.client.model.api.label.ListLabelRe
 import io.softwareecg.awb.importer.prometheus.client.model.api.query.SeriesDefinition;
 import io.softwareecg.awb.sdk.awbapi.repository.ImporterSourceRepository;
 import io.softwareecg.awb.sdk.core.log.EkgLogger;
-import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.awb.sdk.core.security.SecurityContext;
 import io.softwareecg.awb.sdk.datamodel.RawSeriesData;
 import io.softwareecg.awb.sdk.datamodel.SeriesData;
@@ -95,7 +94,7 @@ public class PrometheusRemoteImportStrategy extends SplitSourceProjectImportStra
      *                                   and credentials for the Prometheus database
      */
     private void setupPrometheusClient(ImporterSourceRepository sourceRepository) {
-        prometheusClient = Lookup.lookup(PrometheusClient.class);
+        prometheusClient = new PrometheusClient();
         prometheusClient.bindToAddress(sourceRepository.getRepositoryUrl());
 
         SecurityContext securityContext = new SecurityContext();

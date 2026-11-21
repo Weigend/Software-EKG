@@ -10,7 +10,6 @@ import io.softwareecg.awb.sdk.awbapi.repository.ImporterSourceRepository;
 import io.softwareecg.awb.sdk.awbapi.repository.RepositoryException;
 import io.softwareecg.awb.sdk.awbapi.repository.SeriesImportService;
 import io.softwareecg.awb.sdk.core.log.EkgLogger;
-import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.awb.sdk.core.security.SecurityContext;
 import io.softwareecg.awb.sdk.datamodel.RawSeriesData;
 import io.softwareecg.awb.sdk.datamodel.SeriesData;
@@ -333,7 +332,7 @@ public class PrometheusLocalImportStrategy extends LocalProjectImportStrategy {
      * Configures the Prometheus client with connection details from the source repository.
      */
     private void setupPrometheusClient(ImporterSourceRepository sourceRepository) {
-        prometheusClient = Lookup.lookup(PrometheusClient.class);
+        prometheusClient = new PrometheusClient();
         prometheusClient.bindToAddress(sourceRepository.getRepositoryUrl());
 
         SecurityContext securityContext = new SecurityContext();
