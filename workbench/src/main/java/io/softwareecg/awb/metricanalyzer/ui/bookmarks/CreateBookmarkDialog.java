@@ -13,7 +13,7 @@
 package io.softwareecg.awb.metricanalyzer.ui.bookmarks;
 
 import io.softwareecg.awb.common.ui.components.FilterableComboBox;
-import io.softwareecg.awb.commons.cdi.BeanProvider;
+import io.softwareecg.awb.common.cdi.BeanProvider;
 import io.softwareecg.awb.metricanalyzer.bl.bookmarks.MetricsBookmarkService;
 import io.softwareecg.awb.metricanalyzer.bl.bookmarks.et.Bookmark;
 import io.softwareecg.awb.metricanalyzer.bl.bookmarks.et.BookmarkGroup;

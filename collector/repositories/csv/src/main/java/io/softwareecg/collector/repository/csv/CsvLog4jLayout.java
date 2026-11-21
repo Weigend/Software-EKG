@@ -13,7 +13,6 @@
 package io.softwareecg.collector.repository.csv;
 
 import io.softwareecg.collector.dt.TimeSeriesHeader;
-import io.softwareecg.collector.repository.common.CSVUtil;
 import org.apache.log4j.PatternLayout;
 
 /**
@@ -87,7 +86,7 @@ public class CsvLog4jLayout extends PatternLayout {
         legend.append(headerMetaData);
         legend.append(";");
         for (String counter : metricNames) {
-            legend.append(CSVUtil.escapeCsvColumnName(counter));
+            legend.append(CsvUtil.escapeCsvColumnName(counter));
             legend.append(';');
         }
         legend.append(System.getProperty("line.separator"));

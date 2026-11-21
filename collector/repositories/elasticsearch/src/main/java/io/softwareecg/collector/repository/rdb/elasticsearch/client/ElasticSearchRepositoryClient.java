@@ -7,8 +7,8 @@ import io.softwareecg.collector.repository.rdb.api.querymodel.delete.DeleteParam
 import io.softwareecg.collector.repository.rdb.api.querymodel.search.SearchParams;
 import io.softwareecg.collector.repository.rdb.api.querymodel.search.SearchResult;
 import io.softwareecg.collector.repository.rdb.api.querymodel.status.QueryStatus;
-import io.softwareecg.collector.repository.rdb.elasticsearch.client.utils.ObjectBinder;
-import io.softwareecg.collector.repository.rdb.elasticsearch.client.utils.SchemaBuilder;
+import io.softwareecg.collector.repository.rdb.elasticsearch.client.util.ObjectBinder;
+import io.softwareecg.collector.repository.rdb.elasticsearch.client.util.SchemaBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.elasticsearch.action.ActionRequest;

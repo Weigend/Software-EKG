@@ -12,7 +12,7 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.application.base;
 
-import io.softwareecg.awb.commons.about.VersionInfo;
+import io.softwareecg.awb.common.about.VersionInfo;
 import org.junit.Before;
 import org.junit.Test;
 

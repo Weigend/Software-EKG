@@ -40,7 +40,7 @@ com.example.ekg.ApplianceCounterSource
 ```
 
 Most sources do not implement `queryCounter` themselves. They extend
-`io.softwareecg.collector.source.common.AbstractCounterSource` and read one metric at a time:
+`io.softwareecg.collector.source.AbstractCounterSource` and read one metric at a time:
 
 ```java
 public final class ApplianceCounterSource extends AbstractCounterSource {

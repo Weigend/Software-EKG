@@ -1,6 +1,6 @@
 package io.softwareecg.awb.da.solr.export;
 
-import io.softwareecg.awb.da.solr.utils.LoggingUtils;
+import io.softwareecg.awb.da.solr.util.LoggingUtils;
 import io.softwareecg.awb.sdk.awbapi.repository.RepositoryException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrClient;

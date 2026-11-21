@@ -19,7 +19,7 @@ import io.softwareecg.collector.common.SleepUtil;
 import io.softwareecg.collector.config.CounterDescriptor;
 import io.softwareecg.collector.dt.MetricDefinition;
 import io.softwareecg.collector.source.*;
-import io.softwareecg.collector.source.common.AbstractCounterSource;
+import io.softwareecg.collector.source.AbstractCounterSource;
 import org.apache.commons.lang3.StringUtils;
 import org.jolokia.client.J4pClient;
 import org.jolokia.client.exception.J4pConnectException;
@@ -72,7 +72,7 @@ public class JolokiaCounterSource extends AbstractCounterSource implements Count
     private static final boolean USE_BULK_QUERY = CollectorProperties.isBulkQuery();
 
     /* (non-Javadoc)
-     * @see io.softwareecg.collector.source.common.AbstractCounterSource#querySingleCounter(CounterDescriptor, MetricDefinition)
+     * @see io.softwareecg.collector.source.AbstractCounterSource#querySingleCounter(CounterDescriptor, MetricDefinition)
      */
     @Override
     public double querySingleCounter(CounterDescriptor descriptor, MetricDefinition metricDefinition) {
@@ -148,7 +148,7 @@ public class JolokiaCounterSource extends AbstractCounterSource implements Count
     }
 
     /* (non-Javadoc)
-     * @see io.softwareecg.collector.source.common.AbstractCounterSource#queryCounter(CounterDescriptor)
+     * @see io.softwareecg.collector.source.AbstractCounterSource#queryCounter(CounterDescriptor)
      */
     @Override
     public CounterSeries queryCounter(CounterDescriptor descriptor) {

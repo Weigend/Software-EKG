@@ -1,9 +1,9 @@
 package io.softwareecg.awb.metricanalyzer.ui.explorer.builders;
 
 import io.softwareecg.awb.common.ui.explorer.api.ProgressNotifier;
-import io.softwareecg.awb.explorer.ui.items.common.RepositoryBaseItem;
+import io.softwareecg.awb.explorer.ui.items.RepositoryBaseItem;
 import io.softwareecg.awb.metricanalyzer.ui.api.FilterContext;
-import io.softwareecg.awb.metricanalyzer.ui.explorer.items.common.ProjectBookmarksItem;
+import io.softwareecg.awb.metricanalyzer.ui.explorer.items.bookmarks.ProjectBookmarksItem;
 
 import java.util.List;
 

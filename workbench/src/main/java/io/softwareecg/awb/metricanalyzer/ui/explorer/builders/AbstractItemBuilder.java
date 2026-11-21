@@ -2,9 +2,9 @@ package io.softwareecg.awb.metricanalyzer.ui.explorer.builders;
 
 import io.softwareecg.awb.common.ui.explorer.api.AbstractItem;
 import io.softwareecg.awb.common.ui.explorer.api.ProgressNotifier;
-import io.softwareecg.awb.explorer.ui.items.common.ProjectItem;
-import io.softwareecg.awb.explorer.ui.items.common.RepositoryBaseItem;
-import io.softwareecg.awb.explorer.ui.items.common.RepositoryItem;
+import io.softwareecg.awb.explorer.ui.items.ProjectItem;
+import io.softwareecg.awb.explorer.ui.items.RepositoryBaseItem;
+import io.softwareecg.awb.explorer.ui.items.RepositoryItem;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.NamedValueEntity;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.QueryFilterParams;
 import io.softwareecg.awb.metricanalyzer.ui.api.ContextAwareItem;

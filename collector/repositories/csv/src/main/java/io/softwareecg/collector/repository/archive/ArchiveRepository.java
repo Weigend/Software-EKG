@@ -16,8 +16,8 @@ import io.softwareecg.collector.common.CollectorProperties;
 import io.softwareecg.collector.common.LoggerFactory;
 import io.softwareecg.collector.dt.TimeSeriesHeader;
 import io.softwareecg.collector.repository.StaticTimeSeriesRepository;
-import io.softwareecg.collector.repository.common.CSVUtil;
-import io.softwareecg.collector.repository.common.CommonConstants;
+import io.softwareecg.collector.repository.csv.CsvUtil;
+import io.softwareecg.collector.repository.csv.CsvFormats;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
@@ -206,7 +206,7 @@ public class ArchiveRepository implements StaticTimeSeriesRepository {
             StringBuilder legend = new StringBuilder();
             legend.append("Date" + CSV_DELIMITER);
             for (String counter : counters) {
-                legend.append(CSVUtil.escapeCsvColumnName(counter));
+                legend.append(CsvUtil.escapeCsvColumnName(counter));
                 legend.append(CSV_DELIMITER);
             }
             legend.append(System.getProperty(LINE_SEPARATOR));
@@ -228,8 +228,8 @@ public class ArchiveRepository implements StaticTimeSeriesRepository {
             validateThreadId();
 
             StringBuilder line = new StringBuilder();
-            DateFormat format = CommonConstants.getDateFormat();
-            NumberFormat numberFormat = CommonConstants.getDecimalFormat();
+            DateFormat format = CsvFormats.getDateFormat();
+            NumberFormat numberFormat = CsvFormats.getDecimalFormat();
             line.append(format.format(date)).append(CSV_DELIMITER);
             for (int j = 0; j < metricValues.length; j++) {
                 if (metricValues[j] != null) {

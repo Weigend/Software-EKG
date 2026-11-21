@@ -1,8 +1,6 @@
 package io.softwareecg.awb.explorer.ui.items;
 
 import io.softwareecg.awb.common.ui.explorer.api.ProgressNotifier;
-import io.softwareecg.awb.explorer.ui.items.common.ProjectItem;
-import io.softwareecg.awb.explorer.ui.items.common.RepositoryBaseItem;
 import io.softwareecg.awb.project.api.ProjectDataAccessService;
 import io.softwareecg.awb.project.api.model.Project;
 import io.softwareecg.awb.sdk.awbapi.project.ProjectFlavor;

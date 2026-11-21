@@ -166,6 +166,8 @@ Workbench extensions inside the consolidated module and validate its architectur
   Windows host behind a firewall is read by a Collector on the host itself; see
   [Architecture](architecture.md#the-measured-systems). The HTTPS and WebSocket connectors of
   earlier versions are removed.
+- The base class of the Collector sources is `io.softwareecg.collector.source.AbstractCounterSource`;
+  it was in the package `source.common` before. A source of your own changes its import.
 - Unix parser output varies by tool implementation. `unix` expects the batch mode of the Linux
   `top`.
 - The JSON repository of earlier versions, which was never part of the distribution, is removed.

@@ -1,7 +1,7 @@
 package io.softwareecg.awb.metricanalyzer.ui.api;
 
 import io.softwareecg.awb.explorer.ui.TreeIconsProviderRegistry;
-import io.softwareecg.awb.explorer.ui.items.common.RepositoryBaseItem;
+import io.softwareecg.awb.explorer.ui.items.RepositoryBaseItem;
 import io.softwareecg.awb.project.api.model.Project;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.wfx.lookup.api.Lookup;

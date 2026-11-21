@@ -16,7 +16,6 @@ import io.softwareecg.collector.common.CollectorProperties;
 import io.softwareecg.collector.config.CounterDescriptor;
 import io.softwareecg.collector.repository.RepositoryFactory;
 import io.softwareecg.collector.repository.StaticTimeSeriesRepository;
-import io.softwareecg.collector.repository.common.CSVUtil;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -43,8 +42,8 @@ public class CsvRepositoryFactory implements RepositoryFactory {
 
         File dir = createLogfileDirectory();
 
-        String filePath = dir + "/" + CSVUtil.escape(descriptor.getNodeAddress()) + "_" + CSVUtil.escape(descriptor.getProcessLabel()) + "_"
-                + CSVUtil.escape(descriptor.getMetricGroupId());
+        String filePath = dir + "/" + CsvUtil.escape(descriptor.getNodeAddress()) + "_" + CsvUtil.escape(descriptor.getProcessLabel()) + "_"
+                + CsvUtil.escape(descriptor.getMetricGroupId());
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.US);
         String date = dateFormat.format(START_DATE).replaceAll(" ", "-").replaceAll(":", "-").replaceAll("\\.", "-");

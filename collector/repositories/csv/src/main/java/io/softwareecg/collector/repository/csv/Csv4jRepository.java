@@ -15,7 +15,6 @@ package io.softwareecg.collector.repository.csv;
 import io.softwareecg.collector.common.LoggerFactory;
 import io.softwareecg.collector.dt.TimeSeriesHeader;
 import io.softwareecg.collector.repository.StaticTimeSeriesRepository;
-import io.softwareecg.collector.repository.common.CommonConstants;
 import org.slf4j.Logger;
 
 import java.io.BufferedOutputStream;
@@ -133,7 +132,7 @@ public class Csv4jRepository implements StaticTimeSeriesRepository {
         }
         StringBuilder line = new StringBuilder();
 
-        NumberFormat numberFormat = CommonConstants.getDecimalFormat();
+        NumberFormat numberFormat = CsvFormats.getDecimalFormat();
         line.append(date.getTime()).append(CSV_DELIMITER);
 
         // Write one column in the CSV for each metric value. A value that is missing leaves its

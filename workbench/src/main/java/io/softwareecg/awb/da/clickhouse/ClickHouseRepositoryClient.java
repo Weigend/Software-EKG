@@ -1,7 +1,7 @@
 package io.softwareecg.awb.da.clickhouse;
 
 import io.softwareecg.awb.da.clickhouse.expression.ClickHouseExpressionRenderer;
-import io.softwareecg.awb.da.clickhouse.utils.ClickHouseObjectBinder;
+import io.softwareecg.awb.da.clickhouse.util.ClickHouseObjectBinder;
 import io.softwareecg.awb.da.api.RepositoryClient;
 import io.softwareecg.awb.da.api.RepositoryNotAvailableException;
 import io.softwareecg.awb.da.api.dataobject.admin.CollectionProperties;

@@ -20,7 +20,7 @@ import io.softwareecg.collector.source.CounterSeries;
 import io.softwareecg.collector.source.CounterWildcardSupport;
 import io.softwareecg.collector.source.ExpandWildcardResponse;
 import io.softwareecg.collector.source.ExpandWildcardResultType;
-import io.softwareecg.collector.source.common.AbstractCounterSource;
+import io.softwareecg.collector.source.AbstractCounterSource;
 import org.slf4j.Logger;
 
 import java.net.InetAddress;

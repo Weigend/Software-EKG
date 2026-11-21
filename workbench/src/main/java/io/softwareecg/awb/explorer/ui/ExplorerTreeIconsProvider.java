@@ -1,7 +1,7 @@
 package io.softwareecg.awb.explorer.ui;
 
 import io.softwareecg.awb.common.ui.explorer.api.TreeIconsProvider;
-import io.softwareecg.awb.explorer.ui.items.common.ProjectItem;
+import io.softwareecg.awb.explorer.ui.items.ProjectItem;
 import javafx.scene.Node;
 
 /**

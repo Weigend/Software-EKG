@@ -2,8 +2,8 @@ package io.softwareecg.awb.aichat.ui;
 
 import io.softwareecg.awb.aichat.bl.backend.AiBackendConfig;
 import io.softwareecg.awb.common.ui.view.EkgView;
-import io.softwareecg.awb.commons.module.EkgModule;
-import io.softwareecg.awb.commons.module.ModuleException;
+import io.softwareecg.awb.common.module.EkgModule;
+import io.softwareecg.awb.common.module.ModuleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

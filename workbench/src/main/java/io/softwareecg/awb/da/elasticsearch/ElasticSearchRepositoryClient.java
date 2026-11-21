@@ -14,7 +14,7 @@ import co.elastic.clients.elasticsearch.core.ScrollResponse;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.bulk.BulkOperation;
 import co.elastic.clients.elasticsearch.core.bulk.BulkResponseItem;
-import io.softwareecg.awb.da.elasticsearch.utils.ObjectBinder;
+import io.softwareecg.awb.da.elasticsearch.util.ObjectBinder;
 import io.softwareecg.awb.da.api.RepositoryClient;
 import io.softwareecg.awb.da.api.dataobject.delete.DeleteParams;
 import io.softwareecg.awb.da.api.dataobject.expr.Expression;

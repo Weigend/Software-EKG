@@ -4,7 +4,7 @@ import io.softwareecg.collector.common.LoggerFactory;
 import io.softwareecg.collector.repository.rdb.api.RdbRepositoryAdmin;
 import io.softwareecg.collector.repository.rdb.api.RdbRepositoryException;
 import io.softwareecg.collector.repository.rdb.api.querymodel.admin.CollectionProperties;
-import io.softwareecg.collector.repository.rdb.elasticsearch.client.utils.SchemaBuilder;
+import io.softwareecg.collector.repository.rdb.elasticsearch.client.util.SchemaBuilder;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;

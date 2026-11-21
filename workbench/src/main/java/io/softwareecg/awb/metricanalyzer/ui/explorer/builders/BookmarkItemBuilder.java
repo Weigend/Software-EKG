@@ -1,15 +1,15 @@
 package io.softwareecg.awb.metricanalyzer.ui.explorer.builders;
 
 import io.softwareecg.awb.common.ui.explorer.api.ProgressNotifier;
-import io.softwareecg.awb.explorer.ui.items.common.RepositoryBaseItem;
+import io.softwareecg.awb.explorer.ui.items.RepositoryBaseItem;
 import io.softwareecg.awb.metricanalyzer.bl.bookmarks.MetricsBookmarkService;
 import io.softwareecg.awb.metricanalyzer.bl.bookmarks.et.Bookmark;
 import io.softwareecg.awb.metricanalyzer.bl.bookmarks.et.BookmarkGroup;
 import io.softwareecg.awb.metricanalyzer.ui.api.FilterContext;
-import io.softwareecg.awb.metricanalyzer.ui.explorer.items.common.BookmarkGroupItem;
-import io.softwareecg.awb.metricanalyzer.ui.explorer.items.common.BookmarkItem;
-import io.softwareecg.awb.metricanalyzer.ui.explorer.items.common.ProjectBookmarksItem;
-import io.softwareecg.awb.metricanalyzer.ui.explorer.items.common.ReproBookmarksItem;
+import io.softwareecg.awb.metricanalyzer.ui.explorer.items.bookmarks.BookmarkGroupItem;
+import io.softwareecg.awb.metricanalyzer.ui.explorer.items.bookmarks.BookmarkItem;
+import io.softwareecg.awb.metricanalyzer.ui.explorer.items.bookmarks.ProjectBookmarksItem;
+import io.softwareecg.awb.metricanalyzer.ui.explorer.items.bookmarks.ReproBookmarksItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

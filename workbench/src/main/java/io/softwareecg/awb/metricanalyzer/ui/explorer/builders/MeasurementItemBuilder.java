@@ -2,7 +2,7 @@ package io.softwareecg.awb.metricanalyzer.ui.explorer.builders;
 
 import io.softwareecg.awb.common.ui.explorer.api.ProgressNotifier;
 import io.softwareecg.awb.explorer.ui.items.ItemBuilder;
-import io.softwareecg.awb.explorer.ui.items.common.RepositoryBaseItem;
+import io.softwareecg.awb.explorer.ui.items.RepositoryBaseItem;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.MetricDataAccessService;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.Measurement;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.MetricQuery;

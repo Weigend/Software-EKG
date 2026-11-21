@@ -16,7 +16,7 @@ import io.softwareecg.collector.common.CollectorProperties;
 import io.softwareecg.collector.config.CounterDescriptor;
 import io.softwareecg.collector.repository.RepositoryFactory;
 import io.softwareecg.collector.repository.StaticTimeSeriesRepository;
-import io.softwareecg.collector.repository.common.CSVUtil;
+import io.softwareecg.collector.repository.csv.CsvUtil;
 
 import java.io.File;
 import java.util.Calendar;
@@ -46,8 +46,8 @@ public class ArchiveRepositoryFactory implements RepositoryFactory {
 
         // todo SKR: create JSON Header here
 
-        String filePath = dir + "/" + CSVUtil.escape(descriptor.getNodeAddress()) + "_" + CSVUtil.escape(descriptor.getProcessLabel()) + "_"
-                + CSVUtil.escape(descriptor.getMetricGroupId());
+        String filePath = dir + "/" + CsvUtil.escape(descriptor.getNodeAddress()) + "_" + CsvUtil.escape(descriptor.getProcessLabel()) + "_"
+                + CsvUtil.escape(descriptor.getMetricGroupId());
 
 
         return new ArchiveRepository(filePath);

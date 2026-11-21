@@ -1,12 +1,12 @@
 package io.softwareecg.awb.metricanalyzer.ui.explorer;
 
 import io.softwareecg.awb.common.ui.explorer.api.ItemBuilderRegistry;
-import io.softwareecg.awb.explorer.ui.items.common.ProjectItem;
-import io.softwareecg.awb.explorer.ui.items.common.RepositoryItem;
+import io.softwareecg.awb.explorer.ui.items.ProjectItem;
+import io.softwareecg.awb.explorer.ui.items.RepositoryItem;
 import io.softwareecg.awb.metricanalyzer.ui.explorer.builders.*;
-import io.softwareecg.awb.metricanalyzer.ui.explorer.items.common.BookmarkGroupItem;
-import io.softwareecg.awb.metricanalyzer.ui.explorer.items.common.ProjectBookmarksItem;
-import io.softwareecg.awb.metricanalyzer.ui.explorer.items.common.ReproBookmarksItem;
+import io.softwareecg.awb.metricanalyzer.ui.explorer.items.bookmarks.BookmarkGroupItem;
+import io.softwareecg.awb.metricanalyzer.ui.explorer.items.bookmarks.ProjectBookmarksItem;
+import io.softwareecg.awb.metricanalyzer.ui.explorer.items.bookmarks.ReproBookmarksItem;
 import io.softwareecg.awb.metricanalyzer.ui.explorer.items.series.*;
 import io.softwareecg.awb.metricanalyzer.ui.explorer.items.series.logical.*;
 import io.softwareecg.awb.metricanalyzer.ui.explorer.items.series.physical.HostGroupItem;

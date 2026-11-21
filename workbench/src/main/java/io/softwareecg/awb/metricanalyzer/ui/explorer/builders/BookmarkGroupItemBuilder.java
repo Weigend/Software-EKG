@@ -2,12 +2,12 @@ package io.softwareecg.awb.metricanalyzer.ui.explorer.builders;
 
 import io.softwareecg.awb.common.ui.explorer.api.ProgressNotifier;
 import io.softwareecg.awb.explorer.ui.items.ItemBuilder;
-import io.softwareecg.awb.explorer.ui.items.common.RepositoryBaseItem;
+import io.softwareecg.awb.explorer.ui.items.RepositoryBaseItem;
 import io.softwareecg.awb.metricanalyzer.bl.bookmarks.MetricsBookmarkService;
 import io.softwareecg.awb.metricanalyzer.bl.bookmarks.et.BookmarkGroup;
 import io.softwareecg.awb.metricanalyzer.ui.api.FilterContext;
-import io.softwareecg.awb.metricanalyzer.ui.explorer.items.common.BookmarkGroupItem;
-import io.softwareecg.awb.metricanalyzer.ui.explorer.items.common.ProjectBookmarksItem;
+import io.softwareecg.awb.metricanalyzer.ui.explorer.items.bookmarks.BookmarkGroupItem;
+import io.softwareecg.awb.metricanalyzer.ui.explorer.items.bookmarks.ProjectBookmarksItem;
 
 import java.util.List;
 

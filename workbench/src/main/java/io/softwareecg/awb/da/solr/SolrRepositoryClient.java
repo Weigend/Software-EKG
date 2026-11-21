@@ -2,8 +2,8 @@ package io.softwareecg.awb.da.solr;
 
 
 import io.softwareecg.awb.da.solr.export.SolrExportIteratorFactory;
-import io.softwareecg.awb.da.solr.utils.LoggingUtils;
-import io.softwareecg.awb.da.solr.utils.ObjectBinder;
+import io.softwareecg.awb.da.solr.util.LoggingUtils;
+import io.softwareecg.awb.da.solr.util.ObjectBinder;
 import io.softwareecg.awb.da.api.RepositoryClient;
 import io.softwareecg.awb.da.api.RepositoryNotAvailableException;
 import io.softwareecg.awb.da.api.dataobject.delete.DeleteParams;

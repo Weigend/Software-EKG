@@ -15,7 +15,6 @@ package io.softwareecg.awb.explorer.ui.items;
 
 import io.avaje.inject.External;
 import io.softwareecg.awb.common.ui.explorer.api.AbstractItem;
-import io.softwareecg.awb.explorer.ui.items.common.RepositoryItem;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
 import io.softwareecg.awb.da.api.types.Embedded;

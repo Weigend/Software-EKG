@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.softwareecg.awb.commons.ssh.SshClient;
-import io.softwareecg.awb.commons.ssh.SshResult;
+import io.softwareecg.awb.common.ssh.SshClient;
+import io.softwareecg.awb.common.ssh.SshResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

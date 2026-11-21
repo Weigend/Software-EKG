@@ -7,7 +7,7 @@ import io.softwareecg.collector.dt.MetricDefinition;
 import io.softwareecg.collector.source.CounterWildcardSupport;
 import io.softwareecg.collector.source.ExpandWildcardResponse;
 import io.softwareecg.collector.source.ExpandWildcardResultType;
-import io.softwareecg.collector.source.common.AbstractCounterSource;
+import io.softwareecg.collector.source.AbstractCounterSource;
 import io.softwareecg.collector.source.unix.analyzer.AnalyzerStringUtils;
 import io.softwareecg.collector.source.unix.analyzer.ITerminalOutAnalyzer;
 import io.softwareecg.collector.source.unix.executor.CommandExecutor;

@@ -1,7 +1,7 @@
 package io.softwareecg.awb.metricanalyzer.ui.api;
 
 import io.softwareecg.awb.common.ui.explorer.api.AbstractItem;
-import io.softwareecg.awb.explorer.ui.items.common.ProjectItem;
+import io.softwareecg.awb.explorer.ui.items.ProjectItem;
 import io.softwareecg.awb.sdk.awbapi.project.CloudPlatformType;
 import io.softwareecg.awb.sdk.core.resourceloader.CachingSvgLoader;
 import javafx.scene.Node;

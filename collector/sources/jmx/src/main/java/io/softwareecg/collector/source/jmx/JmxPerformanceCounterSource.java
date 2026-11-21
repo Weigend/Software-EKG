@@ -19,7 +19,7 @@ import io.softwareecg.collector.dt.MetricDefinition;
 import io.softwareecg.collector.source.CounterWildcardSupport;
 import io.softwareecg.collector.source.ExpandWildcardResponse;
 import io.softwareecg.collector.source.ExpandWildcardResultType;
-import io.softwareecg.collector.source.common.AbstractCounterSource;
+import io.softwareecg.collector.source.AbstractCounterSource;
 import org.slf4j.Logger;
 
 import javax.management.*;
@@ -56,7 +56,7 @@ public class JmxPerformanceCounterSource extends AbstractCounterSource implement
 
 
     /* (non-Javadoc)
-     * @see io.softwareecg.collector.source.common.AbstractCounterSource#querySingleCounter(CounterDescriptor, MetricDefinition)
+     * @see io.softwareecg.collector.source.AbstractCounterSource#querySingleCounter(CounterDescriptor, MetricDefinition)
      */
     @Override
     public double querySingleCounter(CounterDescriptor descriptor, MetricDefinition metricDefinition) {

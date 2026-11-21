@@ -1,6 +1,6 @@
 package io.softwareecg.awb.da.solr;
 
-import io.softwareecg.awb.da.solr.utils.SolrClientCacheFactory;
+import io.softwareecg.awb.da.solr.util.SolrClientCacheFactory;
 import io.softwareecg.awb.da.api.RepositoryClient;
 import io.softwareecg.awb.da.api.RepositoryClientFactory;
 import io.softwareecg.awb.da.api.SearchIndexAdminClient;

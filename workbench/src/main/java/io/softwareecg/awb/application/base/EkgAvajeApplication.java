@@ -6,7 +6,7 @@ package io.softwareecg.awb.application.base;
 
 import io.softwareecg.awb.common.ui.events.FinishEvent;
 import io.softwareecg.awb.da.solr.embedded.UserSolrHome;
-import io.softwareecg.awb.commons.about.VersionInfo;
+import io.softwareecg.awb.common.about.VersionInfo;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.main.Main;

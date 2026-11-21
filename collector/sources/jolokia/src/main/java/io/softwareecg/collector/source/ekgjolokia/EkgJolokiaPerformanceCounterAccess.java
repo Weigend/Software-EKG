@@ -18,7 +18,7 @@ import io.softwareecg.collector.common.LoggerFactory;
 import io.softwareecg.collector.config.CounterDescriptor;
 import io.softwareecg.collector.dt.MetricDefinition;
 import io.softwareecg.collector.source.*;
-import io.softwareecg.collector.source.common.AbstractCounterSource;
+import io.softwareecg.collector.source.AbstractCounterSource;
 import org.jolokia.client.J4pClient;
 import org.jolokia.client.exception.J4pException;
 import org.jolokia.client.request.J4pListRequest;
@@ -54,7 +54,7 @@ public class EkgJolokiaPerformanceCounterAccess extends AbstractCounterSource im
     private static final boolean USE_BULK_QUERY = CollectorProperties.isBulkQuery();
 
     /* (non-Javadoc)
-     * @see io.softwareecg.collector.source.common.AbstractCounterSource#querySingleCounter(CounterDescriptor, MetricDefinition)
+     * @see io.softwareecg.collector.source.AbstractCounterSource#querySingleCounter(CounterDescriptor, MetricDefinition)
      */
     @Override
     public double querySingleCounter(CounterDescriptor descriptor, MetricDefinition metricDefinition) {
@@ -108,7 +108,7 @@ public class EkgJolokiaPerformanceCounterAccess extends AbstractCounterSource im
     }
 
     /* (non-Javadoc)
-     * @see io.softwareecg.collector.source.common.AbstractCounterSource#queryCounter(CounterDescriptor)
+     * @see io.softwareecg.collector.source.AbstractCounterSource#queryCounter(CounterDescriptor)
      */
     @Override
     public CounterSeries queryCounter(CounterDescriptor descriptor) {

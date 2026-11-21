@@ -22,7 +22,7 @@ import io.softwareecg.collector.memory.CollectorMemory;
 import io.softwareecg.collector.source.CounterWildcardSupport;
 import io.softwareecg.collector.source.Delayed;
 import io.softwareecg.collector.source.ExpandWildcardResponse;
-import io.softwareecg.collector.source.common.AbstractCounterSource;
+import io.softwareecg.collector.source.AbstractCounterSource;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.HostAccess;
 import org.graalvm.polyglot.Value;
@@ -97,7 +97,7 @@ public class CalculatedPerformanceCounter extends AbstractCounterSource implemen
 
 
     /* (non-Javadoc)
-     * @see io.softwareecg.collector.source.common.AbstractCounterSource#querySingleCounter(io.softwareecg.collector.dt.CounterDescriptor, io.softwareecg.collector.dt.MetricDefinition)
+     * @see io.softwareecg.collector.source.AbstractCounterSource#querySingleCounter(io.softwareecg.collector.dt.CounterDescriptor, io.softwareecg.collector.dt.MetricDefinition)
      */
     @Override
     public double querySingleCounter(CounterDescriptor descriptor, MetricDefinition metricDefinition) {
