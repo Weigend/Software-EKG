@@ -47,6 +47,18 @@
     <dependencySets>
         <dependencySet>
             <outputDirectory>lib</outputDirectory>
+            <excludes>
+                <!-- JavaFX, which only the display of the collector needs, goes to lib/javafx:
+                     the start scripts load it as modules, as JavaFX wants to be loaded -->
+                <exclude>org.openjfx:*</exclude>
+            </excludes>
+        </dependencySet>
+        <dependencySet>
+            <outputDirectory>lib/javafx</outputDirectory>
+            <useProjectArtifact>false</useProjectArtifact>
+            <includes>
+                <include>org.openjfx:*</include>
+            </includes>
         </dependencySet>
     </dependencySets>
 

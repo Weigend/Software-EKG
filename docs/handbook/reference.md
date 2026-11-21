@@ -12,6 +12,7 @@ current repository. Follow the linked guides for procedures and limitations.
 | --- | --- |
 | Default foreground run | `ekg-collector.sh` → `config/default/config.yaml` |
 | Named configuration | `ekg-collector.sh <configfile>` |
+| With the display | `ekg-collector.sh --ui <configfile>`; background: `EKG_COLLECTOR_UI=1` |
 | Override log directory | `ekg-collector.sh <configfile> <logdir>` |
 | JVM options | `EKG_COLLECTOR_JAVA_OPTS='-Xmx1g' ekg-collector.sh <configfile>` |
 | Dependency check | `ekg-collector.sh --check` |
@@ -59,7 +60,7 @@ Durations are `ms`, `s`, `m`, `h`, `d`. Variables are `${ENV:...}`, `${JVMOPT:..
 ## Registered Collector plugins
 
 Sources: `calc`, `mock`, `unix`, `unixio`, `unixdf`, `win`, `jmx`, `jolokia`, `ekgjolokia`, `prometheus`,
-`log`, `rlog`. `rlog` and `ekgjolokia` are legacy; see [Source modules](collector-sources.md).
+`log`. `ekgjolokia` is legacy; see [Source modules](collector-sources.md).
 
 The source `log` reads the `args` of a process as arguments separated by semicolons: `lookback`,
 `timestamp`, `zone`, `charset` and `port`. A metric of it is a regular expression, optionally with
@@ -122,6 +123,7 @@ and options.
 | `collectorPropertiesPath` | JVM property or environment variable: where `collector.properties` is |
 | `collectorRepositoryPropertiesPath` | the same for `remote-repository-config.properties` |
 | `OPENROUTER_API_KEY` | API key of the Workbench AI Assistant |
+| `io.softwareecg.collector.ui.enabled`, `.fullscreen`, `.size` | the display of the Collector: on or off (off), whole screen (no), size of its window (800x480) |
 | `EKG_SKIP_CHECKS=1` | let the Workbench start despite display/library preflight failures |
 | `EKG_SOLR_HOME` | move embedded Solr base (JVM property: `ekg.solr.baseDir`) |
 | `~/.ekg/metadata.mv.db` | project/repository/bookmark/source metadata |
@@ -153,16 +155,17 @@ Workbench extensions inside the consolidated module and validate its architectur
 ## Known compatibility and incomplete surfaces
 
 - Legacy Collector XML is readable/convertible; YAML is the current format.
-- The standalone Collector JavaFX UI exists but is not the primary maintained workflow.
+- The display of the Collector has not been run on a Raspberry Pi, with a touch screen or on
+  Windows yet. The standalone Collector UI of earlier versions, with its login and its settings
+  dialogs, is replaced by it.
 - `log` builds one series per expression, not one per captured value, and does not store the text
-  of the lines. `logevents` is not registered as a source; `rlog` downloads whole files.
+  of the lines. The source `rlog` and the module `logevents` of earlier versions are removed.
 - `ekgjolokia` targets the historical filtered endpoint; prefer `jolokia`.
 - Windows counters can be written with their English names on a Windows of every language. The
   source `win` needs a Collector on Windows with the native library; `%1` is not a placeholder.
 - Unix parser output varies by tool implementation. `unix` expects the batch mode of the Linux
   `top`.
-- The JSON repository and the `logevents` module are in the source tree but not in the Collector
-  distribution.
+- The JSON repository is in the source tree but not in the Collector distribution.
 - The AI Assistant is bound to OpenRouter and `OPENROUTER_API_KEY`; its SSH tool runs a command
   only after explicit approval. Its conclusions are not a substitute for saved evidence.
 

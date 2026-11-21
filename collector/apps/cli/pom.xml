@@ -17,6 +17,9 @@
     <properties>
         <!-- the name of the distribution: its directory and its ZIP -->
         <collectorProductName>software-ekg-collector-${project.version}</collectorProductName>
+        <!-- what the runtime of a distribution has besides the modules of the collector; see the
+             profile 'jdk-with-javafx' -->
+        <collector.jre.javafx></collector.jre.javafx>
     </properties>
 
     <dependencies>
@@ -61,6 +64,13 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>collector-source-log</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- The display of the collector, switched off unless the collector is told otherwise. -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>collector-ui</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -134,6 +144,20 @@
     </build>
 
     <profiles>
+        <!-- The display of the collector needs JavaFX. A runtime cut out of a JDK that comes with
+             JavaFX does not take the JavaFX of lib/javafx beside it, so it gets its own: the
+             modules of that JDK. The runtime of any other JDK loads the ones of lib/javafx. -->
+        <profile>
+            <id>jdk-with-javafx</id>
+            <activation>
+                <file>
+                    <exists>${java.home}/jmods/javafx.controls.jmod</exists>
+                </file>
+            </activation>
+            <properties>
+                <collector.jre.javafx>,javafx.base,javafx.graphics,javafx.controls</collector.jre.javafx>
+            </properties>
+        </profile>
         <!-- mvn package -Pdist: the distribution with its own Java runtime, as a ZIP in 'product'.
              The runtime is cut from the JDK the build runs with and fits its platform. -->
         <profile>
@@ -157,7 +181,7 @@
                                     <executable>${java.home}/bin/jlink</executable>
                                     <arguments>
                                         <argument>--add-modules</argument>
-                                        <argument>java.base,java.logging,java.xml,java.desktop,java.naming,java.management,java.sql,java.instrument,java.security.jgss,java.net.http,jdk.crypto.ec,jdk.unsupported</argument>
+                                        <argument>java.base,java.logging,java.xml,java.desktop,java.naming,java.management,java.sql,java.instrument,java.security.jgss,java.net.http,jdk.crypto.ec,jdk.unsupported${collector.jre.javafx}</argument>
                                         <argument>--strip-debug</argument>
                                         <argument>--no-header-files</argument>
                                         <argument>--no-man-pages</argument>

@@ -23,6 +23,9 @@
 #   EKG_COLLECTOR_JAVA_OPTS   options for the JVM (default: -Xmx386m). To have the collector
 #                             measured itself over Jolokia, add
 #                             -javaagent:lib/jolokia-jvm-1.6.0-agent.jar=port=8778,host=localhost
+#   EKG_COLLECTOR_UI          set to 1 to show on a screen of this machine what the collector is
+#                             doing. A service has no screen of its own: it needs DISPLAY (and
+#                             the right to use that screen) in its environment as well.
 #   JAVA_HOME                 the Java 25 runtime, unless the distribution brings one in "jre"
 #   and whatever the configuration refers to with ${ENV:NAME} - passwords, for example.
 
@@ -46,6 +49,10 @@ STDERR="$HERE/stderr.log"
 # JavaScript engine of the calculated metrics and by the Windows counters, and that engine
 # uses sun.misc.Unsafe and runs without a compiler of its own.
 QUIET="--enable-native-access=ALL-UNNAMED --sun-misc-unsafe-memory-access=allow -Dpolyglot.engine.WarnInterpreterOnly=false"
+
+if [ "${EKG_COLLECTOR_UI:-}" = "1" ]; then
+    JAVA_OPTS="$JAVA_OPTS -Dcollector.ui=true"
+fi
 
 MIN_JAVA=25
 JAVA=""
@@ -125,6 +132,16 @@ start() {
         echo "The log directory $LOGDIR cannot be written. Set EKG_COLLECTOR_LOGDIR to another one." >&2
         return 1
     fi
+    # The display of the collector needs JavaFX, which wants to be loaded as modules: from the
+    # runtime if it has it, from lib/javafx otherwise. Not every runtime takes the modules of
+    # lib/javafx, so they are tried first: collecting must not depend on it.
+    FX=()
+    if ls "$HERE"/lib/javafx/javafx-*.jar > /dev/null 2>&1; then
+        FX=(--module-path "$HERE/lib/javafx" --add-modules javafx.controls --enable-native-access=javafx.graphics)
+        if ! "$JAVA" "${FX[@]}" -version > /dev/null 2>&1; then
+            FX=()
+        fi
+    fi
     if ! touch "$PID_FILE" "$STDERR" 2> /dev/null; then
         echo "$HERE cannot be written; the collector keeps its pid and the output of the JVM there." >&2
         return 1
@@ -132,7 +149,7 @@ start() {
     # relative paths of the configuration and of the repository are meant from here
     cd "$HERE" || return 1
     # shellcheck disable=SC2086
-    nohup "$JAVA" $JAVA_OPTS $QUIET \
+    nohup "$JAVA" $JAVA_OPTS $QUIET ${FX[@]+"${FX[@]}"} \
         -Dlogback.configurationFile="$HERE/config/logback.xml" \
         -Dcollector.log.dir="$LOGDIR" \
         -classpath "$HERE/config:$HERE/lib/*" \

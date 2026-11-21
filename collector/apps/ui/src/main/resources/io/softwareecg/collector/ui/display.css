@@ -1,0 +1,198 @@
+/*
+ * The display of the collector. Dark, because it is looked at in a rack or on a wall, and large
+ * enough to be read from a step away and to be tapped with a finger.
+ */
+
+.display {
+    -ekg-background: #0b1c26;
+    -ekg-surface: #132c3a;
+    -ekg-surface-raised: #1a3a4c;
+    -ekg-text: #e9f3f8;
+    -ekg-text-dim: #93adbb;
+    -ekg-accent: #35c8f5;
+    -ekg-ok: #4cd08a;
+    -ekg-starting: #f0b64a;
+    -ekg-problem: #ff6b6b;
+    -ekg-stopped: #93adbb;
+
+    -fx-background-color: -ekg-background;
+    -fx-font-size: 16px;
+    -fx-font-family: "DejaVu Sans", "Noto Sans", "Segoe UI", "Helvetica Neue", sans-serif;
+}
+
+.display .label {
+    -fx-text-fill: -ekg-text;
+}
+
+/* --- header ------------------------------------------------------------------------------- */
+
+.header {
+    -fx-background-color: linear-gradient(to right, #0d3142, #11475e);
+    -fx-padding: 10 16 10 16;
+    -fx-min-height: 56;
+}
+
+.title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.clock {
+    -fx-font-size: 18px;
+    -fx-text-fill: -ekg-text-dim;
+    -fx-font-family: "DejaVu Sans Mono", "Noto Sans Mono", "Consolas", monospace;
+}
+
+.pill {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-padding: 6 14 6 14;
+    -fx-background-radius: 16;
+    -fx-background-color: -ekg-surface-raised;
+}
+
+.pill.ok       { -fx-background-color: -ekg-ok;       -fx-text-fill: #06231a; }
+.pill.starting { -fx-background-color: -ekg-starting; -fx-text-fill: #2b1d00; }
+.pill.problem  { -fx-background-color: -ekg-problem;  -fx-text-fill: #2c0505; }
+.pill.stopped  { -fx-background-color: -ekg-stopped;  -fx-text-fill: #0b1c26; }
+
+/* --- pages -------------------------------------------------------------------------------- */
+
+.page {
+    -fx-padding: 12 14 12 14;
+    -fx-background-color: -ekg-background;
+}
+
+.tile {
+    -fx-background-color: -ekg-surface;
+    -fx-background-radius: 10;
+    -fx-padding: 8 16 10 16;
+}
+
+.tile-value {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+}
+
+.tile-value.problem {
+    -fx-text-fill: -ekg-problem;
+}
+
+.tile-caption, .running, .row-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: -ekg-text-dim;
+}
+
+/* --- lists -------------------------------------------------------------------------------- */
+
+.rows {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.rows .list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 8 0;
+}
+
+.rows .row {
+    -fx-background-color: transparent, -ekg-surface;
+    -fx-background-insets: 0, 0 0 8 0;
+    -fx-background-radius: 0, 10;
+    -fx-padding: 12 14 20 14;
+    -fx-min-height: 72;
+}
+
+.rows .row:empty {
+    -fx-background-color: transparent;
+    -fx-min-height: 0;
+}
+
+.rows .row:pressed {
+    -fx-background-color: transparent, -ekg-surface-raised;
+}
+
+.row-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.mark {
+    -fx-min-width: 8;
+    -fx-max-width: 8;
+    -fx-min-height: 40;
+    -fx-background-radius: 4;
+    -fx-background-color: -ekg-stopped;
+}
+
+.mark.ok       { -fx-background-color: -ekg-ok; }
+.mark.starting { -fx-background-color: -ekg-starting; }
+.mark.problem  { -fx-background-color: -ekg-problem; }
+
+.state-text {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.state-text.ok       { -fx-text-fill: -ekg-ok; }
+.state-text.starting { -fx-text-fill: -ekg-starting; }
+.state-text.problem  { -fx-text-fill: -ekg-problem; }
+.state-text.stopped  { -fx-text-fill: -ekg-stopped; }
+
+.display .error-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: #ffb3b3;
+}
+
+.display .chevron {
+    -fx-font-size: 26px;
+    -fx-text-fill: -ekg-text-dim;
+}
+
+.metric-value {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.display .placeholder {
+    -fx-text-fill: -ekg-text-dim;
+}
+
+.back {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -ekg-text;
+    -fx-background-color: -ekg-surface-raised;
+    -fx-background-radius: 10;
+    -fx-padding: 12 20 12 16;
+    -fx-min-height: 52;
+}
+
+.back:pressed {
+    -fx-background-color: -ekg-accent;
+    -fx-text-fill: #06222e;
+}
+
+/* --- scroll bars: wide enough to be seen, the lists themselves are dragged ----------------- */
+
+.rows .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 10;
+}
+
+.rows .scroll-bar:vertical .thumb {
+    -fx-background-color: #2c566b;
+    -fx-background-radius: 5;
+}
+
+.rows .scroll-bar .increment-button, .rows .scroll-bar .decrement-button,
+.rows .scroll-bar .increment-arrow, .rows .scroll-bar .decrement-arrow {
+    -fx-padding: 0;
+    -fx-shape: "";
+}
+
+.rows .scroll-bar:horizontal {
+    -fx-pref-height: 0;
+    -fx-opacity: 0;
+}

@@ -29,7 +29,8 @@ public record CollectorJobStatus(
         CollectorJobStateEnum state,
         int metricCount,
         Instant lastSampleTime,
-        String lastError) {
+        String lastError,
+        CollectorJobValues latestValues) {
 
     /**
      * @return {@code true} if the job does not deliver values: the source is unreachable,

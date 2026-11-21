@@ -10,7 +10,7 @@ adapter. It can run beside a workload (`sidecar`) or reach multiple systems (`re
 ## Command line and service
 
 ```text
-ekg-collector.sh [<config.yaml> [<log directory>]]
+ekg-collector.sh [--ui] [<config.yaml> [<log directory>]]
 ekg-collector.sh --convert <config.xml> [<config.yaml>]
 ekg-collector.sh --check | --version | --help
 ```
@@ -299,10 +299,76 @@ Start with the `mock` configuration, then add one real metric, one process and o
 log for wildcard expansion and repository writes before scaling out. A value of `-1` conventionally
 means a source read failed; Prometheus returns no row on an unreachable API and logs state changes.
 
-The engine exposes start/stop and per-job status internally; the service wrapper exposes process
-status. The separate JavaFX Collector UI still exists as a legacy application with login, runtime,
-storage, settings/config import and a simple chart, but the maintained operational path is the
-headless CLI plus the Workbench.
+The state of every job is written to the log whenever it changes. The script for background
+operation tells whether the process runs. What the jobs are doing can also be shown on a screen
+of the machine itself; see [The display](#the-display).
+
+## The display
+
+A Collector can show on a screen of the machine it runs on what it is doing. It is made for a
+small touch screen, such as the 7 inch panel of a Raspberry Pi, and is switched off unless the
+Collector is told otherwise.
+
+![The display of a Collector: its jobs, one of them with a problem](../images/collector-display-overview.png)
+
+The first page shows the Collector at a glance: the number of jobs, how many deliver and how many
+have a problem, and for how long it has been running. Below are the jobs, those with a problem
+first, each with its state in a colour and in words, and with what is wrong.
+
+A tap on a job opens it: its metrics with the value read last, the smallest and largest of the
+last 120 readings, and a small curve of them. **Jobs** leads back.
+
+![A job with its metrics, the values read last and their curves](../images/collector-display-job.png)
+
+The display is a look at the Collector and nothing more. It starts and stops nothing and changes
+no setting, so it needs no login. Closing its window leaves the Collector collecting. The curves
+begin when the display is started; they are not the stored values.
+
+### Switching it on
+
+```bash
+./ekg-collector.sh --ui config/unix/config.yaml
+```
+
+or, for every start and for the Windows launchers, in `config/collector.properties`:
+
+```properties
+io.softwareecg.collector.ui.enabled=true
+io.softwareecg.collector.ui.fullscreen=true
+io.softwareecg.collector.ui.size=800x480
+```
+
+| Setting | Effect | Default |
+| --- | --- | --- |
+| `enabled` | show the display | `false` |
+| `fullscreen` | take the whole screen, as a panel does; there is no way out of it but ending the Collector | `false` |
+| `size` | the size of the window otherwise, as width x height | `800x480` |
+
+For background operation set `EKG_COLLECTOR_UI=1`. A service has no screen of its own: it also
+needs `DISPLAY`, and the right to use that screen, in its environment.
+
+### What it needs
+
+- A graphical session on the machine: X11, or Wayland with XWayland.
+- JavaFX. The distribution brings it in `lib/javafx`, for the operating system and processor it
+  was built on. `./ekg-collector.sh --check` says whether the display is available.
+- If the display cannot be started (no screen, no JavaFX for this machine), the Collector logs
+  the reason and collects without it.
+
+### On a Raspberry Pi
+
+The released packages are built for Linux on x64, macOS and Windows. For a Raspberry Pi, build
+the Collector on the Pi itself, so that it gets the JavaFX for its processor:
+
+```bash
+mvn -pl collector/apps/cli -am package -DskipTests
+```
+
+It needs a Java 25 runtime for ARM, a 64 bit operating system with a desktop, and Maven. Set
+`fullscreen=true` and start the Collector with the desktop session.
+
+The display was developed and tried on Linux x64. It has not been run on a Raspberry Pi or with a
+touch screen yet, and the Windows launchers with it have not been run either.
 
 ## Complete examples
 

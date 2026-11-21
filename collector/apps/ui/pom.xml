@@ -11,11 +11,13 @@
 
     <artifactId>collector-ui</artifactId>
     <packaging>jar</packaging>
-    <name>Software-EKG - Collector - UI</name>
 
-    <properties>
-        <javafx.version>25.0.5.1</javafx.version>
-    </properties>
+    <name>Software-EKG - Collector - Display</name>
+    <description>
+        Shows on a screen of the machine a collector runs on what the collector is doing: the state
+        of its jobs and the values they read. Made for a small touch screen. Part of the collector
+        distribution, switched off unless the collector is told otherwise.
+    </description>
 
     <dependencies>
         <dependency>
@@ -24,25 +26,10 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- JavaFX dependencies -->
+        <!-- JavaFX; graphics and base come with the controls, for the platform of the build -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>${javafx.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>${javafx.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-graphics</artifactId>
-            <version>${javafx.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-base</artifactId>
             <version>${javafx.version}</version>
         </dependency>
     </dependencies>

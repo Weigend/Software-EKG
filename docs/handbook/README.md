@@ -22,7 +22,7 @@ German text where the current JavaFX application does.
 | --- | --- |
 | Product purpose, offline analysis, adapters | [Concepts](concepts.md) |
 | Installation, first chart with New Analysis, first Collector run | [Getting started](getting-started.md) |
-| Collector CLI, YAML, scheduling, variables, service mode | [Collector](collector.md) |
+| Collector CLI, YAML, scheduling, variables, service mode, display | [Collector](collector.md) |
 | Mock, Unix `top`, `iostat`, `df`, Windows, JMX, Jolokia, Prometheus, logs | [Source modules](collector-sources.md) |
 | CSV/archive, Solr and Elasticsearch output | [Collector repositories](collector-repositories.md) |
 | Projects, repositories, New Analysis, explorer, charts, bookmarks, exports, AI Assistant | [Workbench](workbench.md) |

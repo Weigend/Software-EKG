@@ -2,7 +2,7 @@
 #
 # Starts the Software-EKG collector in the foreground.
 #
-#   ekg-collector.sh [<config.yaml> [<log directory>]]
+#   ekg-collector.sh [--ui] [<config.yaml> [<log directory>]]
 #   ekg-collector.sh --convert <config.xml> [<config.yaml>]
 #   ekg-collector.sh --check      only check what the collector needs on this machine and report
 #   ekg-collector.sh --version
@@ -11,7 +11,9 @@
 # Without a configuration it runs config/default/config.yaml, which reads invented values.
 # The examples in the directory config show the real sources; config/current/config-template.yaml
 # explains every setting. --convert turns a configuration in the XML format of earlier
-# versions into YAML.
+# versions into YAML. --ui shows on a screen of this machine what the collector is doing: the
+# state of its jobs and the values they read. The same as io.softwareecg.collector.ui.enabled=true
+# in config/collector.properties.
 #
 # Needs a Java 25 runtime. It is taken from, in this order:
 #   1. the "jre" directory of this distribution, if it was built with one (mvn package -Pdist)
@@ -52,7 +54,7 @@ HERE="$(distribution_dir "$0")"
 case "${1:-}" in
     -h | --help)
         # the usage is the comment at the top of this file
-        sed -n '3,25p' "$0" | sed 's/^# \{0,1\}//'
+        sed -n '3,28p' "$0" | sed 's/^# \{0,1\}//'
         exit 0
         ;;
     --version)
@@ -140,16 +142,43 @@ if [ "${1:-}" = "--convert" ]; then
 fi
 
 CHECK=""
-if [ "${1:-}" = "--check" ]; then
-    CHECK=1
-    shift
-fi
+UI=""
+while :; do
+    case "${1:-}" in
+        --check)
+            CHECK=1
+            shift
+            ;;
+        --ui)
+            UI=1
+            shift
+            ;;
+        -*)
+            fail "Unknown option $1. See ekg-collector.sh --help."
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
 
-case "${1:-}" in
-    -*)
-        fail "Unknown option $1. See ekg-collector.sh --help."
-        ;;
-esac
+# The display of the collector needs JavaFX, which wants to be loaded as modules: from the
+# runtime if it has it, from lib/javafx otherwise. It is only used if the display is switched
+# on. Not every runtime takes the modules of lib/javafx - one cut out of a JDK that came with
+# JavaFX refuses to start with them - so they are tried first: collecting must not depend on it.
+FX=()
+if ls "$HERE"/lib/javafx/javafx-*.jar > /dev/null 2>&1; then
+    FX=(--module-path "$HERE/lib/javafx" --add-modules javafx.controls --enable-native-access=javafx.graphics)
+    if ! "$JAVA" "${FX[@]}" -version > /dev/null 2>&1; then
+        FX=()
+    fi
+fi
+if [ -n "$UI" ]; then
+    if [ ${#FX[@]} -eq 0 ]; then
+        fail "The display of the collector (--ui) needs JavaFX, and $JAVA cannot load the one in\n$HERE/lib/javafx.\n\nUse a Java $MIN_JAVA runtime that has JavaFX, for example the Liberica Full JDK, or a plain one\nsuch as Eclipse Temurin, and set JAVA_HOME to it."
+    fi
+    JAVA_OPTS="$JAVA_OPTS -Dcollector.ui=true"
+fi
 
 CONFIG="${1:-$HERE/config/default/config.yaml}"
 LOGDIR="${2:-$HERE/logs}"
@@ -167,6 +196,11 @@ if [ -n "$CHECK" ]; then
     echo "  Java:           $JAVA (Java $JAVA_VERSION)"
     echo "  Configuration:  $CONFIG"
     echo "  Logs:           $LOGDIR"
+    if [ ${#FX[@]} -gt 0 ]; then
+        echo "  Display:        available, off unless started with --ui or switched on in config/collector.properties"
+    else
+        echo "  Display:        not available: this Java cannot load the JavaFX in lib/javafx"
+    fi
     if [ -n "$REJECTED" ]; then
         printf '%b\n' "  Skipped:$REJECTED"
     fi
@@ -175,7 +209,7 @@ if [ -n "$CHECK" ]; then
 fi
 
 # shellcheck disable=SC2086
-exec "$JAVA" $JAVA_OPTS $QUIET \
+exec "$JAVA" $JAVA_OPTS $QUIET ${FX[@]+"${FX[@]}"} \
     -Dlogback.configurationFile="$HERE/config/logback.xml" \
     -Dcollector.log.dir="$LOGDIR" \
     -classpath "$CLASSPATH" \

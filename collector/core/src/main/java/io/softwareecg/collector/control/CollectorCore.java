@@ -27,6 +27,9 @@ import io.softwareecg.collector.connector.ICollectorConnector;
 import org.slf4j.Logger;
 
 import java.io.File;
+import java.util.Iterator;
+import java.util.ServiceConfigurationError;
+import java.util.ServiceLoader;
 
 
 /**
@@ -49,6 +52,18 @@ public final class CollectorCore {
      * Our connector
      */
     private static final ICollectorConnector connector = Registry.getDefault().lookup(ICollectorConnector.class);
+
+    /**
+     * The system property that switches the display of the collector on, as the option --ui of
+     * the start script sets it. The same as io.softwareecg.collector.ui.enabled in
+     * collector.properties.
+     */
+    public static final String UI_SWITCH = "collector.ui";
+
+    /**
+     * What shows the collector on a display of its machine, if that is switched on.
+     */
+    private static volatile CollectorFrontend frontend;
 
     /**
      * Private constructor because the
@@ -99,6 +114,8 @@ public final class CollectorCore {
             if (connector != null) {
                 connector.start();
             }
+
+            startFrontendIfSwitchedOn(configFile);
 
             // wait until all collector jobs finished
             ENGINE.awaitTermination();
@@ -179,6 +196,41 @@ public final class CollectorCore {
     public static void stop() {
         ENGINE.stop();
         connector.stop();
+        CollectorFrontend shown = frontend;
+        if (shown != null) {
+            shown.stop();
+        }
+    }
+
+    /**
+     * A collector runs without a display unless it is told otherwise. One that cannot be started
+     * - it is not part of the installation, or the machine has no screen - is said so, and the
+     * collector goes on without it: collecting is what it is for.
+     */
+    private static void startFrontendIfSwitchedOn(File configFile) {
+        if (!Boolean.getBoolean(UI_SWITCH) && !CollectorProperties.isUiEnabled()) {
+            return;
+        }
+        try {
+            Iterator<CollectorFrontend> found = ServiceLoader.load(CollectorFrontend.class).iterator();
+            if (!found.hasNext()) {
+                LOGGER.error("The display of the collector is switched on, but this installation has none. "
+                        + "The collector runs without it.");
+                return;
+            }
+            CollectorFrontend display = found.next();
+            display.start(ENGINE, configFile);
+            frontend = display;
+            LOGGER.info("The display of the collector is started.");
+        } catch (RuntimeException | LinkageError | ServiceConfigurationError e) {
+            Throwable root = e;
+            while (root.getCause() != null && root.getCause() != root) {
+                root = root.getCause();
+            }
+            LOGGER.error("The display of the collector cannot be started, the collector runs without it: {}",
+                    root.getMessage() != null ? root.getMessage() : root.toString());
+            LOGGER.debug("Starting the display failed.", e);
+        }
     }
 
     /**

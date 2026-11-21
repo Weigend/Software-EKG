@@ -205,6 +205,14 @@ public class CollectorProperties extends Properties {
     }
 
     /**
+     * @return {@code true} if the collector shows what it is doing on a display of its machine.
+     *         It does not unless it is told to.
+     */
+    public static boolean isUiEnabled() {
+        return Boolean.parseBoolean(properties.getProperty("io.softwareecg.collector.ui.enabled", "false").strip());
+    }
+
+    /**
      * The logdir.
      *
      * @return the logdir.

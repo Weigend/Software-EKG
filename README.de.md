@@ -87,7 +87,7 @@ Dieses Repository ist die konsolidierte Variante von AWB, AWB-SDK und Collector.
 | `collector/sources/*` | Per ServiceLoader ladbare Datenquellen, etwa Prometheus, Unix, Windows, JMX und Logs |
 | `collector/repositories/*` | CSV-, JSON-, Solr- und Elasticsearch-Speicheradapter einschließlich Kompression |
 | `collector/apps/cli` | Headless Collector und dessen Distribution |
-| `collector/apps/ui` | Bestehende eigenständige Collector-UI |
+| `collector/apps/ui` | Anzeige des Collectors für einen kleinen Touchscreen: Jobs, ihr Zustand und Werte; aus, solange nicht eingeschaltet (`--ui`) |
 | `collector/apps/jolokia-agent` | Jolokia-Agent als WAR |
 | `build/collector-parent` | Gemeinsame interne Build-Konfiguration der Collector-Module |
 

@@ -19,6 +19,7 @@ import io.softwareecg.collector.common.LoggerFactory;
 import io.softwareecg.collector.common.Registry;
 import io.softwareecg.collector.common.SleepUtil;
 import io.softwareecg.collector.control.CollectorJobStatus;
+import io.softwareecg.collector.control.CollectorJobValues;
 import io.softwareecg.collector.control.util.SchedulingHelper;
 import io.softwareecg.collector.dt.CollectorJobConfiguration;
 import io.softwareecg.collector.dt.MetricDefinition;
@@ -92,6 +93,11 @@ public abstract class CollectorJob implements Runnable, Comparable<CollectorJob>
      * When the last value set was written, {@code null} before the first one.
      */
     private volatile Instant lastSampleTime;
+
+    /**
+     * The values read last, for something that shows what the collector is doing.
+     */
+    private volatile CollectorJobValues latestValues = CollectorJobValues.NONE;
 
     /**
      * The number of concrete metrics the job currently collects (after wildcard expansion).
@@ -298,7 +304,8 @@ public abstract class CollectorJob implements Runnable, Comparable<CollectorJob>
                 collectorJobState.getState(),
                 metricCount,
                 lastSampleTime,
-                lastError);
+                lastError,
+                latestValues);
     }
 
     private boolean isActive() {
@@ -479,6 +486,7 @@ public abstract class CollectorJob implements Runnable, Comparable<CollectorJob>
             collectorJobState.switchToWaitForDataState();
         }
         lastSampleTime = values.getDate() != null ? values.getDate().toInstant() : Instant.now();
+        latestValues = new CollectorJobValues(lastSampleTime, labelsOf(jobConfiguration), values.getValues());
 
         // record values for calculated counters
         CollectorMemory memory = CollectorMemory.getMemory(jobConfiguration.getNodeAddress());
@@ -546,6 +554,7 @@ public abstract class CollectorJob implements Runnable, Comparable<CollectorJob>
         storageFailures = 0;
         if (newest[0] != null) {
             lastSampleTime = newest[0].getDate().toInstant();
+            latestValues = new CollectorJobValues(lastSampleTime, labelsOf(jobConfiguration), newest[0].getValues());
 
             // record values for calculated counters; the memory cannot hold missing values
             if (!newest[0].getValues().contains(null)) {
@@ -600,6 +609,14 @@ public abstract class CollectorJob implements Runnable, Comparable<CollectorJob>
         long interval = Math.max(1_000, jobConfig.getMetricFetchInterval());
         long pause = Math.min(MAX_STORAGE_RETRY_PAUSE, interval << Math.min(storageFailures - 1, 10));
         Thread.sleep(pause);
+    }
+
+    private static List<String> labelsOf(CollectorJobConfiguration jobConfiguration) {
+        List<String> labels = new ArrayList<>();
+        for (MetricDefinition metricDefinition : jobConfiguration.getMetricDefinitions()) {
+            labels.add(metricDefinition.getLabel());
+        }
+        return labels;
     }
 
     /**
