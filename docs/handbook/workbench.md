@@ -129,9 +129,10 @@ Each chart supports:
 Smoothing functions are `average`, `sum`, `minimum`, `maximum`, `median`, `difference` and
 `value count`, plus no smoothing. Buckets can be automatic, off, or fixed calendar/time
 granularities exposed in the header. Series combination supports concatenation and sum/average at
-exact timestamp, second, minute, hour, day or month granularity. Choose value count for events,
-difference for monotonically increasing counters, and averages only when averaging has a defensible
-meaning.
+exact timestamp, second, minute, hour, day or month granularity. Choose sum for counts per
+interval, as the Collector source `log` delivers them, value count for series in which every
+sample is one event, difference for monotonically increasing counters, and averages only when
+averaging has a defensible meaning.
 
 ### Bookmarks
 

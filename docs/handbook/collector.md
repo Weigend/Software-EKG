@@ -103,8 +103,8 @@ A configuration does not describe servers one by one. It describes **groups**, a
 
 That there are several groups of each kind is the construction principle. A kind of server
 usually needs more than one kind of metric, and a kind of metric is usually wanted for more than
-one kind of server. Application servers get JVM metrics and operating-system metrics. Other
-backend services get operating-system metrics and disk I/O. The operating-system metrics are
+one kind of server. Application servers get JVM metrics and the events of their log. Other
+backend services get operating-system metrics and the events of their log. The log metrics are
 written once and used for both:
 
 ```yaml
@@ -122,20 +122,30 @@ metricGroups:                 # WHAT, one source per group
       - '\CPU\us'
       - '\Load\one'
       - '\Memory\used'
-  disk-io:
-    type: unixio
+  errors:
+    type: log
     metrics:
-      - metric: '\Device(*)\*'
-        wildcard: true
+      - metric: ' ERROR '
+        label: errors
+      - metric: 'transaction failed.*code=TX-41'
+        label: transaction failed TX-41
 
-processGroups:                # OF WHICH processes or endpoints
+processGroups:                # OF WHICH processes, endpoints or files
   app-jvm:
     - name: checkout
       label: Checkout API
       source: 'service:jmx:rmi:///jndi/rmi://${REF:hostAddress}:9010/jmxrmi'
+  app-log:
+    - name: checkout
+      label: Checkout API
+      source: '/var/log/checkout/checkout.log'
   system:
     - name: global
       source: '${REF:hostAddress}:22'
+  service-log:
+    - name: service
+      source: '/var/log/service/service-${REF:hostName}.log'
+      args: 'lookback=24h'
 
 hostGroups:                   # ON WHICH servers, grouped by what they are
   app-servers:
@@ -159,19 +169,18 @@ collectors:                   # the combinations
     processGroup: app-jvm
     hostGroup: app-servers
     interval: 15s
-  - metricGroup: os           # ... and operating system
-    processGroup: system
+  - metricGroup: errors       # ... and log
+    processGroup: app-log
     hostGroup: app-servers
     interval: 15s
   - metricGroup: os           # backend services: operating system ...
     processGroup: system
     hostGroup: backend-services
     interval: 15s
-  - metricGroup: disk-io      # ... and disk I/O
-    processGroup: system
+  - metricGroup: errors       # ... and log
+    processGroup: service-log
     hostGroup: backend-services
-    interval: 1m
-    expandInterval: 20m
+    interval: 15s
 ```
 
 Every collector yields one job for every host and every process of its groups. A job reads all
@@ -180,9 +189,9 @@ metrics of its metric group, of one process, on one host:
 | Collector | Hosts × processes | Jobs |
 | --- | --- | --- |
 | `jvm` on `app-servers` | 3 × 1 | 3 |
-| `os` on `app-servers` | 3 × 1 | 3 |
+| `errors` on `app-servers` | 3 × 1 | 3 |
 | `os` on `backend-services` | 2 × 1 | 2 |
-| `disk-io` on `backend-services` | 2 × 1 | 2 |
+| `errors` on `backend-services` | 2 × 1 | 2 |
 
 Ten jobs come out of four collector entries, and the number of series is the jobs times their
 metrics, with wildcards expanded for every job. The configuration grows by its groups, not by its
@@ -195,12 +204,8 @@ servers:
   collector entry.
 
 A host group may be named by any number of collectors, and so may a metric group and a process
-group. What cannot be done is to put two sources into one metric group: JVM metrics and
-operating-system metrics of the same servers are two metric groups and two collectors.
-
-Log events are meant to fit in the same way, as one more metric group that is combined with both
-host groups. The source `log` is not complete yet; see
-[Log files and events](collector-sources.md#log-files-and-events).
+group. What cannot be done is to put two sources into one metric group: JVM metrics and log
+events of the same servers are two metric groups and two collectors.
 
 ### Groups are also what you compare by
 
@@ -280,7 +285,8 @@ and container dimensions to collected rows.
 - `at` requests a fixed collection time instead of an interval (legacy scheduling surface).
 - `expandInterval` re-resolves wildcard metrics and dynamic processes/systems. Without it,
   expansion happens once at startup.
-- Prometheus additionally uses the process `args` value `lookback=24h` to backfill its first run.
+- Prometheus and `log` additionally use the process `args` value `lookback=24h` to fill in what
+  the server or the file already has when collecting starts.
 
 ## Operations
 
@@ -304,6 +310,7 @@ The packaged `config` directory contains executable examples:
 - `jolokia/config-example-solr-localhost.yaml`: JVM and Solr MBeans;
 - `cluster-monitoring/config.yaml`: five cluster nodes read with `top` over SSH, with property
   files of its own beside it that select Solr as repository;
+- `log/config.yaml`: events of a log file, counted and aggregated, over SSH;
 - `current/config-template.yaml`: all current YAML fields with comments.
 
 [Next: Source modules →](collector-sources.md)

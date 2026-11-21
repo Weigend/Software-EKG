@@ -59,8 +59,12 @@ Durations are `ms`, `s`, `m`, `h`, `d`. Variables are `${ENV:...}`, `${JVMOPT:..
 ## Registered Collector plugins
 
 Sources: `calc`, `mock`, `unix`, `unixio`, `unixdf`, `win`, `jmx`, `jolokia`, `ekgjolokia`, `prometheus`,
-`log`, `rlog`. The last two are legacy/incomplete as detailed in
-[Source modules](collector-sources.md#log-files-and-events).
+`log`, `rlog`. `rlog` and `ekgjolokia` are legacy; see [Source modules](collector-sources.md).
+
+The source `log` reads the `args` of a process as arguments separated by semicolons: `lookback`,
+`timestamp`, `zone`, `charset` and `port`. A metric of it is a regular expression, optionally with
+a group named `sum`, `avg`, `min`, `max` or `last`. See
+[Log files and events](collector-sources.md#log-files-and-events).
 
 Repository factories in the distribution: CSV, archive, Solr and Elasticsearch. A JSON factory
 exists in the source tree but is not shipped. The line
@@ -126,7 +130,9 @@ and options.
 | `~/.ekg/logs` | Workbench launcher logs |
 | Collector `config/collector.properties` | adapter selection and general settings |
 | Collector `config/logback.xml` | logging configuration |
-| Collector `logs/ekg/<start time>/` | files of the CSV repository |
+| Collector `logs/ekg/<start time>/` | files of the CSV repository, `<host>_<process>_<group>_<period>.csv` |
+| `io.softwareecg.collector.source.rollingPolicyPattern` | period of a CSV file, default `%d{yyyy-MM-dd}`; `none` for no files by time |
+| `Csv4jRepository.MaxFileSize`, `Csv4jRepository.MaxBackupIndex` | size of a CSV file (30MB) and files kept per job (0 = all) |
 
 ## Deliberate extension points
 
@@ -148,8 +154,8 @@ Workbench extensions inside the consolidated module and validate its architectur
 
 - Legacy Collector XML is readable/convertible; YAML is the current format.
 - The standalone Collector JavaFX UI exists but is not the primary maintained workflow.
-- `log` tails and regex-matches but does not persist a match; `logevents` is not registered as a
-  source; `rlog` downloads whole files. Do not claim log-event charting is complete.
+- `log` builds one series per expression, not one per captured value, and does not store the text
+  of the lines. `logevents` is not registered as a source; `rlog` downloads whole files.
 - `ekgjolokia` targets the historical filtered endpoint; prefer `jolokia`.
 - Windows counters can be written with their English names on a Windows of every language. The
   source `win` needs a Collector on Windows with the native library; `%1` is not a placeholder.

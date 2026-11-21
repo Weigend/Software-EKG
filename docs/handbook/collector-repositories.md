@@ -8,6 +8,11 @@ Java `ServiceLoader`; the one named in `collector.properties` becomes the destin
 job. The distribution contains CSV, archive, Solr and Elasticsearch implementations. A JSON
 repository exists in the source tree but is not part of the distribution.
 
+CSV and archive repositories write files to the local filesystem of the machine on which the
+Collector is running. Solr and Elasticsearch repositories are remote clients: they send collected
+data to a repository server. Therefore CSV/archive require local disk space on the Collector host,
+whereas Solr/Elasticsearch require network access and storage capacity on the remote server.
+
 ## Selecting a repository
 
 One line of `config/collector.properties` selects the factory by its class name:
@@ -51,35 +56,92 @@ file with a password or generate it securely at deployment time.
 
 ## Choosing storage
 
-| Repository | Best fit | Trade-off |
-| --- | --- | --- |
-| CSV | portable incident bundle; later Workbench import | simple and inspectable, not interactive |
-| Archive | rotated/compressed CSV hand-off | compact but requires extraction/import |
-| Solr | direct Workbench analysis and large sets | operates a search index |
-| Elasticsearch | existing remote search infrastructure | version/cluster compatibility matters |
+| Repository | Storage location | Best fit | Trade-off |
+| --- | --- | --- | --- |
+| CSV | local filesystem of the Collector host | portable incident bundle; later Workbench import | simple and inspectable; a file per day, week or month, of a limited size |
+| Archive | local filesystem of the Collector host | compressed daily files in the older format | grouped by day, week or month; no limit of size |
+| Solr | remote Solr server | direct Workbench analysis and large sets | operates a search index |
+| Elasticsearch | remote Elasticsearch server | existing remote search infrastructure | version/cluster compatibility matters |
 
 ## CSV and archive
+
+Both write the values of a job (a host, a process and a metric group) into files of its own on
+the Collector host. The CSV repository is the one to use; the archive repository is the older
+way to get a file per day.
+
+### CSV: a file per period, of a limited size
 
 CSV writes the Collector interchange format understood by **Import → EKG Collector Logs**. The
 files go to `<log directory>/ekg/<start time>/`, with the start time of the Collector written as
 `yyyy-MM-dd-HH-mm-ss`. The log directory is `logs` in the distribution unless the launcher is
-given another one.
+given another one. Every start of the Collector thus has a directory of its own.
 
-The files rotate. Two keys in `collector.properties` control that:
+The files of a job tell by their names what time they hold:
 
-```properties
-Csv4jRepository.MaxFileSize=30MB
-Csv4jRepository.MaxBackupIndex=3
+```text
+db-01_global_os_2026-11-20.csv        the day before
+db-01_global_os_2026-11-21.csv        today
+db-01_global_os_2026-11-21_2.csv      ... and what did not fit into the first file of today
 ```
 
-These are the defaults. The extended format retains cloud dimensions; the Workbench importer also
-accepts historical pre-6.1 files.
+Three keys in `collector.properties` control that. These are the defaults:
 
-The archive repository builds on the same row representation and groups/compresses output for
-transport. Rolling and archive directory patterns default to `%d{yyyy-MM-dd}` and
-`yyyy-MM-dd-HH`. Their keys are `io.softwareecg.collector.source.rollingPolicyPattern` and
-`io.softwareecg.collector.source.archiveDirectoryPattern`; override them only after verifying the
-resulting paths.
+```properties
+io.softwareecg.collector.source.rollingPolicyPattern=%d{yyyy-MM-dd}
+Csv4jRepository.MaxFileSize=30MB
+Csv4jRepository.MaxBackupIndex=0
+```
+
+| Key | Effect |
+| --- | --- |
+| `rollingPolicyPattern` | The period a file holds, as a date pattern in `%d{...}`. `%d{yyyy-MM-dd}` is a day, `%d{YYYY-'W'ww}` a week from Monday to Sunday, `%d{yyyy-MM}` a month, `%d{yyyy-MM-dd-HH}` an hour. `none` turns files by time off. |
+| `MaxFileSize` | What does not fit into a file goes into a further file of the same period, numbered `_2`, `_3` and so on. Units are `KB`, `MB` and `GB`. |
+| `MaxBackupIndex` | How many files of a job are kept besides the one that is written. `0` keeps all. With a number, the oldest files of the job are deleted. |
+
+- A row goes into the file of **its own time**, not of the moment it is written. What a source
+  delivers of yesterday, with a `lookback` for example, is in the file of yesterday. Periods
+  begin and end in the time zone of the Collector.
+- Every file begins with the header and can be read by itself.
+- Nothing is renamed, and with the defaults nothing is deleted. A Collector that runs for long
+  needs room for it: at most `MaxFileSize` per file, but any number of files. Set
+  `MaxBackupIndex` if the directory must not grow without bound, and know that the oldest values
+  are gone then.
+- If the series of a job change, which happens with wildcards and `expandInterval`, the rows no
+  longer fit the header. The job then continues in a further file of the period, with the new
+  header.
+- A value that is missing in a row leaves its column empty.
+- A setting that is not usable ends the job with the reason.
+
+The extended format retains cloud dimensions; the Workbench importer also accepts historical
+pre-6.1 files.
+
+### Archive: a file per day
+
+The archive repository writes compressed files, `<log directory>/ekg/current/<name>.csv.gz`, in
+the classic format with a date column. Every midnight it moves each file into an archive folder
+and begins a new one:
+
+```text
+logs/ekg/current/db-01_global_os.csv.gz     today, being written
+logs/ekg/archiv/20261120.zip                yesterday: db-01_global_os_2026.11.21_00.00.00.csv.gz ...
+logs/ekg/archiv/20261119.zip                the day before
+```
+
+A file in the archive carries the time it was moved there. The folder is named by a date
+pattern, and it is packed into a ZIP as soon as the next folder begins:
+
+```properties
+io.softwareecg.collector.source.archiveDirectoryPattern=yyyyMMdd
+```
+
+`yyyyMMdd`, as the shipped file sets it, gives a ZIP per day. `yyyy-'W'ww` gives a folder per
+week that fills with seven daily files and is packed when the week is over, `yyyy-MM` one per
+month. The files are always cut at midnight; the
+pattern only decides how they are grouped. Nothing is deleted. Files left in `current` by an
+earlier run are moved to the archive when the Collector starts.
+
+The archive repository has no limit of size, and its files are in the older format without the
+metadata of a job in their header. For new collections the CSV repository does both.
 
 ## JSON
 
@@ -88,8 +150,9 @@ machine-to-machine processing and tests. The Collector distribution does not con
 Workbench has no JSON import. To use it, build the module, add its jar with its dependencies to
 the `lib` directory and select
 `io.softwareecg.collector.repository.json.JsonRepositoryFactory`. Its rotation keys are
-`Json4jRepository.MaxFileSize` and `Json4jRepository.MaxBackupIndex`. Use CSV for a supported
-file hand-off.
+`Json4jRepository.MaxFileSize` and `Json4jRepository.MaxBackupIndex`. It cuts its files by size
+only and deletes the oldest when it has more than `MaxBackupIndex` (3 by default). Use CSV for a
+supported file hand-off.
 
 ## Solr
 

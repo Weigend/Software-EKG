@@ -38,6 +38,6 @@ The handbook distinguishes three states:
 - **Legacy** means it is still readable or runnable for compatibility but is not the preferred
   path for new setups.
 - **Extension point / incomplete** means code exists, but the end-to-end user workflow is not
-  currently complete. This distinction is especially important for log-event collection.
+  currently complete.
 
 [Next: Concepts and motivation →](concepts.md)

@@ -59,8 +59,8 @@ public final class ApplianceCounterSource extends AbstractCounterSource {
 
 Add `CounterWildcardSupport` if a configured expression expands to concrete metrics, and
 `CounterHistorySupport` if the source can deliver timestamps and all samples since a cursor. Study
-`mock` for the smallest adapter, `prometheus` for wildcard/history behaviour and `unix` for remote
-command parsing.
+`mock` for the smallest adapter, `prometheus` for wildcard/history behaviour, `unix` for remote
+command parsing and `log` for events with a time of their own.
 
 A source inside this repository is a module of its own with a focused Maven dependency set,
 added as a dependency of `collector/apps/cli` so that the distribution contains it. A source
@@ -73,22 +73,26 @@ wildcard-empty and wildcard-refresh cases, timestamps, shutdown and interruption
 mutable connection state between descriptors unless the cache key includes every security and
 endpoint dimension.
 
-### Completing a log-event source
+### A source of events
 
-A production log adapter should define these semantics explicitly:
+A source whose values carry a time of their own, events rather than samples, implements
+`CounterHistorySupport` and delivers value sets with their time instead of answering "what is the
+value now". The source `log` is the example to study. What it had to decide, any such source has
+to:
 
-1. pattern syntax and whether it matches a whole line (`String.matches`) or searches within it;
-2. timestamp parser/time zone, with arrival time only as a documented fallback;
-3. output: one `1` sample per match, bucketed count, captured number, or categorical code mapping;
-4. rotation identity, last offset and reconnect deduplication;
-5. bounded buffering/backpressure and batched repository writes;
-6. encoding, multiline events and redaction;
-7. a stable series label derived from regex capture groups;
-8. local and SSH integration tests including rotation during collection.
+1. what an event contributes: a count per interval, or an aggregate of a number it holds;
+2. where the time of an event comes from, with the time of reading only as a documented fallback;
+3. a fixed grid of intervals, and that an interval without events is a value too;
+4. where reading stands, so that an outage neither loses events nor delivers them twice. A job
+   takes a new source object after a failed reading, so this is kept for the thread of the job,
+   not in the object;
+5. what the storage already holds: the `since` of `queryCounterSince` is where to continue, and a
+   storage that reports less than was delivered lost values that have to be read again;
+6. that what is wrong is said: implement `CounterWildcardSupport` and answer
+   `METRIC_SOURCE_NOT_AVAILABLE` with a message, and the job shows it in its state and retries.
 
-Prefer emitting normal `CounterSeries` rows so existing repositories and Workbench value-count
-aggregation can chart them. Add a separate raw-log store only when retaining log text is an explicit
-security and product decision.
+Deliver normal `CounterSeries` rows so that every repository and the Workbench can use them. Add a
+separate store for raw text only when retaining it is an explicit security and product decision.
 
 ## Build a Collector repository
 

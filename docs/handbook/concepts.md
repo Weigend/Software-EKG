@@ -5,9 +5,16 @@
 
 ## Why collect metrics that already exist somewhere?
 
-Operational evidence is usually scattered. CPU data may be available through `top`, JVM state
-through JMX, request rates in Prometheus, business events in a log file and an old incident in a
-CSV archive. Each source already has the data, but none provides the whole comparison.
+Monitoring platforms such as Prometheus and Grafana, Zabbix and similar systems can provide broad,
+well-designed monitoring of a whole environment. An investigation nevertheless has a different
+scope. A
+long-running monitoring system either collects a great volume of data, or deliberately omits the
+specialised exporter, agent item, JVM attribute, log event or high-frequency value that only
+becomes relevant to one incident. Software-EKG reuses the useful monitoring series, adds those
+missing pieces from sources such as `top`, JMX, logs or the CSV files of an earlier collection,
+and limits the result to the current analysis scope. For the time of the investigation it can
+therefore sample deeper, more precisely or faster than would be sensible for permanent
+monitoring.
 
 Software-EKG copies the selected evidence into a common time-series model. That is useful because
 an investigation asks cross-source questions: Did heap growth begin before the login rate fell?
@@ -34,6 +41,13 @@ Offline does not mean isolated forever. A Workbench project may either contain c
 split source such as Prometheus, and a chart can follow incoming data. The local-project workflow is
 the safest default for forensic work; a remote project is useful when freshness matters more than a
 frozen snapshot.
+
+This remains valuable in an AI-assisted investigation. An AI can explore faster and test more
+hypotheses, but it still needs controlled, structured evidence instead of disconnected dashboards
+and screenshots. Software-EKG builds that investigation dataset; the analyst and the AI Assistant
+can then compare systems and verify hypotheses against the same reproducible time series. The
+assistant itself is not offline: what it is shown goes to the service of its model, see
+[AI Assistant](workbench.md#ai-assistant).
 
 ## Why build adapters?
 
@@ -67,8 +81,8 @@ The Collector configuration is built from groups, and there are several of each 
 4. `collectors` combine one group of each kind and say **how often** the combination is read.
 
 The multiplicity is the construction principle. A kind of server needs several kinds of
-metrics, and a kind of metric is wanted for several kinds of servers: JVM and operating-system
-metrics for the application servers, operating-system metrics and disk I/O for the other backend
+metrics, and a kind of metric is wanted for several kinds of servers: JVM metrics and log events
+for the application servers, operating-system metrics and log events for the other backend
 services. Each combination is one collector entry, and the Collector multiplies it out into one
 job for every host and every process of the groups. Three metric groups, two host groups and
 four collector entries cover every server of both kinds; a server that is added later is one
@@ -82,6 +96,17 @@ series. The worked example is in the
 The Workbench then treats all resulting series alike: explore dimensions, select a time range,
 overlay series, aggregate, bookmark and export.
 
+## What makes this model different
+
+Software-EKG combines a pluggable source pipeline with a comparison-oriented collection model.
+Metric, process and host groups are defined independently and expanded into concrete collection
+jobs. Every series keeps its host group and metric group, with its host, process and metric, as
+dimensions for later analysis. Other collectors commonly provide source plugins
+or host templates; Software-EKG connects both ideas to build a focused, heterogeneous and offline
+investigation dataset.
+
+> Define independently what to measure, where to measure it and what to compare.
+
 ## From measurements to temporal events
 
 Numbers are not the only useful time series. A matching log line can be represented as an event or
@@ -90,9 +115,12 @@ in a service, then a database rollback. The same technique shows logins per minu
 deployments or any fact that an operator could otherwise obtain with `tail` and `grep`.
 
 Automating this in the Collector matters because manual shell sessions are not repeatable, lose
-timestamps, and rarely cover all nodes consistently. The present repository contains the beginning
-of this pipeline (`log`, `rlog`, and a `logevents` parsing model), but not a complete supported
-log-event-to-chart path. The exact status and a safe implementation target are documented under
-[Log files and events](collector-sources.md#log-files-and-events).
+timestamps, and rarely cover all nodes consistently. It also closes a gap that no metrics server
+closes afterwards: what an application only writes into its log was never a metric anywhere.
+
+The source `log` does this. A metric is a regular expression, and its series is the number of
+matching lines per interval, or an aggregate of the numbers they hold. Every line counts at the
+time of its own timestamp, so that content a file already has and lines written during an outage
+end up where they belong. See [Log files and events](collector-sources.md#log-files-and-events).
 
 [Next: Getting started →](getting-started.md)
