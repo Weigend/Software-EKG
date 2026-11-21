@@ -5,8 +5,7 @@
 
 A Collector writes everything it collects through one repository. The factories are loaded with
 Java `ServiceLoader`; the one named in `collector.properties` becomes the destination of every
-job. The distribution contains CSV, archive, Solr and Elasticsearch implementations. A JSON
-repository exists in the source tree but is not part of the distribution.
+job. The distribution contains CSV, archive, Solr and Elasticsearch implementations.
 
 CSV and archive repositories write files to the local filesystem of the machine on which the
 Collector is running. Solr and Elasticsearch repositories are remote clients: they send collected
@@ -144,17 +143,6 @@ earlier run are moved to the archive when the Collector starts.
 
 The archive repository has no limit of size, and its files are in the older format without the
 metadata of a job in their header. For new collections the CSV repository does both.
-
-## JSON
-
-The JSON repository (`collector/repositories/json`) is a rotating local repository for
-machine-to-machine processing and tests. The Collector distribution does not contain it, and the
-Workbench has no JSON import. To use it, build the module, add its jar with its dependencies to
-the `lib` directory and select
-`io.softwareecg.collector.repository.json.JsonRepositoryFactory`. Its rotation keys are
-`Json4jRepository.MaxFileSize` and `Json4jRepository.MaxBackupIndex`. It cuts its files by size
-only and deletes the oldest when it has more than `MaxBackupIndex` (3 by default). Use CSV for a
-supported file hand-off.
 
 ## Solr
 

@@ -85,7 +85,7 @@ Dieses Repository ist die konsolidierte Variante von AWB, AWB-SDK und Collector.
 | `workbench` | Eine JavaFX-Anwendung mit UI, Chart Engine, Importern, lokaler Speicherung und eingebettetem Collector |
 | `collector/core` | Konfiguration, Collector Engine, SSH, Speicher- und Source-Verträge |
 | `collector/sources/*` | Per ServiceLoader ladbare Datenquellen, etwa Prometheus, Unix, Windows, JMX und Logs |
-| `collector/repositories/*` | CSV-, JSON-, Solr- und Elasticsearch-Speicheradapter einschließlich Kompression |
+| `collector/repositories/*` | CSV-, Solr- und Elasticsearch-Speicheradapter einschließlich Kompression |
 | `collector/apps/cli` | Headless Collector und dessen Distribution |
 | `collector/apps/ui` | Anzeige des Collectors für einen kleinen Touchscreen: Jobs, ihr Zustand und Werte; aus, solange nicht eingeschaltet (`--ui`) |
 | `collector/apps/jolokia-agent` | Jolokia-Agent als WAR |

@@ -46,7 +46,6 @@
         <module>build/collector-parent</module>
         <module>collector/core</module>
         <module>collector/repositories/csv</module>
-        <module>collector/repositories/json</module>
         <module>collector/repositories/rdb</module>
         <module>collector/repositories/solr</module>
         <module>collector/repositories/elasticsearch</module>

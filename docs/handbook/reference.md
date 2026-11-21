@@ -67,8 +67,7 @@ The source `log` reads the `args` of a process as arguments separated by semicol
 a group named `sum`, `avg`, `min`, `max` or `last`. See
 [Log files and events](collector-sources.md#log-files-and-events).
 
-Repository factories in the distribution: CSV, archive, Solr and Elasticsearch. A JSON factory
-exists in the source tree but is not shipped. The line
+Repository factories: CSV, archive, Solr and Elasticsearch. The line
 `io.softwareecg.collector.repository.RepositoryFactory=<class>` in `collector.properties` selects
 one; remote RDB stores read their connection from `remote-repository-config.properties`. See
 [Collector repositories](collector-repositories.md#selecting-a-repository).
@@ -165,7 +164,7 @@ Workbench extensions inside the consolidated module and validate its architectur
   source `win` needs a Collector on Windows with the native library; `%1` is not a placeholder.
 - Unix parser output varies by tool implementation. `unix` expects the batch mode of the Linux
   `top`.
-- The JSON repository is in the source tree but not in the Collector distribution.
+- The JSON repository of earlier versions, which was never part of the distribution, is removed.
 - The AI Assistant is bound to OpenRouter and `OPENROUTER_API_KEY`; its SSH tool runs a command
   only after explicit approval. Its conclusions are not a substitute for saved evidence.
 
