@@ -20,9 +20,12 @@ else
     (cd "$ROOT" && mvn -q -pl collector/apps/cli -am package -DskipTests)
 fi
 
-START="$(ls -td "$ROOT"/collector/apps/cli/product/software-ekg-collector-*/software-ekg-collector-*/ekg-collector.sh 2> /dev/null | head -1)"
-if [ -z "$START" ]; then
+# Builds of several versions may lie next to each other. The last one is told by its jar: the
+# start script and the directories keep the date of their source and are the same age in all.
+JAR="$(ls -t "$ROOT"/collector/apps/cli/product/software-ekg-collector-*/software-ekg-collector-*/lib/collector-core-*.jar 2> /dev/null | head -1)"
+if [ -z "$JAR" ]; then
     echo "The collector is not built yet. Run this script without --no-build." >&2
     exit 1
 fi
+START="$(dirname "$(dirname "$JAR")")/ekg-collector.sh"
 exec "$START" "$@"
