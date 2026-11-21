@@ -72,7 +72,13 @@ else
     "$COL/ekg-collector.sh" --version
     "$COL/ekg-collector.sh" --check | tee "$WORK/collector.check"
     grep -q -F "$COL/jre/bin/java" "$WORK/collector.check" || fail "The collector does not use the runtime of its distribution."
-    "$COL/ekg-collector.sh" "$COL/config/mock/config.yaml" "$COLLECTOR_LOGS" > "$COLLECTOR_OUT" 2>&1 &
+    grep -q "Display: *available" "$WORK/collector.check" || fail "The collector cannot show its display with the runtime of its distribution."
+    if [ "$PLATFORM" = macos ]; then
+        # the bash that macOS ships is version 3.2
+        /bin/bash "$COL/ekg-collector.sh" --check > /dev/null || fail "The start script of the collector does not run with /bin/bash of macOS."
+    fi
+    # with its display, which is off unless asked for: it has to come up beside the collecting
+    "$COL/ekg-collector.sh" --ui "$COL/config/mock/config.yaml" "$COLLECTOR_LOGS" > "$COLLECTOR_OUT" 2>&1 &
     COLLECTOR_PID=$!
 fi
 sleep "$COLLECTOR_SECONDS"
@@ -89,6 +95,9 @@ tail -n 30 "$COLLECTOR_OUT" || true
 CSV="$(find "$COLLECTOR_LOGS" -name '*.csv' | head -n 1)"
 [ -n "$CSV" ] || fail "The collector wrote no measurements."
 [ "$(wc -l < "$CSV")" -ge 3 ] || fail "The collector wrote no measurements into $CSV."
+if [ "$PLATFORM" != windows ]; then
+    grep -q "The display of the collector is started" "$COLLECTOR_OUT" || fail "The collector did not start its display."
+fi
 echo "The collector ran and wrote $(wc -l < "$CSV") lines into $(basename "$CSV")."
 echo "::endgroup::"
 
@@ -109,7 +118,8 @@ if [ "$PLATFORM" = windows ]; then
     tail -n 40 "$COUNTER_OUT" || true
     [ -n "$COUNTERS_ALIVE" ] || fail "The collector stopped within $COUNTER_SECONDS seconds while reading Windows performance counters."
     grep -q "Native library ${WPC_DLL%.dll} loaded" "$COUNTER_OUT" || fail "The collector did not load $WPC_DLL."
-    CSV="$(find "$COUNTER_LOGS" -name '*_windows.csv' | head -n 1)"
+    # the files of a job carry their day: <host>_<process>_windows_2026-11-21.csv
+    CSV="$(find "$COUNTER_LOGS" -name '*_windows_*.csv' | head -n 1)"
     [ -n "$CSV" ] || fail "The collector wrote no Windows performance counters."
     head -n 4 "$CSV"
     head -n 1 "$CSV" | grep -q -F 'System\Threads' || fail "The counter \\System\\Threads is missing in $CSV."
