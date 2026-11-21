@@ -17,6 +17,9 @@ import javafx.scene.control.MenuItem;
 @SuppressWarnings("unused")
 public class EkgProjectModule implements Module {
 
+    /** The text of the item in the menu <b>Repository</b>. */
+    public static final String ADD_PROJECT = "Add Project...";
+
     @Override
     public void preload() {
     }
@@ -26,14 +29,16 @@ public class EkgProjectModule implements Module {
         EkgApplicationController appController = Lookup.lookup(EkgApplicationController.class);
         appController.addTopNode(new ProjectBar());
 
-        MenuItem createProject = new MenuItem("Create Collector Project");
-        createProject.setMnemonicParsing(false);
-        createProject.setOnAction(e -> {
+        // In the menu of the repositories: the dialog adds a project of a remote repository to
+        // this workbench. It imports nothing and creates nothing in the repository.
+        MenuItem addProject = new MenuItem(ADD_PROJECT);
+        addProject.setMnemonicParsing(false);
+        addProject.setOnAction(e -> {
             CreateProjectDialog createProjectDialog = new CreateProjectDialog();
             createProjectDialog.initOwner(appController.getStage());
             createProjectDialog.showAndWait();
         });
-        appController.addImportMenuItem(createProject);
+        appController.addRepositoryMenuItem(addProject);
     }
 
     @Override

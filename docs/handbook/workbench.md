@@ -16,15 +16,17 @@ view flavour and data collection. The explorer shows series dimensions and bookm
 | Menu | Current functions |
 | --- | --- |
 | Analysis | New Analysis, Data Sources, Exit |
-| Import | Collector CSV, Prometheus, OWID, Binance, Yahoo Finance, Create Collector Project |
-| Repository | Add repository |
+| Import | Collector logs, Prometheus, OWID, Binance, Yahoo Finance |
+| Repository | Add Repository, Add Project |
 | Window | New Chart, restore layout, dockable windows |
 | Help | About/version/runtime information |
 
 ## Projects
 
 A project is the boundary for series, dimension aliases, bookmarks and collection configuration.
-Create a project from the project selector or **Import → Create Collector Project**. Projects may
+A project comes into being with an import or with **Analysis → New Analysis**, each of which
+names it. A project whose series an external Collector writes straight into a remote repository
+is added with **Repository → Add Project...**; see [Repositories](#repositories). Projects may
 use local copied data or a split/remote source. View flavours cover classic infrastructure and
 cloud-native dimensions; specialised importers can supply domain aliases such as Country or Market.
 
@@ -37,13 +39,22 @@ differ; use one project when the point is to overlay the series.
 
 ## Repositories
 
-**Repository → Add...** registers a query repository. The Workbench has clients for:
+**Repository → Add Repository...** registers a query repository. The Workbench has clients for:
 
 - embedded Solr (the offline default);
 - remote Solr, standalone or SolrCloud;
 - Elasticsearch;
 - ClickHouse;
 - H2 for Workbench metadata, not measurement-series analysis.
+
+**Repository → Add Project...** adds a project of a remote repository to the Workbench. That is
+how the series an external Collector writes straight into a remote repository get into the
+explorer: the Workbench shows the projects it knows, and finds their series in the repository by
+the name of the project. Enter the name the series are stored under, which for a Collector is
+the `project` of its configuration. The dialog creates nothing in the repository, no collection,
+index or table; those belong to the repository and are set up when it is added. It stores the
+project in the metadata of this Workbench, so another Workbench that is to show the project
+adds it as well.
 
 Repository configuration supports URLs and authentication fields exposed by the selected backend.
 The embedded Solr base can be moved with the environment variable `EKG_SOLR_HOME` or the JVM

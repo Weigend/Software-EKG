@@ -30,9 +30,10 @@ public interface EkgApplicationController {
     void addRepositoryMenuItem(MenuItem menuItem);
 
     /**
-     * Fuegt ein MenuItem ans Ende des Import-Menues an, unterhalb der Importer.
+     * Adds a MenuItem at the top of the Repository menu: for what manages the repositories
+     * themselves, which comes before what is done with one of them, whichever module starts first.
      */
-    void addImportMenuItem(MenuItem menuItem);
+    void addRepositoryMenuItemFirst(MenuItem menuItem);
 
     /**
      * Fuegt ein MenuItem ins Window-Menue ein, oberhalb von "Restore Default Layout".

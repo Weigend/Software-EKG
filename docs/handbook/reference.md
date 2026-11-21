@@ -82,8 +82,8 @@ qualified interface key in `collector.properties`.
 | Location | Actions |
 | --- | --- |
 | Analysis | New Analysis; Data Sources; Exit |
-| Import | EKG Collector Logs; Prometheus Data; OWID COVID-19 Data; Binance Market Data; Yahoo Finance Market Data; Create Collector Project |
-| Repository | Add repository |
+| Import | EKG Collector Logs; Prometheus Data; OWID COVID-19 Data; Binance Market Data; Yahoo Finance Market Data |
+| Repository | Add Repository; Add Project |
 | Window | New Chart; Restore Default Layout; activate module windows |
 | Help | About Software-EKG |
 | Project selector/bar | create, select, edit; repository/collection/view flavour; importer shortcuts |

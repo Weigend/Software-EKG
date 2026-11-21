@@ -28,14 +28,14 @@ public class EkgRepositoryAdminModule implements EkgModule, Module {
     @Override
     public void start() {
         EkgApplicationController appController = Lookup.lookup(EkgApplicationController.class);
-        MenuItem addRepository = new MenuItem("Add...");
+        MenuItem addRepository = new MenuItem("Add Repository...");
         addRepository.setMnemonicParsing(false);
         addRepository.setOnAction(e -> {
             EkgRepositoryAdmin ekgRepositoryAdmin = new EkgRepositoryAdmin();
             ekgRepositoryAdmin.initOwner(appController.getStage());
             ekgRepositoryAdmin.showAndWait();
         });
-        appController.addRepositoryMenuItem(addRepository);
+        appController.addRepositoryMenuItemFirst(addRepository);
 
         Stage appStage = Lookup.lookup(ApplicationWindow.class).getStage();
 

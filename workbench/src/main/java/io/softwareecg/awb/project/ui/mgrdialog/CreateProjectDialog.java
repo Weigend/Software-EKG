@@ -10,14 +10,18 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
- * Dialog component that is used to create new empty projects in a remote repository that
- * can used by EKG-Collector to fill it with time series data directly from the collectors.
+ * Dialog that adds a project of a remote repository to this workbench: typically the project
+ * an external Collector writes its series under, straight into that repository.
+ * <p>
+ * Nothing is created in the repository. The project is a record in the metadata of the
+ * workbench (H2) that names the repository it belongs to; the workbench shows the projects it
+ * has such a record of, and finds their series in the repository by the name of the project.
  *
  * @since 24.06.2018
  */
 public class CreateProjectDialog extends Dialog<Project> {
 
-    private static final String DEFAULT_TITLE = "Add EKG Collector Project";
+    private static final String DEFAULT_TITLE = "Add Project to Repository";
 
     /**
      * Creates a new CreateProjectDialog instance
@@ -35,8 +39,9 @@ public class CreateProjectDialog extends Dialog<Project> {
         // bind controller to Dialog closed with apply
         setResultConverter(controller::persistProject);
 
-        setHeaderText("To create a new project for the EKG Collector, please specify" +
-                " all required project properties. Creating projects is only\npossible for remote EKG repositories.");
+        setHeaderText("Adds a project of a remote repository to this workbench, for example the\n"
+                + "project a Collector writes into. Use the name the series are stored under.\n"
+                + "Nothing is created in the repository itself.");
 
         Group iconImage = new CachingSvgLoader(false)
                 .setDefaultScale(0.14)

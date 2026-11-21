@@ -46,9 +46,16 @@ class ImporterE2ETest {
                 "---",
                 "OWID COVID-19 Data",
                 "Binance Market Data",
-                "Yahoo Finance Market Data",
-                "---",
-                "Create Collector Project");
+                "Yahoo Finance Market Data");
+    }
+
+    /**
+     * Adding a project of a remote repository imports nothing: it is in the menu of the
+     * repositories, below adding a repository.
+     */
+    @Test
+    void theRepositoryMenuAddsRepositoriesAndTheirProjects() {
+        assertThat(workbench.menuItems("Repository")).containsExactly("Add Repository...", "Add Project...");
     }
 
     @Test

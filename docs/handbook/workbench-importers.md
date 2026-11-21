@@ -30,7 +30,7 @@ it comes from. This is the one of the Collector logs:
 
 | Field | Meaning |
 | --- | --- |
-| Repository | The repository the project lies in: the embedded Solr (`Local Repository`) or a remote one that was added with **Repository → Add...**. See [Architecture](architecture.md#import-into-a-remote-repository). |
+| Repository | The repository the project lies in: the embedded Solr (`Local Repository`) or a remote one that was added with **Repository → Add Repository...**. See [Architecture](architecture.md#import-into-a-remote-repository). |
 | Create New Project / Project Name | A new project, or without the check mark an existing one to import into. A name that is taken is marked red. |
 | Project Type | Classic, Hybrid or Cloud Native: the dimensions the project has. |
 | Cloud Platform Type | The platform of a project with cloud parts. |

@@ -17,7 +17,7 @@ that matter are shown below, each with its picture.
 | Importers | inside the Workbench | Read CSV files of a Collector, the history of a Prometheus server and other data into the repository of a project. |
 | Embedded Solr | inside the Workbench, under `~/.ekg/solr` | The repository of the workstation. It holds what the internal Collector collects and what is imported into a local project. |
 | External Collector | a server, a jump host, a Raspberry Pi, or a measured host itself | The standalone Collector process, configured in YAML. It runs without a Workbench, headless or with a [local display](collector.md#the-display), and writes into one repository: CSV files, a remote Solr or Elasticsearch. |
-| Remote repository | a server of its own | Solr (standalone or SolrCloud), Elasticsearch or ClickHouse, registered in the Workbench with **Repository → Add...**. It is queried by one or several Workbenches. An external Collector writes into Solr and Elasticsearch, the importers write into each of them. |
+| Remote repository | a server of its own | Solr (standalone or SolrCloud), Elasticsearch or ClickHouse, registered in the Workbench with **Repository → Add Repository...**. It is queried by one or several Workbenches. An external Collector writes into Solr and Elasticsearch, the importers write into each of them. |
 
 The internal and the external Collector are the same engine with the same configuration model:
 the Workbench compiles a data source to the configuration a standalone Collector reads. They
@@ -76,6 +76,10 @@ CSV is the output a Collector has unless it is told otherwise.
 
 The Collector writes into a Solr server, and the Workbench queries that server directly. Nothing
 is copied and nothing is imported.
+
+The Workbench has to be told of both: **Repository → Add Repository...** adds the server, and
+**Repository → Add Project...** the project, under the name the Collector has as `project` in its
+configuration. See [Repositories](workbench.md#repositories).
 
 - **For:** analysis while the collection runs, several analysts on the same data, and a
   repository that is to live long.

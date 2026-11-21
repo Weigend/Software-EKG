@@ -28,14 +28,10 @@
                 <Menu fx:id="importMenu" mnemonicParsing="false" text="Import" id="import">
                     <SeparatorMenuItem id="importerMenuAreaStart" visible="false" />
                     <SeparatorMenuItem id="importerMenuAreaEnd" visible="false" />
-
-                    <!-- below the importers: what else belongs to bringing data in by hand, added
-                         at runtime by the modules -->
-                    <SeparatorMenuItem />
                 </Menu>
 
-                <!-- Repository menu: the repositories the time series are stored in. The entries are
-                     added at runtime by the repository module. -->
+                <!-- Repository menu: the repositories the time series are stored in, and the
+                     projects of a repository. The entries are added at runtime by the modules. -->
                 <Menu fx:id="repositoryMenu" mnemonicParsing="false" text="Repository" id="repository" />
 
                 <!-- Window menu: the entries of the modules are added at runtime above the separator -->

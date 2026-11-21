@@ -241,9 +241,8 @@ public class EkgApplicationController extends DefaultApplicationWindow
         repositoryMenu.getItems().add(menuItem);
     }
 
-    public void addImportMenuItem(MenuItem menuItem) {
-        // at the end: below the importers, which keep their own sorted block
-        importMenu.getItems().add(menuItem);
+    public void addRepositoryMenuItemFirst(MenuItem menuItem) {
+        repositoryMenu.getItems().add(0, menuItem);
     }
 
     public void addWindowMenuItem(MenuItem menuItem) {
