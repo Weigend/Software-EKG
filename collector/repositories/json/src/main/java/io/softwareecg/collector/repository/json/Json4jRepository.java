@@ -158,9 +158,27 @@ public class Json4jRepository implements StaticTimeSeriesRepository {
         }
     }
 
+    /**
+     * Nothing to do: every document is written to the file when it is added.
+     * <p>
+     * A job that collects from a source with a history of its own flushes after every cycle. This
+     * must not begin a new file - with the limit of files kept, only the documents of the last
+     * cycles would be left.
+     */
     @Override
     public void flush() {
-        appender.rollOver();
+        // the appender writes immediately
+    }
+
+    /**
+     * The storage is given up, at the end of the job or because its metrics changed: what is
+     * written under the same name afterwards begins a new file.
+     */
+    @Override
+    public void cleanUp() {
+        if (appender != null) {
+            appender.rollOver();
+        }
     }
 
     @SuppressWarnings("unchecked")
