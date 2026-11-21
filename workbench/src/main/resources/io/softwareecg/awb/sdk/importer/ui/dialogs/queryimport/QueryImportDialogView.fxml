@@ -50,11 +50,11 @@
                            GridPane.columnIndex="0" GridPane.rowIndex="0" managed="false" visible="false"/>
                     <HBox fx:id="deltaImportBox" GridPane.columnIndex="1" GridPane.rowIndex="0"
                           spacing="10" alignment="CENTER_LEFT" managed="false" visible="false">
-                        <CheckBox fx:id="chkDeltaImport" text="Nur neue Daten seit letztem Import laden" />
+                        <CheckBox fx:id="chkDeltaImport" text="Load only what is new since the last import" />
                     </HBox>
 
                     <!-- Row 1: Import time range -->
-                    <Label styleClass="dialogLabel" text="Import-Zeitraum:"
+                    <Label styleClass="dialogLabel" text="Import Range:"
                            GridPane.columnIndex="0" GridPane.rowIndex="1"/>
                     <ComboBox fx:id="cmbImportRange" GridPane.columnIndex="1" GridPane.rowIndex="1" maxWidth="Infinity" />
                 </GridPane>

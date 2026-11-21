@@ -46,6 +46,6 @@ public class CsvImportDialogController extends FileImportDialogController {
      * and reconfigure the default view.
      */
     private void initExtViewComponents() {
-        defaultFileSelector.setLabelText("Pfad Collector Logs:");
+        defaultFileSelector.setLabelText("Path Collector Logs:");
     }
 }

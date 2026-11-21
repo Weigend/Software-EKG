@@ -7,6 +7,7 @@ import io.softwareecg.awb.sdk.core.resourceloader.CdiFxmlLoader;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyProperty;
+import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.scene.layout.GridPane;
 
 /**
@@ -36,6 +37,13 @@ public class QuerySourceSelector extends GridPane {
 
     public ReadOnlyProperty<ImporterSourceRepository> getImportSourceRepositoryProperty() {
         return controller.getViewModel().getImportSourceRepositoryProperty();
+    }
+
+    /**
+     * @return the address of the server as it stands in its field
+     */
+    public ReadOnlyStringProperty repositoryUrlProperty() {
+        return controller.getViewModel().repositoryUrlProperty();
     }
 
     public void disableViewReset(boolean isDisabled) {

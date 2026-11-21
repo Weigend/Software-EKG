@@ -94,8 +94,8 @@ public abstract class ImportTask extends Task<Void> {
     public void cancelImport() {
         cancelledByUser = true;
         cancel(false);
-        eventBus.publish(new ProgressEvent("Import in Projekt '" + projectConfig.getProjectName()
-                + "' wird abgebrochen ...", -1, this));
+        eventBus.publish(new ProgressEvent("Cancelling the import into project '" + projectConfig.getProjectName()
+                + "' ...", -1, this));
     }
 
     /** {@code true} once the user has cancelled the import. */
@@ -149,7 +149,7 @@ public abstract class ImportTask extends Task<Void> {
             return null;
         }
 
-        eventBus.publish(CancellableTaskEvent.started(this, "Import abbrechen", this::cancelImport));
+        eventBus.publish(CancellableTaskEvent.started(this, "Cancel import", this::cancelImport));
         try {
             doImport();
             if (cancelledByUser) {
@@ -178,8 +178,8 @@ public abstract class ImportTask extends Task<Void> {
     
     private void publishCancelled() {
         LOGGER.info("Import for project '{}' cancelled by the user", projectConfig.getProjectName());
-        eventBus.publish(new ProgressEvent("Import in Projekt '" + projectConfig.getProjectName()
-                + "' abgebrochen.", 1.0, this));
+        eventBus.publish(new ProgressEvent("Import into project '" + projectConfig.getProjectName()
+                + "' cancelled.", 1.0, this));
     }
 
     /**

@@ -452,7 +452,7 @@ public class PrometheusLocalImportStrategy extends LocalProjectImportStrategy {
         // Check if user selected an import range in the dialog
         String dialogRange = (projectConfig != null) ? projectConfig.getImportRange() : null;
 
-        if (dialogRange != null && !"Alle".equalsIgnoreCase(dialogRange) && !"all".equalsIgnoreCase(dialogRange)) {
+        if (dialogRange != null && !TargetProjectConfig.IMPORT_RANGE_ALL.equalsIgnoreCase(dialogRange)) {
             // Parse the dialog selection (e.g. "1d", "2d", "3d", "5d", "10d")
             long hours = parseDialogRange(dialogRange);
             if (hours > 0) {

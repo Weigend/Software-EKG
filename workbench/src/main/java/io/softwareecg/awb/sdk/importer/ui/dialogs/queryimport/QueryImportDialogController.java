@@ -12,6 +12,7 @@ import io.softwareecg.awb.sdk.importer.tasks.LocalProjectImportTask;
 import io.softwareecg.awb.sdk.importer.tasks.RemoteProjectImportTask;
 import io.softwareecg.awb.sdk.importer.tasks.SplitSourceProjectImportStrategy;
 import io.softwareecg.awb.sdk.importer.ui.controls.qdsselector.QuerySourceSelector;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,6 +23,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
 import java.net.URL;
@@ -114,7 +116,7 @@ public class QueryImportDialogController implements Initializable {
 
     /**
      * ComboBox to select the import time range.
-     * Options: 1d, 2d, 3d, 5d, 10d, Alle
+     * Options: 1d, 2d, 3d, 5d, 10d, All
      */
     @FXML
     protected ComboBox<String> cmbImportRange;
@@ -208,8 +210,8 @@ public class QueryImportDialogController implements Initializable {
     private void initModelToView() {
         // Populate import time range ComboBox
         if (cmbImportRange != null) {
-            cmbImportRange.getItems().addAll("1d", "2d", "3d", "5d", "10d", "Alle");
-            cmbImportRange.setValue("Alle");
+            cmbImportRange.getItems().addAll("1d", "2d", "3d", "5d", "10d", TargetProjectConfig.IMPORT_RANGE_ALL);
+            cmbImportRange.setValue(TargetProjectConfig.IMPORT_RANGE_ALL);
         }
 
         // Disable import range ComboBox when delta import is selected
@@ -240,6 +242,14 @@ public class QueryImportDialogController implements Initializable {
                 updateDeltaImportVisibility(projectSelector.getTargetProjectConfiguration().isNewProject());
             }
         });
+
+        // an import needs a project to go to and a server to come from
+        this.btnOK.disableProperty().bind(
+                projectSelector.isValidProjectDefinitionProperty().not()
+                        .or(repositorySelector.selectedRepositoryProperty().isNull())
+                        .or(Bindings.createBooleanBinding(
+                                () -> StringUtils.isBlank(querySourceSelector.repositoryUrlProperty().get()),
+                                querySourceSelector.repositoryUrlProperty())));
     }
 
     /**
@@ -297,7 +307,7 @@ public class QueryImportDialogController implements Initializable {
         // Set import time range from ComboBox
         if (cmbImportRange != null && config != null) {
             String selectedRange = cmbImportRange.getValue();
-            config.setImportRange(selectedRange != null ? selectedRange : "Alle");
+            config.setImportRange(selectedRange != null ? selectedRange : TargetProjectConfig.IMPORT_RANGE_ALL);
             LOGGER.info("Import range set to: {}", config.getImportRange());
         }
 

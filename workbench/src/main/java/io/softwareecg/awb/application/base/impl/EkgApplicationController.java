@@ -296,7 +296,7 @@ public class EkgApplicationController extends DefaultApplicationWindow
         cancelTaskButton.setVisible(show);
         cancelTaskButton.setManaged(show);
         cancelTaskButton.setDisable(label == null);
-        cancelTaskButton.setText(label != null ? label : "Wird abgebrochen ...");
+        cancelTaskButton.setText(label != null ? label : "Cancelling ...");
     }
 
     private void registerErrorHandler() {
@@ -314,12 +314,12 @@ public class EkgApplicationController extends DefaultApplicationWindow
 
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Fehler!");
+        alert.setTitle("Error");
 
         if (event.hasCustomErrorMessage()) {
             alert.setHeaderText(event.getCustomErrorMessage());
         } else {
-            alert.setHeaderText("In folgender Klasse ist ein Fehler aufgetreten: " + source.getClass().getSimpleName());
+            alert.setHeaderText("An error occurred in: " + source.getClass().getSimpleName());
         }
 
         if (cause != null) {

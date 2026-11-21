@@ -12,6 +12,11 @@ package io.softwareecg.awb.sdk.awbapi.project;
  */
 public class TargetProjectConfig {
 
+    /**
+     * The import range that means everything the source has.
+     */
+    public static final String IMPORT_RANGE_ALL = "All";
+
     public String projectName;
 
     public boolean overwriteExistingData;
@@ -20,9 +25,9 @@ public class TargetProjectConfig {
 
     /**
      * The import time range selected by the user in the dialog.
-     * Values: "1d", "2d", "3d", "5d", "10d", "Alle"
+     * Values: "1d", "2d", "3d", "5d", "10d", {@link #IMPORT_RANGE_ALL}
      */
-    public String importRange = "Alle";
+    public String importRange = IMPORT_RANGE_ALL;
 
     public boolean useSplitSource() {
         return false;

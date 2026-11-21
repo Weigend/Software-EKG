@@ -46,7 +46,7 @@ public class PrometheusClient {
 
     private static final Logger LOGGER = EkgLogger.get();
 
-    private static final String ERR_MSG = "Fehler beim Zugriff auf Prometheus. Grund: ";
+    private static final String ERR_MSG = "Could not access Prometheus. Reason: ";
 
     private static final String API_APPENDIX = "/v1";
 
