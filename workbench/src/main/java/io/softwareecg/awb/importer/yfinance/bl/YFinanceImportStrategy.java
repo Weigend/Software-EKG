@@ -12,6 +12,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class YFinanceImportStrategy extends LocalProjectImportStrategy {
@@ -19,9 +20,13 @@ public class YFinanceImportStrategy extends LocalProjectImportStrategy {
     private static final Logger LOGGER = EkgLogger.get();
 
     private final List<String> paths;
-    private final YFinanceImportOptions options;
+    private final Supplier<YFinanceImportOptions> options;
 
-    public YFinanceImportStrategy(List<String> paths, YFinanceImportOptions options) {
+    /**
+     * @param paths   the files and directories chosen in the dialog
+     * @param options what to import, asked for when an import begins
+     */
+    public YFinanceImportStrategy(List<String> paths, Supplier<YFinanceImportOptions> options) {
         this.paths = paths;
         this.options = options;
     }
@@ -38,7 +43,7 @@ public class YFinanceImportStrategy extends LocalProjectImportStrategy {
         List<File> orderedSymbolDirs = new ArrayList<>(symbolDirs);
         int numberOfDirs = orderedSymbolDirs.size();
         AtomicInteger importedDirs = new AtomicInteger(0);
-        YFinanceMarketDataParser parser = new YFinanceMarketDataParser(options);
+        YFinanceMarketDataParser parser = new YFinanceMarketDataParser(options.get());
 
         return orderedSymbolDirs.stream()
                 .flatMap(symbolDir -> {
