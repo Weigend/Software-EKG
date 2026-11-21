@@ -61,9 +61,8 @@ ausdrücklich ersetzt:
   JavaFX, Oberfläche nicht an der Geschäftslogik vorbei auf die Datenhaltung, Datenhaltung ohne
   Oberfläche. Generierte Avaje-Module sind ausgenommen, weil sie alle Schichten verdrahten.
 - **Abhängigkeiten.** Die Workbench bindet `collector-core` ohne dessen JavaScript-Engine
-  (GraalJS) und WebSocket-Server ein. Beide braucht nur der eigenständige Collector: GraalJS für
-  berechnete Metriken (Quelle `calc`), und auch dort wird die Engine erst gestartet, wenn eine
-  solche Metrik abgefragt wird.
+  (GraalJS) ein. Sie braucht nur der eigenständige Collector, für berechnete Metriken (Quelle
+  `calc`), und auch dort wird die Engine erst gestartet, wenn eine solche Metrik abgefragt wird.
 - **Daten außerhalb des Builds.** Der Solr-Index liegt unter `~/.ekg/solr`, nicht unter
   `target/`. Die Solr-Konfiguration wird bei jedem Start aus der Anwendung dorthin kopiert.
 - **Eine Version.** `revision` im Root-POM; Programme und Skripte lesen sie aus dem Build.

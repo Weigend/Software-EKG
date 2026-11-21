@@ -15,7 +15,7 @@
     <description>Configuration, runtime, source and repository contracts, SSH and collector supervision.</description>
 
     <properties>
-        <!-- Useful for restricted CI stages; the core tests bind local SSH/WebSocket ports. -->
+        <!-- Useful for restricted CI stages; the core tests bind local SSH ports. -->
         <skip.core.tests>false</skip.core.tests>
     </properties>
 
@@ -28,27 +28,6 @@
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-yaml</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.websocket</groupId>
-            <artifactId>javax.websocket-api</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.tyrus</groupId>
-            <artifactId>tyrus-server</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.tyrus</groupId>
-            <artifactId>tyrus-client</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.tyrus</groupId>
-            <artifactId>tyrus-container-grizzly</artifactId>
-            <version>1.0</version>
         </dependency>
 
         <dependency>

@@ -72,11 +72,10 @@ Repository factories: CSV, archive, Solr and Elasticsearch. The line
 one; remote RDB stores read their connection from `remote-repository-config.properties`. See
 [Collector repositories](collector-repositories.md#selecting-a-repository).
 
-Collector connectors are a second ServiceLoader/configuration surface. The default NOP connector
-exposes nothing. The WebSocket connector binds `localhost:8025` below `/collector` and exposes the
-in-memory values; it is a legacy local integration surface rather than a secured remote API. Select
-an `ICollectorConnector` implementation through its fully qualified interface key in
-`collector.properties` only when a local client requires it.
+Collector connectors are a second ServiceLoader/configuration surface. The only connector of the
+distribution is the NOP connector, which exposes nothing. The interface remains as an extension
+point: an `ICollectorConnector` implementation of your own is selected through its fully
+qualified interface key in `collector.properties`.
 
 ## Workbench menus and actions
 
@@ -163,6 +162,10 @@ Workbench extensions inside the consolidated module and validate its architectur
 - `ekgjolokia` targets the historical filtered endpoint; prefer `jolokia`.
 - Windows counters can be written with their English names on a Windows of every language. The
   source `win` needs a Collector on Windows with the native library; `%1` is not a placeholder.
+- Collectors cannot be chained any more: one Collector does not read the values of another. A
+  Windows host behind a firewall is read by a Collector on the host itself; see
+  [Architecture](architecture.md#the-measured-systems). The HTTPS and WebSocket connectors of
+  earlier versions are removed.
 - Unix parser output varies by tool implementation. `unix` expects the batch mode of the Linux
   `top`.
 - The JSON repository of earlier versions, which was never part of the distribution, is removed.

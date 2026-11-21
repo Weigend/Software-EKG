@@ -122,7 +122,7 @@ mvn clean package -DskipTests
 `.mvn/jvm.config` gibt Maven zwei JVM-Optionen mit, damit Java 25 nicht bei jedem Aufruf vor
 Bibliotheken warnt, die Maven selbst mitbringt (jansi, guava).
 
-Die Core-Tests öffnen lokale SSH- und WebSocket-Ports. In eingeschränkten CI-Schritten können sie getrennt ausgeführt werden:
+Die Core-Tests öffnen lokale SSH-Ports. In eingeschränkten CI-Schritten können sie getrennt ausgeführt werden:
 
 ```bash
 mvn test -Dskip.core.tests=true

@@ -61,9 +61,8 @@ This has been replaced explicitly:
   without JavaFX, no access from the UI to the data layer that bypasses the business logic, data
   layer without UI. Generated Avaje modules are exempt because they wire all layers together.
 - **Dependencies.** The workbench includes `collector-core` without its JavaScript engine
-  (GraalJS) and WebSocket server. Only the standalone collector needs both: GraalJS for
-  calculated metrics (source `calc`), and even there the engine is only started when such a
-  metric is queried.
+  (GraalJS). Only the standalone collector needs it, for calculated metrics (source `calc`),
+  and even there the engine is only started when such a metric is queried.
 - **Data outside the build.** The Solr index is located under `~/.ekg/solr`, not under
   `target/`. The Solr configuration is copied there from the application on every start.
 - **One version.** `revision` in the root POM; programs and scripts read it from the build.

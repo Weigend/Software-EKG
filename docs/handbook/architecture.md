@@ -118,6 +118,11 @@ Collector can read all three kinds of systems at once, and that is the point: th
 Linux database server, a Windows application server and the pods of a cluster end up in one
 repository and one chart.
 
+A Windows host whose counters cannot be read over the network, because a firewall is in
+between, is read by a Collector on the host itself. That Collector writes CSV files there, or
+into a remote Solr if the host may open a connection to it. One Collector does not read from
+another: the chaining of Collectors that earlier versions had for this case is removed.
+
 The sources are described in [Source modules](collector-sources.md), the repositories in
 [Collector repositories](collector-repositories.md).
 

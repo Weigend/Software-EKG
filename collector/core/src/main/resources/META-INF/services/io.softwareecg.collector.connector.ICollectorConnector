@@ -1,2 +1,1 @@
 io.softwareecg.collector.connector.nop.NOPCollectorConnector
-io.softwareecg.collector.connector.websockets.WebsocketConnector

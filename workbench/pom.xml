@@ -28,17 +28,13 @@
             <artifactId>collector-core</artifactId>
             <version>${revision}</version>
             <!-- The workbench embeds the collector as a scheduler for its data sources. It needs
-                 neither the calculated counters (GraalJS, about 50 MB) nor the websocket connector
-                 of the stand-alone collector. A source that cannot be loaded without them is
-                 skipped by the collector's source registry. -->
+                 not the calculated counters (GraalJS, about 50 MB) of the stand-alone collector.
+                 A source that cannot be loaded without them is skipped by the collector's source
+                 registry. -->
             <exclusions>
                 <exclusion><groupId>org.graalvm.polyglot</groupId><artifactId>polyglot</artifactId></exclusion>
                 <exclusion><groupId>org.graalvm.polyglot</groupId><artifactId>js</artifactId></exclusion>
                 <exclusion><groupId>org.graalvm.js</groupId><artifactId>js-scriptengine</artifactId></exclusion>
-                <exclusion><groupId>org.glassfish.tyrus</groupId><artifactId>tyrus-server</artifactId></exclusion>
-                <exclusion><groupId>org.glassfish.tyrus</groupId><artifactId>tyrus-client</artifactId></exclusion>
-                <exclusion><groupId>org.glassfish.tyrus</groupId><artifactId>tyrus-container-grizzly</artifactId></exclusion>
-                <exclusion><groupId>javax.websocket</groupId><artifactId>javax.websocket-api</artifactId></exclusion>
             </exclusions>
         </dependency>
         <dependency>
