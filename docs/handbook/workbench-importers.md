@@ -2,12 +2,12 @@
 
 [Handbook home](README.md) · [Workbench](workbench.md) · [Extensions](extensions.md)
 
-An importer reads data that already exists somewhere into a project: the CSV files of a
-Collector, the history of a Prometheus server, or public data sets that have nothing to do with
-software. The Workbench has five. They are in the **Import** menu, in alphabetical order, and in
-the context menu of a project.
+An importer reads data that already exists somewhere into a project. The Workbench has five, in
+the **Import** menu and in the context menu of a project. The first two read what software
+systems measure: the CSV files of a Collector and the history of a Prometheus server. The other
+three, below the line, read public data sets that have nothing to do with software.
 
-![The Import menu with its five importers](../images/importer-menu.png)
+![The Import menu: the Collector logs and Prometheus first, then the three other data sets](../images/importer-menu.png)
 
 | Importer | Where the data comes from | What it reads |
 | --- | --- | --- |
@@ -24,7 +24,9 @@ it works without a connection.
 ## The dialog
 
 All importers share one dialog. Its upper half says where the data goes, its lower half where
-it comes from.
+it comes from. This is the one of the Collector logs:
+
+![The dialog of the Collector log importer](../images/importer-collector-csv-dialog.png)
 
 | Field | Meaning |
 | --- | --- |
@@ -40,15 +42,16 @@ it comes from.
 with `Import in series <project> successful.` The project then appears in the explorer below
 its repository.
 
-## EKG Collector Logs
+## What software systems measure
+
+### EKG Collector Logs
 
 **Where the data comes from.** From an external Collector with the CSV repository, which is the
 one it has unless told otherwise. It writes its files to `<log directory>/ekg/<start time>/`,
 one per job and day; see [CSV and archive](collector-repositories.md#csv-and-archive). Copy the
 directory to the workstation. This is the way for a collection behind a jump host or across an
-air gap, and for a frozen snapshot of an incident.
-
-![The dialog of the Collector log importer](../images/importer-collector-csv-dialog.png)
+air gap, and for a frozen snapshot of an incident. Its dialog is the one shown
+[above](#the-dialog); **Path Collector Logs** takes the directory.
 
 The importer reads every published format: the current one with the metadata of the job in its
 header, including the cloud-native dimensions, and the classic rows of Collectors before 6.1.
@@ -63,7 +66,7 @@ once: importing it again can store its values a second time.
 The picture shows four minutes of a host read with the source `unix`: the metrics of the file
 are in the explorer, and `\Cpu\us` is in the chart.
 
-## Prometheus Data
+### Prometheus Data
 
 **Where the data comes from.** From the HTTP API of a Prometheus server. **Repository URL** is
 the address of the server, such as `http://prometheus.example.org:9090`. The importer asks the
@@ -75,8 +78,8 @@ The dialog has a second part for the server:
 
 | Field | Meaning |
 | --- | --- |
-| Import-Zeitraum (the range to import) | The last 1, 2, 3, 5 or 10 days, or `Alle`: everything the server has. |
-| Repository URL | The address of the server. It can be entered once the project is named. |
+| Import Range | The last 1, 2, 3, 5 or 10 days, or `All`: everything the server has. |
+| Repository URL | The address of the server. It can be entered once the project is named, and **Import Data** can be pressed once it is entered. |
 | Authentication Type | None, user name and password, a JWT bearer token, or OAuth2 client credentials with the address of the OAuth server. |
 
 With **Project Time Series Source** the importer does one of two things:
@@ -123,7 +126,13 @@ The Workbench can also collect from a Prometheus server continuously, with
 [Data Sources and New Analysis](workbench.md#data-sources-and-new-analysis). The importer is
 for a range of the past.
 
-## OWID COVID-19 Data
+## Data that has nothing to do with software
+
+The data model of Software-EKG is not bound to servers and processes: a series is a metric of
+something that belongs to a group. These three importers show it with a pandemic and two
+markets, and they are a quick way to try the charts without a system to measure.
+
+### OWID COVID-19 Data
 
 **Where the data comes from.** From [Our World in Data](https://ourworldindata.org/coronavirus),
 which publishes its COVID-19 data set as one CSV file. The header of the dialog names the file
@@ -155,9 +164,9 @@ A value of 0 is not stored, and neither is a text.
 
 The picture shows what the data model is good for beyond software: below *Europe* the node `*`
 stands for all its countries, and a double click on `hosp_patients_per_million` puts them into
-one chart. This module demonstrates that EKG is a general comparative time-series tool.
+one chart.
 
-## Binance Market Data
+### Binance Market Data
 
 **Where the data comes from.** From `data.binance.vision`, where the exchange Binance publishes
 its market data as files. The importer reads the aggregated trades of the spot market
@@ -194,7 +203,7 @@ Quote Asset and Symbol are stored in the cloud-native dimensions namespace and s
 The picture shows the month of a small symbol, 336,270 trades. A month of a large one such as
 `BTCUSDT` has many millions; begin with a single file.
 
-## Yahoo Finance Market Data
+### Yahoo Finance Market Data
 
 **Where the data comes from.** From Yahoo Finance, fetched with the Python library
 [`yfinance`](https://github.com/ranaroussi/yfinance). There is no file to download as with the
