@@ -1,15 +1,3 @@
-//______________________________________________________________________________
-//
-//          Project:    Software EKG
-//______________________________________________________________________________
-//
-//         Author:      Weigend AM 2009 - 2014
-//______________________________________________________________________________
-//
-// Notice: This piece of software was created, designed and implemented by
-// experienced craftsmen and innovators in Munich, Germany.
-// Changes should be done with respect to the original design.
-//______________________________________________________________________________
 package io.softwareecg.collector.source.log.mock.ssh;
 
 import org.apache.sshd.server.Environment;
@@ -21,11 +9,15 @@ import org.apache.sshd.server.command.CommandFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
- * Created by martin.binder on 10.05.2014.
+ * Answers every command a client sends with what the receiver makes of it, and ends it.
+ *
+ * @since 12.05.2014
  */
 public class SshCommandFactoryMock implements CommandFactory {
+
     private final ISshCommandReceiver commandReceiver;
 
     public SshCommandFactoryMock(ISshCommandReceiver commandReceiver) {
@@ -34,17 +26,15 @@ public class SshCommandFactoryMock implements CommandFactory {
 
     @Override
     public Command createCommand(ChannelSession channel, final String command) {
-
         return new Command() {
-            private boolean shutdown = false;
-            private InputStream in;
+
             private OutputStream out;
-            private OutputStream err;
+
             private ExitCallback exitCallback;
 
             @Override
             public void setInputStream(InputStream in) {
-                this.in = in;
+                // the commands read nothing
             }
 
             @Override
@@ -54,7 +44,7 @@ public class SshCommandFactoryMock implements CommandFactory {
 
             @Override
             public void setErrorStream(OutputStream err) {
-                this.err = err;
+                // errors are part of the answer
             }
 
             @Override
@@ -63,28 +53,24 @@ public class SshCommandFactoryMock implements CommandFactory {
             }
 
             @Override
-            public void start(ChannelSession channel, Environment env) throws IOException {
-                while(!shutdown) {
-                    out.write(commandReceiver.execute(command).getBytes());
-                    out.flush();
+            public void start(ChannelSession channel, Environment env) {
+                // must not block the thread of the server
+                Thread thread = new Thread(() -> {
                     try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        out.write(commandReceiver.execute(command).getBytes(StandardCharsets.UTF_8));
+                        out.flush();
+                        exitCallback.onExit(0);
+                    } catch (IOException | RuntimeException e) {
+                        exitCallback.onExit(1, String.valueOf(e.getMessage()));
                     }
-                }
-                exitCallback.onExit(0);
+                }, "ssh-command-mock");
+                thread.setDaemon(true);
+                thread.start();
             }
 
             @Override
             public void destroy(ChannelSession channel) {
-                shutdown = true;
-
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    // do nothing
-                }
+                // nothing is kept
             }
         };
     }

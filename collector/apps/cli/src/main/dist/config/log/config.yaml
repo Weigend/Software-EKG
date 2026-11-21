@@ -1,0 +1,61 @@
+# Software-EKG collector - the events of a log file as time series, read over SSH.
+#
+# What an operator would look for with "tail -f" and "grep" and count by hand: every metric is
+# a regular expression, and its series is the number of lines per interval that contain it.
+# With a group named sum, avg, min, max or last the series is that aggregate of the numbers the
+# group captures - a response time, a number of bytes.
+#
+# Give every metric a label: the expression itself is a poor name for a series.
+#
+# A line counts at the time of its timestamp, not at the time it is read. The usual formats
+# are recognised ("2026-11-21 10:15:30,123", ISO 8601, the access logs of web servers, syslog).
+
+project: Checkout logs
+
+metricGroups:
+  checkout-events:
+    type: log
+    metrics:
+      - metric: 'user login succeeded'
+        label: logins
+      - metric: 'user login failed'
+        label: failed logins
+      - metric: 'transaction failed.*code=TX-41'
+        label: transaction failed TX-41
+      - metric: 'transaction failed.*code=TX-72'
+        label: transaction failed TX-72
+      - metric: 'request took (?<avg>\d+) ms'
+        label: request time ms, average
+      - metric: 'request took (?<max>\d+) ms'
+        label: request time ms, slowest
+
+processGroups:
+  checkout:
+    - name: checkout
+      # the log file, on every host of the group
+      source: '/var/log/checkout/checkout-${REF:hostName}.log'
+      # Arguments, separated by semicolons. All of them are optional:
+      #   lookback=24h                     also read what the file already has of the last 24
+      #                                    hours; without it only what is written from now on
+      #   timestamp=dd.MM.yyyy HH:mm:ss    the pattern of the timestamps, if it is not a usual one
+      #   zone=Europe/Berlin               the time zone of timestamps that name none, if it is
+      #                                    not the one of the collector
+      #   charset=ISO-8859-1               the character set of the file, if it is not UTF-8
+      #   port=2222                        the SSH port, if it is not 22
+      args: 'lookback=24h'
+
+hostGroups:
+  checkout-servers:
+    # the login the file is read with; it needs nothing but the right to read the file
+    username: ekg
+    password: '${ENV:EKG_SSH_PASSWORD}'
+    hosts:
+      - checkout-01
+      - checkout-02
+
+collectors:
+  # The interval is the resolution of the series: one value for every 15 seconds.
+  - metricGroup: checkout-events
+    processGroup: checkout
+    hostGroup: checkout-servers
+    interval: 15s

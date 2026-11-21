@@ -62,8 +62,9 @@ metricGroups:
     #   jmx          JMX directly
     #   win          Windows performance counters            '\Processor(_Total)\*'
     #   calc         calculated from other metrics           'value("\CPU\us") + value("\CPU\sy")'
+    #   log          lines of a log file, counted            'user login succeeded'
     #   mock         invented values, to try a configuration
-    #   ekgjolokia, log, rlog
+    #   ekgjolokia, rlog
     type: jolokia
 
     metrics:
