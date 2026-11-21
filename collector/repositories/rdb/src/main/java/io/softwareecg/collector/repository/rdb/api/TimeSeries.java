@@ -112,6 +112,13 @@ public class TimeSeries {
     // ----------------- generic filter dimension ------------------
 
     /**
+     * The id of the group the process belongs to in the collector configuration,
+     * for example 'app-jvm'. Not set for series of a job that knows no group.
+     */
+    @PersistedField(EkgSchemaField.TS_PROCESS_GROUP_NAME)
+    private String processGroupName;
+
+    /**
      * The name of the process the measured metric belongs to.
      * For example 'Java' or 'Payara Micro'
      */
@@ -242,6 +249,7 @@ public class TimeSeries {
         }
 
         setContainerId(timeSeriesHeader.getContainerId());
+        setProcessGroupName(timeSeriesHeader.getProcessGroupId());
         setProcessLabel(timeSeriesHeader.getProcessLabel());
         setMeasurement(measurement);
         setMetricGroupId(timeSeriesHeader.getMetricGroupId());
@@ -341,6 +349,14 @@ public class TimeSeries {
 
     public void setContainerId(String container) {
         this.container = container;
+    }
+
+    public String getProcessGroupName() {
+        return processGroupName;
+    }
+
+    public void setProcessGroupName(String processGroupName) {
+        this.processGroupName = processGroupName;
     }
 
     public String getProcessName() {
@@ -485,6 +501,7 @@ public class TimeSeries {
                 Objects.equals(service, that.service) &&
                 Objects.equals(pod, that.pod) &&
                 Objects.equals(container, that.container) &&
+                Objects.equals(processGroupName, that.processGroupName) &&
                 Objects.equals(processName, that.processName) &&
                 Objects.equals(metricGroupId, that.metricGroupId) &&
                 Objects.equals(measurement, that.measurement) &&
@@ -499,7 +516,8 @@ public class TimeSeries {
     @Override
     public int hashCode() {
         int result = Objects.hash(super.hashCode(), projectName, hostGroupName, hostName, namespace, service, pod,
-                container, processName, metricGroupId, measurement, metric, start, end, ag, remoteSeriesKey);
+                container, processGroupName, processName, metricGroupId, measurement, metric, start, end, ag,
+                remoteSeriesKey);
         result = 31 * result + Arrays.hashCode(data);
         return result;
     }
@@ -514,6 +532,7 @@ public class TimeSeries {
                 .append("service", service)
                 .append("pod", pod)
                 .append("container", container)
+                .append("processGroupName", processGroupName)
                 .append("processName", processName)
                 .append("metricGroupId", metricGroupId)
                 .append("measurement", measurement)
@@ -526,9 +545,16 @@ public class TimeSeries {
                 .toString();
     }
 
+    /**
+     * The key of all records of one series: what they have in common, whenever they were written.
+     * <p>
+     * The group of the process is part of it, so that processes of the same name in two groups
+     * stay two series. A series without a group has the key it always had.
+     */
     public static int calculateGroupHashKey(String project, String hostGroupName, String hostName, String namespace,
-                                               String service, String pod, String container, String process,
-                                               String measurement,String metricGroupId, String metric) {
+                                               String service, String pod, String container, String processGroup,
+                                               String process, String measurement, String metricGroupId,
+                                               String metric) {
 
         String sb = (project != null ? project : "") +
                 (hostGroupName != null ? hostGroupName : "") +
@@ -537,6 +563,7 @@ public class TimeSeries {
                 (service != null ? service : "") +
                 (pod != null ? pod : "") +
                 (container != null ? container : "") +
+                (processGroup != null ? processGroup : "") +
                 (process != null ? process : "") +
                 // (measurement != null ? measurement : "") +  <-- we can't use measurement because the groupHashKey has
                 // to be the same each day, but the measurement changes from time to time. Let it here in code to
@@ -558,6 +585,7 @@ public class TimeSeries {
           service,
           pod,
           container,
+          processGroupName,
           processName,
           measurement,
           metricGroupId,

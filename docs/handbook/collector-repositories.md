@@ -187,12 +187,29 @@ address.
 The Workbench includes embedded Solr under `~/.ekg/solr`. That store is ideal for offline projects;
 an external Solr is appropriate when Collector and Workbench must share a long-lived repository.
 
+Every record names the job it comes from: project, host group and host, process group and
+process, metric group and metric. The process group is written as the field `ts_processGroup`.
+
+- The collection needs that field in its schema. The schema that comes with the Workbench
+  (`solr/ekgdata/conf/schema.xml`) has it. A collection set up from an older schema rejects the
+  records; the job then shows a storage error with the reason and keeps trying.
+- Records written by an earlier Collector have no process group. In the Workbench a series that
+  is continued by this Collector therefore begins anew at that point, below its process group.
+- Records of one series are merged by a key over these names. The process group is part of it,
+  so records written before and after the change of version are not merged with each other.
+
 ## Elasticsearch
 
 The Elasticsearch repository implements the same relational/time-series repository contract and
 uses the same general RDB controls for commits, compaction and retention. It targets the client
 generation pinned by this build. Verify server compatibility in a staging index before pointing a
 Collector at a managed cluster.
+
+The process group is written here as well, as `ts_processGroup`. An index the Collector creates
+knows it as a keyword, like the other dimensions. An index created by an earlier Collector gets
+the field added by Elasticsearch on the first record, with the mapping Elasticsearch chooses for
+texts; create a new index if the process group is to be filtered exactly. What is said above
+about records of an earlier Collector holds here too.
 
 ## Operational safeguards
 

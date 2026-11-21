@@ -123,6 +123,8 @@ public class SchemaBuilder {
         // common dimensions
         defineField(properties, TS_MEASUREMENT, KEYWORD, true, true, true);
 
+        defineField(properties, TS_PROCESS_GROUP_NAME, KEYWORD, true, true, true);
+
         defineField(properties, TS_PROCESS_NAME, KEYWORD, true, true, true);
 
         defineField(properties, TS_METRIC_GROUP, KEYWORD, true, true, true);

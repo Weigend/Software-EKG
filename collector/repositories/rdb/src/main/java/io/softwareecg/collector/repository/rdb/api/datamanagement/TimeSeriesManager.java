@@ -542,6 +542,7 @@ public class TimeSeriesManager {
             addExpressionIfNotNull(EkgSchemaField.TS_HOST_NAME, header.getHostName());
 
             // common metric attributes
+            addExpressionIfNotNull(EkgSchemaField.TS_PROCESS_GROUP_NAME, header.getProcessGroupId());
             addExpressionIfNotNull(EkgSchemaField.TS_PROCESS_NAME, header.getProcessLabel());
             addExpressionIfNotNull(EkgSchemaField.TS_METRIC_GROUP, header.getMetricGroupId());
 
@@ -570,6 +571,7 @@ public class TimeSeriesManager {
                     timeSeriesHeader.getService(),
                     timeSeriesHeader.getPodName(),
                     timeSeriesHeader.getContainerId(),
+                    timeSeriesHeader.getProcessGroupId(),
                     timeSeriesHeader.getProcessLabel(),
                     "",
                     timeSeriesHeader.getMetricGroupId(),

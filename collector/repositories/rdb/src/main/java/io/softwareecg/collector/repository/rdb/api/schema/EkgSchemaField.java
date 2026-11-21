@@ -120,6 +120,11 @@ public enum EkgSchemaField implements Field {
 
     TS_MEASUREMENT("ts_measurement", SINGLE_VALUE),
 
+    /**
+     * The id of the process group the process belongs to in the collector configuration.
+     */
+    TS_PROCESS_GROUP_NAME("ts_processGroup", SINGLE_VALUE),
+
     TS_PROCESS_NAME("ts_process", SINGLE_VALUE),
 
     TS_METRIC_GROUP("ts_metricGroup", SINGLE_VALUE),

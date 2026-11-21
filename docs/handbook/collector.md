@@ -215,8 +215,9 @@ selection shows a metric for all hosts of a group in one chart, and the explorer
 processes below their group. Name the groups by what they are (`app-servers`, `app-jvm`, `jvm`),
 not by an incident or a date.
 
-The CSV repository writes all three. The Solr and Elasticsearch repositories write the host
-group and the metric group, not yet the process group.
+The CSV, Solr and Elasticsearch repositories write all three; see
+[Collector repositories](collector-repositories.md) for what a Solr collection or an
+Elasticsearch index needs for it.
 
 ### Reading the file
 

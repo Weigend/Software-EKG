@@ -103,8 +103,8 @@ readable.
 
 The explorer can represent physical hierarchy (host groups, hosts, process groups/processes,
 measurements and metrics) and logical/cloud hierarchy (namespaces, services, pods and containers).
-The level of process groups is shown where series have one: CSV files of a Collector carry the
-process group of its configuration, and an analysis started with **New Analysis** uses the name
+The level of process groups is shown where series have one: what a Collector writes, as CSV
+files or into Solr or Elasticsearch, carries the process group of its configuration, and an analysis started with **New Analysis** uses the name
 of the host group for it. The filter header of a chart has no field for the process group.
 Expand nodes to narrow the context or use the chart filter header. Filter controls accept multiple
 values and wildcards where the backing query supports them. A warning item reports incomplete or
