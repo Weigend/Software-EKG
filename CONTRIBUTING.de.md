@@ -23,7 +23,8 @@ Weitere Build- und Startvarianten stehen im [README](README.de.md#bauen-und-test
 
 - Halte Änderungen möglichst klein und thematisch geschlossen.
 - Ergänze oder aktualisiere Tests für verändertes Verhalten.
-- Führe vor dem Pull Request `xvfb-run -a mvn verify` aus.
+- Führe vor dem Pull Request `xvfb-run -a mvn verify` aus, und `./run-e2e-tests.sh`, wenn du einen
+  Importer, seinen Dialog oder die Menüs geändert hast.
 - Dokumentiere sichtbare Änderungen und neue Konfigurationsoptionen.
 - Committe keine Zugangsdaten, privaten Schlüssel, Produktionsdaten oder generierten Build-Dateien.
 - Akzeptiere, dass Collector-Erweiterungspunkte derzeit keine dauerhaft stabile Drittanbieter-API

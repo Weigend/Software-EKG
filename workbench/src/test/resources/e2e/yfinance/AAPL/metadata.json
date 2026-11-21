@@ -1,0 +1,9 @@
+{
+  "info": {
+    "symbol": "AAPL",
+    "quoteType": "EQUITY",
+    "fullExchangeName": "NasdaqGS",
+    "exchange": "NMS",
+    "country": "United States"
+  }
+}

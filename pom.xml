@@ -99,6 +99,17 @@
             </properties>
         </profile>
         <!-- Software City metrics: activate with  mvn verify -Pmetrics  -->
+        <!-- mvn -pl workbench -am test -Pe2e: the end-to-end tests, and only they. They start the
+             whole workbench and operate it through its user interface (run-e2e-tests.sh). An
+             application can be started only once in a JVM, so they do not run with the other tests. -->
+        <profile>
+            <id>e2e</id>
+            <properties>
+                <test>*E2ETest</test>
+                <surefire.failIfNoSpecifiedTests>false</surefire.failIfNoSpecifiedTests>
+            </properties>
+        </profile>
+
         <profile>
             <id>metrics</id>
             <build>
@@ -734,6 +745,8 @@
                 <configuration>
                     <excludes>
                         <exclude>**/*ManualTest.java</exclude>
+                        <!-- start the whole workbench; they run alone, with the profile e2e -->
+                        <exclude>**/*E2ETest.java</exclude>
                     </excludes>
                     <!-- Mockito is started as a regular Java agent. Otherwise it attaches itself to the
                          running JVM, which newer JDKs warn about and restricted environments forbid. -->

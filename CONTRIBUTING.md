@@ -23,7 +23,8 @@ Further build and start variants are described in the [README](README.md#build-a
 
 - Keep changes as small and thematically self-contained as possible.
 - Add or update tests for changed behaviour.
-- Run `xvfb-run -a mvn verify` before opening the pull request.
+- Run `xvfb-run -a mvn verify` before opening the pull request, and `./run-e2e-tests.sh` if you
+  changed an importer, its dialog or the menus.
 - Document visible changes and new configuration options.
 - Do not commit credentials, private keys, production data or generated build files.
 - Accept that collector extension points currently do not promise a permanently stable

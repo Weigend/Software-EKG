@@ -129,6 +129,26 @@ mvn test -Dskip.core.tests=true
 mvn -pl collector/core test
 ```
 
+### End-to-End-Tests
+
+`mvn test` startet die Workbench nicht. Die End-to-End-Tests tun es: Sie starten die ganze
+Anwendung mit eigenem Datenverzeichnis, wählen jeden Importer im Menü **Import**, füllen seinen
+Dialog aus, importieren kleine Dateien, die bei den Tests liegen (und die Zeitreihen eines
+Prometheus-Servers, der Teil des Tests ist), und fragen dann das Repository, was angekommen ist.
+Außerdem prüfen sie die Reihenfolge des Menüs und das Layout in einem Fenster von 1600 Pixeln.
+
+```bash
+./run-e2e-tests.sh              # auf einem virtuellen Display (xvfb-run), wenn vorhanden
+./run-e2e-tests.sh --show       # auf dem Display der Sitzung, zum Zuschauen
+mvn -pl workbench -am test -Pe2e -Dskip.core.tests=true   # was das Skript aufruft
+```
+
+Die Tests sind die Klassen `*E2ETest` in `workbench/src/test/java/io/softwareecg/awb/e2e`. Die
+Klassen daneben bedienen die Workbench: `Workbench` startet sie und findet Menüs und
+Bedienelemente über Text und Id, `ImportDialog` füllt den Dialog eines Importers aus,
+`ImportedProject` fragt das Repository. Die Bilder, die die Tests von den Dialogen machen,
+liegen in `workbench/target/e2e/screenshots`.
+
 ## Starten
 
 Aus dem Quellbaum, jeweils mit vorherigem Build (ohne Tests):
