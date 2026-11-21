@@ -64,6 +64,17 @@ class ChildrenTask<T extends AbstractItem> extends Task<List<AbstractItem>> impl
         }
     }
 
+    /**
+     * A task is cancelled when the node is loaded anew while it is still loading. Its thread is
+     * not interrupted but left to finish; what it found is not used. Interrupting it would hit
+     * the database or the repository in the middle of a read: an access to the metadata that
+     * was just opening the database failed with "Sleep interrupted" and was logged as an error.
+     */
+    @Override
+    public boolean cancel(boolean mayInterruptIfRunning) {
+        return super.cancel(false);
+    }
+
     @Override
     protected void failed() {
         super.failed();
