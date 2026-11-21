@@ -73,6 +73,11 @@ public class BinanceImportModule extends ImportModule
     }
 
     @Override
+    public int getMenuPosition() {
+        return MENU_GROUP_OTHER_DATA + 10;
+    }
+
+    @Override
     public String getMenuText() {
         return "Binance Market Data";
     }

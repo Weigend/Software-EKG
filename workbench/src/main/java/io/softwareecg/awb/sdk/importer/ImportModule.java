@@ -24,11 +24,13 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -43,6 +45,17 @@ import java.util.List;
 public abstract class ImportModule implements Module {
 
     private static final Logger LOGGER = EkgLogger.get();
+
+    /** First in the menu: what software systems measure - the files of a Collector, a monitoring server. */
+    public static final int MENU_GROUP_SYSTEMS = 100;
+
+    /** Then: data sets that have nothing to do with software. */
+    public static final int MENU_GROUP_OTHER_DATA = 200;
+
+    /** Last: importers that do not say where they belong. */
+    public static final int MENU_GROUP_UNSORTED = 900;
+
+    private static final String MENU_POSITION = "ekg.importer.menuPosition";
 
     private Stage importDialogModal = null;
 
@@ -127,6 +140,56 @@ public abstract class ImportModule implements Module {
     }
 
 
+    /**
+     * Where the importer stands in the menu <b>Import</b> and wherever else the importers are
+     * listed. Importers are ordered by this number and, where it is the same, by their text.
+     * The hundreds are groups, with a line between them in the menu: {@link #MENU_GROUP_SYSTEMS}
+     * for what software systems measure, {@link #MENU_GROUP_OTHER_DATA} for data sets that have
+     * nothing to do with software. An importer that says nothing comes last.
+     *
+     * @return the position in the menu
+     */
+    public int getMenuPosition() {
+        return MENU_GROUP_UNSORTED;
+    }
+
+    /**
+     * @param modules importers in any order
+     * @return the same importers in the order of the menu
+     */
+    public static <M extends ImportModule> List<M> inMenuOrder(Collection<M> modules) {
+        List<M> ordered = new ArrayList<>(modules);
+        ordered.sort(Comparator.comparingInt((M module) -> module.getMenuPosition()).thenComparing(ImportModule::getMenuText));
+        return ordered;
+    }
+
+    /**
+     * Orders the items of the importers and puts a line between their groups.
+     */
+    static List<MenuItem> menuItemsInOrder(List<MenuItem> items) {
+        List<MenuItem> ordered = new ArrayList<>(items);
+        // the lines are drawn anew for what is in the menu now
+        ordered.removeIf(SeparatorMenuItem.class::isInstance);
+        ordered.sort(Comparator.comparingInt(ImportModule::positionOf).thenComparing(MenuItem::getText));
+
+        List<MenuItem> result = new ArrayList<>();
+        for (MenuItem item : ordered) {
+            if (!result.isEmpty() && groupOf(result.get(result.size() - 1)) != groupOf(item)) {
+                result.add(new SeparatorMenuItem());
+            }
+            result.add(item);
+        }
+        return result;
+    }
+
+    private static int positionOf(MenuItem item) {
+        return item.getProperties().get(MENU_POSITION) instanceof Integer position ? position : MENU_GROUP_UNSORTED;
+    }
+
+    private static int groupOf(MenuItem item) {
+        return positionOf(item) / 100;
+    }
+
     //----------------------------------------------------------------------------------------------------------------
 
     protected void bindToAwbFileMenu(String name, EventHandler<ActionEvent> clickHandler) {
@@ -159,10 +222,11 @@ public abstract class ImportModule implements Module {
                 importerMenuItems.add(fileMenuItems.remove(menuItemIndex));
             }
 
-            importerMenuItems.add(MenuUtil.createMenuItem(name, clickHandler));
-            importerMenuItems.sort(Comparator.comparing(MenuItem::getText));
+            MenuItem item = MenuUtil.createMenuItem(name, clickHandler);
+            item.getProperties().put(MENU_POSITION, getMenuPosition());
+            importerMenuItems.add(item);
 
-            fileMenuItems.addAll(menuItemIndex, importerMenuItems);
+            fileMenuItems.addAll(menuItemIndex, menuItemsInOrder(importerMenuItems));
         }
     }
 

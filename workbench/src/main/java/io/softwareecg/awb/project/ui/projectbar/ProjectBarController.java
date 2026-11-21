@@ -299,7 +299,7 @@ public class ProjectBarController implements Initializable {
 
         // otherwise show a context menu with all available importers
         ContextMenu contextMenu = new ContextMenu();
-        for (ImportModule module : importModules) {
+        for (ImportModule module : ImportModule.inMenuOrder(importModules)) {
             MenuItem item = new MenuItem(module.getMenuText());
             item.setOnAction(e -> module.showImportDialog(projectName));
             contextMenu.getItems().add(item);

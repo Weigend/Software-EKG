@@ -69,6 +69,11 @@ public class OwidImportModule extends ImportModule
     }
 
     @Override
+    public int getMenuPosition() {
+        return MENU_GROUP_OTHER_DATA;
+    }
+
+    @Override
     public String getMenuText() {
         return "OWID COVID-19 Data";
     }

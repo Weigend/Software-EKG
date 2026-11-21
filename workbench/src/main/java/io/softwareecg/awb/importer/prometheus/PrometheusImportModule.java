@@ -52,6 +52,11 @@ public class PrometheusImportModule extends ImportModule implements ContextMenuA
     }
 
     @Override
+    public int getMenuPosition() {
+        return MENU_GROUP_SYSTEMS + 10;
+    }
+
+    @Override
     public String getMenuText() {
         return "Prometheus Data";
     }

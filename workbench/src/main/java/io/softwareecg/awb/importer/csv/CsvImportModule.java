@@ -49,6 +49,11 @@ public class CsvImportModule extends ImportModule
     }
 
     @Override
+    public int getMenuPosition() {
+        return MENU_GROUP_SYSTEMS;
+    }
+
+    @Override
     public String getMenuText() {
         return "EKG Collector Logs";
     }

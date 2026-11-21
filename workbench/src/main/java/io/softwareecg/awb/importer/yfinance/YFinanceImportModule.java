@@ -59,6 +59,11 @@ public class YFinanceImportModule extends ImportModule
     }
 
     @Override
+    public int getMenuPosition() {
+        return MENU_GROUP_OTHER_DATA + 20;
+    }
+
+    @Override
     public String getMenuText() {
         return "Yahoo Finance Market Data";
     }
