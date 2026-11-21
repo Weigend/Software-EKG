@@ -35,10 +35,20 @@ public final class OwidMetricParser {
         DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
-    private static final int NUMBER_OF_COLUMNS = 4;
-    private static final int CONTINENT_COLUMN = 1;
-    private static final int COUNTRY_COLUMN = 2;
-    private static final int DATE_COLUMN = 3;
+    private static final String DATE_COLUMN = "date";
+    private static final String CONTINENT_COLUMN = "continent";
+
+    /**
+     * The column of the country: "location" in the classic file (owid-covid-data.csv),
+     * "country" in the compact file of the OWID catalog (compact.csv).
+     */
+    private static final List<String> COUNTRY_COLUMNS = List.of("location", "country");
+
+    /**
+     * The columns that say what a row is about. All other columns are metrics.
+     */
+    private static final Set<String> IDENTITY_COLUMNS =
+            Set.of(DATE_COLUMN, CONTINENT_COLUMN, "location", "country", "iso_code", "code");
 
     private OwidMetricParser() {
         // Hide ctor. This is a static class.
@@ -110,14 +120,24 @@ public final class OwidMetricParser {
         int lineCounter = 0;
         int columnCount = columnNames.length;
 
+        // the columns are found by their names: the classic and the compact file order them differently
+        List<String> header = Arrays.asList(columnNames);
+        int dateColumn = header.indexOf(DATE_COLUMN);
+        int continentColumn = header.indexOf(CONTINENT_COLUMN);
+        int countryColumn = COUNTRY_COLUMNS.stream().mapToInt(header::indexOf).filter(i -> i >= 0).findFirst().orElse(-1);
+        if (dateColumn < 0 || countryColumn < 0) {
+            throw new ParseException("Not an OWID file: it has no column 'date' or no column 'location' / 'country'", 0);
+        }
+
         CsvRow row;
         while ((row = csvParser.nextRow()) != null) {
 
-            long timestamp = DATE_FORMAT.parse(row.getField(DATE_COLUMN)).getTime();
-            String continent = row.getField(CONTINENT_COLUMN);
-            String country = row.getField(COUNTRY_COLUMN);
+            long timestamp = DATE_FORMAT.parse(row.getField(dateColumn)).getTime();
+            String continent = continentColumn < 0 ? "" : row.getField(continentColumn);
+            String country = row.getField(countryColumn);
 
-            if (continent.isBlank() && ("world".equalsIgnoreCase(country) || "international".equalsIgnoreCase(country))) {
+            // the world, income groups and other aggregates belong to no continent
+            if (continent == null || continent.isBlank()) {
                 continent = "Non-Continent";
             }
 
@@ -127,8 +147,11 @@ public final class OwidMetricParser {
                 resultList.addAll(seriesData.values());
             }
 
-            for (int columnIdx = NUMBER_OF_COLUMNS; columnIdx < columnCount; columnIdx++) {
+            for (int columnIdx = 0; columnIdx < columnCount; columnIdx++) {
                 String metricName = columnNames[columnIdx];
+                if (IDENTITY_COLUMNS.contains(metricName)) {
+                    continue;
+                }
 
                 if (metricName.contains("_cases")) {
                     seriesDataMap.get(country).get(metricName).addLabel(FilterDimension.METRIC_GROUP, "CASES");
@@ -168,10 +191,9 @@ public final class OwidMetricParser {
 
         Map<String, RawSeriesData> seriesDataMap = new HashMap<>();
 
-        for (int i = 1; i < metricNames.length; i++) {
+        for (int i = 0; i < metricNames.length; i++) {
             String columnName = metricNames[i];
-            if ("date".equals(columnName) || "iso_code".equals(columnName)
-                    || "continent".equals(columnName) || "location".equals(columnName)) {
+            if (IDENTITY_COLUMNS.contains(columnName)) {
                 continue;
             }
 
