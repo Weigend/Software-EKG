@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 340" width="1120" height="340"
+     font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#1f2933">
+  <title>The Workbench alone</title>
+  <desc>The internal Collector of the Workbench reads Linux hosts, Windows hosts and a Prometheus server and writes into the embedded Solr, which the analysis queries.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,1 L9,5 L0,9 z" fill="#3b4652"/>
+    </marker>
+    <style>
+      .zone      { fill: #f6f7f9; stroke: #9aa5b1; stroke-width: 1.2; stroke-dasharray: 6 4; }
+      .zoneLabel { font-size: 12px; font-weight: bold; fill: #52606d; letter-spacing: 0.6px; }
+      .workbench { fill: #e4eef9; stroke: #3f72a8; stroke-width: 1.5; }
+      .part      { fill: #ffffff; stroke: #3f72a8; stroke-width: 1.3; }
+      .collector { fill: #dff1e1; stroke: #2f7d3b; stroke-width: 1.6; }
+      .store     { fill: #fdf0cf; stroke: #a87b12; stroke-width: 1.5; }
+      .storeLine { fill: none; stroke: #a87b12; stroke-width: 1.5; }
+      .host      { fill: #ffffff; stroke: #6b7682; stroke-width: 1.3; }
+      .title     { font-size: 15px; font-weight: bold; }
+      .sub       { fill: #47525e; }
+      .flow      { fill: none; stroke: #3b4652; stroke-width: 1.6; marker-end: url(#arrow); }
+      .flowLabel { font-size: 11.5px; font-style: italic; fill: #3b4652; }
+    </style>
+  </defs>
+  <rect x="0" y="0" width="1120" height="340" fill="#ffffff"/>
+  <rect class="zone" x="20" y="20" width="280" height="300" rx="10"/>
+  <text class="zoneLabel" x="36" y="43">MEASURED SYSTEMS</text>
+  <rect class="host" x="36" y="54" width="248" height="78" rx="6"/>
+  <text class="title" x="160.0" y="90" text-anchor="middle">Linux / Unix hosts</text>
+  <text class="sub" x="160.0" y="110" text-anchor="middle">SSH: top</text>
+  <rect class="host" x="36" y="140" width="248" height="78" rx="6"/>
+  <text class="title" x="160.0" y="166" text-anchor="middle">Windows hosts</text>
+  <text class="sub" x="160.0" y="188" text-anchor="middle">performance counters,</text>
+  <text class="sub" x="160.0" y="204" text-anchor="middle">Workbench running on Windows</text>
+  <rect class="host" x="36" y="226" width="248" height="78" rx="6"/>
+  <text class="title" x="160.0" y="252" text-anchor="middle">Cloud / Kubernetes</text>
+  <text class="sub" x="160.0" y="274" text-anchor="middle">Prometheus server:</text>
+  <text class="sub" x="160.0" y="290" text-anchor="middle">HTTP API, PromQL, history</text>
+  <rect class="zone" x="380" y="20" width="720" height="300" rx="10"/>
+  <text class="zoneLabel" x="396" y="43">ANALYST WORKSTATION</text>
+  <rect class="workbench" x="398" y="56" width="684" height="246" rx="8"/>
+  <text class="title" x="414" y="81">Workbench</text>
+  <rect class="collector" x="420" y="129" width="180" height="100" rx="6"/>
+  <text class="title" x="510.0" y="166" text-anchor="middle">Internal Collector</text>
+  <text class="sub" x="510.0" y="188" text-anchor="middle">started by New Analysis,</text>
+  <text class="sub" x="510.0" y="204" text-anchor="middle">one engine per source</text>
+  <path class="store" d="M690,131 a80.0,12 0 0 1 160,0 v96 a80.0,12 0 0 1 -160,0 z"/>
+  <path class="storeLine" d="M690,131 a80.0,12 0 0 0 160,0"/>
+  <text class="title" x="770.0" y="182" text-anchor="middle">Embedded Solr</text>
+  <text class="sub" x="770.0" y="204" text-anchor="middle">~/.ekg/solr</text>
+  <rect class="part" x="940" y="129" width="122" height="100" rx="6"/>
+  <text class="title" x="1001.0" y="166" text-anchor="middle">Analysis</text>
+  <text class="sub" x="1001.0" y="188" text-anchor="middle">explorer, charts,</text>
+  <text class="sub" x="1001.0" y="204" text-anchor="middle">bookmarks, export</text>
+  <path class="flow" d="M284,93 H335 V152 H418"/>
+  <path class="flow" d="M284,179 H418"/>
+  <path class="flow" d="M284,265 H346 V206 H418"/>
+  <path class="flow" d="M600,179 H688"/>
+  <text class="flowLabel" x="644" y="171" text-anchor="middle">writes</text>
+  <path class="flow" d="M850,179 H938"/>
+  <text class="flowLabel" x="894" y="171" text-anchor="middle">queries</text>
+</svg>

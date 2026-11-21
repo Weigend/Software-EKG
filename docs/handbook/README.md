@@ -13,7 +13,8 @@ application does.
 
 ## Choose a path
 
-- **First use:** [Concepts and motivation](concepts.md) → [Getting started](getting-started.md)
+- **First use:** [Concepts and motivation](concepts.md) → [Architecture](architecture.md) →
+  [Getting started](getting-started.md)
 - **Collect data:** [Collector](collector.md) → [Source modules](collector-sources.md) →
   [Repositories](collector-repositories.md)
 - **Analyse data:** [Workbench](workbench.md) → [Importers](workbench-importers.md)
@@ -25,6 +26,7 @@ application does.
 | Surface | Handbook page |
 | --- | --- |
 | Product purpose, offline analysis, adapters | [Concepts](concepts.md) |
+| Parts and scenarios: internal and external Collector, embedded and remote repositories, measured systems | [Architecture](architecture.md) |
 | Installation, first chart with New Analysis, first Collector run | [Getting started](getting-started.md) |
 | Collector CLI, YAML, scheduling, variables, service mode, display | [Collector](collector.md) |
 | Mock, Unix `top`, `iostat`, `df`, Windows, JMX, Jolokia, Prometheus, logs | [Source modules](collector-sources.md) |

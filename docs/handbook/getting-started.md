@@ -1,7 +1,7 @@
 # Getting Started
 
-[Handbook home](README.md) · [Concepts](concepts.md) · [Collector](collector.md) ·
-[Workbench](workbench.md)
+[Handbook home](README.md) · [Concepts](concepts.md) · [Architecture](architecture.md) ·
+[Collector](collector.md) · [Workbench](workbench.md)
 
 ## Install a release
 

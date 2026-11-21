@@ -1,7 +1,7 @@
 # Concepts and Motivation
 
-[Handbook home](README.md) · [Getting started](getting-started.md) · [Collector](collector.md) ·
-[Workbench](workbench.md)
+[Handbook home](README.md) · [Architecture](architecture.md) ·
+[Getting started](getting-started.md) · [Collector](collector.md) · [Workbench](workbench.md)
 
 ## Why collect metrics that already exist somewhere?
 
@@ -123,4 +123,4 @@ matching lines per interval, or an aggregate of the numbers they hold. Every lin
 time of its own timestamp, so that content a file already has and lines written during an outage
 end up where they belong. See [Log files and events](collector-sources.md#log-files-and-events).
 
-[Next: Getting started →](getting-started.md)
+[Next: Architecture →](architecture.md)
