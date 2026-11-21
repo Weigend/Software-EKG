@@ -45,6 +45,13 @@ jobs:
     - name: Build with Maven
       run: xvfb-run -a mvn -B clean verify
 
+    - name: End-to-end tests of the workbench
+      # The build above does not start the workbench. These tests do: they operate it through
+      # its user interface - every importer from its menu item to what the repository holds
+      # afterwards - and run in a JVM of their own, because an application can be started only
+      # once in one. The script wraps itself in xvfb-run.
+      run: ./run-e2e-tests.sh
+
     - name: Upload test results
       uses: actions/upload-artifact@v7
       if: always()
@@ -52,6 +59,16 @@ jobs:
         name: test-results
         path: '**/target/surefire-reports/*.xml'
         if-no-files-found: warn
+        retention-days: 14
+
+    - name: Upload the pictures of the end-to-end tests
+      # what the dialogs looked like: the first thing to look at when one of the tests fails
+      uses: actions/upload-artifact@v7
+      if: always()
+      with:
+        name: e2e-screenshots
+        path: workbench/target/e2e/screenshots/*.png
+        if-no-files-found: ignore
         retention-days: 14
 
   windows-counters:
