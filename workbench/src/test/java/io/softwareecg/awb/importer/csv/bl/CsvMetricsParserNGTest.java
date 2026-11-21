@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 
@@ -61,6 +62,46 @@ public class CsvMetricsParserNGTest {
         assertEquals(EKG_STD_DATEFORMAT.parse("11.05.2012 14:09:57.679").getTime(), 
                 firstCol.getValues().get(0).getTimestamp());
         assertEquals(1144.0, firstCol.getValues().get(0).getValue(), 0.0);
+    }
+
+    /**
+     * A file as the CSV repository of the collector writes it for the source "log": the file of
+     * one day, named by it, in which an aggregate has no value where no line matched.
+     */
+    @Test
+    public void aColumnThatIsEmptyIsAValueThatIsMissing() throws Exception {
+        RawSeriesData[] series = new CsvMetricsParserNG().parse(getCsvFile("collector72-log-events_2026-11-20.csv"));
+
+        assertEquals(2, series.length);
+        RawSeriesData logins = series[0];
+        RawSeriesData slowest = series[1];
+        assertEquals("logins", logins.getMetricName());
+        assertEquals("slowest request ms", slowest.getMetricName());
+
+        assertEquals("a count has a value for every interval", 5, logins.getValues().size());
+        assertEquals(1795184460000L, logins.getValues().get(2).getTimestamp());
+        assertEquals(1, logins.getValues().get(2).getValue(), 0.0);
+        assertEquals(0, logins.getValues().get(0).getValue(), 0.0);
+
+        assertEquals("the aggregate only where a line matched", 1, slowest.getValues().size());
+        assertEquals(1795184460000L, slowest.getValues().get(0).getTimestamp());
+        assertEquals(310, slowest.getValues().get(0).getValue(), 0.0);
+    }
+
+    /**
+     * The header of a collector file ends with a separator. That is not a further column - and
+     * no reason to leave out the last one.
+     */
+    @Test
+    public void everyColumnOfTheHeaderIsASeries() throws Exception {
+        RawSeriesData[] series = new CsvMetricsParserNG().parse(getCsvFile("unix-top-2014.csv"));
+
+        String header = java.nio.file.Files.readAllLines(getCsvFile("unix-top-2014.csv").toPath()).get(0);
+        String[] columns = header.split(";");
+        assertEquals("Date", columns[0]);
+        assertEquals(columns.length - 1, series.length);
+        assertEquals("\\Process(java)\\RES", series[series.length - 1].getMetricName());
+        assertFalse("the last column has its values", series[series.length - 1].getValues().isEmpty());
     }
 
     private File getCsvFile(String fileName) throws Exception {

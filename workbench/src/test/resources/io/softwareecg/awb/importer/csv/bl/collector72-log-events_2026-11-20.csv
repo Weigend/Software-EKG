@@ -1,0 +1,6 @@
+{"logFormatVersion":6.1, "metadata":{"ekgProjectName":"Log test", "hostGroupName":"local", "hostName":"this-machine", "namespace":"", "service":"", "pod":"", "container":"", "process":"checkout", "measurement":"2026-11-21-12-21-54", "metricGroup":"checkout-events" }};logins;slowest request ms;
+1795184340000;0;
+1795184400000;0;
+1795184460000;1;310
+1795184520000;0;
+1795184580000;0;

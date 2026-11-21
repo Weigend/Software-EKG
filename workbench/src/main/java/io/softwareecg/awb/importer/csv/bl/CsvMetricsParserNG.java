@@ -265,23 +265,20 @@ public class CsvMetricsParserNG {
                     "first column. The parsed csv isn't a valid collector log.");
         }
 
+        // The header of a collector file ends with a separator. What follows it is not a column;
+        // counting it as one must not cost the last metric its place.
         int count = csvRow.getFieldCount();
+        if (count > 1 && StringUtils.isBlank(csvRow.getField(count - 1))) {
+            count--;
+        }
         Set<String> headerSet = new HashSet<>(count, 1f);
-        String[] headers = new String[count - 1];
+        String[] headers = new String[count];
 
         for (int i = 0; i < count; i++) {
 
             String headerField = csvRow.getField(i);
 
             if (StringUtils.isBlank(headerField)) {
-
-                // we know that older collector logs have an tailing colon at the header line
-                // this is not correct but have to be handled here (skip the field)
-                if (i == count - 1) {
-                    headers = Arrays.copyOf(headers, headers.length - 1);
-                    break;
-                }
-
                 throw new ParseException("Find blank headers fields in the first line!", 0);
             }
 
