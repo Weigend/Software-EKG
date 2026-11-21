@@ -7,7 +7,11 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="io.softwareecg.awb.metricanalyzer.ui.chartng.ChartPanelController"
-            prefHeight="400.0" minWidth="400" maxWidth="Infinity" >
+            prefHeight="400.0" minWidth="1082" maxWidth="Infinity" >
+    <!-- minWidth: what the header of the chart needs (ChartHeader.fxml). In a pane that is
+         narrower the chart keeps this width and loses its right edge, instead of being squeezed
+         until the fields of its header overlap. The pane is made wider by dragging the line
+         between it and its neighbours. -->
 
     <!-- =========================================== filter header ================================================ -->
 
@@ -60,7 +64,8 @@
                         <ColumnConstraints minWidth="5"   maxWidth="5"                         hgrow="NEVER"/>
                         <ColumnConstraints minWidth="260" prefWidth="334"  maxWidth="334"      hgrow="ALWAYS"/>
                         <ColumnConstraints minWidth="10"  maxWidth="10"                        hgrow="NEVER"/>
-                        <ColumnConstraints minWidth="900" prefWidth="960" maxWidth="Infinity"  hgrow="SOMETIMES"  />
+                        <!-- the legend: with the column beside it not wider than the header above may get -->
+                        <ColumnConstraints minWidth="600" prefWidth="960" maxWidth="Infinity"  hgrow="SOMETIMES"  />
                     </columnConstraints>
 
                     <!--

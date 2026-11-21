@@ -4,7 +4,11 @@
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 <fx:root type="javafx.scene.layout.GridPane" xmlns:fx="http://javafx.com/fxml"
-         fx:controller="io.softwareecg.awb.project.ui.projectbar.ProjectBarController" id="projectBar" disable="true">
+         fx:controller="io.softwareecg.awb.project.ui.projectbar.ProjectBarController" id="projectBar" disable="true"
+         minWidth="0">
+    <!-- minWidth 0: the columns below add up to 1763 pixels. Without it the bar asks for that
+         much, and a narrower window shows explorer, chart and assistant laid out for 1763 pixels
+         and cut off at its right edge. With it the bar itself is cut - the dates at its end. -->
 
     <rowConstraints>
         <RowConstraints minHeight="32.0" maxHeight="32.0" vgrow="NEVER"/>

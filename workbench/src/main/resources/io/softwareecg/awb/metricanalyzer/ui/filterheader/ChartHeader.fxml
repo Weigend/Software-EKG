@@ -20,8 +20,10 @@
         <!-- (1) space -->
         <ColumnConstraints minWidth="10"  maxWidth="10"   hgrow="NEVER"  />
 
-        <!-- (2) center column  -->
-        <ColumnConstraints minWidth="620" prefWidth="700" maxWidth="Infinity" hgrow="SOMETIMES"  />
+        <!-- (2) center column: not narrower than the control bar below the metric, which needs
+                 543. The columns add up to 1066; with the padding of the header
+                 that is the least width of a chart, see minWidth in ChartPanel.fxml. -->
+        <ColumnConstraints minWidth="548" prefWidth="700" maxWidth="Infinity" hgrow="SOMETIMES"  />
 
         <!-- (3) space -->
         <ColumnConstraints minWidth="10" maxWidth="10"     hgrow="NEVER"  />
