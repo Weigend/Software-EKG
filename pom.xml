@@ -53,10 +53,8 @@
         <module>collector/sources/jmx</module>
         <module>collector/sources/jolokia</module>
         <module>collector/sources/log</module>
-        <module>collector/sources/logevents</module>
         <module>collector/sources/mock</module>
         <module>collector/sources/prometheus</module>
-        <module>collector/sources/rlog</module>
         <module>collector/sources/unix</module>
         <module>collector/sources/windows</module>
         <module>collector/apps/cli</module>

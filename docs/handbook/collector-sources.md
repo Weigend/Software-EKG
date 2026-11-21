@@ -19,7 +19,6 @@ below through Java `ServiceLoader`.
 | `ekgjolokia` | older EKG Jolokia endpoint | expansion | legacy |
 | `prometheus` | Prometheus HTTP API | every expression expands to series; backfill | supported |
 | `log` | lines of a log file, on this machine or over SSH | none; reads what the file already has (`lookback`) | supported |
-| `rlog` | whole remote file over HTTPS :19888 | none | legacy |
 
 Wildcards are expanded only for a metric with `wildcard: true`; see
 [Metrics and wildcards](collector.md#metrics-and-wildcards). `prometheus` is the exception.
@@ -488,8 +487,9 @@ An argument that is not known is an error, like an unknown key of the configurat
   offer it; its series reach the Workbench through **Import → EKG Collector Logs** or a shared
   Solr repository.
 
-The `logevents` module in the source tree is something else: a model of events and intervals
-that is not registered as a source and not shipped. `rlog` is a legacy adapter that downloads a
-whole file from `https://<host>:19888` and reports its size; it does not look into the file.
+Two things of earlier versions are removed. The source `rlog`, which downloaded whole files from
+an agent on port 19888: a configuration that names it is rejected with
+`Invalid counter source: 'rlog'`, and the source `log` reads the file itself. And the module
+`logevents`, a model of events and intervals that never was a source.
 
 [Next: Collector repositories →](collector-repositories.md)
