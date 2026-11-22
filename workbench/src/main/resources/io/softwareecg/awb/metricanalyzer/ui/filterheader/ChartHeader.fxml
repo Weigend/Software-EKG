@@ -14,15 +14,19 @@
 
 
     <columnConstraints>
-        <!-- (0) left column -->
-        <ColumnConstraints minWidth="260" prefWidth="334" maxWidth="334"  hgrow="ALWAYS"  />
+        <!-- (0) left column: complete at its least width, see the labels in ChartHeader.css. It
+                 asks for no more than that, so that in a panel of medium width the centre column
+                 gets what there is - its bar needs it for "Combine metrics:" - and grows to 334
+                 only when the centre column has its 700. -->
+        <ColumnConstraints minWidth="260" prefWidth="260" maxWidth="334"  hgrow="ALWAYS"  />
 
         <!-- (1) space -->
         <ColumnConstraints minWidth="10"  maxWidth="10"   hgrow="NEVER"  />
 
         <!-- (2) center column: not narrower than the control bar below the metric, which needs
-                 543. The columns add up to 1066; with the padding of the header
-                 that is the least width of a chart, see minWidth in ChartPanel.fxml. -->
+                 542 without its label "Combine metrics:" and 652 with all of it. The least
+                 widths of the columns add up to 1066; with the padding of the header that is
+                 the least width of a chart, see minWidth in ChartPanel.fxml. -->
         <ColumnConstraints minWidth="548" prefWidth="700" maxWidth="Infinity" hgrow="SOMETIMES"  />
 
         <!-- (3) space -->
@@ -199,21 +203,23 @@
 
         <columnConstraints>
             <!-- (0) space in front of the checkbox. It was as wide as the labels above (80); what it
-                 gave up went to the columns (5) and (9), whose texts were cut off. The sum of the
-                 fixed columns is still 543, see the centre column of the header. -->
-            <ColumnConstraints minWidth="25"  maxWidth="25"  hgrow="NEVER" halignment="RIGHT" />
+                 gave up went to the columns (5) and (9), whose texts were cut off, and to the
+                 label in (4). The fixed columns add up to 510; with the 120 of the label
+                 "Combine metrics:" and the padding of the bar that is 652, the width of the
+                 centre column from which nothing in the bar is cut off. -->
+            <ColumnConstraints minWidth="10"  maxWidth="10"  hgrow="NEVER" halignment="RIGHT" />
             <!-- (1) checkbox expert mode without label -->
             <ColumnConstraints minWidth="27"  maxWidth="27"  hgrow="NEVER" />
             <!-- (2) label for checkbox "show all filters"  -->
             <ColumnConstraints minWidth="128" maxWidth="128" hgrow="NEVER" halignment="LEFT" />
             <!-- (3) checkbox "show all filters" without label -->
             <ColumnConstraints minWidth="1"  maxWidth="1"  hgrow="NEVER"/>
-            <!-- (4) empty space that can scale in the width to fit window size -->
+            <!-- (4) the label "Combine metrics:", with the space that is left over to its left -->
             <ColumnConstraints minWidth="10"                 hgrow="ALWAYS" halignment="RIGHT" />
             <!-- (5) combine-mode button: wide enough for "Concatenate" -->
             <ColumnConstraints minWidth="150" maxWidth="150" hgrow="NEVER"  />
             <!-- (6) space -->
-            <ColumnConstraints minWidth="20"  maxWidth="20"  hgrow="NEVER"  />
+            <ColumnConstraints minWidth="12"  maxWidth="12"  hgrow="NEVER"  />
             <!-- (7) refresh button -->
             <ColumnConstraints minWidth="40"  maxWidth="40"  hgrow="NEVER"  />
             <!-- (8) space -->
@@ -243,9 +249,14 @@
             </tooltip>
         </CheckBox>
 
-        <Label  text="Combine metrics:  " GridPane.columnIndex="4" translateY="1" />
+        <Label fx:id="lbCombineMode" text="Combine metrics:" GridPane.columnIndex="4" translateY="1" />
 
-        <ComboBox fx:id="cbxCombineMode" GridPane.columnIndex="5" />
+        <ComboBox fx:id="cbxCombineMode" GridPane.columnIndex="5" >
+            <tooltip>
+                <!-- says what the list is when its label has no room, in a panel at its least width -->
+                <Tooltip text="Combine metrics: what becomes of several series"/>
+            </tooltip>
+        </ComboBox>
 
         <Button fx:id="btRefreshGraph" GridPane.columnIndex="7" mnemonicParsing="false" />
 

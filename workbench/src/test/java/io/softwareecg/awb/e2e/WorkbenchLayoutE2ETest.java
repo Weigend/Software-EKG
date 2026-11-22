@@ -79,6 +79,8 @@ class WorkbenchLayoutE2ETest {
         Map<String, Boolean> besideTheTimeRange = textsOf("vbPostProcessingBlock");
         Map<String, Boolean> belowTheMetric = textsOf("chartHeaderControlBar");
 
+        assertThat(textsOf("seriesFilterGroup")).as("texts of the filters: whether they have the width they need")
+                .containsEntry("Host/Device:", true).doesNotContainValue(false);
         assertThat(besideTheTimeRange).as("texts beside the time range: whether they have the width they need")
                 .containsEntry("Smoothing:", true).containsEntry("Granularity:", true)
                 .doesNotContainValue(false);
@@ -86,6 +88,25 @@ class WorkbenchLayoutE2ETest {
         // a panel as narrow as this one that is less than it needs.
         assertThat(belowTheMetric).as("texts in the bar below the metric: whether they have the width they need")
                 .containsEntry("Bookmark it!", true).containsEntry("Concatenate", true);
+    }
+
+    /**
+     * On a screen of 1920 pixels, with the explorer and the assistant beside the chart, the
+     * header has everything in full, "Combine metrics:" too. That label has the room that is
+     * left in its bar, and the filters on the left used to take it.
+     */
+    @Test
+    void nothingInTheChartHeaderIsCutOffOnAScreenOf1920Pixels() {
+        workbench.resize(1920, 1100);
+        workbench.screenshot("layout-1920");
+
+        assertThat(textsOf("seriesFilterGroup")).as("texts of the filters: whether they have the width they need")
+                .containsEntry("Host/Device:", true).doesNotContainValue(false);
+        assertThat(textsOf("chartHeaderControlBar")).as("texts in the bar below the metric: whether they have the width they need")
+                .containsEntry("Combine metrics:", true).containsEntry("Bookmark it!", true)
+                .doesNotContainValue(false);
+        assertThat(textsOf("vbPostProcessingBlock")).as("texts beside the time range: whether they have the width they need")
+                .containsEntry("Granularity:", true).doesNotContainValue(false);
     }
 
     /**
@@ -98,7 +119,7 @@ class WorkbenchLayoutE2ETest {
             Map<String, Boolean> texts = new TreeMap<>();
             for (String selector : List.of(".label", ".button", ".list-cell")) {
                 for (Node node : parent.lookupAll(selector)) {
-                    if (!(node instanceof Labeled labeled) || !labeled.isVisible()
+                    if (!(node instanceof Labeled labeled) || !isShown(labeled)
                             || labeled.getText() == null || labeled.getText().isBlank()) {
                         continue;
                     }
@@ -113,6 +134,16 @@ class WorkbenchLayoutE2ETest {
             }
             return texts;
         });
+    }
+
+    /** Whether a control and everything it is in is visible: the filters of the other kind of project are not. */
+    private static boolean isShown(Node node) {
+        for (Node current = node; current != null; current = current.getParent()) {
+            if (!current.isVisible()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static Bounds bounds(String id) {
