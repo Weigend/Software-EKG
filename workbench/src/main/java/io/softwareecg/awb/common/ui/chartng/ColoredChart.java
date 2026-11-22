@@ -11,6 +11,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.paint.Color;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -43,6 +44,9 @@ public class ColoredChart implements Observable {
     private final XYChart<Long, Double> wrappedChart;
 
     private Map<String, List<ColoredSeries>> coloredSeriesMap = new LinkedHashMap<>();
+
+    /** the colours the other charts of the panel use; none as long as nobody says otherwise */
+    private Supplier<Collection<Color>> coloursOfOtherCharts = List::of;
 
     //=================================================================================================================
 
@@ -93,6 +97,25 @@ public class ColoredChart implements Observable {
     // decorator API
     //=================================================================================================================
 
+
+    /**
+     * Tells the chart which colours the other charts of its panel use, so that its new series
+     * get others. A chart that is not told has the panel to itself.
+     *
+     * @param coloursOfOtherCharts gives the colours of the series of the other charts
+     */
+    public void setColoursOfOtherCharts(Supplier<Collection<Color>> coloursOfOtherCharts) {
+        this.coloursOfOtherCharts = coloursOfOtherCharts;
+    }
+
+    /** The colours of the series of this chart. */
+    public List<Color> getSeriesColours() {
+        return getAllColoredSeries().stream().map(ColoredSeries::getColor).filter(Objects::nonNull).toList();
+    }
+
+    private Color colourForANewSeries() {
+        return ChartColorStyle.nextColor(getSeriesColours(), coloursOfOtherCharts.get());
+    }
 
     public Map<String, List<ColoredSeries>> getColoredSeriesMap() {
         return coloredSeriesMap;
@@ -196,7 +219,7 @@ public class ColoredChart implements Observable {
      */
     public synchronized void addSeries(XYChart.Series<Long, Double> series) {
 
-        Color seriesColor = ChartColorStyle.getColor(series);
+        Color seriesColor = colourForANewSeries();
 
         if (!coloredSeriesMap.containsKey(series.getName())) {
             coloredSeriesMap.put(series.getName(), new ArrayList<>());
@@ -252,7 +275,7 @@ public class ColoredChart implements Observable {
             XYChart.Series<Long, Double> existing = shown.get(String.valueOf(series.getName()));
             List<ColoredSeries> settings = existing == null ? null : coloredSeriesMap.get(existing.getName());
             if (existing == null || settings == null || settings.isEmpty()) {
-                Color seriesColor = ChartColorStyle.getColor(series);
+                Color seriesColor = colourForANewSeries();
                 wrappedChart.getData().add(series);
                 coloredSeriesMap.computeIfAbsent(series.getName(), name -> new ArrayList<>())
                         .add(new ColoredSeries(series, seriesColor));
@@ -428,7 +451,6 @@ public class ColoredChart implements Observable {
         coloredSeriesMap.clear();
         isComputed = false;
         wrappedChart.getData().clear();
-        ChartColorStyle.reset();
 
         if (resetAxis) {
             wrappedChart.getYAxis().setLabel("");
@@ -497,8 +519,6 @@ public class ColoredChart implements Observable {
 
         private final XYChart.Series<Long, Double> series;
         
-        /** The color index assigned to this series (for persisting custom colors) */
-        private int colorIndex;
 
         /**
          * Constructs a new ColoredSeries instance that will display the name
@@ -511,7 +531,6 @@ public class ColoredChart implements Observable {
             this.seriesName = series.getName();
             this.series = series;
             this.color = color;
-            this.colorIndex = ChartColorStyle.getLastAssignedIndex();
             
             // Schedule color application - must happen after JavaFX applies its default CSS styles
             scheduleColorApplication();
@@ -604,7 +623,6 @@ public class ColoredChart implements Observable {
 
         public void setColor(Color color) {
             this.color = color;
-            ChartColorStyle.setCustomColor(colorIndex, color);
             applyColorToNode();
         }
         

@@ -12,20 +12,17 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.common.ui.chartng;
 
-import javafx.scene.chart.XYChart;
 import javafx.scene.paint.Color;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
- * Management for the colors of series.
- * Colors are assigned sequentially: 1st series gets color 0, 2nd gets color 1, etc.
- * Custom colors set by user are preserved across chart reloads.
+ * The colours of series: the palette, and which of it a new series gets. A series keeps its
+ * colour as long as it is shown, see {@link ColoredChart#replaceSeries}.
  *
- * <p>Pure static-utility class (private constructor). The legacy {@code @Singleton}
- * annotation was misleading — all callers use static methods like
- * {@code ChartColorStyle.getColor(...)}.
+ * <p>Pure static-utility class (private constructor).
  */
 public final class ChartColorStyle {
 
@@ -82,54 +79,64 @@ public final class ChartColorStyle {
 
     public static final int INT_255 = 255;
 
-    private static int availableColorIdx = 0;
-    
-    /** Stores custom colors set by user, keyed by position index */
-    private static final Map<Integer, Color> CUSTOM_COLORS = new HashMap<>();
-
     private ChartColorStyle() {
     }
 
     /**
-     * Returns the next color for a series.
-     * If user has set a custom color for this position, that color is returned.
+     * The colour of a series that is added to a chart.
+     * <p>
+     * A chart that is alone in its panel takes the colours in the order of the palette, the
+     * first one none of its series has. With other charts in the panel - those in the
+     * background - the order would give the new chart the colours they have: every chart
+     * begins with the first ones. Then the colour is the one of the palette that differs most
+     * from all colours in use, so that front and background can be told apart.
      *
-     * @param series series (unused, kept for API compatibility)
-     * @return the next color
+     * @param ofTheChart     the colours of the series the chart has already
+     * @param ofOtherCharts the colours of the series of the other charts of the panel
+     * @return the colour of the new series
      */
-    public static Color getColor(XYChart.Series series) {
-        int currentIdx = availableColorIdx++;
-        
-        // Check if user has set a custom color for this position
-        if (CUSTOM_COLORS.containsKey(currentIdx)) {
-            return CUSTOM_COLORS.get(currentIdx);
+    public static Color nextColor(Collection<Color> ofTheChart, Collection<Color> ofOtherCharts) {
+        List<Color> free = new ArrayList<>();
+        for (Color color : AVAILABLE_COLORS) {
+            if (!ofTheChart.contains(color) && !ofOtherCharts.contains(color)) {
+                free.add(color);
+            }
         }
-        
-        return AVAILABLE_COLORS[currentIdx % AVAILABLE_COLORS.length];
-    }
-    
-    /**
-     * Returns the index of the last assigned color.
-     * Call this immediately after getColor() to get the index for the series.
-     */
-    public static int getLastAssignedIndex() {
-        return availableColorIdx - 1;
-    }
-    
-    /**
-     * Sets a custom color for a specific position index.
-     * This color will be used when the chart is reloaded.
-     */
-    public static void setCustomColor(int index, Color color) {
-        CUSTOM_COLORS.put(index, color);
+        if (free.isEmpty()) {
+            // more series than colours: around again
+            return AVAILABLE_COLORS[ofTheChart.size() % AVAILABLE_COLORS.length];
+        }
+        if (ofOtherCharts.isEmpty()) {
+            return free.get(0);
+        }
+
+        List<Color> inUse = new ArrayList<>(ofOtherCharts);
+        inUse.addAll(ofTheChart);
+        Color farthest = free.get(0);
+        double distanceOfTheFarthest = -1;
+        for (Color candidate : free) {
+            double nearest = Double.MAX_VALUE;
+            for (Color used : inUse) {
+                nearest = Math.min(nearest, distance(candidate, used));
+            }
+            if (nearest > distanceOfTheFarthest) {
+                farthest = candidate;
+                distanceOfTheFarthest = nearest;
+            }
+        }
+        return farthest;
     }
 
     /**
-     * Resets the color index to start from the beginning.
-     * Call this when the chart is cleared.
+     * How different two colours look: the distance of their red, green and blue, weighted by
+     * how sensitive the eye is to each of them at this level of red ("redmean").
      */
-    public static void reset() {
-        availableColorIdx = 0;
+    static double distance(Color one, Color other) {
+        double meanRed = (one.getRed() + other.getRed()) / 2 * INT_255;
+        double red = (one.getRed() - other.getRed()) * INT_255;
+        double green = (one.getGreen() - other.getGreen()) * INT_255;
+        double blue = (one.getBlue() - other.getBlue()) * INT_255;
+        return Math.sqrt((2 + meanRed / 256) * red * red + 4 * green * green + (2 + (255 - meanRed) / 256) * blue * blue);
     }
 
     /**
@@ -154,14 +161,4 @@ public final class ChartColorStyle {
     public static String toRGBCode(Color color, double opacity) {
         return String.format("%s%02X", toRGBCode(color), (int) (opacity * INT_255));
     }
-
-    /**
-     * Returns the string representation of the color of the given series
-     * @param series series
-     * @return the string representation of the color
-     */
-    public static String getRGBCodeColor(XYChart.Series series) {
-        return toRGBCode(getColor(series));
-    }
-
 }

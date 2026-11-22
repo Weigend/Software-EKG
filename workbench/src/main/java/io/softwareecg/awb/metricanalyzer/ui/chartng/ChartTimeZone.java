@@ -27,12 +27,21 @@ public class ChartTimeZone {
             "GMT+2", "GMT+2  (Namibia/Windhoek)"
     );
 
+    private static final String BERLIN = "Europe/Berlin";
+
     /**
-     * The time zone the EKG AWB use as default setting to display
-     * data in the chart
+     * The time zone a chart shows its times in unless another one is chosen: that of the
+     * computer. It was Europe/Berlin for everybody once, which is right in Germany only.
      */
-    private static final ChartTimeZone DEFAULT_TIME_ZONE =
-            new ChartTimeZone("Germany/Berlin", "Europe/Berlin");
+    private static final ChartTimeZone DEFAULT_TIME_ZONE = localTimeZone(ZoneId.systemDefault());
+
+    /**
+     * @param zone the time zone of the computer
+     * @return its entry in the list of time zones, which names it as the local time
+     */
+    static ChartTimeZone localTimeZone(ZoneId zone) {
+        return new ChartTimeZone("Local time (" + zone.getId() + ")", zone.getId());
+    }
 
     /**
      * The ZoneId that is a unique id that represents the time zone
@@ -113,7 +122,11 @@ public class ChartTimeZone {
         List<ChartTimeZone> resultList = new ArrayList<>();
 
         resultList.add(DEFAULT_TIME_ZONE);
-        resultList.add(new ChartTimeZone("Default/UTC", "UTC"));
+        resultList.add(new ChartTimeZone("UTC", "UTC"));
+        if (!BERLIN.equals(DEFAULT_TIME_ZONE.getTimeZone().getId())) {
+            // the zone every chart had before; the only one beside the local one that knows summer time
+            resultList.add(new ChartTimeZone(BERLIN));
+        }
 
         ArrayList<ChartTimeZone> gmtTimeZones = ZoneId.getAvailableZoneIds().stream()
                 .filter(id -> id.contains("GMT+") || id.contains("GMT-"))

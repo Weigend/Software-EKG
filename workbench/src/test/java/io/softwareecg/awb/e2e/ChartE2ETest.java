@@ -124,6 +124,9 @@ class ChartE2ETest {
         awaitInFront("\\Load\\one");
         assertThat(seriesOfTheBackground()).as("series in the background").singleElement().asString().endsWith("\\Cpu\\us");
         assertThat(metricOfTheHeader()).as("metric of the header").isEqualTo("\\Load\\one");
+        // the chart in front does not begin with the colours again that the one behind it has
+        assertThat(workbench.onFx(() -> stackedChart().getBaseChart().getSeriesColours()))
+                .as("colours in front, with " + colourOfTheCpu + " in the background").doesNotContain(colourOfTheCpu);
 
         bringTheBackgroundChartToFront();
         awaitInFront("\\Cpu\\us");

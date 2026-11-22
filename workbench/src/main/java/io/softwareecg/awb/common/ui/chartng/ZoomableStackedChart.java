@@ -279,6 +279,10 @@ public class ZoomableStackedChart extends StackPane {
         // this assignment happens than the constructor all this method an also than the chart type changes
         this.baseChart = baseChart;
 
+        // its new series get colours the charts in the background do not have
+        baseChart.setColoursOfOtherCharts(() -> backgroundCharts.stream()
+                .flatMap(chart -> chart.getSeriesColours().stream()).toList());
+
         // style chart
         baseChart.setChartColor(color);
         baseChart.getYAxis().castToAxis().setPrefWidth(AXIS_WIDTH);

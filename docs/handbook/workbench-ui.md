@@ -171,8 +171,9 @@ The button with the two arrows loads the chart again. **Bookmark it!** stores th
 
 The time runs along the lower axis and the values along the left one, whose label is the query
 of the header. The small symbol at the lower left corner chooses the time zone of the time
-axis: *Germany/Berlin* unless changed, UTC, or a fixed offset to GMT. The data is not changed
-by it.
+axis: that of the computer unless changed, UTC, Europe/Berlin, or a fixed offset to GMT. The
+data is not changed by it. The pictures of this page were taken in the time zone
+Europe/Berlin.
 
 | Mouse | Effect |
 | --- | --- |
@@ -219,13 +220,16 @@ bar for the chart, and a line for each of its series.
 
 ### Colours
 
-Series get their colours in the order they are loaded in. A click on the coloured field of a
-series opens a palette, and **Custom Color...** below it any other colour.
+A chart that is alone in its panel gives its series the colours of a palette in their order.
+A chart that is opened in front of others gets colours that differ as much as possible from
+theirs, so that front and background can be told apart without doing anything. A click on the
+coloured field of a series opens a palette, and **Custom Color...** below it any other colour.
 
 ![The palette of a series](../images/ui-legend-colour.png)
 
-A chosen colour remains when the chart is loaded again. Series that have the same name in one
-chart share a colour: it is changed at the first of them, and the others show a lock.
+A series keeps its colour as long as it is shown, also when the chart is loaded again, zoomed
+or exchanged with one in the background. Series that have the same name in one chart share a
+colour: it is changed at the first of them, and the others show a lock.
 
 ### Chart types
 
@@ -265,8 +269,8 @@ A chart is pushed to the background in two ways:
 ![The rate of requests in front, with its axis on the left, and the response times in the background, with their axis on the right](../images/ui-background-chart.png)
 
 In the picture the response times of the three servers were shown first. Then the rate of
-requests of `web03` was opened with **Show and keep existing metrics**, and given another
-colour. The two belong together: the fewer requests the server answers, the longer it takes.
+requests of `web03` was opened with **Show and keep existing metrics**; its red is the colour
+it got by itself. The two belong together: the fewer requests the server answers, the longer it takes.
 
 A chart in the background
 
