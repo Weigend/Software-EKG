@@ -42,9 +42,9 @@
             </padding>
             <Label fx:id="statusLabel" text="" styleClass="ai-chat-status" managed="false" visible="false"/>
             <HBox spacing="5.0" alignment="CENTER_LEFT">
-                <TextArea fx:id="inputArea" promptText="Frage stellen..." prefRowCount="2"
+                <TextArea fx:id="inputArea" promptText="Ask a question..." prefRowCount="2"
                           wrapText="true" HBox.hgrow="ALWAYS" onKeyPressed="#onInputKeyPressed"/>
-                <Button fx:id="sendButton" text="Senden" onAction="#onSend"
+                <Button fx:id="sendButton" text="Send" onAction="#onSend"
                         defaultButton="true" styleClass="ai-chat-send-btn" prefHeight="50.0"/>
             </HBox>
         </VBox>

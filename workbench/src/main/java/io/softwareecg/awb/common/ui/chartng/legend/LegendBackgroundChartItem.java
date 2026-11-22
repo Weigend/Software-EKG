@@ -69,7 +69,7 @@ public class LegendBackgroundChartItem extends LegendChartItem {
 
     private Node createDeleteButton() {
 
-        Button clearButton = new Button("Entfernen");
+        Button clearButton = new Button("Remove");
         clearButton.setOnMouseClicked(event -> {
             actions.deleteBgChart(backgroundChart.getId());
             LegendBackgroundChartItem.this.requestFocus();

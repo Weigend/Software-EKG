@@ -23,7 +23,7 @@ public class ChartTimeZone {
      * with country/capital city appended
      */
     private static final Map<String, String> TIME_ZONE_ALIAS_MAPPING = Map.of(
-            "GMT+0", "GMT+0  (Island/Reykjavik)",
+            "GMT+0", "GMT+0  (Iceland/Reykjavik)",
             "GMT+2", "GMT+2  (Namibia/Windhoek)"
     );
 
@@ -32,7 +32,7 @@ public class ChartTimeZone {
      * data in the chart
      */
     private static final ChartTimeZone DEFAULT_TIME_ZONE =
-            new ChartTimeZone("Deutschland/Berlin", "Europe/Berlin");
+            new ChartTimeZone("Germany/Berlin", "Europe/Berlin");
 
     /**
      * The ZoneId that is a unique id that represents the time zone

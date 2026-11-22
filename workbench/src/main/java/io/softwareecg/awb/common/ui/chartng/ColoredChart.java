@@ -527,6 +527,9 @@ public class ColoredChart implements Observable {
                         applyColorAfterLayout();
                     }
                 });
+                // A point chart never creates a node for the series, only a symbol for each
+                // value; they are there after the next layout.
+                applyColorAfterLayout();
             }
         }
         
@@ -602,12 +605,21 @@ public class ColoredChart implements Observable {
         public void setColor(Color color) {
             this.color = color;
             ChartColorStyle.setCustomColor(colorIndex, color);
-            if (series.getNode() != null) {
-                applyColorToNode();
-            }
+            applyColorToNode();
         }
         
         private void applyColorToNode() {
+            if (series.getNode() == null) {
+                // A point chart: the symbols are regions, coloured by their background. Without
+                // this they keep the colours of the JavaFX default and differ from the legend.
+                String symbolStyle = "-fx-background-color: " + ChartColorStyle.toRGBCode(this.color);
+                series.getData().forEach(point -> {
+                    if (point.getNode() != null) {
+                        point.getNode().setStyle(symbolStyle);
+                    }
+                });
+                return;
+            }
             SeriesLineAreaContainer seriesLineAreaContainer = getStyleableSeriesElements(series);
             seriesLineAreaContainer.seriesMainElements.forEach(node -> {
                 node.setStyle(FX_STROKE + ChartColorStyle.toRGBCode(this.color));

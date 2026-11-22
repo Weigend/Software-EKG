@@ -574,7 +574,13 @@ public class ChartPanelController implements Initializable {
 
         cbTimeZone.setItems(FXCollections.observableArrayList(ChartTimeZone.getChartTimeZones()));
         cbTimeZone.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> xAxis.setTimeZone(newValue.getTimeZone())
+                (observable, oldValue, newValue) -> {
+                    // the axis of the chart that is shown now: a change of the chart type
+                    // replaces the base chart and its axis with it
+                    if (zoomableStackedChart.getBaseChart().getXAxis() instanceof DateAxis shown) {
+                        shown.setTimeZone(newValue.getTimeZone());
+                    }
+                }
         );
         cbTimeZone.setValue(ChartTimeZone.getDefaultTimeZone());
     }
@@ -806,11 +812,11 @@ public class ChartPanelController implements Initializable {
 
         FileChooser chooser = new FileChooser();
 
-        chooser.setTitle("Geben die die Datei an, in welche der Excel-Export stattfinden soll.");
+        chooser.setTitle("Choose the file for the Excel export");
 
         chooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Excel Dateien", "*.xlsx"),
-                new FileChooser.ExtensionFilter("Alle Dateien", "*")
+                new FileChooser.ExtensionFilter("Excel files", "*.xlsx"),
+                new FileChooser.ExtensionFilter("All files", "*")
         );
 
         File chosenFile = chooser.showSaveDialog(null);

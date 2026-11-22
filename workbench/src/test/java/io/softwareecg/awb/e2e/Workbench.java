@@ -32,6 +32,7 @@ import java.time.Duration;
 import java.util.EventObject;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -204,10 +205,24 @@ public final class Workbench {
     }
 
     /**
-     * @return the first control of the main window with this id, if it is there
+     * @return the control of the main window with this id, if it is there. Every project has a
+     *         chart panel of its own, with the same ids in each: the one that is shown is taken.
      */
     public Optional<Node> find(String id) {
-        return onFx(() -> Optional.ofNullable(mainStage.getScene().getRoot().lookup("#" + id)));
+        return onFx(() -> {
+            Set<Node> all = mainStage.getScene().getRoot().lookupAll("#" + id);
+            return all.stream().filter(Workbench::isShown).findFirst().or(() -> all.stream().findFirst());
+        });
+    }
+
+    /** Whether a control is in a part of the window that is shown, not in a tab behind another. */
+    private static boolean isShown(Node node) {
+        for (Node current = node; current != null; current = current.getParent()) {
+            if (!current.isVisible()) {
+                return false;
+            }
+        }
+        return node.getScene() != null;
     }
 
     /**

@@ -198,8 +198,10 @@
     <GridPane id="chartHeaderControlBar" styleClass="fieldWrapper" GridPane.rowIndex="2" GridPane.columnIndex="2">
 
         <columnConstraints>
-            <!-- (0) label of expert checkbox with length of first label column of the grid in the top -->
-            <ColumnConstraints minWidth="80"  maxWidth="80"  hgrow="NEVER" halignment="RIGHT" />
+            <!-- (0) space in front of the checkbox. It was as wide as the labels above (80); what it
+                 gave up went to the columns (5) and (9), whose texts were cut off. The sum of the
+                 fixed columns is still 543, see the centre column of the header. -->
+            <ColumnConstraints minWidth="25"  maxWidth="25"  hgrow="NEVER" halignment="RIGHT" />
             <!-- (1) checkbox expert mode without label -->
             <ColumnConstraints minWidth="27"  maxWidth="27"  hgrow="NEVER" />
             <!-- (2) label for checkbox "show all filters"  -->
@@ -208,16 +210,16 @@
             <ColumnConstraints minWidth="1"  maxWidth="1"  hgrow="NEVER"/>
             <!-- (4) empty space that can scale in the width to fit window size -->
             <ColumnConstraints minWidth="10"                 hgrow="ALWAYS" halignment="RIGHT" />
-            <!-- (5) combine-mode button -->
-            <ColumnConstraints minWidth="120" maxWidth="120" hgrow="NEVER"  />
+            <!-- (5) combine-mode button: wide enough for "Concatenate" -->
+            <ColumnConstraints minWidth="150" maxWidth="150" hgrow="NEVER"  />
             <!-- (6) space -->
             <ColumnConstraints minWidth="20"  maxWidth="20"  hgrow="NEVER"  />
-            <!-- (7) bookmark button -->
+            <!-- (7) refresh button -->
             <ColumnConstraints minWidth="40"  maxWidth="40"  hgrow="NEVER"  />
             <!-- (8) space -->
             <ColumnConstraints minWidth="10"  maxWidth="10"  hgrow="NEVER"  />
-            <!-- (9) refresh button -->
-            <ColumnConstraints minWidth="107" maxWidth="107" hgrow="NEVER"  />
+            <!-- (9) bookmark button: wide enough for its icon and "Bookmark it!" -->
+            <ColumnConstraints minWidth="132" maxWidth="132" hgrow="NEVER"  />
         </columnConstraints>
 
         <rowConstraints>

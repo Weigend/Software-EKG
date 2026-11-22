@@ -2,13 +2,18 @@ package io.softwareecg.awb.e2e;
 
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.TabPane;
+import javafx.scene.text.Text;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -61,6 +66,53 @@ class WorkbenchLayoutE2ETest {
         Bounds range = bounds("vbPostProcessingBlock");
         assertThat(filters.getMaxX()).as("right edge of the filters, left of the metric").isLessThanOrEqualTo(metric.getMinX());
         assertThat(metric.getMaxX()).as("right edge of the metric, left of the time range").isLessThanOrEqualTo(range.getMinX());
+    }
+
+    /**
+     * The texts of the header are there in full. "Bookmark it!", "Concatenate", "Smoothing:" and
+     * "Granularity:" ended in three dots: their places were narrower than the words.
+     */
+    @Test
+    void theTextsOfTheChartHeaderAreNotCutOff() {
+        workbench.resize(1600, 1000);
+
+        Map<String, Boolean> besideTheTimeRange = textsOf("vbPostProcessingBlock");
+        Map<String, Boolean> belowTheMetric = textsOf("chartHeaderControlBar");
+
+        assertThat(besideTheTimeRange).as("texts beside the time range: whether they have the width they need")
+                .containsEntry("Smoothing:", true).containsEntry("Granularity:", true)
+                .doesNotContainValue(false);
+        // "Combine metrics:" is not among them: it has the room that is left in the bar, and in
+        // a panel as narrow as this one that is less than it needs.
+        assertThat(belowTheMetric).as("texts in the bar below the metric: whether they have the width they need")
+                .containsEntry("Bookmark it!", true).containsEntry("Concatenate", true);
+    }
+
+    /**
+     * The texts of the labels, buttons and list fields below a control, each with whether the
+     * control is as wide as its text needs.
+     */
+    private static Map<String, Boolean> textsOf(String id) {
+        Node parent = workbench.find(id).orElseThrow(() -> new AssertionError("No control with the id '" + id + "'"));
+        return workbench.onFx(() -> {
+            Map<String, Boolean> texts = new TreeMap<>();
+            for (String selector : List.of(".label", ".button", ".list-cell")) {
+                for (Node node : parent.lookupAll(selector)) {
+                    if (!(node instanceof Labeled labeled) || !labeled.isVisible()
+                            || labeled.getText() == null || labeled.getText().isBlank()) {
+                        continue;
+                    }
+                    Text text = new Text(labeled.getText().strip());
+                    text.setFont(labeled.getFont());
+                    double graphic = labeled.getGraphic() == null ? 0
+                            : labeled.getGraphic().getLayoutBounds().getWidth() + labeled.getGraphicTextGap();
+                    double room = labeled.getWidth() - labeled.getInsets().getLeft() - labeled.getInsets().getRight();
+                    texts.merge(labeled.getText().strip(), text.getLayoutBounds().getWidth() + graphic <= room + 1,
+                            Boolean::logicalAnd);
+                }
+            }
+            return texts;
+        });
     }
 
     private static Bounds bounds(String id) {

@@ -205,7 +205,7 @@ public class ProjectBarController implements Initializable {
 
         } else  {
             if (cloudPlatformType == CloudPlatformType.OTHER) {
-                lbPlatformFlavor.setText("Sonstige");
+                lbPlatformFlavor.setText("Other");
             } else {
                 lbPlatformFlavor.setText(cloudPlatformType.getName());
             }

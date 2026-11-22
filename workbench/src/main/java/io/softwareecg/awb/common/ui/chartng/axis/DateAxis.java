@@ -188,6 +188,9 @@ public class DateAxis extends BaseAxis<Long> {
         dateAxis.setWidth(this.getWidth());
         dateAxis.setVisible(this.isVisible());
         dateAxis.setOpacity(this.getOpacity());
+        // the time zone as well: the axis that replaces this one - when the type of the chart
+        // changes - would otherwise show the same values an hour or more apart, in UTC
+        dateAxis.zoneIdProperty.set(this.zoneIdProperty.get());
 
         return dateAxis;
     }
@@ -203,6 +206,7 @@ public class DateAxis extends BaseAxis<Long> {
         dateAxis.upperBoundProperty().bind(this.upperBoundProperty());
         dateAxis.setVisible(this.isVisible());
         dateAxis.setOpacity(this.getOpacity());
+        dateAxis.zoneIdProperty.set(this.zoneIdProperty.get());
 
         return dateAxis;
     }
@@ -216,6 +220,13 @@ public class DateAxis extends BaseAxis<Long> {
         this.invalidateRange();
         requestAxisLayout();
         layout();
+    }
+
+    /**
+     * @return the time zone the times of this axis are shown in
+     */
+    public ZoneId getTimeZone() {
+        return zoneIdProperty.get();
     }
 
     // ===============================================================================================================

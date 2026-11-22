@@ -418,9 +418,9 @@ public class StackedChartController {
         deleteAllBackgroundCharts(true);
 
         baseChart.clear(true);
-        String seriesName = topSeries.getName() + "-[100% Basis]";
+        String seriesName = topSeries.getName() + "-[100% Baseline]";
         baseChart.addSeries(new XYChart.Series<>(seriesName, newSeriesData));
-        baseChart.setLegendLabel(baseChart.getLegendLabel() + " [100% Basis]");
+        baseChart.setLegendLabel(baseChart.getLegendLabel() + " [100% Baseline]");
         baseChart.setSeriesColor(seriesName, new Color(0.6784314f, 0.84705883f, 0.9019608f, 1));
         baseChart.setComputed(true);
         baseChart.toXYChart().layout();
@@ -436,7 +436,7 @@ public class StackedChartController {
 
         baseChart.clear(true);
         relativeChildSeriesList.forEach(baseChart::addSeries);
-        baseChart.setLegendLabel(baseChart.getLegendLabel() + " [Relative Werte]");
+        baseChart.setLegendLabel(baseChart.getLegendLabel() + " [Relative Values]");
         baseChart.setComputed(true);
         pushBaseToBackgroundChart(UUID.randomUUID().toString());
 

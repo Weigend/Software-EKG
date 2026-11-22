@@ -1,5 +1,6 @@
 package io.softwareecg.awb.common.ui.chartng;
 
+import io.softwareecg.awb.common.ui.chartng.axis.DateAxis;
 import io.softwareecg.awb.common.ui.chartng.zoom.Zoomable;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
@@ -13,6 +14,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -549,10 +551,11 @@ public class ChartMouseBehaviour {
      */
     private static final class DetailsPopup extends VBox {
 
-        /** maximal width of series name in legend */
-        public static final int SERIES_NAME_MAX_WIDTH = 140;
+        /** least width of a series name, so that the values of short names stand in a column */
+        public static final int SERIES_NAME_MIN_WIDTH = 140;
 
-        private static final NumberFormat NUMBER_FORMAT = NumberFormat.getInstance(Locale.GERMAN);
+        /** the numbers as the axes show them */
+        private static final NumberFormat NUMBER_FORMAT = NumberFormat.getInstance(Locale.ENGLISH);
 
         private static final String POPUP_STYLESHEET =
                 DetailsPopup.class.getResource("ChartDetailOverlayStyle.css").toExternalForm();
@@ -588,13 +591,17 @@ public class ChartMouseBehaviour {
 
             List<Node> popupRows = new ArrayList<>();
 
+            // in the time zone of the axis below: the time of the popup and the time read off
+            // the axis are the same moment and have to read the same
             Date date = new Date(xValueLong);
-            Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
-            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy - HH:mm:ss,SSS", Locale.GERMANY);
+            TimeZone timeZone = zoomableStackedChart.getBaseChart().getXAxis() instanceof DateAxis axis
+                    ? TimeZone.getTimeZone(axis.getTimeZone()) : TimeZone.getTimeZone("UTC");
+            Calendar cal = new GregorianCalendar(timeZone);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy - HH:mm:ss.SSS", Locale.ENGLISH);
             sdf.setCalendar(cal);
             cal.setTime(date);
 
-            popupRows.add(new HBox(new Label(sdf.format(date) + " Uhr")));
+            popupRows.add(new HBox(new Label(sdf.format(date))));
 
             VBox baseChartPopupRow = buildPopupRows(mouseY, xValueLong, zoomableStackedChart.getBaseChart());
             if (baseChartPopupRow != null) {
@@ -644,8 +651,11 @@ public class ChartMouseBehaviour {
 
                 Label seriesName = new Label(series.getName());
                 seriesName.setTextFill(chart.getColoredSeries(series.getName()).get(0).getColor());
-                seriesName.setMinWidth(SERIES_NAME_MAX_WIDTH);
-                seriesName.setMaxWidth(SERIES_NAME_MAX_WIDTH);
+                // as wide as the name is: it ends with the metric, which is what tells the
+                // series of one chart apart
+                seriesName.setMinWidth(Region.USE_PREF_SIZE);
+                HBox nameColumn = new HBox(seriesName);
+                nameColumn.setMinWidth(SERIES_NAME_MIN_WIDTH);
 
                 double yValueForChart = getYValueForX(series, xValueLong);
                 if (Double.isNaN(yValueForChart)) {
@@ -659,7 +669,9 @@ public class ChartMouseBehaviour {
                 // make series name bold when mouse is near given chart's line
                 if (isMouseNearLine(yValueForChart, yValueUnderMouse, Math.abs(yValueLower - yValueUpper))) {
                     String formattedValue = NUMBER_FORMAT.format(yValueForChart);
-                    HBox hbox = new HBox(SPACING_10, seriesName, new Label(" | " + formattedValue));
+                    Label value = new Label(" | " + formattedValue);
+                    value.setMinWidth(Region.USE_PREF_SIZE);
+                    HBox hbox = new HBox(SPACING_10, nameColumn, value);
                     elements.add(hbox);
                 }
 

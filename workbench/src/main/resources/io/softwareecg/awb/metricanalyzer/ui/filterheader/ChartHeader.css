@@ -77,6 +77,14 @@ cbxCombineMode {
 
 #vbPostProcessingBlock {
     -fx-hgap: 4;
+    -fx-padding: 10 6 6 6;
+}
+
+/* less space around the fields than in the other blocks: the column is 238 wide, its fields 135,
+   and the labels "Smoothing:" and "Granularity:" need the rest */
+#vbPostProcessingBlock .filterPane {
+    -fx-hgap: 4;
+    -fx-padding: 3 0 3 0;
 }
 
 #vbPostProcessingBlock .filterPane > ComboBox {
