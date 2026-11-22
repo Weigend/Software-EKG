@@ -120,7 +120,7 @@ The explorer can represent physical hierarchy (host groups, hosts, process group
 measurements and metrics) and logical/cloud hierarchy (namespaces, services, pods and containers).
 The level of process groups is shown where series have one: what a Collector writes, as CSV
 files or into Solr or Elasticsearch, carries the process group of its configuration, and an analysis started with **New Analysis** uses the name
-of the host group for it. The filter header of a chart has no field for the process group.
+of the host group for it. The filter header of a chart has the field **Process Group** for it.
 Expand nodes to narrow the context or use the chart filter header. Filter controls accept multiple
 values and wildcards where the backing query supports them. A warning item reports incomplete or
 inconsistent hierarchy data rather than silently hiding it.
@@ -149,7 +149,8 @@ Each chart supports:
 How this is done with the mouse and in the legend is shown in
 [The chart](workbench-ui.md#the-chart) and [The legend](workbench-ui.md#the-legend): zooming,
 reading values, colours, the chart types LINE, AREA, SUM and POINT,
-[charts in the background](workbench-ui.md#charts-in-the-background) and the
+[charts in the background](workbench-ui.md#charts-in-the-background), which can be brought to
+the front again, and the
 [percentage deviation](workbench-ui.md#percentage-deviation).
 
 ### Smoothing and aggregation
@@ -180,7 +181,8 @@ query as a bookmark when reproducibility matters.
 
 The dockable AI Assistant uses an OpenAI-compatible chat endpoint. Its tool set can:
 
-- read the current chart context;
+- read the current chart context, with the time zone of the chart: the times of an answer are
+  those of the time axis;
 - list metric dimensions;
 - query time series;
 - propose and run an SSH command only through an approval handler.
@@ -190,6 +192,8 @@ The model is not configurable in the application yet. The Workbench talks to
 API key from the environment variable `OPENROUTER_API_KEY`, which must be set before the
 Workbench starts. Without it the assistant cannot reach a model. Another endpoint (OpenAI,
 Ollama or another OpenAI-compatible service) needs a change in `AiChatModule` and a new build.
+
+An analysis is shown, with a picture, in [The AI Assistant](workbench-ui.md#the-ai-assistant).
 
 Chart context, metric names and queried values are sent to that service. Review what data
 leaves the workstation and never approve an SSH command you would not run yourself. AI output is

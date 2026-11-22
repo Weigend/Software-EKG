@@ -5,7 +5,8 @@
 
 This page goes through the window of the Workbench part by part: the explorer, the filter
 header of a chart with its wildcards, the chart itself, and the legend, where charts are pushed
-to the background, removed again, coloured and drawn as lines, areas, sums or points.
+to the background and brought to the front again, coloured and drawn as lines, areas, sums or
+points. At the end the AI Assistant analyses the fault the pictures show.
 
 The pictures show a sample project with generated values. *Webshop* has three web servers,
 `web01` to `web03`, and a database server, measured for eight hours. Around midday `web03` goes
@@ -24,7 +25,7 @@ wrong: its response times rise, it serves fewer requests, and at 14:10 it is res
 | 5 | [Chart](#the-chart) | The series over the time. Zooming, moving and reading values is done with the mouse. |
 | 6 | [Chart Behavior and Chart Export](#chart-behavior-and-export) | Settings of the chart, and its export as Excel file or picture. |
 | 7 | [Legend](#the-legend) | The charts of the panel and their series: visibility, colour, type, and the charts in the background. |
-| 8 | AI Assistant | See [AI Assistant](workbench.md#ai-assistant). |
+| 8 | [AI Assistant](#the-ai-assistant) | Answers questions about the data of the chart, by querying it. |
 | 9 | Status bar | What the last query did - *Processed 3 series with 5.760 values of 109.440 total in 17ms* - and the progress of what runs in the background. |
 
 Parts 4 to 7 together are one chart panel. It has a tab with the name of its project, and
@@ -76,7 +77,8 @@ A metric is opened in two ways:
 
 | Action | Effect |
 | --- | --- |
-| Double-click, or **Show and replace existing metrics** in the menu of the metric | The chart shows this metric and nothing else. |
+| Double-click, the Enter key, or **Show and replace existing metrics** in the menu of the metric | The chart shows this metric and nothing else. |
+| Moving to the metric with the arrow keys | The same. Going down a list of metrics with the Down key shows one after the other. |
 | **Show and keep existing metrics** in the menu of the metric | What the chart showed moves to the background, and this metric is drawn in front of it. See [Charts in the background](#charts-in-the-background). |
 
 The other nodes have menus of their own, opened with the right mouse button:
@@ -104,14 +106,15 @@ chart again at once; a typed value is confirmed with the Enter key.
 | Measurement | one measurement, or `*` for all |
 | Clusters/Devices | the host group |
 | Host/Device | the host |
+| Process Group | the process group: the level between the host and the process in the explorer, `app` and `system` in the pictures |
 | Process | the process |
 | Metric Type | the metric group |
 | Metric | the metric |
 | Exclude | metrics to leave out of what **Metric** matches |
 
 In a cloud-native project the fields are *Namespace*, *Pod* and *Container* instead of
-*Clusters/Devices* and *Host/Device*, and **Enable add. filters** adds *Measurement* and
-*Service*. There is no field for the process group.
+*Clusters/Devices* and *Host/Device*, and **Enable add. filters** adds *Measurement*, *Service*
+and *Process Group*.
 
 ### Wildcards
 
@@ -147,6 +150,11 @@ among them because it is excluded. Typing narrows the list and completes the nam
 | Smoothing | A value computed for every interval of time instead of the single values: **Average**, **Min**, **Max**, **Sum**, **Median**, **Value Count** (how many values there are) or **Value Difference** (the change against the interval before). |
 | Granularity | The interval of the smoothing: seconds to half years, or **Auto**, which chooses one that fits the time shown. |
 | Combine metrics | What becomes of several series. **Concatenate**, the standard, joins the parts a series has in several measurements to one line. **Sum** and **Average** make one series of all, per second, minute, hour, day or month. **Inactive** leaves every part as it is. |
+
+The lists **Smoothing** and **Combine metrics** say what their modes do. Every entry of the open
+list has a tooltip, and so has the list itself for the mode that is chosen.
+
+![The tooltip of the mode Concatenate in the list Combine metrics](../images/ui-combine-tooltip.png)
 
 Reducing the points does not lose anything: zooming in loads the interval again, and the 500
 points are then spent on it alone.
@@ -200,6 +208,7 @@ bar for the chart, and a line for each of its series.
 | List with **LINE** | The [type](#chart-types) of the chart. |
 | **Push to Background** | Moves the chart to the [background](#charts-in-the-background). |
 | **Calculate % Deviation** | [Compares](#percentage-deviation) the charts in the background with this one. |
+| **Bring to Front** | Makes a chart in the background the one in front again; what is in front goes to the [background](#charts-in-the-background) in exchange. |
 | **Remove** | Takes a chart in the background out of the panel. |
 
 | In the line of a series | Effect |
@@ -268,8 +277,17 @@ A chart in the background
 - has its own type, colours and check boxes in the legend;
 - follows new values as the chart in front does, if its project is being collected.
 
-**Remove** takes a chart in the background out again. That is the only way back: a chart in the
-background cannot be brought to the front. To change its query, remove it and open it again.
+**Bring to Front** exchanges a chart in the background with the one in front. The chart comes
+back with its series, their colours and its type, and the filter header shows its query again,
+which can then be changed. What was in front is in the background now, and can be brought back
+the same way.
+
+![After Bring to Front: the response times are in front again and the rate of requests is behind them](../images/ui-bring-to-front.png)
+
+This is the picture before with the two charts exchanged: the header shows `\Requests\time`
+of all hosts again, and the axis of the response times is the one on the left.
+
+**Remove** takes a chart in the background out of the panel.
 
 ### Percentage deviation
 
@@ -289,6 +307,8 @@ The picture came about like this:
 The result is two charts in the background. *[100% Baseline]* is the measure as an area, and
 *[Relative Values]* has the other series in percent of it: `web02` constantly a little below
 `web01`, `web03` above it until it falls to 55 percent. The place in front is empty afterwards.
+The two charts are calculated, not queried; **Bring to Front** is not available for them,
+because the header would have no query to show.
 
 The series are compared interval by interval, so they should have their values at the same
 times. Smoothing all of them with the same granularity, as here with **Average**, does that.
@@ -306,5 +326,36 @@ and of all charts in the background into one chart in the background, with one a
 | Export Displayed Data as PNG | Writes the chart as a picture, in a size that can be chosen. |
 
 See [Export](workbench.md#export).
+
+## The AI Assistant
+
+The pane on the right takes questions about the data in plain words. The assistant does not
+see the picture of the chart: it asks which project, filters and time zone the chart panel in
+use has, and then queries the series it needs itself, also others than those shown.
+
+![The assistant explains why web03 got slow](../images/ui-ai-analysis.png)
+
+In the picture the chart shows the response times of the three web servers, and the question
+was:
+
+> web03 gets slow around 13:00. Compare it with web01 and web02 and look at heap and garbage
+> collection of its Tomcat. What is the likely cause? Use only the measured data.
+
+To answer it, the assistant read the heap, the garbage collection times, the threads and the
+rate of requests of all three servers, none of which is in the chart, and compared them. Its
+conclusion is a memory leak in the Tomcat of `web03`: the heap that remains after a garbage
+collection rises while the load does not, the collections take longer, and the requests with
+them. That is what the sample data was made to show. It also says what the data cannot tell:
+which objects fill the heap.
+
+Three things to know:
+
+- The times the assistant names are those of the chart: it works in the time zone chosen at the
+  lower left corner of the chart.
+- The answer is a hypothesis with numbers to check, not a measurement. The chart panel beside
+  it is where they are checked.
+- The names of the metrics and the values the assistant queries are sent to the service that
+  runs the model. What it needs, and what to mind, is described in
+  [AI Assistant](workbench.md#ai-assistant).
 
 [Next: Workbench importers →](workbench-importers.md)

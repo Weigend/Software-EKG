@@ -89,8 +89,8 @@ qualified interface key in `collector.properties`.
 | Help | About Software-EKG |
 | Project selector/bar | create, select, edit; repository/collection/view flavour; importer shortcuts |
 | Explorer | traverse physical/cloud dimensions; open/query series and bookmarks; context actions. See [The explorer](workbench-ui.md#the-explorer) |
-| Chart header | dimension/time filters with the patterns `*`, `?`, `\|(a\|b)`, `-(a)`; smoothing; combine; refresh. See [The filter header](workbench-ui.md#the-filter-header) |
-| Chart/legend | zoom; visibility; colours; types LINE, AREA, SUM, POINT; foreground/background; y-axis alignment; absolute/relative combination; remove. See [The chart](workbench-ui.md#the-chart) and [The legend](workbench-ui.md#the-legend) |
+| Chart header | dimension filters including the process group, time filters, with the patterns `*`, `?`, `\|(a\|b)`, `-(a)`; smoothing; combine; refresh. See [The filter header](workbench-ui.md#the-filter-header) |
+| Chart/legend | zoom; visibility; colours; types LINE, AREA, SUM, POINT; push to background and bring to front; y-axis alignment; absolute/relative combination; remove. See [The chart](workbench-ui.md#the-chart) and [The legend](workbench-ui.md#the-legend) |
 | Export | bitmap screenshot; Excel data |
 | Status bar | background progress and cancellation |
 
