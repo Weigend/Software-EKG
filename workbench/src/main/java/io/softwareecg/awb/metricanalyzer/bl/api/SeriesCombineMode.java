@@ -13,7 +13,7 @@ public enum SeriesCombineMode implements NamedEnum {
     /**
      * inactive, no combine of any series
      */
-    NONE ("Inactive"),
+    NONE ("Inactive", "every part of a series is a line of its own, one for each measurement"),
 
     /**
      * Similar series that are identically in each filter dimension except
@@ -21,7 +21,7 @@ public enum SeriesCombineMode implements NamedEnum {
      *
      * Result: a set of unique time series with no measurement value because it used as combined
      */
-    CONCAT ("Concatenate"),
+    CONCAT ("Concatenate", "the parts a series has in several measurements are joined to one line"),
 
     /**
      * All series will merge together by adding values in the same slices.
@@ -30,17 +30,17 @@ public enum SeriesCombineMode implements NamedEnum {
      *
      * Result: a single time series with the sum of all input series at each covered time slot
      */
-    SUM_EXACT("Sum (Exact)"),
+    SUM_EXACT("Sum (Exact)", "one series instead of all: the sum of their values at the same instant"),
 
-    SUM_SEC("Sum (per Second)"),
+    SUM_SEC("Sum (per Second)", "one series instead of all: the sum of their values in every second"),
 
-    SUM_MIN("Sum (per Minute)"),
+    SUM_MIN("Sum (per Minute)", "one series instead of all: the sum of their values in every minute"),
 
-    SUM_HOUR("Sum (per Hour)"),
+    SUM_HOUR("Sum (per Hour)", "one series instead of all: the sum of their values in every hour"),
 
-    SUM_DAY("Sum (per Day)"),
+    SUM_DAY("Sum (per Day)", "one series instead of all: the sum of their values on every day"),
 
-    SUM_MONTH("Sum (per Month)"),
+    SUM_MONTH("Sum (per Month)", "one series instead of all: the sum of their values in every month"),
 
     /**
      * All series will merge together by calculate the average value of each series point in
@@ -48,17 +48,17 @@ public enum SeriesCombineMode implements NamedEnum {
      *
      * Result: a single time series with the average of all input series at each covered time slot
      */
-    AVG_EXACT("Average (Exact)"),
+    AVG_EXACT("Average (Exact)", "one series instead of all: the average of their values at the same instant"),
 
-    AVG_SEC("Average (per Second)"),
+    AVG_SEC("Average (per Second)", "one series instead of all: the average of their values in every second"),
 
-    AVG_MIN("Average (per Minute)"),
+    AVG_MIN("Average (per Minute)", "one series instead of all: the average of their values in every minute"),
 
-    AVG_HOUR("Average (per Hour)"),
+    AVG_HOUR("Average (per Hour)", "one series instead of all: the average of their values in every hour"),
 
-    AVG_DAY("Average (per Day)"),
+    AVG_DAY("Average (per Day)", "one series instead of all: the average of their values on every day"),
 
-    AVG_MONTH("Average (per Month)");
+    AVG_MONTH("Average (per Month)", "one series instead of all: the average of their values in every month");
 
     /**
      * The readable name of the enumeration
@@ -66,13 +66,25 @@ public enum SeriesCombineMode implements NamedEnum {
     private final String name;
 
     /**
+     * What the mode does to the series of a chart
+     */
+    private final String effect;
+
+    /**
      * Internal constructor that creates enum of this type
      * with the readable name that represents the enum value.
      *
      * @param name the readable name that represents the enum value
+     * @param effect what the mode does to the series of a chart, for the tooltip
      */
-    SeriesCombineMode(String name) {
+    SeriesCombineMode(String name, String effect) {
         this.name = name;
+        this.effect = effect;
+    }
+
+    @Override
+    public String getDescription() {
+        return name + ": " + effect;
     }
 
     /**

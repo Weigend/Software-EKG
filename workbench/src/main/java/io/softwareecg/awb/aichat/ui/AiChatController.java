@@ -84,7 +84,7 @@ public class AiChatController implements Initializable {
         List<AiTool> tools = List.of(
                 new GetCurrentContextTool(contextProvider),
                 new ListMetricsTool(this::resolveMetricDataAccessService),
-                new QueryTimeSeriesTool(this::resolveMetricDataAccessService, contextProvider),
+                new QueryTimeSeriesTool(this::resolveMetricDataAccessService, contextProvider, this::chartTimeZone),
                 new SshCommandTool(this::showSshApprovalDialog)
         );
         this.agentLoop = new AgentLoop(client, tools, SystemPrompts.DEFAULT);
@@ -119,6 +119,8 @@ public class AiChatController implements Initializable {
 
             ObjectMapper mapper = new ObjectMapper();
             ObjectNode ctx = mapper.createObjectNode();
+            ZoneId zone = controller.getTimeZone();
+            ctx.put("time_zone", zone.getId());
             ctx.put("project", safe(params.getProjectName()));
             ctx.put("host", safe(params.getHostName()));
             ctx.put("hostgroup", safe(params.getHostGroupName()));
@@ -131,11 +133,11 @@ public class AiChatController implements Initializable {
 
             if (params.getStart() > 0) {
                 ctx.put("start", params.getStart());
-                ctx.put("start_iso", formatEpoch(params.getStart()));
+                ctx.put("start_iso", formatEpoch(params.getStart(), zone));
             }
             if (params.getEnd() > 0) {
                 ctx.put("end", params.getEnd());
-                ctx.put("end_iso", formatEpoch(params.getEnd()));
+                ctx.put("end_iso", formatEpoch(params.getEnd(), zone));
             }
             if (params.isExpertMode()) ctx.put("expert_mode", true);
             if (params.isMultiMetricMode()) ctx.put("multi_metric_mode", true);
@@ -156,11 +158,16 @@ public class AiChatController implements Initializable {
         }
     }
 
-    private static final DateTimeFormatter ISO_LOCAL = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-            .withZone(ZoneId.systemDefault());
+    private static final DateTimeFormatter DATE_AND_TIME = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    private static String formatEpoch(long epochMs) {
-        return ISO_LOCAL.format(Instant.ofEpochMilli(epochMs));
+    private static String formatEpoch(long epochMs, ZoneId zone) {
+        return DATE_AND_TIME.withZone(zone).format(Instant.ofEpochMilli(epochMs));
+    }
+
+    /** The time zone of the chart the assistant looks at; that of the computer if there is no chart. */
+    private ZoneId chartTimeZone() {
+        ChartPanelController controller = resolveActiveChartController();
+        return controller != null ? controller.getTimeZone() : ZoneId.systemDefault();
     }
 
     private static String safe(String value) {

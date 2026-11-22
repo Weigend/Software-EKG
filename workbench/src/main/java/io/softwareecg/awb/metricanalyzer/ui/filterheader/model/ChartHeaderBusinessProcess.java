@@ -17,6 +17,7 @@ import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.Measurement;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.Metric;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.MetricGroup;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.Process;
+import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.ProcessGroup;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.logical.Container;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.logical.Namespace;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.logical.Pod;
@@ -53,6 +54,7 @@ public class ChartHeaderBusinessProcess extends ChartHeaderModel {
 
     // generic filters
     private Service<Collection<Measurement>> measurementsService;
+    private Service<Collection<ProcessGroup>> processGroupsService;
     private Service<Collection<Process>> procService;
     private Service<Collection<MetricGroup>> metricGroupsService;
     private Service<Collection<Metric>> metricNamesService;
@@ -78,6 +80,7 @@ public class ChartHeaderBusinessProcess extends ChartHeaderModel {
         containersService = createService(super.getContainers(), b -> b.withContainer((Container) null), metricDAS::getContainers);
 
         measurementsService = createService(super.getMeasurements(), b -> b.withMeasurement((Measurement) null), metricDAS::getMeasurements);
+        processGroupsService = createService(super.getProcessGroups(), b -> b.withProcessGroup((ProcessGroup) null), metricDAS::getProcessGroups);
         procService = createService(super.getProcess(), b -> b.withProcess((Process) null), metricDAS::getProcesses);
         metricGroupsService = createService(super.getMetricMetricGroups(), b -> b.withMetricGroup((MetricGroup) null), metricDAS::getMetricGroups);
         metricNamesService = createService(super.getMetrics(), b -> b.withMetric((Metric) null), metricDAS::getMetricsNames);
@@ -117,6 +120,13 @@ public class ChartHeaderBusinessProcess extends ChartHeaderModel {
                 };
             }
         };
+    }
+
+    /**
+     * Loads the process groups and fills the model.
+     */
+    public void loadProcessGroups() {
+        processGroupsService.restart();
     }
 
     /**

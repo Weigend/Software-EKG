@@ -188,6 +188,18 @@ public final class Workbench {
      * explorer does, and waits until its header is there.
      */
     public void openChart(String project, String metricGroup, String metric) {
+        openChart(project, metricGroup, metric, OpeningMode.CLEAR_VIEW);
+    }
+
+    /**
+     * Opens a chart of one metric in front of what the chart panel of the project shows, as
+     * "Show and keep existing metrics" in the menu of the metric does.
+     */
+    public void openChartInFront(String project, String metricGroup, String metric) {
+        openChart(project, metricGroup, metric, OpeningMode.MERGE_VIEW);
+    }
+
+    private void openChart(String project, String metricGroup, String metric, OpeningMode mode) {
         @SuppressWarnings({"unchecked", "rawtypes"})
         QueryFilterParams query = (QueryFilterParams) new QueryFilterParams.Builder()
                 .withProject(project)
@@ -196,7 +208,7 @@ public final class Workbench {
                 .withMultiMetricMode(false)
                 .build();
         onFx(() -> {
-            eventBus().publish(new QueryContextEvent(this, query, embeddedRepository(), OpeningMode.CLEAR_VIEW));
+            eventBus().publish(new QueryContextEvent(this, query, embeddedRepository(), mode));
             return null;
         });
         awaitTrue("the chart of '" + metric + "'", Duration.ofSeconds(30),

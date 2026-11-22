@@ -11,11 +11,14 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.StackedAreaChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.net.URISyntaxException;
@@ -48,6 +51,11 @@ class ChartE2ETest {
         ImportDialog dialog = workbench.openImporter("EKG Collector Logs");
         dialog.projectName("Chart").files(logs).importData(Duration.ofMinutes(2));
         workbench.project("Chart").awaitPoints(330, Duration.ofSeconds(30));
+    }
+
+    /** Every test begins with one metric in front and nothing behind it. */
+    @BeforeEach
+    void showOneMetric() {
         workbench.openChart("Chart", "os", "\\Cpu\\us");
     }
 
@@ -103,7 +111,87 @@ class ChartE2ETest {
                 "has the colour " + colourOfTheLegend);
     }
 
+    /**
+     * A chart of the background comes back to the front, with its series and their colours,
+     * and the header shows its query again. It could only be removed before, so that a query
+     * in the background could not be changed any more.
+     */
+    @Test
+    void aChartOfTheBackgroundComesBackToTheFront() {
+        Color colourOfTheCpu = workbench.onFx(() -> stackedChart().getBaseChart().getAllColoredSeries().get(0).getColor());
+
+        workbench.openChartInFront("Chart", "os", "\\Load\\one");
+        awaitInFront("\\Load\\one");
+        assertThat(seriesOfTheBackground()).as("series in the background").singleElement().asString().endsWith("\\Cpu\\us");
+        assertThat(metricOfTheHeader()).as("metric of the header").isEqualTo("\\Load\\one");
+
+        bringTheBackgroundChartToFront();
+        awaitInFront("\\Cpu\\us");
+        workbench.screenshot("chart-brought-to-front");
+
+        assertThat(seriesOfTheBackground()).as("series in the background").singleElement().asString().endsWith("\\Load\\one");
+        assertThat(metricOfTheHeader()).as("metric of the header").isEqualTo("\\Cpu\\us");
+        assertThat(workbench.onFx(() -> stackedChart().getBaseChart().getAllColoredSeries().get(0).getColor()))
+                .as("colour of the series that is in front again").isEqualTo(colourOfTheCpu);
+
+        // what went to the background in exchange can be brought to the front as well
+        bringTheBackgroundChartToFront();
+        awaitInFront("\\Load\\one");
+        assertThat(seriesOfTheBackground()).as("series in the background").singleElement().asString().endsWith("\\Cpu\\us");
+        assertThat(metricOfTheHeader()).as("metric of the header").isEqualTo("\\Load\\one");
+    }
+
+    /**
+     * The lists "Combine metrics" and "Smoothing" say what the chosen mode does: nobody
+     * guesses what "Concatenate" means.
+     */
+    @Test
+    void theListsOfTheHeaderSayWhatTheChosenModeDoes() {
+        assertThat(tooltipOf("cbxCombineMode")).isEqualTo(
+                "Combine metrics - Concatenate: the parts a series has in several measurements are joined to one line");
+        assertThat(tooltipOf("cbxSmoothingType")).isEqualTo("Smoothing - Inactive: the values as they were measured");
+    }
+
     // ---------------------------------------------------------------------------------------------
+
+    private static void bringTheBackgroundChartToFront() {
+        workbench.onFx(() -> {
+            Button button = legend().lookupAll(".button").stream()
+                    .filter(Button.class::isInstance).map(Button.class::cast)
+                    .filter(candidate -> "Bring to Front".equals(candidate.getText()))
+                    .findFirst().orElseThrow(() -> new AssertionError("The legend has no button 'Bring to Front'"));
+            assertThat(button.isDisabled()).as("'Bring to Front' is disabled").isFalse();
+            button.fire();
+            return null;
+        });
+    }
+
+    private static void awaitInFront(String metric) {
+        Workbench.await("the metric " + metric + " in front and one chart in the background", Duration.ofSeconds(20),
+                () -> workbench.onFx(() -> {
+                    List<XYChart.Series<Long, Double>> inFront = stackedChart().getBaseChart().getAllSeries();
+                    return inFront.size() == 1 && inFront.get(0).getName().endsWith(metric)
+                            && stackedChart().getBackgroundCharts().size() == 1 ? Optional.of(metric) : Optional.empty();
+                }));
+        Workbench.pause(Duration.ofMillis(500));
+    }
+
+    private static List<String> seriesOfTheBackground() {
+        return workbench.onFx(() -> stackedChart().getBackgroundCharts().stream()
+                .flatMap(chart -> chart.getAllSeries().stream()).map(XYChart.Series::getName).toList());
+    }
+
+    private static String metricOfTheHeader() {
+        return workbench.onFx(() -> ((ComboBox<?>) shown("cbxMetric")).getEditor().getText());
+    }
+
+    private static String tooltipOf(String id) {
+        return workbench.onFx(() -> ((ComboBox<?>) shown(id)).getTooltip().getText());
+    }
+
+    private static ZoomableStackedChart stackedChart() {
+        return (ZoomableStackedChart) ((BorderPane) shown("chartContainer")).getCenter();
+    }
 
     /** Chooses a type in the list of the chart in front, and waits for the chart of that type. */
     private static void choose(ChartType type) {

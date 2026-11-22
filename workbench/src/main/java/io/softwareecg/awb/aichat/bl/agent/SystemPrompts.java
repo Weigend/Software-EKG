@@ -54,6 +54,8 @@ public final class SystemPrompts {
                The context contains:
                - Filter dimensions: project, host, hostgroup, measurement, metric, process \
                  (if a value is '*', the dimension is unfiltered — omit it from tool calls)
+               - time_zone: the time zone the chart shows its times in. All times the tools return \
+                 are in this zone. Give times in this zone, so that they match the axis of the chart.
                - Time range: start/end as epoch milliseconds (only present if a time filter is active; \
                  if missing, omit start/end from queries to get all data)
                - start_iso/end_iso: human-readable dates (for display only, not for tool parameters)
@@ -112,6 +114,8 @@ public final class SystemPrompts {
             - Only provide deeper analysis when the user explicitly asks for it \
               (e.g. "analyze this", "what could cause this", "explain").
             - Reference specific values and timestamps from tool responses.
+            - Do NOT use Markdown tables. The panel shows paragraphs, lists, bold text and code, \
+              but no tables; put a comparison into a short list instead.
             - Answer in the same language the user uses (German or English).
             """;
 }

@@ -23,6 +23,7 @@ import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.Measurement;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.Metric;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.MetricGroup;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.Process;
+import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.ProcessGroup;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.logical.Container;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.logical.Namespace;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.logical.Pod;
@@ -33,6 +34,7 @@ import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.QueryComputeParams;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.QueryFilterParams;
 import io.softwareecg.awb.metricanalyzer.ui.filterheader.converter.InstantToUtcDateConverter;
 import io.softwareecg.awb.metricanalyzer.ui.filterheader.converter.NamedEnumConverter;
+import io.softwareecg.awb.sdk.core.NamedEnum;
 import io.softwareecg.awb.metricanalyzer.ui.filterheader.model.ChartHeaderBusinessProcess;
 import io.softwareecg.awb.metricanalyzer.ui.filterheader.model.ChartHeaderModel;
 import io.softwareecg.awb.project.api.ProjectViewFlavorChangedEvent;
@@ -148,6 +150,13 @@ public class ChartHeaderController implements Initializable {
     private FilterableComboBox<Container> cbxContainer;
 
     /* ------------------ generic filter (II) ----------------- */
+
+    @FXML
+    private GridPane processGroupFilterPane;
+    @FXML
+    private Label lbProcessGroup;
+    @FXML
+    private FilterableComboBox<ProcessGroup> cbxProcessGroup;
 
     @FXML
     private Label lbProcess;
@@ -425,6 +434,35 @@ public class ChartHeaderController implements Initializable {
         cbxSmoothingGranularity.setConverter(new NamedEnumConverter<>());
         cbxSmoothingType.setConverter(new NamedEnumConverter<>());
         cbxCombineMode.setConverter(new NamedEnumConverter<>());
+
+        explain(cbxSmoothingType, "Smoothing");
+        explain(cbxCombineMode, "Combine metrics");
+    }
+
+    /**
+     * Gives a list of modes tooltips that say what a mode does: one at every entry of the open
+     * list, and one at the list itself for the mode that is chosen. "Concatenate" and "Value
+     * Difference" are names nobody can guess the effect of.
+     *
+     * @param modes the list
+     * @param title what the list is, the text of its label. The label of "Combine metrics" has
+     *              no room in a narrow chart panel, so the tooltip names the list as well.
+     */
+    private static <T extends NamedEnum> void explain(ComboBox<T> modes, String title) {
+        modes.setCellFactory(list -> new ListCell<>() {
+            @Override
+            protected void updateItem(T mode, boolean empty) {
+                super.updateItem(mode, empty);
+                boolean none = empty || mode == null;
+                setText(none ? null : mode.getName());
+                setTooltip(none || mode.getDescription().isBlank() ? null : new Tooltip(mode.getDescription()));
+            }
+        });
+        Tooltip chosen = new Tooltip();
+        chosen.textProperty().bind(javafx.beans.binding.Bindings.createStringBinding(
+                () -> modes.getValue() == null ? title : title + " - " + modes.getValue().getDescription(),
+                modes.valueProperty()));
+        modes.setTooltip(chosen);
     }
 
     private void updateFilterDimensionLabels(Project project) {
@@ -443,6 +481,7 @@ public class ChartHeaderController implements Initializable {
         lbPod.setText(getDimensionLabel(FilterDimension.POD, project.getDimensionAliasPod()));
         lbContainer.setText(getDimensionLabel(FilterDimension.CONTAINER, project.getDimensionAliasContainer()));
         lbMeasurement.setText(getDimensionLabel(FilterDimension.MEASUREMENT, project.getDimensionAliasMeasurement()));
+        lbProcessGroup.setText(getDimensionLabel(FilterDimension.PROCESS_GROUP, null));
         lbProcess.setText(getDimensionLabel(FilterDimension.PROCESS, project.getDimensionAliasProcess()));
         lbMetricGroup.setText(getDimensionLabel(FilterDimension.METRIC_GROUP, project.getDimensionAliasMetricGroup()));
         lbMetric.setText(getDimensionLabel(FilterDimension.METRIC_NAME, project.getDimensionAliasMetricName()));
@@ -491,6 +530,11 @@ public class ChartHeaderController implements Initializable {
         measurementFilterPane.visibleProperty().bind(enableExtCloudFilters);
         measurementFilterPane.managedProperty().bind(measurementFilterPane.visibleProperty());
 
+        // the process group like the measurement: always in a classic project, and in a
+        // cloud-native one among the additional filters, where the header is long as it is
+        processGroupFilterPane.visibleProperty().bind(enableExtCloudFilters);
+        processGroupFilterPane.managedProperty().bind(processGroupFilterPane.visibleProperty());
+
         serviceFilterPane.visibleProperty().bind(viewModel.cloudModeProperty().and(cbEnableAllFilter.selectedProperty()));
         serviceFilterPane.managedProperty().bind(serviceFilterPane.visibleProperty());
 
@@ -502,6 +546,12 @@ public class ChartHeaderController implements Initializable {
             // don't consume space in the region if invisible
             child.managedProperty().bind(child.visibleProperty());
 
+            if (child == measurementFilterPane || child == processGroupFilterPane) {
+                // bound above. The measurement is marked as a classic filter and was bound a
+                // second time here, to classic projects only: the check box for the
+                // additional filters never showed it in a cloud-native project.
+                continue;
+            }
             if (child.getStyleClass().contains("classicFilter")) {
                 child.visibleProperty().bind(viewModel.cloudModeProperty().not());
 
@@ -544,6 +594,7 @@ public class ChartHeaderController implements Initializable {
 
         // overall series filter
         Bindings.bindComboBox(cbxMeasurement, viewModel.getMeasurements(), viewModel.currentMeasurementProperty());
+        Bindings.bindComboBox(cbxProcessGroup, viewModel.getProcessGroups(), viewModel.currentProcessGroupProperty());
         Bindings.bindComboBox(cbxProcess, viewModel.getProcess(), viewModel.currentProcessProperty());
         Bindings.bindComboBox(cbxMetricGroup, viewModel.getMetricMetricGroups(), viewModel.currentMetricGroupProperty());
         Bindings.bindComboBox(cbxMetric, viewModel.getMetrics(), viewModel.currentMetricProperty());
@@ -656,6 +707,7 @@ public class ChartHeaderController implements Initializable {
         initCbxItemAction(cbxContainer,   viewModel::loadContainers,   new Container(LOADING_TEXT),   Container::new);
         // generic filter
         initCbxItemAction(cbxMeasurement, viewModel::loadMeasurements, new Measurement(LOADING_TEXT), Measurement::new);
+        initCbxItemAction(cbxProcessGroup, viewModel::loadProcessGroups, new ProcessGroup(LOADING_TEXT), ProcessGroup::new);
         initCbxItemAction(cbxProcess,     viewModel::loadProcesses,    new Process(LOADING_TEXT),     Process::new);
         initCbxItemAction(cbxMetricGroup, viewModel::loadMetricGroups, new MetricGroup(LOADING_TEXT), MetricGroup::new);
         initCbxItemAction(cbxMetric,      viewModel::loadMetrics,      new Metric(LOADING_TEXT),      Metric::new);

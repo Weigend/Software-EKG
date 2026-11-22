@@ -19,6 +19,7 @@ import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.Measurement;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.Metric;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.MetricGroup;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.Process;
+import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.ProcessGroup;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.logical.Container;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.logical.Namespace;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.logical.Pod;
@@ -60,6 +61,7 @@ public class ChartHeaderModel {
         DEFAULT_FILTER_DIMENSION_LABELS.put(FilterDimension.POD, "Pod");
         DEFAULT_FILTER_DIMENSION_LABELS.put(FilterDimension.CONTAINER, "Container");
         DEFAULT_FILTER_DIMENSION_LABELS.put(FilterDimension.MEASUREMENT, "Measurement");
+        DEFAULT_FILTER_DIMENSION_LABELS.put(FilterDimension.PROCESS_GROUP, "Process Group");
         DEFAULT_FILTER_DIMENSION_LABELS.put(FilterDimension.PROCESS, "Process");
         DEFAULT_FILTER_DIMENSION_LABELS.put(FilterDimension.METRIC_GROUP, "Metric Type");
         DEFAULT_FILTER_DIMENSION_LABELS.put(FilterDimension.METRIC_NAME, "Metric");
@@ -96,6 +98,9 @@ public class ChartHeaderModel {
     private final ObjectProperty<Container> currentContainer = new SimpleObjectProperty<>(new Container("*"));
 
     /* ---------------------------- generic filter properties (II) ------------------------------- */
+
+    private final ListProperty<ProcessGroup> processGroups = new SimpleListProperty<>(observableArrayList());
+    private final ObjectProperty<ProcessGroup> currentProcessGroup = new SimpleObjectProperty<>(new ProcessGroup("*"));
 
     private final ListProperty<Process> process = new SimpleListProperty<>(observableArrayList());
     private final ObjectProperty<Process> currentProcess = new SimpleObjectProperty<>(new Process("*", "*"));
@@ -414,6 +419,20 @@ public class ChartHeaderModel {
     }
 
     /**
+     * @return the process groups the filter offers
+     */
+    public ObservableList<ProcessGroup> getProcessGroups() {
+        return processGroups;
+    }
+
+    /**
+     * @return the process group the chart is filtered by
+     */
+    public Property<ProcessGroup> currentProcessGroupProperty() {
+        return currentProcessGroup;
+    }
+
+    /**
      * Gets the process.
      *
      * @return the process
@@ -531,6 +550,7 @@ public class ChartHeaderModel {
                 .withService(currentService.get())
                 .withPod(currentPod.get())
                 .withContainer(currentContainer.get())
+                .withProcessGroup(currentProcessGroup.get())
                 .withProcess(currentProcess.get())
                 .withStart(start.get() == null ? -1 : start.get().toEpochMilli())
                 .withStop(stop.get() == null ? -1 : stop.get().toEpochMilli())
@@ -579,6 +599,11 @@ public class ChartHeaderModel {
 
         // common stuff
         currentProject.set(queryContext.getProject());
+        // The process group as well. A metric opened below a process group in the explorer
+        // brings one along; the header used to drop it, and the first change of another
+        // field showed the series of all process groups.
+        currentProcessGroup.set(queryContext.getProcessGroup() == null
+                ? new ProcessGroup("*") : queryContext.getProcessGroup());
         currentProcess.set(queryContext.getProcess());
         currentMetricGroup.set(queryContext.getMetricGroup());
         currentMetric.set(queryContext.getMetric());

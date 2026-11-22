@@ -131,6 +131,16 @@
 
         <!-- ================= start generic filter ================= -->
 
+        <!-- the level between the host and the process in the explorer: "app" and "system" -->
+        <GridPane fx:id="processGroupFilterPane" styleClass="filterPane">
+            <Label fx:id="lbProcessGroup" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+            <FilterableComboBox fx:id="cbxProcessGroup" GridPane.rowIndex="0" GridPane.columnIndex="1" >
+                <converter>
+                    <ProcessGroupStringConverter/>
+                </converter>
+            </FilterableComboBox>
+        </GridPane>
+
         <GridPane styleClass="filterPane">
             <Label fx:id="lbProcess" GridPane.rowIndex="0" GridPane.columnIndex="0" />
             <FilterableComboBox fx:id="cbxProcess" GridPane.rowIndex="0" GridPane.columnIndex="1" >
@@ -251,12 +261,8 @@
 
         <Label fx:id="lbCombineMode" text="Combine metrics:" GridPane.columnIndex="4" translateY="1" />
 
-        <ComboBox fx:id="cbxCombineMode" GridPane.columnIndex="5" >
-            <tooltip>
-                <!-- says what the list is when its label has no room, in a panel at its least width -->
-                <Tooltip text="Combine metrics: what becomes of several series"/>
-            </tooltip>
-        </ComboBox>
+        <!-- its tooltip says what the chosen mode does, see ChartHeaderController -->
+        <ComboBox fx:id="cbxCombineMode" GridPane.columnIndex="5" />
 
         <Button fx:id="btRefreshGraph" GridPane.columnIndex="7" mnemonicParsing="false" />
 

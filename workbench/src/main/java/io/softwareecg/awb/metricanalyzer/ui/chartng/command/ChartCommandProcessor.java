@@ -201,6 +201,13 @@ public class ChartCommandProcessor {
                     commandProtocolManager.logStrCommand(command, targetChartId);
                     break;
 
+                case BRING_BG_TO_FRONT:
+                    CommandValidator.checkSingleValueArray(command, argument, "idOfTheChartPushedBack");
+                    CommandValidator.checkTargetChartId(command, targetChartId);
+                    chartController.bringBackgroundChartToFront(targetChartId, argument[0]);
+                    commandProtocolManager.logStrCommand(command, targetChartId, argument);
+                    break;
+
                 case DELETE_ALL_BG_CHARTS:
                     CommandValidator.checkIsEmpty(command, argument);
                     deleteAllBackgroundCharts();
@@ -357,6 +364,14 @@ public class ChartCommandProcessor {
                     CommandValidator.checkTargetChartId(command, targetChartId);
                     deleteBackgroundChart(targetChartId);
                     commandProtocolManager.logStrCommand(command, targetChartId);
+                    break;
+
+                case BRING_BG_TO_FRONT:
+                    CommandValidator.checkSingleValueArray(command, argument, "idOfTheChartPushedBack");
+                    CommandValidator.checkTargetChartId(command, targetChartId);
+                    CommandValidator.checkType(command, String.class, argument[0]);
+                    chartController.bringBackgroundChartToFront(targetChartId, argument[0].toString());
+                    commandProtocolManager.logStrCommand(command, targetChartId, argument[0].toString());
                     break;
 
                 case RELATIVE_COMBINE_TO_BASE:

@@ -23,6 +23,9 @@ public enum ChartCommand {
 
     DELETE_BG_CHART,
 
+    /** a chart of the background becomes the chart in front, and what was in front goes back */
+    BRING_BG_TO_FRONT,
+
     DELETE_ALL_BG_CHARTS,
 
     RELATIVE_COMBINE_TO_BASE,

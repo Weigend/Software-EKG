@@ -35,6 +35,24 @@ public class LegendActionCallbacks {
         // default: no operation
     }
 
+    /**
+     * Brings a chart of the background to the front.
+     *
+     * @param chartId the chart
+     */
+    public void bringToFront(String chartId) {
+        // default: no operation
+    }
+
+    /**
+     * @param chartId a chart of the background
+     * @return whether it can be brought to the front: a chart that was calculated from others
+     *         has no query the filter header could show for it
+     */
+    public boolean canBringToFront(String chartId) {
+        return false;
+    }
+
     public void deleteAllBgCharts() {
         // default: no operation
     }

@@ -184,6 +184,14 @@ public class ChartPanelController implements Initializable {
      * Returns the MetricDataAccessService bound to the current repository.
      * This instance has a properly initialized RepositoryClient, unlike the CDI default bean.
      */
+    /**
+     * @return the time zone the chart shows its times in, chosen at its lower left corner
+     */
+    public java.time.ZoneId getTimeZone() {
+        ChartTimeZone chosen = cbTimeZone.getValue();
+        return (chosen != null ? chosen : ChartTimeZone.getDefaultTimeZone()).getTimeZone();
+    }
+
     public MetricDataAccessService getMetricDataAccessService() {
         if (viewModel.getEkgRepository() == null) return null;
         return viewModel.getEkgRepository().getBoundedService(MetricDataAccessService.class);
@@ -409,6 +417,43 @@ public class ChartPanelController implements Initializable {
      * @param start the start of the time range, or -1 for the whole of it
      * @param end   the end of the time range, or -1 for the whole of it
      */
+    /**
+     * Brings a chart of the background to the front. The chart in front goes to the
+     * background in exchange, and the filter header shows the query of the chart that is in
+     * front now - so that it can be changed there, which a chart in the background cannot.
+     *
+     * @param chartId the chart of the background; one this view has the query of
+     */
+    private void bringToFront(String chartId) {
+        BackgroundQuery query = backgroundQueries.remove(chartId);
+        if (query == null) {
+            return;
+        }
+        String idOfTheChartPushedBack = UUID.randomUUID().toString();
+        if (!zoomableStackedChart.getBaseChart().isEmpty() && baseShowsQuery
+                && viewModel.getBaseChartFilterParams() != null) {
+            backgroundQueries.put(idOfTheChartPushedBack,
+                    new BackgroundQuery(shownQuery(), viewModel.getBaseChartComputeParams()));
+        }
+        commandProcessor.executeObjectArgCommand(ChartCommand.BRING_BG_TO_FRONT, chartId, idOfTheChartPushedBack);
+
+        // The header takes over the query without loading it: the chart is there already.
+        // Not the time, though: what the query has there is the interval that was zoomed
+        // into when the chart went to the background, not what "From" and "To" said.
+        QueryFilterParams forTheHeader = copyOf(query.filter());
+        QueryFilterParams header = chartHeaderController.getDefinedFilterParameters();
+        forTheHeader.setStart(header.getStart());
+        forTheHeader.setEnd(header.getEnd());
+
+        viewModel.suppressEventHandling(true);
+        viewModel.setBaseChartFilterParams(copyOf(query.filter()));
+        viewModel.setBaseChartComputeParams(query.compute());
+        chartHeaderController.setQueryContext(forTheHeader, OpeningMode.UPDATE);
+        chartHeaderController.setComputeParameters(query.compute());
+        viewModel.suppressEventHandling(false);
+        baseShowsQuery = true;
+    }
+
     private void followBackgroundCharts(long start, long end) {
         List<ColoredChart> charts = new ArrayList<>(zoomableStackedChart.getBackgroundCharts());
         backgroundQueries.keySet().retainAll(charts.stream().map(ColoredChart::getId).collect(Collectors.toSet()));
@@ -882,6 +927,16 @@ public class ChartPanelController implements Initializable {
         @Override
         public void deleteBgChart(String chartId) {
             commandProcessor.executeCommand(ChartCommand.DELETE_BG_CHART, chartId);
+        }
+
+        @Override
+        public void bringToFront(String chartId) {
+            ChartPanelController.this.bringToFront(chartId);
+        }
+
+        @Override
+        public boolean canBringToFront(String chartId) {
+            return backgroundQueries.containsKey(chartId);
         }
 
         @Override

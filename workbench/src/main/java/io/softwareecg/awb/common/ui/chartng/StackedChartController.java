@@ -249,6 +249,36 @@ public class StackedChartController {
      *
      * @param backgroundChartId the id of the chart that should removed from background
      */
+    /**
+     * Brings a chart of the background to the front, with its series, their colours and its
+     * type. What is in front goes to the background in exchange, as with
+     * {@link #pushBaseToBackgroundChart(String)}; nothing is lost on either side.
+     *
+     * @param backgroundChartId       the chart of the background
+     * @param idOfTheChartPushedBack the id the chart in front has in the background afterwards;
+     *                               not used if there is nothing in front
+     */
+    public void bringBackgroundChartToFront(String backgroundChartId, String idOfTheChartPushedBack) {
+        ColoredChart background = getChartById(backgroundChartId);
+        if (background == zoomableStackedChart.getBaseChart()) {
+            return;
+        }
+
+        if (!zoomableStackedChart.getBaseChart().isEmpty()) {
+            pushBaseToBackgroundChart(idOfTheChartPushedBack);
+        }
+        // the place in front is empty now: it takes the type first, which replaces the chart
+        // there, and then the series - the way a chart gets to the background, the other way round
+        changeChartType(zoomableStackedChart.getBaseChart().getId(), background.getChartType());
+        ColoredChart base = zoomableStackedChart.getBaseChart();
+        ChartCloneUtil.transferSeriesData(background, base);
+        base.setLegendLabel(background.getLegendLabel());
+        base.setComputed(background.isComputed());
+
+        deleteBackgroundChart(backgroundChartId);
+        chartLegend.setBaseChart(base);
+    }
+
     public void deleteBackgroundChart(String backgroundChartId) {
 
         ColoredChart backgroundChart = getChartById(backgroundChartId);

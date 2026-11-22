@@ -15,4 +15,14 @@ public interface NamedEnum {
      * @return the alias name of the enum value
      */
     String getName();
+
+    /**
+     * What choosing the value does, in a sentence for a tooltip. A name such as "Concatenate"
+     * does not say it.
+     *
+     * @return the description, or an empty text if the value has none
+     */
+    default String getDescription() {
+        return "";
+    }
 }

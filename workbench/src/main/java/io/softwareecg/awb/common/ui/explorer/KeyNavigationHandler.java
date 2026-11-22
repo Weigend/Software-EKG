@@ -13,6 +13,7 @@
 package io.softwareecg.awb.common.ui.explorer;
 
 import io.softwareecg.awb.common.ui.explorer.api.AbstractItem;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyCode;
@@ -66,16 +67,25 @@ class KeyNavigationHandler<T> implements EventHandler<KeyEvent> {
             selectCurrentItem();
         }
 
-        //Select a item and publish query context event
-        if (enterKey(event.getCode())) {
+        // Enter shows the selected item, and so does moving to it with the arrow keys: going
+        // down a list of metrics shows one after the other.
+        if (enterKey(event.getCode()) || navigationKey(event.getCode())) {
             getSelectedItem().ifPresent(i -> i.getEnterPressedHandler().handle(event));
-        }
-        if (navigationKey(event.getCode())) {
-            getSelectedItem().ifPresent(i -> i.getEnterPressedHandler().handle(event));
+            keepTheKeyboard();
         }
         if (refreshKey(event)) {
             getSelectedItem().ifPresent(i -> i.getService().restart());
         }
+    }
+
+    /**
+     * Gives the focus back to the tree. What an item shows opens in another pane, and that
+     * pane takes the focus: the next arrow key went to it instead of the tree, so that the
+     * keys worked for one step and then no more.
+     */
+    private void keepTheKeyboard() {
+        treeView.requestFocus();
+        Platform.runLater(treeView::requestFocus);
     }
 
     private Optional<AbstractItem<?>> getSelectedItem() {

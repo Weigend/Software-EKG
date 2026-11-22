@@ -42,10 +42,21 @@ public class QueryTimeSeriesTool implements AiTool {
     private final SimplificationService simplificationService = new DouglasPeuckerSimplificationService();
     private final Supplier<MetricDataAccessService> metricServiceSupplier;
     private final ChartContextProvider contextProvider;
+    private final Supplier<ZoneId> timeZone;
 
     public QueryTimeSeriesTool(Supplier<MetricDataAccessService> metricServiceSupplier, ChartContextProvider contextProvider) {
+        this(metricServiceSupplier, contextProvider, ZoneId::systemDefault);
+    }
+
+    /**
+     * @param timeZone the time zone the times of the answer are given in: that of the chart,
+     *                 so that the times the assistant names are those of the axis beside it
+     */
+    public QueryTimeSeriesTool(Supplier<MetricDataAccessService> metricServiceSupplier, ChartContextProvider contextProvider,
+                               Supplier<ZoneId> timeZone) {
         this.metricServiceSupplier = metricServiceSupplier;
         this.contextProvider = contextProvider;
+        this.timeZone = timeZone;
     }
 
     @Override
@@ -198,7 +209,9 @@ public class QueryTimeSeriesTool implements AiTool {
     private String formatResponse(Collection<TimeSeries> seriesList, int maxPoints, long totalHits, boolean includeValues) {
         try {
             ObjectNode result = objectMapper.createObjectNode();
+            ZoneId zone = timeZone.get();
             result.put("total_series_found", totalHits);
+            result.put("time_zone", zone.getId());
 
             // Limit to MAX_SERIES_RETURNED
             List<TimeSeries> limited = new ArrayList<>(seriesList);
@@ -228,8 +241,8 @@ public class QueryTimeSeriesTool implements AiTool {
                 seriesNode.put("points", values.size());
 
                 if (!values.isEmpty()) {
-                    seriesNode.put("start_time", formatEpoch(values.get(0).getTimestamp()));
-                    seriesNode.put("end_time", formatEpoch(values.get(values.size() - 1).getTimestamp()));
+                    seriesNode.put("start_time", formatEpoch(values.get(0).getTimestamp(), zone));
+                    seriesNode.put("end_time", formatEpoch(values.get(values.size() - 1).getTimestamp(), zone));
 
                     DoubleSummaryStatistics stats = values.stream()
                             .mapToDouble(Value::getValue)
@@ -245,7 +258,7 @@ public class QueryTimeSeriesTool implements AiTool {
                         ArrayNode valuesArray = seriesNode.putArray("values");
                         for (Value v : values) {
                             ArrayNode point = valuesArray.addArray();
-                            point.add(formatEpoch(v.getTimestamp()));
+                            point.add(formatEpoch(v.getTimestamp(), zone));
                             point.add(round(v.getValue()));
                         }
                     }
@@ -258,11 +271,14 @@ public class QueryTimeSeriesTool implements AiTool {
         }
     }
 
-    private static final DateTimeFormatter ISO_LOCAL = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-            .withZone(ZoneId.systemDefault());
+    private static final DateTimeFormatter DATE_AND_TIME = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    private static String formatEpoch(long epochMs) {
-        return ISO_LOCAL.format(Instant.ofEpochMilli(epochMs));
+    /**
+     * A time as the chart shows it. The zone of the computer was used once; the chart has a
+     * zone of its own, and the times of the assistant were hours away from those of its axis.
+     */
+    static String formatEpoch(long epochMs, ZoneId zone) {
+        return DATE_AND_TIME.withZone(zone).format(Instant.ofEpochMilli(epochMs));
     }
 
     private static double round(double value) {
