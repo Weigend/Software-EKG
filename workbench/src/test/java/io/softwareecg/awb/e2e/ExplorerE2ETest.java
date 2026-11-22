@@ -97,9 +97,19 @@ class ExplorerE2ETest {
             });
             item = Workbench.await("the node '" + name + "' below '" + parent.getValue() + "'", Duration.ofSeconds(30),
                     () -> workbench.onFx(() -> parent.getChildren().stream()
-                            .filter(child -> name.equals(String.valueOf(child.getValue()))).findFirst()));
+                            .filter(child -> isNamed(child, name)).findFirst()));
         }
         return item;
+    }
+
+    /**
+     * Whether a node has this name. A repository shows the number of its series behind its
+     * name once it has counted them - "Local Repository (660)" - which is the case when other
+     * tests have imported before this one.
+     */
+    private static boolean isNamed(TreeItem<Object> node, String name) {
+        String shown = String.valueOf(node.getValue());
+        return shown.equals(name) || shown.startsWith(name + " (");
     }
 
     private static void select(TreeItem<Object> item) {
