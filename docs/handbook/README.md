@@ -3,6 +3,11 @@
 Software-EKG builds focused, reproducible time-series datasets for investigations across
 otherwise disconnected sources.
 
+It is the diagnostic recorder of a software emergency doctor, not another permanent monitoring
+system. For one concrete investigation the analyst records whichever metrics matter, begins with
+a broad comparison and narrows systems, processes, time and measurements until the decisive
+difference is visible.
+
 This handbook describes the user-visible and deliberately extensible features of the current
 Software-EKG repository. It covers the Workbench, the Collector (a standalone acquisition
 process with an optional local display), their data formats and the extension contracts that are

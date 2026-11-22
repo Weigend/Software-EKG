@@ -14,6 +14,12 @@
 
 Das Software-EKG ist eine Workbench für die vergleichende Analyse von Softwaresystemen. Der Name ist wörtlich gemeint: Wie ein EKG die Signale des Herzens über die Zeit aufzeichnet, zeichnet das Software-EKG gezielt die Messwerte der Systeme, Server und Anwendungen auf, die zusammen einen Anwendungscluster, ein verteiltes System oder einen Serververbund bilden. Legt man die Kurven übereinander, fällt auf, welche Komponente wann aus dem Takt gerät.
 
+Es ist ein Experteninstrument für den *Software-Notarzt*: ein diagnostischer Rekorder, der für
+einen konkreten Einsatz zusammengestellt wird. Der Analyst beginnt mit einem groben Überblick,
+vergleicht viele Systeme und zeichnet dann gezieltere Metriken auf oder grenzt Zeitraum, Systeme
+und Prozesse immer weiter ein, bis der entscheidende Unterschied sichtbar wird. Es gibt keinen
+für immer festgelegten Monitoring-Katalog; welche Messwerte wichtig sind, bestimmt der Fall.
+
 ![CPU-Last des WebLogic-Prozesses auf elf Knoten eines Clusters, eine Woche im März 2015](docs/images/beispiel-cpu-cluster-2015.png)
 
 Das Bild zeigt die CPU-Last desselben Java-Prozesses auf elf Knoten eines Clusters über eine Woche. Man sieht, dass die Anwendung nur tagsüber von Montag bis Freitag genutzt wird und dass ein Server die ganze Woche deutlich über den anderen liegt. Warum das so ist, sagt das Bild nicht. Es liefert aber die drei Angaben, auf die es ankommt: welcher Server, welcher Zeitraum und womit man ihn vergleicht. Die Ursache war am Ende ein fehlerhaftes Load Balancing im Client; der ganze Fall steht in [docs/positioning.de.md](docs/positioning.de.md#ein-beispiel).
@@ -44,6 +50,12 @@ Es ist der erste Schritt einer Root-Cause-Analyse, nicht ihr Ende: Das EKG zeigt
 3. **Festhalten.** Auffällige Stellen werden als Bookmarks gespeichert und als PNG oder Excel exportiert.
 4. **Prüfen.** Der eingebaute AI Assistant hilft, eine Hypothese an den Rohdaten zu prüfen, siehe [Die Rolle der AI](#die-rolle-der-ai).
 5. **Vertiefen.** Ausgehend davon wird festgelegt, was genau tiefer untersucht werden soll. Speicherprofiler, CPU-Profiler, Netzwerk-Tracing-Tools oder andere Visualisierungen kommen dann gezielt für die Komponenten zum Einsatz, die bereits in der Metrikanalyse auffällig sind.
+
+Ein Bookmark hält bewusst die entscheidende Ansicht fest, statt aus dem Software-EKG eine
+Fallverwaltung oder ein Autorenwerkzeug zu machen. Der fertige Befund gehört normalerweise in eine
+Präsentation, einen Einsatzbericht oder ein Kundendokument. Das Bild des festgehaltenen Charts und
+seine exportierten Daten liefern dafür die Belege; eine AI kann helfen, daraus das Dokument zu
+erstellen, ohne dass der Rekorder selbst zum Präsentationswerkzeug werden muss.
 
 Die vollständige Anwender- und Erweiterungsdokumentation steht im
 [Software-EKG-Handbuch](docs/handbook/README.md) (auf Englisch).

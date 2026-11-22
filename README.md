@@ -14,6 +14,12 @@
 
 Software-EKG is a workbench for the comparative analysis of software systems. The name is meant literally: EKG is the German abbreviation for an electrocardiogram (ECG). Just as an ECG records the signals of the heart over time, Software-EKG records selected measurements of the systems, servers and applications that together form an application cluster, a distributed system or a group of servers. Put the curves on top of each other and you see which component falls out of rhythm, and when.
 
+It is an expert instrument for the *software emergency doctor*: a diagnostic recorder configured
+for one concrete investigation. The analyst starts with a broad view, compares many systems and
+then records more specific metrics or narrows the time, systems and processes until the relevant
+difference becomes visible. It is not a permanently prescribed monitoring catalogue; what matters
+enough to record depends on the case.
+
 ![CPU load of the WebLogic process on eleven nodes of a cluster, one week in March 2015](docs/images/beispiel-cpu-cluster-2015.png)
 
 The picture shows the CPU load of the same Java process on eleven nodes of a cluster over one week. You can see that the application is only used during the day from Monday to Friday, and that one server stays well above the others all week. The picture does not say why. It does give the three facts that matter: which server, which period, and what to compare it with. In the end the cause was faulty load balancing in the client; the whole case is described in [docs/positioning.md](docs/positioning.md#an-example).
@@ -44,6 +50,12 @@ It is the first step of a root cause analysis, not the end of it: Software-EKG s
 3. **Record.** Conspicuous places are saved as bookmarks and exported as PNG or Excel.
 4. **Verify.** The built-in AI Assistant helps to check a hypothesis against the raw data, see [The role of AI](#the-role-of-ai).
 5. **Go deeper.** Based on this, you decide what exactly to investigate further. Memory profilers, CPU profilers, network tracing tools or other visualisations are then used specifically for the components that already stood out in the metric analysis.
+
+A bookmark deliberately records the useful view rather than trying to become a case-management or
+document-authoring system. The final finding normally belongs in a presentation, incident report or
+customer document. The picture of the bookmarked chart and its exported data provide the evidence;
+an AI can help turn those artefacts into the document without making the recorder itself a
+presentation tool.
 
 The complete English user and extension documentation is available in the
 [Software-EKG Handbook](docs/handbook/README.md).

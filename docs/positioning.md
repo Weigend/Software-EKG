@@ -2,13 +2,13 @@
 
 **English** | [Deutsch](positioning.de.md)
 
-As of 18 November 2026. This document records what Software-EKG is for and what it is not for. It is the result of a discussion, not a plan for a rebuild: what will be built or removed as a consequence has not been decided yet.
+As of 22 November 2026. This document records what Software-EKG is for and what it is not for. It is the result of a discussion, not a plan for a rebuild: what will be built or removed as a consequence has not been decided yet.
 
 ## Position
 
 > With Software-EKG, an analyst looks for the needle in the haystack.
 
-Software-EKG is a workbench for the comparative long-term analysis of software systems. An analyst compares, locally and away from the production systems, the behaviour of many systems over months, recognises conspicuous patterns and records them as findings. A built-in AI agent helps to check the analyst's hypotheses against logs, release plans and documentation.
+Software-EKG is a diagnostic recorder and workbench for the comparative long-term analysis of software systems. A software emergency doctor configures it for one concrete assignment, compares locally and away from the production systems, begins with a broad view and narrows systems, periods and metrics until the decisive difference is visible. Useful views are preserved as bookmarks and become evidence for findings in the presentation or document appropriate to the assignment. A built-in AI agent helps to check the analyst's hypotheses against logs, release plans and documentation.
 
 The core is comparison, not the detection of anomalies. The analyst finds patterns they were not looking for, and many of them lie within all thresholds:
 
@@ -36,9 +36,9 @@ This is an expert use case, and it often delivers only the first analysis of sym
 
 1. **Collect.** Data is collected and stored locally, in the embedded Solr or in ClickHouse. The analysis takes place on your own machine, not on the production systems. With a connection, the workbench imports from Prometheus, once or as a delta import. The collector supplies further sources, among them system metrics and logs via SSH.
 2. **Compare.** The analyst puts many time series on top of each other, for example the used heap of 50 systems, changes the time window and adds further systems. Often there is no clear question at the start; it emerges while comparing.
-3. **Finding.** The analyst records what stands out. Three facts are decisive: which server, which period, and what to compare with. The hypothesis is added to that.
+3. **Bookmark.** The analyst preserves the view in which something stands out. Three facts are decisive: which server, which period, and what to compare with. The hypothesis may be developed in the report or presentation that uses this evidence.
 4. **Verify.** The built-in AI agent checks the hypothesis against the raw data. It has read access to logs, release plans and other documentation and looks for evidence as well as counter-evidence. An agent that only confirms would automate the analyst's confirmation bias. The check works by elimination: if logs and GC metrics show that no more is running on the conspicuous server than on the others, load is ruled out as an explanation, and suspicion moves to the Java process itself. Some of the questions are already narrowed down by the tool; the rest needs logs and other information. Where even those are not enough, the agent formulates the questions for the people who know the system.
-5. **Hand over.** The finding goes into an analysis document, together with the picture.
+5. **Hand over.** The picture of the bookmarked view and, where needed, its exported values go into an analysis document or presentation. An AI can draft that document from the evidence; the Workbench does not need to become a document-authoring system.
 
 ## An example
 
@@ -106,10 +106,9 @@ It has not been shown that Software-EKG is better for this kind of analysis than
 
 ## What is missing
 
-- **The finding.** Today, bookmarks record a view. A finding additionally needs the marked time window, the basis of comparison, the hypothesis, and evidence and counter-evidence from the raw data. The open questions to those who know the system belong to it as well. Hypotheses cannot currently be marked in the tool. The finding would be the connecting element between comparison, search for the cause and documentation.
 - **Sources of the agent.** Today it reaches the time series and, via SSH, the systems. It does not yet reach release plans and documentation.
 - **The picture for the agent.** Today the agent receives measurements as text. It cannot request a chart, although that is exactly the strength of the tool: the used DB pool of 100 servers is a lot as raw data, and a single picture as a chart.
-- **The analysis document.** The PNG export delivers the picture; the way from the finding to the document is done by hand.
+- **Context beside the picture.** A screenshot communicates the pattern, but exact series names, filters and values are not always recoverable from colours and pixels. Passing that existing bookmark context alongside the PNG would make external AI-assisted presentations and reports more reliable without adding a document editor.
 - **Scheduled import from Prometheus.** For that the collector needs its own Prometheus source. The collector remains optional, but would provide the long-term view of Prometheus.
 
 ## Open

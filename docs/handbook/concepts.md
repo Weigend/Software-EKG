@@ -3,6 +3,24 @@
 [Handbook home](README.md) · [Architecture](architecture.md) ·
 [Getting started](getting-started.md) · [Collector](collector.md) · [Workbench](workbench.md)
 
+## A recorder for the software emergency doctor
+
+Software-EKG is an expert instrument for a concrete diagnostic assignment. Like a medical
+recorder, it preserves signals over time so that an experienced analyst can compare them. It does
+not decide in advance which signals must matter in every incident: the relevant metrics may be
+heap and garbage collection in one case, connection pools, operating-system values, log events or
+business counters in another.
+
+The investigation proceeds from coarse to fine. The analyst first overlays broad, comparable
+signals from many systems to find which system and period differ. That observation determines the
+next, more specific metrics, processes and time range. Software-EKG supports this repeated
+narrowing; a profiler or trace tool can take over once the affected component and period are known.
+
+This is why Software-EKG complements monitoring rather than replacing it. Monitoring continuously
+answers whether known conditions are healthy and raises alarms. The recorder helps an expert ask
+what is different in this particular case, including patterns that remain inside every alarm
+threshold.
+
 ## Why collect metrics that already exist somewhere?
 
 Monitoring platforms such as Prometheus and Grafana, Zabbix and similar systems can provide broad,
@@ -23,6 +41,20 @@ The value is not another copy by itself; it is a stable, comparable investigatio
 The Collector deliberately gathers only named metrics and patterns. It is an adapter between the
 systems that already expose facts and the repository the Workbench can analyse. The original
 monitoring remains authoritative and continues to alert. Software-EKG supplies a focused case file.
+
+## From a bookmark to the report
+
+During the investigation a [bookmark](workbench.md#bookmarks) preserves the decisive view: the
+filters that select its series, and the time range. It stores the query, not a picture, so the
+view can be opened again and changed. That is intentionally lighter than a finding database. The final result usually has to fit
+an existing presentation, incident report or customer document, so document authoring remains
+outside the Workbench.
+
+The picture of the bookmarked chart and an optional export of its data, both made with the
+[export](workbench.md#export) of the chart, are the evidence handed to that next step. An AI can use them to draft slides or prose. The screenshot communicates the pattern; series
+names, filters, time range and exported values should accompany it whenever the exact identity or
+value matters. This division keeps Software-EKG focused on recording and diagnosis while leaving
+communication to the tool appropriate for the audience.
 
 ## Why work offline?
 

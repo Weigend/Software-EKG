@@ -2,13 +2,13 @@
 
 [English](positioning.md) | **Deutsch**
 
-Stand: 18.11.2026. Dieses Dokument hält fest, wofür das Software-EKG da ist und wofür nicht. Es ist das Ergebnis einer Diskussion, kein Umbauplan: Was daraus gebaut oder gestrichen wird, ist noch nicht entschieden.
+Stand: 22.11.2026. Dieses Dokument hält fest, wofür das Software-EKG da ist und wofür nicht. Es ist das Ergebnis einer Diskussion, kein Umbauplan: Was daraus gebaut oder gestrichen wird, ist noch nicht entschieden.
 
 ## Position
 
 > Mit dem Software-EKG sucht ein Analyst die Nadel im Heuhaufen.
 
-Das Software-EKG ist eine Workbench für die vergleichende Langzeitanalyse von Softwaresystemen. Ein Analyst vergleicht lokal, abseits der Produktionssysteme, das Verhalten vieler Systeme über Monate, erkennt auffällige Muster und hält sie als Befunde fest. Ein eingebauter AI-Agent hilft ihm, seine Hypothesen anhand von Logs, Release-Plänen und Dokumentation zu prüfen.
+Das Software-EKG ist ein diagnostischer Rekorder und eine Workbench für die vergleichende Langzeitanalyse von Softwaresystemen. Ein Software-Notarzt stellt es für einen konkreten Einsatz zusammen, vergleicht lokal und abseits der Produktionssysteme, beginnt mit einem groben Überblick und grenzt Systeme, Zeiträume und Metriken ein, bis der entscheidende Unterschied sichtbar wird. Aussagekräftige Ansichten hält er als Bookmarks fest; sie werden zu Belegen für den Befund in der zum Einsatz passenden Präsentation oder Dokumentation. Ein eingebauter AI-Agent hilft ihm, seine Hypothesen anhand von Logs, Release-Plänen und Dokumentation zu prüfen.
 
 Der Kern ist der Vergleich, nicht die Erkennung von Anomalien. Der Analyst findet Muster, nach denen er vorher nicht gesucht hat, und viele davon liegen innerhalb aller Grenzwerte:
 
@@ -36,9 +36,9 @@ Das ist ein Experten-Use-Case, und er liefert oft nur die erste Symptomanalyse. 
 
 1. **Sammeln.** Daten werden eingesammelt und lokal gespeichert, im eingebetteten Solr oder in ClickHouse. Die Auswertung findet auf dem eigenen Rechner statt, nicht auf den Produktionssystemen. Mit Verbindung importiert die Workbench aus Prometheus, einmalig oder als Delta-Import. Weitere Quellen liefert der Collector, unter anderem Systemmetriken und Logs per SSH.
 2. **Vergleichen.** Der Analyst legt viele Zeitreihen übereinander, etwa den belegten Heap von 50 Systemen, verändert das Zeitfenster und nimmt weitere Systeme dazu. Eine klare Frage hat er am Anfang oft nicht; sie entsteht beim Vergleichen.
-3. **Befund.** Er hält fest, was ihm auffällt. Entscheidend sind drei Angaben: welcher Server, welcher Zeitraum und womit er vergleichen will. Dazu kommt die Hypothese.
+3. **Bookmark.** Er hält die Ansicht fest, in der ihm etwas auffällt. Entscheidend sind drei Angaben: welcher Server, welcher Zeitraum und womit er vergleicht. Die Hypothese kann im Bericht oder in der Präsentation entwickelt werden, die diese Belege verwendet.
 4. **Prüfen.** Der eingebaute AI-Agent gleicht die Hypothese mit den Rohdaten ab. Er hat Lesezugriff auf Logs, Release-Pläne und andere Dokumentation und sucht Belege ebenso wie Gegenbelege. Ein Agent, der nur bestätigt, würde den Bestätigungsfehler des Analysten automatisieren. Die Prüfung arbeitet durch Ausschluss: Zeigen Logs und GC-Metriken, dass auf dem auffälligen Server nicht mehr läuft als auf den anderen, scheidet die Last als Erklärung aus, und die Vermutung rückt zum Java-Prozess selbst. Einen Teil der Fragen grenzt schon das Tool ein, für den Rest braucht es Logs und andere Informationen. Wo auch die nicht reichen, formuliert der Agent die Fragen an die Menschen, die das System kennen.
-5. **Weitergeben.** Der Befund geht mit Bild in ein Analysedokument.
+5. **Weitergeben.** Das Bild der im Bookmark festgehaltenen Ansicht und bei Bedarf die exportierten Werte gehen in ein Analysedokument oder eine Präsentation. Eine AI kann daraus das Dokument entwerfen; die Workbench muss dafür kein Autorenwerkzeug werden.
 
 ## Ein Beispiel
 
@@ -106,10 +106,9 @@ Nicht belegt ist, dass das EKG für diese Art der Auswertung besser ist als die 
 
 ## Was fehlt
 
-- **Der Befund.** Heute halten Bookmarks eine Ansicht fest. Ein Befund braucht zusätzlich das markierte Zeitfenster, die Vergleichsbasis, die Hypothese sowie Belege und Gegenbelege aus den Rohdaten. Dazu gehören die offenen Fragen an die, die das System kennen. Hypothesen lassen sich im Tool derzeit nicht markieren. Der Befund wäre das verbindende Element zwischen Vergleich, Ursachensuche und Dokumentation.
 - **Quellen des Agenten.** Er erreicht heute die Zeitreihen und per SSH die Systeme. Release-Pläne und Dokumentation erreicht er noch nicht.
 - **Das Bild für den Agenten.** Der Agent bekommt heute Messwerte als Text. Ein Chart kann er nicht anfordern, obwohl genau das die Stärke des Werkzeugs ist: Der belegte DB-Pool von 100 Servern ist als Rohdaten sehr viel, als Bild ein einziges.
-- **Das Analysedokument.** Der PNG-Export liefert das Bild; den Weg vom Befund zum Dokument geht man von Hand.
+- **Kontext neben dem Bild.** Ein Screenshot vermittelt das Muster, exakte Seriennamen, Filter und Werte lassen sich aus Farben und Pixeln aber nicht immer sicher zurückgewinnen. Wird dieser bereits im Bookmark vorhandene Kontext zusammen mit dem PNG weitergegeben, werden externe AI-gestützte Präsentationen und Berichte zuverlässiger, ohne einen Dokumenteditor einzubauen.
 - **Zeitgesteuerter Import aus Prometheus.** Dafür braucht der Collector eine eigene Prometheus-Quelle. Der Collector bleibt optional, würde aber die Langzeitsicht auf Prometheus liefern.
 
 ## Offen
