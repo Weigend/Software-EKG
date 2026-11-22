@@ -17,7 +17,8 @@ application does.
   [Getting started](getting-started.md)
 - **Collect data:** [Collector](collector.md) → [Source modules](collector-sources.md) →
   [Repositories](collector-repositories.md)
-- **Analyse data:** [Workbench](workbench.md) → [Importers](workbench-importers.md)
+- **Analyse data:** [Workbench](workbench.md) → [The Workbench window](workbench-ui.md) →
+  [Importers](workbench-importers.md)
 - **Add a proprietary integration:** [Extension guide](extensions.md)
 - **Look up every surface:** [Feature and configuration reference](reference.md)
 
@@ -32,6 +33,7 @@ application does.
 | Mock, Unix `top`, `iostat`, `df`, Windows, JMX, Jolokia, Prometheus, logs | [Source modules](collector-sources.md) |
 | CSV/archive, Solr and Elasticsearch output | [Collector repositories](collector-repositories.md) |
 | Projects, repositories, New Analysis, explorer, charts, bookmarks, exports, AI Assistant | [Workbench](workbench.md) |
+| The window in pictures: explorer, filter header and wildcards, chart, legend, colours, chart types, charts in the background | [The Workbench window](workbench-ui.md) |
 | Collector CSV, Prometheus, OWID, Binance and Yahoo Finance imports | [Workbench importers](workbench-importers.md) |
 | New Collector sources/repositories and Workbench importers | [Extensions](extensions.md) |
 | Menus, CLI, paths, settings and compatibility status | [Reference](reference.md) |

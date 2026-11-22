@@ -1,6 +1,7 @@
 # Workbench Importers
 
-[Handbook home](README.md) · [Workbench](workbench.md) · [Extensions](extensions.md)
+[Handbook home](README.md) · [Workbench](workbench.md) · [The window](workbench-ui.md) ·
+[Extensions](extensions.md)
 
 An importer reads data that already exists somewhere into a project. The Workbench has five, in
 the **Import** menu and in the context menu of a project. The first two read what software

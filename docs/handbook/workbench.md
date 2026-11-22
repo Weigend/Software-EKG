@@ -1,7 +1,7 @@
 # Workbench Guide
 
 [Handbook home](README.md) · [Getting started](getting-started.md) ·
-[Importers](workbench-importers.md) · [Reference](reference.md)
+[The window](workbench-ui.md) · [Importers](workbench-importers.md) · [Reference](reference.md)
 
 The Workbench is the JavaFX investigation application. It manages projects and repositories,
 imports or remotely queries data, explores dimensions, computes chart series, preserves queries as
@@ -12,13 +12,17 @@ bookmarks and exports evidence. Its normal mode is local/offline analysis with e
 The main window is dockable. **Window → Restore Default Layout** recovers the standard arrangement;
 **Window → New Chart** opens another independent chart. The project bar selects the active project,
 view flavour and data collection. The explorer shows series dimensions and bookmark groups.
+[The Workbench window](workbench-ui.md) goes through all of it with pictures: the explorer, the
+filter header and its wildcards, the chart, and the legend with its colours, chart types and
+charts in the background.
 
 | Menu | Current functions |
 | --- | --- |
 | Analysis | New Analysis, Data Sources, Exit |
+| View | Explorer, AI Assistant: shows a pane that was closed |
 | Import | Collector logs, Prometheus, OWID, Binance, Yahoo Finance |
 | Repository | Add Repository, Add Project |
-| Window | New Chart, restore layout, dockable windows |
+| Window | New Chart, Restore Default Layout |
 | Help | About/version/runtime information |
 
 ## Projects
@@ -125,6 +129,10 @@ The chart query includes project, source, time interval, selected dimensions, so
 parameters. Changing a parent filter refreshes valid child choices. Use aliases shown by the
 project; the stored dimensions remain stable underneath.
 
+The tree, the fields of the header and the patterns they take - `*`, `?`, `|(a|b)` and `-(a)` -
+are described in [The explorer](workbench-ui.md#the-explorer) and
+[The filter header](workbench-ui.md#the-filter-header).
+
 ## Chart operations
 
 Each chart supports:
@@ -137,6 +145,12 @@ Each chart supports:
 - combining chart series and calculating percentage deviation from a comparison;
 - point reduction for display (Douglas–Peucker and value-change simplification);
 - cancellation of background fetches from the application status bar.
+
+How this is done with the mouse and in the legend is shown in
+[The chart](workbench-ui.md#the-chart) and [The legend](workbench-ui.md#the-legend): zooming,
+reading values, colours, the chart types LINE, AREA, SUM and POINT,
+[charts in the background](workbench-ui.md#charts-in-the-background) and the
+[percentage deviation](workbench-ui.md#percentage-deviation).
 
 ### Smoothing and aggregation
 
@@ -193,4 +207,4 @@ a hypothesis aid, not collected evidence.
 Back up metadata and Solr together while the Workbench is stopped. If the layout becomes unusable,
 restore it from the Window menu; do not delete the metadata database as a layout reset.
 
-[Next: Workbench importers →](workbench-importers.md)
+[Next: The Workbench window →](workbench-ui.md)
