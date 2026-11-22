@@ -123,16 +123,43 @@ public final class Workbench {
      * @return its dialog, shown and ready
      */
     public ImportDialog openImporter(String menuText) {
+        return new ImportDialog(this, openDialog("Import", menuText));
+    }
+
+    /**
+     * Chooses an item of a menu that opens a dialog.
+     *
+     * @param menu the text of the menu, for example "Help"
+     * @param item the text of the item
+     * @return the window that opened
+     */
+    public Stage openDialog(String menu, String item) {
         List<Window> before = onFx(() -> List.copyOf(Window.getWindows()));
         // not waited for: the dialog is modal, and choosing the item returns when it is closed
-        Platform.runLater(() -> menuItem("Import", menuText).fire());
-        Stage dialog = await("the dialog of '" + menuText + "'", Duration.ofSeconds(30), () -> onFx(() ->
+        Platform.runLater(() -> menuItem(menu, item).fire());
+        return await("the dialog of '" + item + "'", Duration.ofSeconds(30), () -> onFx(() ->
                 Window.getWindows().stream()
                         .filter(window -> !before.contains(window))
                         .filter(Stage.class::isInstance).map(Stage.class::cast)
                         .filter(Window::isShowing)
                         .findFirst()));
-        return new ImportDialog(this, dialog);
+    }
+
+    /**
+     * Closes a dialog as its close button does.
+     */
+    public void close(Stage dialog) {
+        onFx(() -> {
+            dialog.close();
+            return null;
+        });
+    }
+
+    /**
+     * Takes a picture of a dialog into {@link #SCREENSHOTS}.
+     */
+    public Path screenshot(Stage dialog, String name) {
+        return screenshot((Window) dialog, name);
     }
 
     /**

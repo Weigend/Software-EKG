@@ -16,7 +16,7 @@
     </stylesheets>
 
     <ImageView fx:id="ivAboutBanner" fitHeight="600.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" layoutX="-4"  >
-        <Image url="@logo-7.1-about.png"/>
+        <Image url="@logo-7.x-about.png"/>
     </ImageView>
 
     <Pane fx:id="ivFounderBannerWrapper" prefHeight="450.0" prefWidth="800.0" layoutX="-4" visible="false" >
