@@ -11,7 +11,7 @@ import io.softwareecg.awb.importer.framework.LocalProjectImportStrategy;
 import io.softwareecg.awb.importer.framework.LocalProjectImportTask;
 import io.softwareecg.awb.importer.framework.RemoteProjectImportTask;
 import io.softwareecg.awb.importer.framework.SplitSourceProjectImportStrategy;
-import io.softwareecg.awb.importer.ui.controls.qdsselector.QuerySourceSelector;
+import io.softwareecg.awb.repository.ui.sourceselector.QuerySourceSelector;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

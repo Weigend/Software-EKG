@@ -1,5 +1,7 @@
 package io.softwareecg.awb.e2e;
 
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -182,6 +184,17 @@ class ImporterE2ETest {
         } finally {
             dialog.cancel();
         }
+    }
+
+    /** The project bar finds the importers and opens the one the data of the project came from. */
+    @Test
+    void theProjectBarOpensTheImporterOfTheProject() {
+        workbench.openImporter("EKG Collector Logs").projectName("From the bar").files(testData("e2e/collector")).importData(IMPORT);
+        workbench.project("From the bar").select();
+        Button importData = (Button) workbench.find("btnImportDataToProject").orElseThrow();
+        Stage dialog = workbench.openDialog("Import Data", importData::fire);
+        assertThat(workbench.onFx(dialog::getTitle)).containsIgnoringCase("Collector");
+        workbench.close(dialog);
     }
 
     private static Path testData(String resource) {

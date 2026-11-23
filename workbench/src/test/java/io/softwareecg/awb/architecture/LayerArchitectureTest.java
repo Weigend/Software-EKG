@@ -6,6 +6,7 @@ import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
 
 /**
  * Architektur-Regeln, die die Schichtung UI -> Logik -> API durchsetzen.
@@ -108,6 +109,15 @@ public class LayerArchitectureTest {
                     .should().dependOnClassesThat().resideInAPackage("jakarta.enterprise..")
                     .because("AWB-Code muss frei von CDI-spezifischen Typen sein "
                             + "(jakarta.inject reicht; jakarta.enterprise ist CDI-only)");
+
+    /**
+     * Die Pakete direkt unter {@code io.softwareecg.awb} sind die Komponenten der Workbench. Sie
+     * bilden Schichten: keine zwei duerfen, auch nicht ueber andere, voneinander abhaengen.
+     */
+    @ArchTest
+    static final ArchRule components_must_be_free_of_cycles =
+            slices().matching("io.softwareecg.awb.(*)..").should().beFreeOfCycles()
+                    .because("Komponenten, die sich gegenseitig brauchen, sind in Wahrheit eine");
 
     @ArchTest
     static final ArchRule metadata_clients_must_use_ports_instead_of_h2 =

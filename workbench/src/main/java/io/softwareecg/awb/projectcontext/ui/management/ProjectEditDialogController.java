@@ -7,7 +7,7 @@ import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import jakarta.inject.Inject;
-import io.softwareecg.awb.importer.ui.controls.qdsselector.QuerySourceSelector;
+import io.softwareecg.awb.repository.ui.sourceselector.QuerySourceSelector;
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;

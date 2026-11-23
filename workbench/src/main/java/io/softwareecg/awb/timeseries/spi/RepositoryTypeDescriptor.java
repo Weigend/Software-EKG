@@ -1,6 +1,5 @@
 package io.softwareecg.awb.timeseries.spi;
 
-import io.softwareecg.awb.repository.model.EkgRepositoryDbType;
 import io.softwareecg.awb.runtime.NamedEnum;
 import java.util.Objects;
 import java.util.function.Predicate;

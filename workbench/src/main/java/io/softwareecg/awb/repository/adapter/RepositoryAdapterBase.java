@@ -4,7 +4,7 @@ import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.timeseries.port.TimeSeriesRepository;
 import io.softwareecg.awb.repository.api.RepositoryClientAware;
 import io.softwareecg.awb.timeseries.spi.TimeSeriesRepositoryProvider;
-import io.softwareecg.awb.repository.model.EkgRepositoryDbType;
+import io.softwareecg.awb.timeseries.spi.EkgRepositoryDbType;
 import io.softwareecg.awb.secrets.model.ResourceAuthType;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;

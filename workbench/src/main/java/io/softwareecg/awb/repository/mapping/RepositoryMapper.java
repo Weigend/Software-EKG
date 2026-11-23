@@ -1,7 +1,7 @@
 package io.softwareecg.awb.repository.mapping;
 
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.repository.model.EkgRepositoryDbType;
+import io.softwareecg.awb.timeseries.spi.EkgRepositoryDbType;
 import io.softwareecg.awb.repository.model.RepositoryDefinition;
 import io.softwareecg.awb.timeseries.port.TimeSeriesImportSource;
 import io.softwareecg.awb.secrets.model.ResourceAuthType;

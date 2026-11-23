@@ -1,7 +1,6 @@
 package io.softwareecg.awb.repository.model;
 
-import io.softwareecg.awb.repository.model.AbstractEt;
-import io.softwareecg.awb.repository.model.EkgRepositoryDbType;
+import io.softwareecg.awb.timeseries.spi.EkgRepositoryDbType;
 import io.softwareecg.awb.timeseries.schema.DocumentType;
 import io.softwareecg.awb.timeseries.schema.PersistedField;
 import org.apache.commons.lang3.StringUtils;

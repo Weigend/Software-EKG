@@ -2,6 +2,7 @@ package io.softwareecg.awb.importer;
 
 import io.softwareecg.awb.importer.spi.ImporterTreeIconProvider;
 import io.softwareecg.awb.importer.spi.TreeIconProviderPluginRegistry;
+import io.softwareecg.awb.projectcontext.api.ProjectImporter;
 import io.softwareecg.awb.projectcontext.api.ProjectSelector;
 import io.softwareecg.awb.projectcontext.model.ProjectTimeSeriesType;
 import io.softwareecg.awb.metadata.spi.AliasMappingProvider;
@@ -30,7 +31,6 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -42,7 +42,7 @@ import java.util.List;
  *
  * @since 14.07.2018
  */
-public abstract class ImportModule implements Module {
+public abstract class ImportModule implements Module, ProjectImporter {
 
     private static final Logger LOGGER = EkgLogger.get();
 
@@ -127,8 +127,10 @@ public abstract class ImportModule implements Module {
 
     public abstract ImportDialog getImportDialog();
 
+    @Override
     public abstract String getMenuText();
 
+    @Override
     public abstract String getImporterID();
 
     public ImporterTreeIconProvider getTreeIconProvider() {
@@ -149,18 +151,9 @@ public abstract class ImportModule implements Module {
      *
      * @return the position in the menu
      */
+    @Override
     public int getMenuPosition() {
         return MENU_GROUP_UNSORTED;
-    }
-
-    /**
-     * @param modules importers in any order
-     * @return the same importers in the order of the menu
-     */
-    public static <M extends ImportModule> List<M> inMenuOrder(Collection<M> modules) {
-        List<M> ordered = new ArrayList<>(modules);
-        ordered.sort(Comparator.comparingInt((M module) -> module.getMenuPosition()).thenComparing(ImportModule::getMenuText));
-        return ordered;
     }
 
     /**
@@ -247,6 +240,7 @@ public abstract class ImportModule implements Module {
      *
      * @param preselectedProjectName the project name to pre-select
      */
+    @Override
     public void showImportDialog(String preselectedProjectName) {
         ImportDialog importDialog = getImportDialog();
         configureImportDialog(importDialog);

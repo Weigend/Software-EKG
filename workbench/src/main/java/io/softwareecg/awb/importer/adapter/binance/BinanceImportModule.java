@@ -1,6 +1,5 @@
 package io.softwareecg.awb.importer.adapter.binance;
 
-import io.softwareecg.awb.importer.adapter.binance.bl.BinanceImportStrategy;
 import io.softwareecg.awb.importer.adapter.binance.ui.BinanceImportDialog;
 import io.softwareecg.awb.importer.spi.ContextMenuAware;
 import io.softwareecg.awb.importer.spi.ContextMenuEntry;

@@ -1,7 +1,5 @@
 package io.softwareecg.awb.importer.adapter.yfinance;
 
-import io.softwareecg.awb.importer.adapter.yfinance.bl.YFinanceImportOptions;
-import io.softwareecg.awb.importer.adapter.yfinance.bl.YFinanceImportStrategy;
 import io.softwareecg.awb.importer.adapter.yfinance.ui.YFinanceImportDialog;
 import io.softwareecg.awb.importer.spi.ContextMenuAware;
 import io.softwareecg.awb.importer.spi.ContextMenuEntry;

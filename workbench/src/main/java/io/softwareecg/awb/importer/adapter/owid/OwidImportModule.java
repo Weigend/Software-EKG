@@ -1,6 +1,5 @@
 package io.softwareecg.awb.importer.adapter.owid;
 
-import io.softwareecg.awb.importer.adapter.owid.bl.OwidImportStrategy;
 import io.softwareecg.awb.importer.adapter.owid.ui.OwidImportDialog;
 import io.softwareecg.awb.importer.spi.ContextMenuAware;
 import io.softwareecg.awb.importer.spi.ContextMenuEntry;

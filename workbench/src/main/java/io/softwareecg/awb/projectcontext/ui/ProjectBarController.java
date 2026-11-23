@@ -1,6 +1,7 @@
 package io.softwareecg.awb.projectcontext.ui;
 
 import io.softwareecg.awb.projectcontext.api.ProjectDataCollection;
+import io.softwareecg.awb.projectcontext.api.ProjectImporter;
 import io.softwareecg.awb.projectcontext.events.ProjectDataCollectionChangedEvent;
 import io.softwareecg.awb.projectcontext.events.ShowProjectDataSourcesEvent;
 import javafx.application.Platform;
@@ -17,7 +18,6 @@ import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.EventSubscriber;
 import io.softwareecg.wfx.lookup.api.Lookup;
-import io.softwareecg.awb.importer.ImportModule;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
@@ -35,6 +35,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.List;
@@ -279,8 +280,8 @@ public class ProjectBarController implements Initializable {
     //=================================================================================================================
 
     private void handleImportData() {
-        List<ImportModule> importModules = Lookup.lookupAll(ImportModule.class);
-        if (importModules == null || importModules.isEmpty()) {
+        List<ProjectImporter> importers = Lookup.lookupAll(ProjectImporter.class);
+        if (importers == null || importers.isEmpty()) {
             return;
         }
 
@@ -289,9 +290,9 @@ public class ProjectBarController implements Initializable {
         // if the project has a known importer, open its dialog directly
         String importerId = activeProject.getImporterId();
         if (StringUtils.isNotBlank(importerId)) {
-            for (ImportModule module : importModules) {
-                if (importerId.equals(module.getImporterID())) {
-                    module.showImportDialog(projectName);
+            for (ProjectImporter importer : importers) {
+                if (importerId.equals(importer.getImporterID())) {
+                    importer.showImportDialog(projectName);
                     return;
                 }
             }
@@ -299,11 +300,13 @@ public class ProjectBarController implements Initializable {
 
         // otherwise show a context menu with all available importers
         ContextMenu contextMenu = new ContextMenu();
-        for (ImportModule module : ImportModule.inMenuOrder(importModules)) {
-            MenuItem item = new MenuItem(module.getMenuText());
-            item.setOnAction(e -> module.showImportDialog(projectName));
-            contextMenu.getItems().add(item);
-        }
+        importers.stream()
+                .sorted(Comparator.comparingInt(ProjectImporter::getMenuPosition).thenComparing(ProjectImporter::getMenuText))
+                .forEach(importer -> {
+                    MenuItem item = new MenuItem(importer.getMenuText());
+                    item.setOnAction(e -> importer.showImportDialog(projectName));
+                    contextMenu.getItems().add(item);
+                });
         contextMenu.show(btnImportDataToProject, Side.BOTTOM, 0, 0);
     }
 }

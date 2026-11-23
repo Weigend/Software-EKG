@@ -11,7 +11,7 @@
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.control.ButtonType?>
 <?import java.net.URL?>
-<?import io.softwareecg.awb.importer.ui.controls.qdsselector.QuerySourceSelector?>
+<?import io.softwareecg.awb.repository.ui.sourceselector.QuerySourceSelector?>
 <?import javafx.scene.layout.BorderPane?>
 <DialogPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"

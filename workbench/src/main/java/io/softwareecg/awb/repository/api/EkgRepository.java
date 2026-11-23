@@ -14,8 +14,7 @@ package io.softwareecg.awb.repository.api;
 
 
 import io.softwareecg.awb.timeseries.port.TimeSeriesRepository;
-import io.softwareecg.awb.repository.model.EkgRepositoryDbType;
-import io.softwareecg.awb.repository.api.Repository;
+import io.softwareecg.awb.timeseries.spi.EkgRepositoryDbType;
 import io.softwareecg.awb.secrets.model.ResourceAuthType;
 
 /**

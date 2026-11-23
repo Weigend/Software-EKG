@@ -14,7 +14,6 @@ import java.util.TimeZone;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import io.softwareecg.awb.queryengine.pipeline.smoothing.SumTimeSeriesSmoother;
 /**
  * Unit test for the SumTimeSeriesSmoother implementation that will
  * challenge the slicing computation in the tested class that
@@ -24,8 +23,8 @@ import io.softwareecg.awb.queryengine.pipeline.smoothing.SumTimeSeriesSmoother;
  */
 public class SumTimeSeriesSmootherTest {
 
-    private static final String TEST_DATA_FILE = "/io/softwareecg/bl/services/value-testdata.csv";
-    private static final String AGG_TEST_DATA_FILE = "/io/softwareecg/bl/services/value-testdata-month-agg.csv";
+    private static final String TEST_DATA_FILE = "/io/softwareecg/awb/queryengine/pipeline/smoothing/value-testdata.csv";
+    private static final String AGG_TEST_DATA_FILE = "/io/softwareecg/awb/queryengine/pipeline/smoothing/value-testdata-month-agg.csv";
 
     private static final long OFFSET_TWO_MONTHS = 2 * 2_628_000_000L;
 

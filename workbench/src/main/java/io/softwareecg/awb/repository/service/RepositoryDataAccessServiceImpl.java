@@ -19,7 +19,7 @@ import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.timeseries.port.TimeSeriesRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
 import io.softwareecg.awb.repository.events.RepositoryChangeEvent;
-import io.softwareecg.awb.repository.model.EkgRepositoryDbType;
+import io.softwareecg.awb.timeseries.spi.EkgRepositoryDbType;
 import io.softwareecg.awb.timeseries.repositorytype.Embedded;
 import io.softwareecg.awb.repository.mapping.RepositoryMapper;
 import io.softwareecg.awb.repository.adapter.clickhouse.ClickHouseRepositoryNaming;

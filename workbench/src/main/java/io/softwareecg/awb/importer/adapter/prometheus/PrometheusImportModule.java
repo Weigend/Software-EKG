@@ -1,8 +1,5 @@
 package io.softwareecg.awb.importer.adapter.prometheus;
 
-import io.softwareecg.awb.importer.adapter.prometheus.bl.PrometheusLocalImportStrategy;
-import io.softwareecg.awb.importer.adapter.prometheus.bl.PrometheusRemoteImportStrategy;
-import io.softwareecg.awb.importer.adapter.prometheus.bl.PrometheusSeriesDataFetcher;
 import io.softwareecg.awb.importer.spi.ContextMenuAware;
 import io.softwareecg.awb.importer.spi.ContextMenuEntry;
 import io.softwareecg.awb.importer.ImportModule;

@@ -94,7 +94,7 @@ and its factory can a repository of that type be created and opened.
 - **`connectionValidator`** gives immediate feedback in the form. The provider remains
   responsible for the real errors: connection, authentication, timeout and cleanup.
 
-`EkgRepositoryDbType` is an open identity, not an enum. `descriptor.repositoryType()` defines the
+`EkgRepositoryDbType` in `timeseries.spi` is an open identity, not an enum. `descriptor.repositoryType()` defines the
 ID, so no central list of types has to be extended. `RepositoryTypeRegistry` rejects two types with
 the same ID.
 

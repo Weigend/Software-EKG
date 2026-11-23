@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.softwareecg.awb.repository.ui.sourceselector.QuerySourceSelector?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<fx:root type="QuerySourceSelector" vgap="5"
+         xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx" fx:id="querySourceSelector"
+         fx:controller="io.softwareecg.awb.repository.ui.sourceselector.QuerySourceSelectorController" >
+
+    <columnConstraints>
+        <ColumnConstraints minWidth="${controller.labelWidth}" maxWidth="${controller.labelWidth}" hgrow="NEVER" halignment="LEFT" />
+        <ColumnConstraints maxWidth="Infinity" hgrow="ALWAYS"/>
+        <ColumnConstraints minWidth="9" maxWidth="9"  hgrow="NEVER" />
+        <ColumnConstraints minWidth="41" maxWidth="41" hgrow="NEVER" />
+    </columnConstraints>
+
+    <rowConstraints>
+        <RowConstraints minHeight="${controller.rowHeight}" maxHeight="${controller.rowHeight}" vgrow="ALWAYS"/>
+        <RowConstraints minHeight="${controller.rowHeight}" maxHeight="${controller.rowHeight}" vgrow="NEVER"/>
+        <RowConstraints minHeight="110.0" maxHeight="110.0" vgrow="NEVER"/>
+    </rowConstraints>
+
+    <!-- EkgRepository URL -->
+    <Label text="Repository URL:" styleClass="dialogLabel" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+    <TextField fx:id="txtRepositoryURL" GridPane.rowIndex="0" GridPane.columnIndex="1"  />
+    <Button id="btnValidateRepositoryDefinition" maxWidth="Infinity" maxHeight="Infinity" translateX="-1" GridPane.rowIndex="0" GridPane.columnIndex="3" disable="true" />
+
+    <!-- selection area if an authentication should be used or not -->
+    <Label text="Authentication Type:" styleClass="dialogLabel"  GridPane.rowIndex="1" GridPane.columnIndex="0" />
+    <ComboBox fx:id="cbRepositoryAuthType" GridPane.rowIndex="1"  GridPane.columnIndex="1" GridPane.columnSpan="3" maxWidth="Infinity" />
+
+    <!-- optional block with authentication details (only shown than AuthType not "NONE" -->
+    <GridPane id="gpRepositoryAuthentication" vgap="5"
+              GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="4" >
+
+        <columnConstraints>
+            <ColumnConstraints minWidth="${controller.labelWidth}" maxWidth="${controller.labelWidth}" hgrow="NEVER" halignment="LEFT" />
+            <ColumnConstraints maxWidth="Infinity" hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <rowConstraints>
+            <RowConstraints minHeight="${controller.rowHeight}" maxHeight="${controller.rowHeight}" vgrow="NEVER"/>
+            <RowConstraints minHeight="${controller.rowHeight}" maxHeight="${controller.rowHeight}" vgrow="NEVER"/>
+            <RowConstraints minHeight="${controller.rowHeight}" maxHeight="${controller.rowHeight}" vgrow="NEVER"/>
+        </rowConstraints>
+
+        <!-- absolute URL of the OAuth authentication server if in use -->
+        <Label fx:id="lbRepositoryOAuthServerUrl" text="OAuth Server:" styleClass="dialogLabel"
+               GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="txtRepositoryOAuthServerUrl" promptText="Absolute (Service) URL of the OAuth Server"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1" />
+
+        <!-- EkgRepository credential user repositoryName -->
+        <Label fx:id="lbRepositoryUserName" text="Username:" styleClass="dialogLabel"
+               GridPane.rowIndex="1" GridPane.columnIndex="0" />
+        <TextField fx:id="txtRepositoryUserName" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+        <!-- EkgRepository credential API key -->
+        <Label fx:id="lbRepositoryApiKey" text="API-Key:" styleClass="dialogLabel"
+               GridPane.rowIndex="2" GridPane.columnIndex="0" />
+
+        <!-- EkgRepository credential API key -->
+        <Label fx:id="lbRepositoryJwtToken" text="JWT Token:" styleClass="dialogLabel"
+               GridPane.rowIndex="2" GridPane.columnIndex="0" />
+
+        <!-- EkgRepository credential password -->
+        <Label fx:id="lbRepositoryPassword" text="Password:" styleClass="dialogLabel"
+               GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+
+        <PasswordField fx:id="txtRepositoryPassword"  GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+    </GridPane>
+
+
+    <stylesheets>
+        <URL value="@QuerySourceSelectorStyle.css"/>
+    </stylesheets>
+
+</fx:root>

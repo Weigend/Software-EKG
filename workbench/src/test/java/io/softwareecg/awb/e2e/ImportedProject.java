@@ -6,6 +6,12 @@ import io.softwareecg.awb.queryengine.model.MetricQuery;
 import io.softwareecg.awb.investigation.model.QuerySpec;
 import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
 
+import io.softwareecg.awb.projectcontext.events.ProjectSelectedEvent;
+import io.softwareecg.awb.projectcontext.model.Project;
+import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
+import io.softwareecg.wfx.lookup.api.Lookup;
+import io.softwareecg.wfx.platform.api.EventBus;
+import javafx.scene.control.Label;
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +37,20 @@ public final class ImportedProject {
     public boolean exists() {
         return workbench.embeddedRepository().getBoundedService(ProjectDataAccessService.class)
                 .listProjects().stream().anyMatch(project -> name.equals(project.getName()));
+    }
+
+    /** Selects the project, as a click on it in the explorer does, and waits for the project bar. */
+    @SuppressWarnings("unchecked")
+    public void select() {
+        Project project = workbench.embeddedRepository().getBoundedService(ProjectDataAccessService.class)
+                .listProjects().stream().filter(candidate -> name.equals(candidate.getName())).findFirst().orElseThrow();
+        workbench.onFx(() -> {
+            Lookup.lookup(EventBus.class).publish(new ProjectSelectedEvent(this, null, project,
+                    ProjectViewFlavor.PHYSICAL_VIEW, workbench.embeddedRepository()));
+            return null;
+        });
+        workbench.awaitTrue("the project bar to show '" + name + "'", Duration.ofSeconds(20), () -> workbench.onFx(() ->
+                workbench.find("lbProjectId").map(Label.class::cast).map(Label::getText).filter(name::equals).isPresent()));
     }
 
     /** @return the number of values of all series of the project */
