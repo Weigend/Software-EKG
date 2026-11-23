@@ -35,12 +35,13 @@ class AnalysisSourceRegistryTest {
         var prometheus = new AnalysisSourceDefinition("prometheus-test", "Prometheus", true, true);
         var direct = new AnalysisSourceDefinition("direct-test", "Direct", false, true);
 
-        var options = new AnalysisSourceRegistry(List.of(
+        var registry = new AnalysisSourceRegistry(List.of(
                 provider(prometheus, AnalysisTopic.LINUX, "usual"),
-                provider(direct, AnalysisTopic.LINUX, "alternative")))
-                .options(AnalysisTopic.LINUX);
+                provider(direct, AnalysisTopic.LINUX, "alternative")));
+        var options = registry.options(AnalysisTopic.LINUX);
 
         assertEquals(List.of(prometheus, direct), options.stream().map(AnalysisSourceOption::source).toList());
+        assertEquals(List.of(prometheus, direct), registry.definitions());
     }
 
     private static AnalysisSourceProvider provider(AnalysisSourceDefinition source,

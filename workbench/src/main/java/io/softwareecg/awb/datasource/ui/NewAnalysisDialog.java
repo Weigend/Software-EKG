@@ -437,7 +437,10 @@ public class NewAnalysisDialog extends Dialog<Void> {
             }
         } else if (currentStep().equals(SOURCES_STEP)) {
             List<String> next = new ArrayList<>(List.of(TOPICS_STEP, SOURCES_STEP));
-            chosenSources.values().stream().map(AnalysisSourceDefinition::id).distinct().forEach(sourceId -> {
+            Set<String> selectedSourceIds = chosenSources.values().stream()
+                    .map(AnalysisSourceDefinition::id).collect(Collectors.toSet());
+            sourceRegistry.definitions().stream().map(AnalysisSourceDefinition::id)
+                    .filter(selectedSourceIds::contains).forEach(sourceId -> {
                 AnalysisSourceWizardPage page = sourcePages.get(sourceId);
                 if (page == null) throw new IllegalStateException("No wizard page for analysis source " + sourceId);
                 Set<AnalysisTopic> topics = chosenSources.entrySet().stream()
