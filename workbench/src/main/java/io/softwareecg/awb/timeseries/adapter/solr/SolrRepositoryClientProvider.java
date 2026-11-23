@@ -3,6 +3,8 @@ package io.softwareecg.awb.timeseries.adapter.solr;
 import io.softwareecg.awb.timeseries.adapter.solr.util.SolrClientCacheFactory;
 import io.softwareecg.awb.timeseries.port.TimeSeriesRepository;
 import io.softwareecg.awb.timeseries.spi.TimeSeriesRepositoryProvider;
+import io.softwareecg.awb.timeseries.spi.RepositoryDescriptors;
+import io.softwareecg.awb.timeseries.spi.RepositoryTypeDescriptor;
 import io.softwareecg.awb.timeseries.port.TimeSeriesAdmin;
 import io.softwareecg.awb.timeseries.spi.TimeSeriesAdminProvider;
 import io.softwareecg.awb.timeseries.repositorytype.Solr;
@@ -14,6 +16,7 @@ import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.io.SolrClientCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.List;
 
 /**
  * Provider that creates and manages {@link SolrRepositoryClient}s.
@@ -29,6 +32,11 @@ import org.slf4j.LoggerFactory;
 @Singleton
 @Solr
 public class SolrRepositoryClientProvider implements TimeSeriesAdminProvider, TimeSeriesRepositoryProvider {
+
+    @Override
+    public List<RepositoryTypeDescriptor> repositoryTypes() {
+        return List.of(RepositoryDescriptors.solrStandalone(), RepositoryDescriptors.solrCloud());
+    }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SolrRepositoryClientProvider.class);
 

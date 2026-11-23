@@ -3,7 +3,7 @@ package io.softwareecg.awb.uitoolkit.chart;
 
 import io.softwareecg.awb.uitoolkit.chart.axis.SpawningAxis;
 import io.softwareecg.awb.uitoolkit.chart.compute.TimeSeriesSliceAnalyzer;
-import io.softwareecg.awb.uitoolkit.chart.legend.StackedChartLegend;
+import io.softwareecg.awb.uitoolkit.chart.legend.ChartLegendPort;
 import io.softwareecg.awb.uitoolkit.chart.zoom.Zoomable;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import javafx.beans.InvalidationListener;
@@ -45,7 +45,7 @@ public class StackedChartController {
 
     private final ZoomableStackedChart zoomableStackedChart;
 
-    private StackedChartLegend chartLegend;
+    private ChartLegendPort chartLegend;
 
     private final BooleanProperty yAxisAlignmentActive = new SimpleBooleanProperty(false);
 
@@ -481,7 +481,7 @@ public class StackedChartController {
      *
      * @param chartLegend the chart legend that should coupled with the stacked chart.
      */
-    /* package private */ void setChartLegend(StackedChartLegend chartLegend) {
+    /* package private */ void setChartLegend(ChartLegendPort chartLegend) {
         this.chartLegend = chartLegend;
         this.zoomableStackedChart.getBackgroundCharts().addListener((InvalidationListener)  observable ->
                 this.chartLegend.setBackgroundChart(zoomableStackedChart.getBackgroundCharts()));

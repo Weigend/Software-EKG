@@ -2,6 +2,8 @@ package io.softwareecg.awb.datasource.ui;
 
 import io.softwareecg.awb.datasource.model.AnalysisPlan;
 import io.softwareecg.awb.datasource.spi.AnalysisSourceDefinition;
+import io.softwareecg.awb.datasource.spi.AnalysisSourceOption;
+import io.softwareecg.awb.datasource.spi.AnalysisSourceRegistry;
 import io.softwareecg.awb.datasource.spi.AnalysisTopic;
 import io.softwareecg.awb.datasource.model.CollectionPlan;
 import io.softwareecg.awb.datasource.NewAnalysisService;
@@ -48,6 +50,8 @@ import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.EventObject;
 import java.util.List;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -84,6 +88,7 @@ public class NewAnalysisDialog extends Dialog<Void> {
     private static final double CHOICE_WIDTH = 240;
 
     private final NewAnalysisService service;
+    private final AnalysisSourceRegistry sourceRegistry;
 
     private final TextField urlField = new TextField("http://localhost:9090");
     private final Button connectButton = new Button("Connect");
@@ -115,10 +120,10 @@ public class NewAnalysisDialog extends Dialog<Void> {
 
     private final VBox sourceRows = new VBox(16);
 
-    /** The steps of the dialog. Which of the last three are taken depends on the sources chosen. */
-    private enum Step { TOPICS, SOURCES, PROMETHEUS, SSH, WINDOWS }
-
-    private List<Step> steps = List.of(Step.TOPICS);
+    private static final String TOPICS_STEP = "topics";
+    private static final String SOURCES_STEP = "sources";
+    private List<String> steps = List.of(TOPICS_STEP);
+    private final Map<String, AnalysisSourceWizardPage> sourcePages = new LinkedHashMap<>();
 
     private int stepIndex;
 
@@ -157,7 +162,7 @@ public class NewAnalysisDialog extends Dialog<Void> {
      * Starts a new analysis.
      */
     public NewAnalysisDialog(NewAnalysisService service) {
-        this(service, null);
+        this(service, null, AnalysisSourceRegistry.standard(), contributedPages());
     }
 
     /**
@@ -166,7 +171,21 @@ public class NewAnalysisDialog extends Dialog<Void> {
      * @param existingAnalysis the name of the analysis, or {@code null} to start a new one
      */
     public NewAnalysisDialog(NewAnalysisService service, String existingAnalysis) {
+        this(service, existingAnalysis, AnalysisSourceRegistry.standard(), contributedPages());
+    }
+
+    /** Constructor used by the composition root and contract tests with an extensible registry. */
+    public NewAnalysisDialog(NewAnalysisService service, String existingAnalysis,
+                             AnalysisSourceRegistry sourceRegistry) {
+        this(service, existingAnalysis, sourceRegistry, List.of());
+    }
+
+    /** Constructor used by composition to add source-specific wizard pages without changing this dialog. */
+    public NewAnalysisDialog(NewAnalysisService service, String existingAnalysis,
+                             AnalysisSourceRegistry sourceRegistry,
+                             Collection<? extends AnalysisSourceWizardPage> contributedPages) {
         this.service = service;
+        this.sourceRegistry = sourceRegistry;
         this.existingAnalysis = existingAnalysis;
         this.windowsProblem = service.windowsCountersProblem();
 
@@ -187,13 +206,25 @@ public class NewAnalysisDialog extends Dialog<Void> {
         connectionPage = buildContent();
         sshPage = new SshPage(service, existingAnalysis, this::updateStartButton);
         windowsPage = new WindowsPage(service, existingAnalysis, this::updateStartButton);
+        builtInPages().forEach(page -> sourcePages.put(page.sourceId(), page));
+        for (AnalysisSourceWizardPage page : contributedPages) {
+            if (sourcePages.putIfAbsent(page.sourceId(), page) != null) {
+                throw new IllegalArgumentException("Duplicate analysis source wizard page: " + page.sourceId());
+            }
+        }
+        sourceRegistry.definitions().stream().filter(AnalysisSourceDefinition::isAvailable)
+                .filter(definition -> !sourcePages.containsKey(definition.id())).findFirst()
+                .ifPresent(definition -> {
+                    throw new IllegalStateException("No wizard page for available analysis source " + definition.id());
+                });
         // the name is asked wherever the last step is; it is one name
         if (existingAnalysis == null) {
             sshPage.nameProperty().bindBidirectional(nameField.textProperty());
             windowsPage.nameProperty().bindBidirectional(nameField.textProperty());
         }
         getDialogPane().setHeader(buildHeader());
-        StackPane pages = new StackPane(topicPage, sourcePage, connectionPage, sshPage.node(), windowsPage.node());
+        StackPane pages = new StackPane(topicPage, sourcePage);
+        pages.getChildren().addAll(sourcePages.values().stream().map(AnalysisSourceWizardPage::node).toList());
         pages.getStyleClass().add("ekg-pages");
         getDialogPane().setContent(pages);
         getDialogPane().getStyleClass().add("ekg-wizard");
@@ -305,12 +336,12 @@ public class NewAnalysisDialog extends Dialog<Void> {
 
     /** A topic can be chosen if it is built and one of the ways to collect it can be gone here. */
     private boolean usable(AnalysisTopic topic) {
-        return topic.isAvailable() && topic.sources().stream().anyMatch(this::usable);
+        return topic.isAvailable() && sourceRegistry.options(topic).stream().anyMatch(this::usable);
     }
 
     /** A way can be gone if it is built and - for Windows performance counters - this is a Windows. */
-    private boolean usable(AnalysisTopic.SourceOption option) {
-        return option.available() && (option.source() != AnalysisSourceDefinition.WINDOWS_COUNTERS || windowsProblem == null);
+    private boolean usable(AnalysisSourceOption option) {
+        return option.available() && (!option.source().equals(AnalysisSourceDefinition.WINDOWS_COUNTERS) || windowsProblem == null);
     }
 
     /** The few words on a tile that is built but cannot be chosen on this machine. */
@@ -348,8 +379,8 @@ public class NewAnalysisDialog extends Dialog<Void> {
     }
 
     /** Shows "What > How > Where" with the part the step belongs to set off. */
-    private void showTrail(Step step) {
-        int current = step == Step.TOPICS ? 0 : step == Step.SOURCES ? 1 : 2;
+    private void showTrail(String step) {
+        int current = step.equals(TOPICS_STEP) ? 0 : step.equals(SOURCES_STEP) ? 1 : 2;
         String[] parts = {"What", "How", "Where"};
         stepTrail.getChildren().clear();
         for (int i = 0; i < parts.length; i++) {
@@ -376,17 +407,18 @@ public class NewAnalysisDialog extends Dialog<Void> {
         return band;
     }
 
-    private Step currentStep() {
+    private String currentStep() {
         return steps.get(stepIndex);
     }
 
     /** The topics and the sources are never the end: what follows them is only known afterwards. */
     private boolean isLastStep() {
-        return currentStep() != Step.TOPICS && currentStep() != Step.SOURCES && stepIndex == steps.size() - 1;
+        return !currentStep().equals(TOPICS_STEP) && !currentStep().equals(SOURCES_STEP)
+                && stepIndex == steps.size() - 1;
     }
 
     private void next() {
-        if (currentStep() == Step.TOPICS) {
+        if (currentStep().equals(TOPICS_STEP)) {
             Set<AnalysisTopic> selected = EnumSet.noneOf(AnalysisTopic.class);
             tiles.forEach((topic, tile) -> {
                 if (tile.isSelected()) {
@@ -396,28 +428,24 @@ public class NewAnalysisDialog extends Dialog<Void> {
             if (selected.isEmpty()) {
                 // "show me what is there": a Prometheus server, nothing assumed about it
                 chosenTopics.clear();
-                steps = List.of(Step.TOPICS, Step.PROMETHEUS);
+                AnalysisSourceWizardPage page = sourcePages.get(AnalysisSourceDefinition.PROMETHEUS.id());
+                page.selectedTopics(Set.of());
+                steps = List.of(TOPICS_STEP, page.sourceId());
             } else {
                 showSourceChoices(selected);
-                steps = List.of(Step.TOPICS, Step.SOURCES);
+                steps = List.of(TOPICS_STEP, SOURCES_STEP);
             }
-        } else if (currentStep() == Step.SOURCES) {
-            chosenTopics.clear();
-            chosenSources.forEach((topic, source) -> {
-                if (source == AnalysisSourceDefinition.PROMETHEUS) {
-                    chosenTopics.add(topic);
-                }
+        } else if (currentStep().equals(SOURCES_STEP)) {
+            List<String> next = new ArrayList<>(List.of(TOPICS_STEP, SOURCES_STEP));
+            chosenSources.values().stream().map(AnalysisSourceDefinition::id).distinct().forEach(sourceId -> {
+                AnalysisSourceWizardPage page = sourcePages.get(sourceId);
+                if (page == null) throw new IllegalStateException("No wizard page for analysis source " + sourceId);
+                Set<AnalysisTopic> topics = chosenSources.entrySet().stream()
+                        .filter(entry -> entry.getValue().id().equals(sourceId))
+                        .map(Map.Entry::getKey).collect(Collectors.toCollection(() -> EnumSet.noneOf(AnalysisTopic.class)));
+                page.selectedTopics(topics);
+                next.add(sourceId);
             });
-            List<Step> next = new ArrayList<>(List.of(Step.TOPICS, Step.SOURCES));
-            if (!chosenTopics.isEmpty()) {
-                next.add(Step.PROMETHEUS);
-            }
-            if (chosenSources.containsValue(AnalysisSourceDefinition.SSH_TOP)) {
-                next.add(Step.SSH);
-            }
-            if (chosenSources.containsValue(AnalysisSourceDefinition.WINDOWS_COUNTERS)) {
-                next.add(Step.WINDOWS);
-            }
             steps = next;
         }
         stepIndex++;
@@ -425,47 +453,32 @@ public class NewAnalysisDialog extends Dialog<Void> {
     }
 
     private void showStep() {
-        Step step = currentStep();
-        topicPage.setVisible(step == Step.TOPICS);
-        sourcePage.setVisible(step == Step.SOURCES);
-        connectionPage.setVisible(step == Step.PROMETHEUS);
-        sshPage.node().setVisible(step == Step.SSH);
-        windowsPage.node().setVisible(step == Step.WINDOWS);
+        String step = currentStep();
+        topicPage.setVisible(step.equals(TOPICS_STEP));
+        sourcePage.setVisible(step.equals(SOURCES_STEP));
+        sourcePages.values().forEach(page -> page.node().setVisible(page.sourceId().equals(step)));
 
         showTrail(step);
-        String target = existingAnalysis == null ? "" : " The data is added to the analysis '" + existingAnalysis + "'.";
-        switch (step) {
-            case TOPICS -> describeStep(existingAnalysis == null ? "What do you want to analyse?" : "What do you want to add?",
+        if (step.equals(TOPICS_STEP)) {
+            describeStep(existingAnalysis == null ? "What do you want to analyse?" : "What do you want to add?",
                     "Choose one or more topics. Each brings its essential metrics; how the data comes and where it is "
                             + "follow in the next steps.");
-            case SOURCES -> describeStep("How does the data come?",
+        } else if (step.equals(SOURCES_STEP)) {
+            describeStep("How does the data come?",
                     "Most things can be collected in more than one way. The ways differ in what they need and what "
                             + "they give; choose one for each topic.");
-            case PROMETHEUS -> describeStep(chosenTopics.isEmpty()
-                            ? "Connect your Prometheus server"
-                            : "Where is the Prometheus server for " + titles(chosenTopics) + "?",
-                    (chosenTopics.isEmpty()
-                            ? "You then choose from everything the server monitors."
-                            : "It monitors these systems; they are found and selected for you.") + target);
-            case SSH -> describeStep("Which Linux / Unix hosts do you want to read?",
-                    "They are read directly, by SSH and top: nothing to install, no Prometheus needed. "
-                            + "Values are collected from now on, for as long as the analysis is running." + target);
-            case WINDOWS -> describeStep("Which Windows hosts do you want to read?",
-                    "They are read directly, through their performance counters: nothing to install. "
-                            + "Values are collected from now on, for as long as the analysis is running." + target);
+        } else {
+            AnalysisSourceWizardPage page = sourcePages.get(step);
+            Set<AnalysisTopic> topics = chosenSources.entrySet().stream()
+                    .filter(entry -> entry.getValue().id().equals(step)).map(Map.Entry::getKey).collect(Collectors.toSet());
+            describeStep(page.title(topics), page.hint(topics, existingAnalysis));
         }
 
         backButton.setVisible(stepIndex > 0);
         startButton.setText(isLastStep() ? startText : "Continue");
         startButton.setId(isLastStep() ? "startAnalysis" : "continue");
 
-        if (step == Step.PROMETHEUS) {
-            showConnectionStep();
-        } else if (step == Step.SSH) {
-            sshPage.focus();
-        } else if (step == Step.WINDOWS) {
-            windowsPage.focus();
-        }
+        if (!step.equals(TOPICS_STEP) && !step.equals(SOURCES_STEP)) sourcePages.get(step).focus();
         updateStartButton();
     }
 
@@ -492,7 +505,7 @@ public class NewAnalysisDialog extends Dialog<Void> {
 
             ToggleGroup choice = new ToggleGroup();
             HBox options = new HBox(12);
-            for (AnalysisTopic.SourceOption option : topic.sources()) {
+            for (AnalysisSourceOption option : sourceRegistry.options(topic)) {
                 ToggleButton tile = sourceTile(topic, option);
                 tile.setToggleGroup(choice);
                 options.getChildren().add(tile);
@@ -518,7 +531,7 @@ public class NewAnalysisDialog extends Dialog<Void> {
      * One way to collect a topic as a tile of the size the topics have: what it is called,
      * whether it is one server for all or each system by itself, and what it needs and gives.
      */
-    private ToggleButton sourceTile(AnalysisTopic topic, AnalysisTopic.SourceOption option) {
+    private ToggleButton sourceTile(AnalysisTopic topic, AnalysisSourceOption option) {
         Label title = new Label(option.source().title());
         title.getStyleClass().add("tile-title");
         Label kind = new Label(option.source().isAggregating() ? "one server for all" : "each system directly");
@@ -537,7 +550,7 @@ public class NewAnalysisDialog extends Dialog<Void> {
         content.setAlignment(Pos.TOP_LEFT);
 
         ToggleButton tile = new ToggleButton();
-        tile.setId("source-" + topic.name() + "-" + option.source().name());
+        tile.setId("source-" + topic.name() + "-" + option.source().id());
         tile.getStyleClass().setAll("topic-tile");
         tile.setUserData(option.source());
 
@@ -998,6 +1011,74 @@ public class NewAnalysisDialog extends Dialog<Void> {
                 selections, lookbackBox.getValue(), interval);
     }
 
+    private List<AnalysisSourceWizardPage> builtInPages() {
+        return List.of(
+                new AnalysisSourceWizardPage() {
+                    @Override public String sourceId() { return AnalysisSourceDefinition.PROMETHEUS.id(); }
+                    @Override public Node node() { return connectionPage; }
+                    @Override public void selectedTopics(Set<AnalysisTopic> topics) {
+                        chosenTopics.clear();
+                        chosenTopics.addAll(topics);
+                    }
+                    @Override public String title(Set<AnalysisTopic> topics) {
+                        return topics.isEmpty() ? "Connect your Prometheus server"
+                                : "Where is the Prometheus server for " + titles(topics) + "?";
+                    }
+                    @Override public String hint(Set<AnalysisTopic> topics, String analysis) {
+                        return (topics.isEmpty() ? "You then choose from everything the server monitors."
+                                : "It monitors these systems; they are found and selected for you.") + target(analysis);
+                    }
+                    @Override public boolean isComplete() { return prometheusPageIsComplete(); }
+                    @Override public CollectionPlan plan(String projectName) { return prometheusPlan(projectName); }
+                    @Override public void focus() { showConnectionStep(); }
+                    @Override public void showMessage(String text, boolean problem) {
+                        statusLabel.setStyle(problem ? "-fx-text-fill: #b42318;" : "");
+                        statusLabel.setText(text);
+                    }
+                },
+                new AnalysisSourceWizardPage() {
+                    @Override public String sourceId() { return AnalysisSourceDefinition.SSH_TOP.id(); }
+                    @Override public Node node() { return sshPage.node(); }
+                    @Override public String title(Set<AnalysisTopic> topics) {
+                        return "Which Linux / Unix hosts do you want to read?";
+                    }
+                    @Override public String hint(Set<AnalysisTopic> topics, String analysis) {
+                        return "They are read directly, by SSH and top: nothing to install, no Prometheus needed. "
+                                + "Values are collected from now on, for as long as the analysis is running." + target(analysis);
+                    }
+                    @Override public boolean isComplete() { return sshPage.isComplete(); }
+                    @Override public CollectionPlan plan(String projectName) { return sshPage.plan(projectName); }
+                    @Override public void focus() { sshPage.focus(); }
+                    @Override public void showMessage(String text, boolean problem) { sshPage.showMessage(text, problem); }
+                },
+                new AnalysisSourceWizardPage() {
+                    @Override public String sourceId() { return AnalysisSourceDefinition.WINDOWS_COUNTERS.id(); }
+                    @Override public Node node() { return windowsPage.node(); }
+                    @Override public String title(Set<AnalysisTopic> topics) {
+                        return "Which Windows hosts do you want to read?";
+                    }
+                    @Override public String hint(Set<AnalysisTopic> topics, String analysis) {
+                        return "They are read directly, through their performance counters: nothing to install. "
+                                + "Values are collected from now on, for as long as the analysis is running." + target(analysis);
+                    }
+                    @Override public boolean isComplete() { return windowsPage.isComplete(); }
+                    @Override public CollectionPlan plan(String projectName) { return windowsPage.plan(projectName); }
+                    @Override public void focus() { windowsPage.focus(); }
+                    @Override public void showMessage(String text, boolean problem) { windowsPage.showMessage(text, problem); }
+                });
+    }
+
+    private static String target(String analysis) {
+        return analysis == null ? "" : " The data is added to the analysis '" + analysis + "'.";
+    }
+
+    private boolean prometheusPageIsComplete() {
+        return environment != null
+                && nameField.getText() != null && !nameField.getText().isBlank()
+                && groupRows.stream().anyMatch(row -> row.selected.isSelected())
+                && groupRows.stream().filter(row -> row.selected.isSelected()).allMatch(GroupRow::isComplete);
+    }
+
     /**
      * Starts the analysis with one data source per source in use. If a later source cannot be
      * started, the analysis stays with the ones before it, the dialog says so and stays open;
@@ -1006,18 +1087,8 @@ public class NewAnalysisDialog extends Dialog<Void> {
     private void startAnalysis() {
         String name = nameField.getText() == null ? "" : nameField.getText().trim();
         List<CollectionPlan> plans = new ArrayList<>();
-        if (steps.contains(Step.PROMETHEUS)) {
-            if (environment == null) {
-                return;
-            }
-            plans.add(prometheusPlan(name));
-        }
-        if (steps.contains(Step.SSH)) {
-            plans.add(sshPage.plan(name));
-        }
-        if (steps.contains(Step.WINDOWS)) {
-            plans.add(windowsPage.plan(name));
-        }
+        steps.stream().map(sourcePages::get).filter(java.util.Objects::nonNull)
+                .map(page -> page.plan(name)).forEach(plans::add);
         if (plans.isEmpty()) {
             return;
         }
@@ -1061,14 +1132,8 @@ public class NewAnalysisDialog extends Dialog<Void> {
 
     /** Says on the step shown what the start is doing, or what went wrong. */
     private void showProgress(String text, boolean problem) {
-        if (currentStep() == Step.SSH) {
-            sshPage.showMessage(text, problem);
-        } else if (currentStep() == Step.WINDOWS) {
-            windowsPage.showMessage(text, problem);
-        } else {
-            statusLabel.setStyle(problem ? "-fx-text-fill: #b42318;" : "");
-            statusLabel.setText(text);
-        }
+        AnalysisSourceWizardPage page = sourcePages.get(currentStep());
+        if (page != null) page.showMessage(text, problem);
     }
 
     private void updateStartButton() {
@@ -1078,32 +1143,13 @@ public class NewAnalysisDialog extends Dialog<Void> {
         if (steps == null || sshPage == null || windowsPage == null) {
             return;
         }
-        switch (currentStep()) {
-            case TOPICS -> {
-                startButton.setDisable(tiles.values().stream().noneMatch(ToggleButton::isSelected));
-                return;
-            }
-            case SOURCES -> {
-                startButton.setDisable(false);
-                return;
-            }
-            case SSH -> {
-                startButton.setDisable(!sshPage.isComplete());
-                return;
-            }
-            case WINDOWS -> {
-                startButton.setDisable(!windowsPage.isComplete());
-                return;
-            }
-            default -> {
-                // the Prometheus server, below
-            }
+        if (currentStep().equals(TOPICS_STEP)) {
+            startButton.setDisable(tiles.values().stream().noneMatch(ToggleButton::isSelected));
+        } else if (currentStep().equals(SOURCES_STEP)) {
+            startButton.setDisable(false);
+        } else {
+            startButton.setDisable(!sourcePages.get(currentStep()).isComplete());
         }
-        boolean ready = environment != null
-                && nameField.getText() != null && !nameField.getText().isBlank()
-                && groupRows.stream().anyMatch(row -> row.selected.isSelected())
-                && groupRows.stream().filter(row -> row.selected.isSelected()).allMatch(GroupRow::isComplete);
-        startButton.setDisable(!ready);
     }
 
     //=================================================================================================================
@@ -1113,6 +1159,10 @@ public class NewAnalysisDialog extends Dialog<Void> {
     @SuppressWarnings("unchecked")
     private static EventBus<EventObject> eventBus() {
         return Lookup.lookup(EventBus.class);
+    }
+
+    private static List<AnalysisSourceWizardPage> contributedPages() {
+        return Lookup.lookupAll(AnalysisSourceWizardPage.class);
     }
 
     private static void runInBackground(String name, Runnable work) {

@@ -1,0 +1,43 @@
+package io.softwareecg.awb.datasource.spi;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+class AnalysisSourceRegistryTest {
+
+    @Test
+    void exposes_a_contributed_source_without_changing_the_topic_or_dialog() {
+        var source = new AnalysisSourceDefinition("oracle-awr", "Oracle AWR", true, true);
+        AnalysisSourceProvider provider = provider(source, AnalysisTopic.DATABASES, "Database snapshots");
+
+        var options = new AnalysisSourceRegistry(List.of(provider)).options(AnalysisTopic.DATABASES);
+
+        assertEquals(List.of(new AnalysisSourceOption(source, "Database snapshots")), options);
+    }
+
+    @Test
+    void rejects_duplicate_stable_source_ids() {
+        var source = new AnalysisSourceDefinition("duplicate", "First", false, true);
+
+        assertThrows(IllegalArgumentException.class, () -> new AnalysisSourceRegistry(List.of(
+                provider(source, AnalysisTopic.LINUX, "one"),
+                provider(new AnalysisSourceDefinition("duplicate", "Second", false, true),
+                        AnalysisTopic.LINUX, "two"))));
+    }
+
+    private static AnalysisSourceProvider provider(AnalysisSourceDefinition source,
+                                                   AnalysisTopic topic,
+                                                   String description) {
+        return new AnalysisSourceProvider() {
+            @Override public AnalysisSourceDefinition definition() { return source; }
+            @Override public Map<AnalysisTopic, AnalysisSourceOption> topics() {
+                return Map.of(topic, new AnalysisSourceOption(source, description));
+            }
+        };
+    }
+}

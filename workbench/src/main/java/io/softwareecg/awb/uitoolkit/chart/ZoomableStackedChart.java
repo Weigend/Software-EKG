@@ -1,6 +1,6 @@
 package io.softwareecg.awb.uitoolkit.chart;
 
-import io.softwareecg.awb.uitoolkit.chart.legend.StackedChartLegend;
+import io.softwareecg.awb.uitoolkit.chart.legend.ChartLegendPort;
 import io.softwareecg.awb.uitoolkit.chart.zoom.Zoomable;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -84,7 +84,7 @@ public class ZoomableStackedChart extends StackPane {
      * @param baseChart the base chart that will be the initial base chart on top of the stack
      * @param chartLegend the chart legend that will interact with this instance
      */
-    public ZoomableStackedChart(ColoredChart baseChart, StackedChartLegend chartLegend) {
+    public ZoomableStackedChart(ColoredChart baseChart, ChartLegendPort chartLegend) {
         this(baseChart);
         getController().setChartLegend(chartLegend);
     }

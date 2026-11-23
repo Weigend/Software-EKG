@@ -3,6 +3,8 @@ package io.softwareecg.awb.timeseries.adapter.solr.embedded;
 import io.softwareecg.awb.timeseries.adapter.solr.SolrRepositoryClientProvider;
 import io.softwareecg.awb.timeseries.port.TimeSeriesRepository;
 import io.softwareecg.awb.timeseries.spi.TimeSeriesRepositoryProvider;
+import io.softwareecg.awb.timeseries.spi.RepositoryDescriptors;
+import io.softwareecg.awb.timeseries.spi.RepositoryTypeDescriptor;
 import io.softwareecg.awb.timeseries.repositorytype.Embedded;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
@@ -10,6 +12,7 @@ import jakarta.inject.Singleton;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.core.CoreContainer;
+import java.util.List;
 
 
 /**
@@ -29,6 +32,11 @@ import org.apache.solr.core.CoreContainer;
 @Embedded
 @Singleton
 public class EmbeddedRepositoryClientProvider implements TimeSeriesRepositoryProvider {
+
+    @Override
+    public List<RepositoryTypeDescriptor> repositoryTypes() {
+        return List.of(RepositoryDescriptors.embeddedSolr());
+    }
 
     private static final String CORE_NAME = "ekgdata";
 

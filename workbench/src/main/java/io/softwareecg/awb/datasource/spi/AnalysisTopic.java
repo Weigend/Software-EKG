@@ -1,7 +1,5 @@
 package io.softwareecg.awb.datasource.spi;
 
-import java.util.List;
-
 /**
  * What an analysis is about, as the user thinks of it: "my Linux servers", "my Java processes".
  * A topic is the first thing chosen for a new analysis - before any address or technology.
@@ -85,54 +83,4 @@ public enum AnalysisTopic {
         return available;
     }
 
-    /**
-     * One way to collect the topic.
-     *
-     * @param source      where the data comes from
-     * @param description what this way needs and gives for this topic, in a sentence or two
-     * @param available   {@code false} for a way that is planned but cannot be chosen yet. A
-     *                    source can be built for one topic and not yet for another.
-     */
-    public record SourceOption(AnalysisSourceDefinition source, String description, boolean available) {
-
-        /**
-         * A way that can be chosen if its source is built.
-         */
-        public SourceOption(AnalysisSourceDefinition source, String description) {
-            this(source, description, source.isAvailable());
-        }
-    }
-
-    /**
-     * @return the ways this topic can be collected, the usual one first. Ways that are planned
-     *         but not built are part of the list ({@link SourceOption#available()}).
-     */
-    public List<SourceOption> sources() {
-        return switch (this) {
-            case LINUX -> List.of(
-                    new SourceOption(AnalysisSourceDefinition.PROMETHEUS,
-                            "A server already collects from all hosts (node exporter). "
-                                    + "The hosts are found for you, their history comes along."),
-                    new SourceOption(AnalysisSourceDefinition.SSH_TOP,
-                            "Each host is read with top. Needs only an SSH login, no Prometheus. "
-                                    + "Shows single processes too. No history."));
-            case JVM -> List.of(
-                    new SourceOption(AnalysisSourceDefinition.PROMETHEUS,
-                            "Metrics of Micrometer or the JMX exporter, through a server. "
-                                    + "The processes are found for you, their history comes along."),
-                    new SourceOption(AnalysisSourceDefinition.JOLOKIA, "Each JVM is read directly over HTTP."),
-                    new SourceOption(AnalysisSourceDefinition.JMX, "Each JVM is read directly over JMX."));
-            case WINDOWS -> List.of(
-                    // the server is there, but not yet what tells Windows hosts from others on it
-                    new SourceOption(AnalysisSourceDefinition.PROMETHEUS, "One server that collects from all hosts (windows exporter).", false),
-                    new SourceOption(AnalysisSourceDefinition.WINDOWS_COUNTERS,
-                            "Each host is read through its performance counters, from Windows. "
-                                    + "Shows single processes too. No history."));
-            case DATABASES -> List.of(
-                    new SourceOption(AnalysisSourceDefinition.PROMETHEUS, "One server that collects from the database exporters."),
-                    new SourceOption(AnalysisSourceDefinition.POSTGRES, "Each database is asked directly."));
-            case KUBERNETES, SERVICES -> List.of(
-                    new SourceOption(AnalysisSourceDefinition.PROMETHEUS, "One server that collects from the cluster."));
-        };
-    }
 }

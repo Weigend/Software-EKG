@@ -149,6 +149,16 @@ Add parser unit tests and an import test that queries the stored rows through th
 
 ## Extend Workbench UI or analysis
 
+The Workbench now has three explicit extension contracts. Use the focused guide instead of adding
+another branch to a dialog or depending on an H2 class:
+
+- [Add a source to New Analysis](workbench-analysis-sources.md)
+- [Add a time-series repository](workbench-repositories.md)
+- [Replace the metadata backend](workbench-metadata-backends.md)
+
+The Metric Explorer is split into a coordinator, query editor/header, chart and legend. See
+[Metric view component boundaries](workbench-metric-view.md) before changing this area.
+
 Modules add items through `EkgApplicationController` to Analysis, Import, Repository or Window.
 Keep JavaFX in UI packages; architecture tests enforce that business logic and data access do not
 depend on UI classes or bypass their layer. New smoothing/combination algorithms belong behind the

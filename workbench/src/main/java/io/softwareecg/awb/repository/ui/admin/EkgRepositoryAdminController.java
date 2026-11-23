@@ -4,8 +4,11 @@ import io.softwareecg.awb.uitoolkit.bindings.StaticBoolProperty;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
 import io.softwareecg.awb.repository.events.RepositoryModifyEvent;
-import io.softwareecg.awb.repository.model.EkgRepositoryDbType;
 import io.softwareecg.awb.timeseries.repositorytype.Embedded;
+import io.softwareecg.awb.timeseries.spi.RepositoryTypeDescriptor;
+import io.softwareecg.awb.timeseries.spi.RepositoryTypeRegistry;
+import io.softwareecg.awb.timeseries.spi.TimeSeriesRepositoryProvider;
+import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.awb.secrets.model.ResourceAuthType;
 import io.softwareecg.wfx.platform.api.EventBus;
@@ -17,13 +20,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.validator.routines.UrlValidator;
 
 import java.net.URL;
 import java.util.*;
-import java.util.regex.Pattern;
 
-import static io.softwareecg.awb.repository.model.EkgRepositoryDbType.*;
 import static io.softwareecg.awb.secrets.model.ResourceAuthType.*;
 import static io.softwareecg.awb.uitoolkit.controls.EkgComboBoxListViewSkin.CellBehaviorResource;
 import static org.apache.commons.lang3.StringUtils.isNoneBlank;
@@ -39,46 +39,7 @@ public class EkgRepositoryAdminController implements Initializable {
 
     private static final PseudoClass INVALID_PSEUDO_CLASS = PseudoClass.getPseudoClass("invalid");
 
-    // --------------------------- validators for connection URLs / connection-strings ------------------------------
-
-    private static final UrlValidator REPOSITORY_URL_VALIDATOR =
-            new UrlValidator(new String[]{"http", "https"}, UrlValidator.ALLOW_LOCAL_URLS);
-
-    private static final String SINGLE_HOST_PATTERN
-            = "((([a-z0-9]|[a-z0-9][a-z0-9\\-]*[a-z0-9])\\.)*([a-z0-9]|[a-z0-9][a-z0-9\\-]*[a-z0-9])(:[1-9][0-9]{1,4})?)";
-
-    private static final String SINGLE_HOST_CAIN_PATTERN = "(," + SINGLE_HOST_PATTERN + ")*";
-
-    private static final Pattern ZK_HOSTS_VALIDATION_PATTERN
-            = Pattern.compile("^" + SINGLE_HOST_PATTERN + SINGLE_HOST_CAIN_PATTERN + "$", Pattern.CASE_INSENSITIVE);
-
-    private static final Pattern CLICKHOUSE_JDBC_URL_PATTERN
-            = Pattern.compile("^jdbc:c(h|lickhouse)://[a-zA-Z0-9._\\-]+(:[1-9][0-9]{1,4})?"
-            + "(,[a-zA-Z0-9._\\-]+(:[1-9][0-9]{1,4})?)*"
-            + "(/[a-zA-Z0-9_]*)?(\\?.*)?$", Pattern.CASE_INSENSITIVE);
-
-
-    // ------------------------------------ style and behaviour definitions ------------------------------------------
-
-    /**
-     * per value icons and disable states for the ComboBox 'EkgRepositoryDbType'
-     */
-    private final Map<EkgRepositoryDbType, CellBehaviorResource> dbTypeResourceMap = Map.of(
-            SOLR_EMBEDDED,
-            new CellBehaviorResource("icons/repository-db-type-solr.svg", StaticBoolProperty.TRUE),
-
-            SOLR_STANDALONE,
-            new CellBehaviorResource("icons/repository-db-type-solr.svg", StaticBoolProperty.FALSE),
-
-            SOLR_CLOUD,
-            new CellBehaviorResource("icons/repository-db-type-solr-cloud.svg", StaticBoolProperty.FALSE),
-
-            ELASTICSEARCH_STANDALONE,
-            new CellBehaviorResource("icons/repository-db-type-elasticsearch.svg", StaticBoolProperty.FALSE),
-
-            CLICKHOUSE_CLOUD,
-            new CellBehaviorResource("icons/repository-db-type-clickhouse.svg", StaticBoolProperty.FALSE)
-    );
+    private RepositoryTypeRegistry repositoryTypes;
 
     /**
      * per value icons and disable states for the ComboBox 'EkgRepositoryDbType'
@@ -127,7 +88,7 @@ public class EkgRepositoryAdminController implements Initializable {
      * (Solr Cloud, Solr Classic Standalone or ElasticSearch)
      */
     @FXML
-    private ComboBox<EkgRepositoryDbType> cbRepositoryDbType;
+    private ComboBox<RepositoryTypeDescriptor> cbRepositoryDbType;
 
     /**
      * The unique name of the types
@@ -220,6 +181,7 @@ public class EkgRepositoryAdminController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        repositoryTypes = new RepositoryTypeRegistry(Lookup.lookupAll(TimeSeriesRepositoryProvider.class));
 
         // init pseudo classes and other view styles that
         // will setup programmatically
@@ -288,6 +250,8 @@ public class EkgRepositoryAdminController implements Initializable {
      */
     public void setOldRepository(EkgRepository oldRepository) {
         viewModel.setOldRepository(oldRepository);
+        viewModel.repositoryDbTypeProperty().set(
+                repositoryTypes.require(oldRepository.getEkgRepositoryDbType().name()));
     }
 
     //================================================================================================================
@@ -343,36 +307,19 @@ public class EkgRepositoryAdminController implements Initializable {
         });
 
         // disable text field and according label for the Solr collection name if Solr Standalone is in use
-        txtRepositoryIndexName.disableProperty().bind(viewModel.repositoryDbTypeProperty().isEqualTo(SOLR_STANDALONE));
+        txtRepositoryIndexName.disableProperty().bind(javafx.beans.binding.Bindings.createBooleanBinding(
+                () -> viewModel.getRepositoryDbType().indexDisabled(),
+                viewModel.repositoryDbTypeProperty()));
         lbRepositoryIndexName.disableProperty().bind(txtRepositoryIndexName.disableProperty());
 
         cbRepositoryDbType.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            switch (newValue) {
-
-                case SOLR_CLOUD:
-                    lbRepositoryUrl.setText("ZooKeeper Host/Port:");
-                    txtRepositoryUrl.setPromptText("1-n ZooKeeper Host+Port Paare ('host:port, ...')");
-                    break;
-
-                case SOLR_STANDALONE:
-                    lbRepositoryUrl.setText("Repository URL:");
-                    txtRepositoryUrl.setPromptText("Absolute Solr URL inkl. Core-Namen");
-                    txtRepositoryIndexName.setText(null);
-                    break;
-
-                case CLICKHOUSE_CLOUD:
-                    lbRepositoryUrl.setText("ClickHouse JDBC URL:");
-                    txtRepositoryUrl.setPromptText("jdbc:clickhouse://node1:8123,node2:8123,node3:8123/softwareekg?compress=0");
-                    lbRepositoryIndexName.setText("Table Name:");
-                    txtRepositoryIndexName.setPromptText("Optional, e.g. ekg_timeseries (compress=0 recommended)");
-                    break;
-
-                default:
-                    lbRepositoryUrl.setText("Repository URL:");
-                    txtRepositoryUrl.setPromptText("Geben sie die URL des Repositories ein.");
-                    lbRepositoryIndexName.setText("Index Name:");
-                    txtRepositoryIndexName.setPromptText("Enter the index (e.g. the Solr collection).");
-            }
+            if (newValue == null) return;
+            RepositoryTypeDescriptor descriptor = newValue;
+            lbRepositoryUrl.setText(descriptor.connectionLabel());
+            txtRepositoryUrl.setPromptText(descriptor.connectionPrompt());
+            lbRepositoryIndexName.setText(descriptor.indexLabel());
+            txtRepositoryIndexName.setPromptText(descriptor.indexPrompt());
+            if (descriptor.indexDisabled()) txtRepositoryIndexName.setText(null);
         });
     }
 
@@ -390,7 +337,13 @@ public class EkgRepositoryAdminController implements Initializable {
      */
     private void initViewStyles() {
       cbRepositoryAuthType.setSkin(new EkgComboBoxListViewSkin<>(cbRepositoryAuthType, authTypeResourceMap, NONE));
-      cbRepositoryDbType.setSkin(new EkgComboBoxListViewSkin<>(cbRepositoryDbType, dbTypeResourceMap, SOLR_STANDALONE));
+      Map<RepositoryTypeDescriptor, CellBehaviorResource> resources = new LinkedHashMap<>();
+      for (RepositoryTypeDescriptor descriptor : repositoryTypes.all()) {
+          resources.put(descriptor, new CellBehaviorResource(descriptor.icon(),
+                  new javafx.beans.property.SimpleBooleanProperty(!descriptor.selectable())));
+      }
+      cbRepositoryDbType.setSkin(new EkgComboBoxListViewSkin<>(cbRepositoryDbType, resources,
+              repositoryTypes.require("SOLR_STANDALONE")));
     }
 
     /**
@@ -401,8 +354,9 @@ public class EkgRepositoryAdminController implements Initializable {
         txtRepositoryName.textProperty().bindBidirectional(viewModel.repositoryNameProperty());
 
         cbRepositoryDbType.valueProperty().bindBidirectional(viewModel.repositoryDbTypeProperty());
-        cbRepositoryDbType.setValue(SOLR_STANDALONE);
-        cbRepositoryDbType.getItems().addAll(List.of(SOLR_STANDALONE, SOLR_CLOUD, ELASTICSEARCH_STANDALONE, CLICKHOUSE_CLOUD));
+        cbRepositoryDbType.setValue(repositoryTypes.require("SOLR_STANDALONE"));
+        cbRepositoryDbType.getItems().addAll(repositoryTypes.all().stream()
+                .filter(RepositoryTypeDescriptor::selectable).toList());
 
         txtRepositoryUrl.textProperty().bindBidirectional(viewModel.repositoryConnectionUrlProperty());
         txtRepositoryIndexName.textProperty().bindBidirectional(viewModel.dbIndexNameProperty());
@@ -435,15 +389,7 @@ public class EkgRepositoryAdminController implements Initializable {
 
     private boolean isConnectionUrlValid(String newUrl) {
 
-        if (viewModel.getRepositoryDbType() == SOLR_CLOUD) {
-            return ZK_HOSTS_VALIDATION_PATTERN.matcher(newUrl).matches();
-        }
-
-        if (viewModel.getRepositoryDbType() == CLICKHOUSE_CLOUD) {
-            return CLICKHOUSE_JDBC_URL_PATTERN.matcher(newUrl).matches();
-        }
-
-        return REPOSITORY_URL_VALIDATOR.isValid(newUrl);
+        return viewModel.getRepositoryDbType().isConnectionValid(newUrl);
     }
 
     /**
@@ -454,7 +400,7 @@ public class EkgRepositoryAdminController implements Initializable {
         txtRepositoryAuthUsername.setText(null);
         txtRepositoryAuthUsername.setText(null);
         cbRepositoryAuthType.setValue(NONE);
-        cbRepositoryDbType.setValue(SOLR_STANDALONE);
+        cbRepositoryDbType.setValue(repositoryTypes.require("SOLR_STANDALONE"));
         viewModel.oldRepositoryProperty().set(null);
         viewModel.setIsEditingMode(false);
         viewModel.setDbIndexName(null);
@@ -478,7 +424,8 @@ public class EkgRepositoryAdminController implements Initializable {
 
         String reproConnectionUrl = viewModel.getRepositoryConnectionUrl();
 
-        if (reproConnectionUrl.endsWith("/") && viewModel.getRepositoryDbType() != ELASTICSEARCH_STANDALONE) {
+        if (reproConnectionUrl.endsWith("/")
+                && !viewModel.getRepositoryDbType().id().equals("ELASTICSEARCH_STANDALONE")) {
             reproConnectionUrl = reproConnectionUrl.substring(0, reproConnectionUrl.length() - 1);
         }
 
@@ -491,7 +438,7 @@ public class EkgRepositoryAdminController implements Initializable {
                         viewModel.getRepositoryName(),
                         reproConnectionUrl,
                         viewModel.getDbIndexName(),
-                        viewModel.getRepositoryDbType(),
+                        viewModel.getRepositoryDbType().repositoryType(),
                         viewModel.getRepositoryAuthType(),
                         viewModel.getRepositoryAuthUsername(),
                         viewModel.getRepositoryAuthPassword())
@@ -499,7 +446,7 @@ public class EkgRepositoryAdminController implements Initializable {
                         viewModel.getRepositoryName(),
                         reproConnectionUrl,
                         viewModel.getDbIndexName(),
-                        viewModel.getRepositoryDbType(),
+                        viewModel.getRepositoryDbType().repositoryType(),
                         viewModel.getRepositoryAuthType(),
                         viewModel.getRepositoryAuthUsername(),
                         viewModel.getRepositoryAuthPassword());

@@ -108,4 +108,39 @@ public class LayerArchitectureTest {
                     .should().dependOnClassesThat().resideInAPackage("jakarta.enterprise..")
                     .because("AWB-Code muss frei von CDI-spezifischen Typen sein "
                             + "(jakarta.inject reicht; jakarta.enterprise ist CDI-only)");
+
+    @ArchTest
+    static final ArchRule metadata_clients_must_use_ports_instead_of_h2 =
+            noClasses().that().resideOutsideOfPackages(
+                            "io.softwareecg.awb.metadata.adapter.h2..",
+                            "io.softwareecg.awb.application.composition..")
+                    .and().areNotAssignableTo(io.avaje.inject.spi.AvajeModule.class)
+                    .should().dependOnClassesThat()
+                    .resideInAPackage("io.softwareecg.awb.metadata.adapter.h2..")
+                    .because("H2 ist ein austauschbarer Adapter; Nutzer muessen metadata.port verwenden");
+
+    @ArchTest
+    static final ArchRule repository_ui_must_not_know_repository_adapters =
+            noClasses().that().resideInAPackage("io.softwareecg.awb.repository.ui..")
+                    .should().dependOnClassesThat()
+                    .resideInAPackage("io.softwareecg.awb.timeseries.adapter..")
+                    .because("Repository-Typen werden ueber TimeSeriesRepositoryProvider beschrieben");
+
+    @ArchTest
+    static final ArchRule datasource_spi_must_not_know_ui_or_adapters =
+            noClasses().that().resideInAPackage("io.softwareecg.awb.datasource.spi..")
+                    .should().dependOnClassesThat().resideInAnyPackage(
+                            "io.softwareecg.awb.datasource.ui..",
+                            "io.softwareecg.awb.datasource.adapter..")
+                    .because("New-Analysis-Erweiterungen beginnen an einem stabilen, UI-neutralen Vertrag");
+
+    @ArchTest
+    static final ArchRule metric_view_must_use_chart_and_query_editor_ports =
+            noClasses().that().resideInAPackage("io.softwareecg.awb.metricview..")
+                    .and().resideOutsideOfPackage("io.softwareecg.awb.metricview.queryeditor..")
+                    .should().dependOnClassesThat().haveFullyQualifiedName(
+                            "io.softwareecg.awb.metricview.queryeditor.ChartHeaderController")
+                    .orShould().dependOnClassesThat().haveFullyQualifiedName(
+                            "io.softwareecg.awb.uitoolkit.chart.legend.StackedChartLegend")
+                    .because("MetricView koordiniert Header und Legende nur ueber deren Ports");
 }

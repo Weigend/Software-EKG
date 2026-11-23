@@ -24,7 +24,10 @@ application does.
   [Repositories](collector-repositories.md)
 - **Analyse data:** [Workbench](workbench.md) → [The Workbench window](workbench-ui.md) →
   [Importers](workbench-importers.md)
-- **Add a proprietary integration:** [Extension guide](extensions.md)
+- **Add a proprietary integration:** [Extension guide](extensions.md) →
+  [New Analysis source](workbench-analysis-sources.md) ·
+  [time-series repository](workbench-repositories.md) ·
+  [metadata backend](workbench-metadata-backends.md)
 - **Look up every surface:** [Feature and configuration reference](reference.md)
 
 ## What is covered
@@ -41,6 +44,7 @@ application does.
 | The window in pictures: explorer, filter header and wildcards, chart, legend, colours, chart types, charts in the background | [The Workbench window](workbench-ui.md) |
 | Collector CSV, Prometheus, OWID, Binance and Yahoo Finance imports | [Workbench importers](workbench-importers.md) |
 | New Collector sources/repositories and Workbench importers | [Extensions](extensions.md) |
+| Workbench extension contracts | [Analysis sources](workbench-analysis-sources.md) · [repositories](workbench-repositories.md) · [metadata backends](workbench-metadata-backends.md) |
 | Menus, CLI, paths, settings and compatibility status | [Reference](reference.md) |
 
 ## Scope and status language

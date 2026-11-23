@@ -14,6 +14,8 @@ package io.softwareecg.awb.timeseries.spi;
 
 import io.softwareecg.awb.timeseries.port.TimeSeriesRepository;
 
+import java.util.List;
+
 
 /**
  * Interface that represents an resolver for
@@ -22,6 +24,11 @@ import io.softwareecg.awb.timeseries.port.TimeSeriesRepository;
  * @since 03.06.2015
  */
 public interface TimeSeriesRepositoryProvider {
+
+    /** Repository types contributed by this provider, including UI metadata and validation. */
+    default List<RepositoryTypeDescriptor> repositoryTypes() {
+        return List.of();
+    }
 
     TimeSeriesRepository createRepositoryClient(String connectionUrl, String userName, String password);
 

@@ -1,5 +1,9 @@
 package io.softwareecg.awb.metadata.adapter.h2;
 
+import io.softwareecg.awb.metadata.model.BookmarkGroupRow;
+import io.softwareecg.awb.metadata.model.MetricBookmarkRow;
+import io.softwareecg.awb.metadata.model.MetricQueryBookmarkRow;
+import io.softwareecg.awb.metadata.port.BookmarkStore;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
@@ -18,7 +22,7 @@ import java.util.UUID;
  *
  */
 @Singleton
-public class H2BookmarkStore {
+public class H2BookmarkStore implements BookmarkStore {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(H2BookmarkStore.class);
 
@@ -397,35 +401,4 @@ public class H2BookmarkStore {
         return r;
     }
 
-    /**
-     * Data transfer object for metric bookmark rows.
-     */
-    public static class MetricBookmarkRow {
-        public String id;
-        public String name;
-        public String bookmarkGroupId;
-        public String commandProtocol;
-        public String projectName;
-    }
-
-    /**
-     * Data transfer object for bookmark group rows.
-     */
-    public static class BookmarkGroupRow {
-        public String id;
-        public String name;
-        public String projectName;
-    }
-
-    /**
-     * Data transfer object for metric query bookmark rows.
-     * Query parameters are stored as a single JSON CLOB instead of individual columns.
-     */
-    public static class MetricQueryBookmarkRow {
-        public String id;
-        public String name;
-        public String bookmarkGroupId;
-        public String projectName;
-        public String queryData;
-    }
 }

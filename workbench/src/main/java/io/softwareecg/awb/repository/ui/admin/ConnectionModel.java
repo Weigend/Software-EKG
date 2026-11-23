@@ -13,7 +13,7 @@
 package io.softwareecg.awb.repository.ui.admin;
 
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.repository.model.EkgRepositoryDbType;
+import io.softwareecg.awb.timeseries.spi.RepositoryTypeDescriptor;
 import io.softwareecg.awb.secrets.model.ResourceAuthType;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
@@ -45,7 +45,7 @@ public class ConnectionModel {
      * The type of the types
      * (Solr Cloud, Solr Classic Standalone or ElasticSearch)
      */
-    private final ObjectProperty<EkgRepositoryDbType> repositoryDbType = new SimpleObjectProperty<>();
+    private final ObjectProperty<RepositoryTypeDescriptor> repositoryDbType = new SimpleObjectProperty<>();
 
     /**
      * The authentication type the types used
@@ -98,7 +98,6 @@ public class ConnectionModel {
                 return;
             }
 
-            repositoryDbType.set(repositoryToUpdate.getEkgRepositoryDbType());
             repositoryName.set(repositoryToUpdate.getRepositoryName());
             repositoryConnectionUrl.set(repositoryToUpdate.getConnectionUrl());
         });
@@ -156,7 +155,7 @@ public class ConnectionModel {
      *
      * @return the types type.
      */
-    public EkgRepositoryDbType getRepositoryDbType() {
+    public RepositoryTypeDescriptor getRepositoryDbType() {
         return repositoryDbType.get();
     }
 
@@ -165,7 +164,7 @@ public class ConnectionModel {
      *
      * @return the repositoryDbType
      */
-    public ObjectProperty<EkgRepositoryDbType> repositoryDbTypeProperty() {
+    public ObjectProperty<RepositoryTypeDescriptor> repositoryDbTypeProperty() {
         return repositoryDbType;
     }
 

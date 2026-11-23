@@ -4,6 +4,8 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.softwareecg.awb.timeseries.port.TimeSeriesRepository;
 import io.softwareecg.awb.timeseries.spi.TimeSeriesRepositoryProvider;
+import io.softwareecg.awb.timeseries.spi.RepositoryDescriptors;
+import io.softwareecg.awb.timeseries.spi.RepositoryTypeDescriptor;
 import io.softwareecg.awb.timeseries.port.TimeSeriesAdmin;
 import io.softwareecg.awb.timeseries.spi.TimeSeriesAdminProvider;
 import io.softwareecg.awb.timeseries.repositorytype.ClickHouse;
@@ -22,6 +24,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Locale;
+import java.util.List;
 
 /**
  * Provider that creates and manages {@link ClickHouseRepositoryClient}s.
@@ -42,6 +45,11 @@ import java.util.Locale;
 @Singleton
 @ClickHouse
 public class ClickHouseRepositoryClientProvider implements TimeSeriesAdminProvider, TimeSeriesRepositoryProvider {
+
+    @Override
+    public List<RepositoryTypeDescriptor> repositoryTypes() {
+        return List.of(RepositoryDescriptors.clickhouse());
+    }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClickHouseRepositoryClientProvider.class);
 

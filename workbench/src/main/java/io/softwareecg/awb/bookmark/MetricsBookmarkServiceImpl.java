@@ -1,9 +1,9 @@
 package io.softwareecg.awb.bookmark;
 
-import io.softwareecg.awb.metadata.adapter.h2.H2BookmarkStore;
-import io.softwareecg.awb.metadata.adapter.h2.H2BookmarkStore.BookmarkGroupRow;
-import io.softwareecg.awb.metadata.adapter.h2.H2BookmarkStore.MetricBookmarkRow;
-import io.softwareecg.awb.metadata.adapter.h2.H2BookmarkStore.MetricQueryBookmarkRow;
+import io.softwareecg.awb.metadata.model.BookmarkGroupRow;
+import io.softwareecg.awb.metadata.model.MetricBookmarkRow;
+import io.softwareecg.awb.metadata.model.MetricQueryBookmarkRow;
+import io.softwareecg.awb.metadata.port.BookmarkStore;
 import io.softwareecg.awb.bookmark.model.Bookmark;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
 import io.softwareecg.awb.bookmark.model.MetricBookmark;
@@ -30,11 +30,11 @@ public class MetricsBookmarkServiceImpl implements MetricsBookmarkService {
 
     private final Logger LOGGER = EkgLogger.get();
 
-    private final H2BookmarkStore h2Repo;
+    private final BookmarkStore bookmarkStore;
 
     @Inject
-    public MetricsBookmarkServiceImpl(@External H2BookmarkStore h2Repo) {
-        this.h2Repo = h2Repo;
+    public MetricsBookmarkServiceImpl(@External BookmarkStore bookmarkStore) {
+        this.bookmarkStore = bookmarkStore;
     }
 
     @Override
@@ -48,14 +48,14 @@ public class MetricsBookmarkServiceImpl implements MetricsBookmarkService {
 
     @Override
     public List<MetricBookmark> getMetricBookmarks(String bookmarkGroupId) {
-        return h2Repo.listBookmarks(bookmarkGroupId).stream()
+        return bookmarkStore.listBookmarks(bookmarkGroupId).stream()
                 .map(MetricsBookmarkServiceImpl::toMetricBookmark)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<MetricQueryBookmark> getMetricQueryBookmarks(String bookmarkGroupId) {
-        return h2Repo.listQueryBookmarks(bookmarkGroupId).stream()
+        return bookmarkStore.listQueryBookmarks(bookmarkGroupId).stream()
                 .map(MetricsBookmarkServiceImpl::toMetricQueryBookmark)
                 .collect(Collectors.toList());
     }
@@ -63,11 +63,11 @@ public class MetricsBookmarkServiceImpl implements MetricsBookmarkService {
     @Override
     public void persistNewBookmark(Bookmark bookmark) {
         if (bookmark instanceof MetricQueryBookmark queryBookmark) {
-            h2Repo.insertQueryBookmark(toQueryBookmarkRow(queryBookmark));
+            bookmarkStore.insertQueryBookmark(toQueryBookmarkRow(queryBookmark));
             return;
         }
         if (bookmark instanceof MetricBookmark metricBookmark) {
-            h2Repo.insertBookmark(toBookmarkRow(metricBookmark));
+            bookmarkStore.insertBookmark(toBookmarkRow(metricBookmark));
             return;
         }
         LOGGER.warn("Unsupported bookmark type for H2 persistence: {}", bookmark.getClass().getName());
@@ -84,9 +84,9 @@ public class MetricsBookmarkServiceImpl implements MetricsBookmarkService {
     @Override
     public void deleteBookmark(Bookmark bookmark) {
         if (bookmark instanceof MetricQueryBookmark) {
-            h2Repo.deleteQueryBookmark(bookmark.getId());
+            bookmarkStore.deleteQueryBookmark(bookmark.getId());
         } else {
-            h2Repo.deleteBookmark(bookmark.getId());
+            bookmarkStore.deleteBookmark(bookmark.getId());
         }
     }
 
@@ -96,14 +96,14 @@ public class MetricsBookmarkServiceImpl implements MetricsBookmarkService {
 
     @Override
     public List<BookmarkGroup> getBookmarkGroups() {
-        return h2Repo.listGroups().stream()
+        return bookmarkStore.listGroups().stream()
                 .map(MetricsBookmarkServiceImpl::toBookmarkGroup)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<BookmarkGroup> getGlobalBookmarkGroups() {
-        return h2Repo.listGlobalGroups().stream()
+        return bookmarkStore.listGlobalGroups().stream()
                 .map(MetricsBookmarkServiceImpl::toBookmarkGroup)
                 .filter(g -> !g.isEmptyGroup())
                 .collect(Collectors.toList());
@@ -111,7 +111,7 @@ public class MetricsBookmarkServiceImpl implements MetricsBookmarkService {
 
     @Override
     public List<BookmarkGroup> getBookmarkGroupsByProject(String projectName) {
-        return h2Repo.listGroups(projectName).stream()
+        return bookmarkStore.listGroups(projectName).stream()
                 .map(MetricsBookmarkServiceImpl::toBookmarkGroup)
                 .filter(g -> !g.isEmptyGroup())
                 .collect(Collectors.toList());
@@ -119,17 +119,17 @@ public class MetricsBookmarkServiceImpl implements MetricsBookmarkService {
 
     @Override
     public void persistNewBookmarkGroup(BookmarkGroup bookmarkGroup) {
-        h2Repo.insertGroup(toGroupRow(bookmarkGroup));
+        bookmarkStore.insertGroup(toGroupRow(bookmarkGroup));
     }
 
     @Override
     public void updateBookmark(BookmarkGroup bookmarkGroup) {
-        h2Repo.updateGroup(toGroupRow(bookmarkGroup));
+        bookmarkStore.updateGroup(toGroupRow(bookmarkGroup));
     }
 
     @Override
     public void deleteBookmarkGroup(String groupId) {
-        h2Repo.deleteGroup(groupId);
+        bookmarkStore.deleteGroup(groupId);
     }
 
     // =========================================================================

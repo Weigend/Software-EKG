@@ -5,6 +5,8 @@ import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.rest5_client.Rest5ClientTransport;
 import io.softwareecg.awb.timeseries.port.TimeSeriesRepository;
 import io.softwareecg.awb.timeseries.spi.TimeSeriesRepositoryProvider;
+import io.softwareecg.awb.timeseries.spi.RepositoryDescriptors;
+import io.softwareecg.awb.timeseries.spi.RepositoryTypeDescriptor;
 import io.softwareecg.awb.timeseries.repositorytype.ElasticSearch;
 import jakarta.inject.Singleton;
 import org.apache.commons.lang3.NotImplementedException;
@@ -19,6 +21,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.List;
 
 /**
  * A provider that acts as factory for TimeSeriesRepository instances based on
@@ -29,6 +32,11 @@ import java.util.Base64;
 @Singleton
 @ElasticSearch
 public class ElasticSearchRepositoryClientProvider implements TimeSeriesRepositoryProvider {
+
+    @Override
+    public List<RepositoryTypeDescriptor> repositoryTypes() {
+        return List.of(RepositoryDescriptors.elasticsearch());
+    }
 
     private ElasticsearchClient elasticSearchClient;
     private Rest5Client restClient;

@@ -13,7 +13,7 @@ import io.softwareecg.awb.uitoolkit.chart.ZoomableStackedChart;
 import io.softwareecg.awb.uitoolkit.chart.axis.DateAxis;
 import io.softwareecg.awb.uitoolkit.chart.axis.MetricAxis;
 import io.softwareecg.awb.uitoolkit.chart.legend.LegendActionCallbacks;
-import io.softwareecg.awb.uitoolkit.chart.legend.StackedChartLegend;
+import io.softwareecg.awb.uitoolkit.chart.legend.ChartLegendPort;
 import io.softwareecg.awb.uitoolkit.chart.zoom.Zoomable;
 import io.softwareecg.awb.uitoolkit.events.OpeningMode;
 import io.softwareecg.awb.investigation.model.SeriesCombineMode;
@@ -33,7 +33,7 @@ import io.softwareecg.awb.bookmark.ui.CreateBookmarkDialog;
 import io.softwareecg.awb.evidence.export.ExcelExportSeriesData;
 import io.softwareecg.awb.evidence.export.ExcelExporter;
 import io.softwareecg.awb.evidence.export.ScreenshotExportDialog;
-import io.softwareecg.awb.metricview.queryeditor.ChartHeaderController;
+import io.softwareecg.awb.metricview.queryeditor.QueryEditorPort;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
@@ -111,10 +111,10 @@ public class MetricViewController implements Initializable {
     private Pane chartActionsPanel;
 
     @FXML
-    private StackedChartLegend chartLegend;
+    private ChartLegendPort chartLegend;
 
     @FXML
-    private ChartHeaderController chartHeaderController;
+    private QueryEditorPort chartHeaderController;
 
     @FXML
     private CheckBox cbAlignYAxis;
@@ -610,7 +610,7 @@ public class MetricViewController implements Initializable {
         yAxis.setLabel(chartHeaderController.getDefinedFilterParameters().getRawQuery());
 
         // wire this controller and the one of the filter header panel using an own
-        // ChartHeaderController.ActionCallbacks implementation that will set to the foreign controller
+        // Bind query-editor actions through its component port.
         chartHeaderController.initButtonHandler(new HeaderButtonActions());
 
         // create the default line chart and add it to the view container
@@ -974,7 +974,7 @@ public class MetricViewController implements Initializable {
     /**
      * Handler for the chart filter header panel
      */
-    private class HeaderButtonActions extends ChartHeaderController.ActionCallbacks {
+    private class HeaderButtonActions extends QueryEditorPort.Actions {
 
         /**
          * Creates the Metrics for the Graph.

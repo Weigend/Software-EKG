@@ -79,7 +79,7 @@ import static javafx.collections.FXCollections.observableList;
  *
  * @since 20.01.2017
  */
-public class ChartHeaderController implements Initializable {
+public class ChartHeaderController implements Initializable, QueryEditorPort {
 
     private static final int NUMBER_DUMMY_LOADING_ITEMS = 4;
 
@@ -93,7 +93,7 @@ public class ChartHeaderController implements Initializable {
     /**
      * Default callback for handling actions
      */
-    private ActionCallbacks actions = new ActionCallbacks();
+    private QueryEditorPort.Actions actions = new QueryEditorPort.Actions();
 
     /* ------------------ generic filter (I) ------------------ */
 
@@ -257,7 +257,7 @@ public class ChartHeaderController implements Initializable {
      * Initialize the Button handler
      * @param actions actions
      */
-    public void initButtonHandler(ActionCallbacks actions) {
+    public void initButtonHandler(QueryEditorPort.Actions actions) {
         this.actions = actions;
         btBookmark.setOnAction(e -> actions.createBookmark());
         btRefreshGraph.setOnAction(e -> actions.updateMetricsGraph());
@@ -809,7 +809,8 @@ public class ChartHeaderController implements Initializable {
      * Callback for handling actions
      */
     @SuppressWarnings("all")
-    public static class ActionCallbacks {
+    @Deprecated(forRemoval = false)
+    public static class ActionCallbacks extends QueryEditorPort.Actions {
         /**
          * Handles the button clicked event on the addToGraphButton
          */

@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @since 27.08.2018
  */
-public class StackedChartLegend extends BorderPane {
+public class StackedChartLegend extends BorderPane implements ChartLegendPort {
 
     private static final String CHART_LEGEND_STYLESHEET = "/io/softwareecg/awb/uitoolkit/chart/StackedChartLegendStyle.css";
 
