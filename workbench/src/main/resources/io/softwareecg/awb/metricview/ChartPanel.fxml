@@ -20,7 +20,7 @@
       controls to define the post computing behavior.
     -->
     <top>
-        <fx:include fx:id="chartHeader" source="../filterheader/ChartHeader.fxml"/>
+        <fx:include fx:id="chartHeader" source="queryeditor/ChartHeader.fxml"/>
     </top>
 
     <!-- ================================================ chart ================================================== -->
