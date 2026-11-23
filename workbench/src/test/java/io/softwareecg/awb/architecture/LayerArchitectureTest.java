@@ -30,7 +30,6 @@ public class LayerArchitectureTest {
     static final ArchRule domain_and_service_code_must_not_depend_on_javafx =
             noClasses().that().resideInAnyPackage(
                             "io.softwareecg.awb.datasource.model..",
-                            "io.softwareecg.awb.investigation.model..",
                             "io.softwareecg.awb.metadata.model..",
                             "io.softwareecg.awb.projectcontext.model..",
                             "io.softwareecg.awb.repository.model..",
@@ -38,7 +37,7 @@ public class LayerArchitectureTest {
                             "io.softwareecg.awb.repository.spi..",
                             "io.softwareecg.awb.timeseries..",
                             "io.softwareecg.awb..port..",
-                            "io.softwareecg.awb.queryengine..")
+                            "io.softwareecg.awb.query..")
                     .should().dependOnClassesThat().resideInAnyPackage("javafx..")
                     .because("BL darf nicht auf JavaFX hoeren - JavaFX nur in UI-Paketen");
 
@@ -55,7 +54,7 @@ public class LayerArchitectureTest {
                             "io.softwareecg.awb.application.api..",
                             "io.softwareecg.awb.repository.api..",
                             "io.softwareecg.awb.projectcontext.api..",
-                            "io.softwareecg.awb.investigation.api..",
+                            "io.softwareecg.awb.query.api..",
                             "io.softwareecg.awb.repository.port..")
                     .should().dependOnClassesThat().resideInAnyPackage(
                             "io.softwareecg.awb..bl..",

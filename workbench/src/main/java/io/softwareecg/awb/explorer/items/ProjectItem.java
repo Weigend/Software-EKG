@@ -22,7 +22,7 @@ import io.softwareecg.awb.projectcontext.api.ProjectViewFlavorChangedEvent;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.port.TimeSeriesRepository;
-import io.softwareecg.awb.repository.port.query.delete.DeleteParams;
+import io.softwareecg.awb.repository.port.DeleteParams;
 import io.softwareecg.awb.repository.schema.DocumentType;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;

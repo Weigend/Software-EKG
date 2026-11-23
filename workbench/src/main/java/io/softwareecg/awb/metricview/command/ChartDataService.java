@@ -1,7 +1,7 @@
 package io.softwareecg.awb.metricview.command;
 
-import io.softwareecg.awb.investigation.model.ComputationSpec;
-import io.softwareecg.awb.investigation.model.QuerySpec;
+import io.softwareecg.awb.query.model.ComputationSpec;
+import io.softwareecg.awb.query.model.QuerySpec;
 import javafx.concurrent.Service;
 
 /**

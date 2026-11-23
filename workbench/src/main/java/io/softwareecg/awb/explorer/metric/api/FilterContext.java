@@ -1,6 +1,6 @@
 package io.softwareecg.awb.explorer.metric.api;
 
-import io.softwareecg.awb.investigation.model.QuerySpec;
+import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
 
 import java.util.Objects;

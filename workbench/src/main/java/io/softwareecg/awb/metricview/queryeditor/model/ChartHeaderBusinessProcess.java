@@ -12,7 +12,7 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.metricview.queryeditor.model;
 
-import io.softwareecg.awb.queryengine.MetricDataAccessService;
+import io.softwareecg.awb.query.MetricDataAccessService;
 import io.softwareecg.awb.timeseries.dimension.Measurement;
 import io.softwareecg.awb.timeseries.dimension.Metric;
 import io.softwareecg.awb.timeseries.dimension.MetricGroup;
@@ -23,10 +23,10 @@ import io.softwareecg.awb.timeseries.dimension.logical.Namespace;
 import io.softwareecg.awb.timeseries.dimension.logical.Pod;
 import io.softwareecg.awb.timeseries.dimension.physical.Host;
 import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
-import io.softwareecg.awb.queryengine.model.MetricQuery;
-import io.softwareecg.awb.investigation.model.QuerySpec;
+import io.softwareecg.awb.query.model.MetricQuery;
+import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.repository.port.query.facet.FacetParams;
+import io.softwareecg.awb.repository.port.search.facet.FacetParams;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;

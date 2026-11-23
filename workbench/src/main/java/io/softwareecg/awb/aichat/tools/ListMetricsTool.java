@@ -4,15 +4,15 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.softwareecg.awb.queryengine.MetricDataAccessService;
+import io.softwareecg.awb.query.MetricDataAccessService;
 import io.softwareecg.awb.timeseries.dimension.logical.Container;
 import io.softwareecg.awb.timeseries.dimension.logical.Namespace;
 import io.softwareecg.awb.timeseries.dimension.logical.Pod;
 import io.softwareecg.awb.timeseries.dimension.logical.Service;
 import io.softwareecg.awb.timeseries.dimension.physical.Host;
 import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
-import io.softwareecg.awb.queryengine.model.MetricQuery;
-import io.softwareecg.awb.investigation.model.QuerySpec;
+import io.softwareecg.awb.query.model.MetricQuery;
+import io.softwareecg.awb.query.model.QuerySpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -12,10 +12,8 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.bookmark.model;
 
-import io.softwareecg.awb.bookmark.model.Bookmark;
-import io.softwareecg.awb.bookmark.model.MetricQueryBookmark;
 import io.softwareecg.awb.timeseries.dimension.Metric;
-import io.softwareecg.awb.investigation.model.QuerySpec;
+import io.softwareecg.awb.query.model.QuerySpec;
 import org.junit.Test;
 
 import java.time.Instant;

@@ -1,13 +1,12 @@
 package io.softwareecg.awb.repository.port;
 
-import io.softwareecg.awb.repository.port.query.delete.DeleteParams;
-import io.softwareecg.awb.repository.port.query.expr.Expression;
-import io.softwareecg.awb.repository.port.query.facet.FacetParams;
-import io.softwareecg.awb.repository.port.query.facet.FacetResult;
-import io.softwareecg.awb.repository.port.query.search.ExportParams;
-import io.softwareecg.awb.repository.port.query.search.SearchParams;
-import io.softwareecg.awb.repository.port.query.search.SearchResult;
-import io.softwareecg.awb.repository.port.query.search.SortField;
+import io.softwareecg.awb.repository.port.search.expr.Expression;
+import io.softwareecg.awb.repository.port.search.facet.FacetParams;
+import io.softwareecg.awb.repository.port.search.facet.FacetResult;
+import io.softwareecg.awb.repository.port.search.ExportParams;
+import io.softwareecg.awb.repository.port.search.SearchParams;
+import io.softwareecg.awb.repository.port.search.SearchResult;
+import io.softwareecg.awb.repository.port.search.SortField;
 import io.softwareecg.awb.repository.schema.EkgSchemaField;
 import io.softwareecg.awb.repository.schema.Field;
 

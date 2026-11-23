@@ -17,7 +17,7 @@ import io.softwareecg.awb.datasource.adapter.ssh.TopMetric;
 import io.softwareecg.awb.datasource.adapter.windows.WindowsDiscovery;
 import io.softwareecg.awb.datasource.adapter.windows.WindowsMetric;
 import io.softwareecg.awb.datasource.adapter.windows.WindowsPlan;
-import io.softwareecg.awb.investigation.api.OpenInvestigationCommand;
+import io.softwareecg.awb.query.api.OpenInvestigationCommand;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.events.ProjectDataChangedEvent;

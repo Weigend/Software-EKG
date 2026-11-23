@@ -1,7 +1,7 @@
 package io.softwareecg.awb.repository.adapter.clickhouse;
 
 import io.softwareecg.awb.repository.port.TimeSeriesAdmin;
-import io.softwareecg.awb.repository.port.query.admin.CollectionProperties;
+import io.softwareecg.awb.repository.port.CollectionProperties;
 import io.softwareecg.awb.repository.port.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

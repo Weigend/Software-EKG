@@ -1,6 +1,5 @@
 package io.softwareecg.awb.repository.port;
 
-import io.softwareecg.awb.repository.port.query.admin.CollectionProperties;
 
 import java.util.Collection;
 

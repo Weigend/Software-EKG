@@ -13,8 +13,8 @@
 package io.softwareecg.awb.explorer.metric.items.series;
 
 import io.softwareecg.awb.uitoolkit.events.OpeningMode;
-import io.softwareecg.awb.investigation.api.OpenInvestigationCommand;
-import io.softwareecg.awb.investigation.model.QuerySpec;
+import io.softwareecg.awb.query.api.OpenInvestigationCommand;
+import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.explorer.metric.api.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.api.FilterContext;
 import io.softwareecg.awb.repository.api.EkgRepository;

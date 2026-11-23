@@ -2,10 +2,10 @@ package io.softwareecg.awb.repository.service;
 
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.port.TimeSeriesRepository;
-import io.softwareecg.awb.repository.port.query.expr.Expression;
-import io.softwareecg.awb.repository.port.query.search.SearchParams;
-import io.softwareecg.awb.repository.port.query.search.SearchResult;
-import io.softwareecg.awb.repository.port.query.search.SortField;
+import io.softwareecg.awb.repository.port.search.expr.Expression;
+import io.softwareecg.awb.repository.port.search.SearchParams;
+import io.softwareecg.awb.repository.port.search.SearchResult;
+import io.softwareecg.awb.repository.port.search.SortField;
 import io.softwareecg.awb.repository.schema.DocumentType;
 import io.softwareecg.awb.repository.schema.EkgSchemaField;
 import io.softwareecg.awb.repository.model.BinaryTimeSeries;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static io.softwareecg.awb.repository.port.query.expr.ExprFactory.exactFilter;
+import static io.softwareecg.awb.repository.port.search.expr.ExprFactory.exactFilter;
 import static io.softwareecg.awb.repository.schema.EkgSchemaField.*;
 
 /**

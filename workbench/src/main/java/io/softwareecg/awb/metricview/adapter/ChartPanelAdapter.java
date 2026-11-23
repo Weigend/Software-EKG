@@ -4,7 +4,7 @@ import io.softwareecg.awb.uitoolkit.events.OpeningMode;
 import io.softwareecg.awb.uitoolkit.view.EkgView;
 import io.softwareecg.awb.uitoolkit.view.ViewMapper;
 import io.softwareecg.awb.bookmark.model.MetricQueryBookmark;
-import io.softwareecg.awb.investigation.api.OpenInvestigationCommand;
+import io.softwareecg.awb.query.api.OpenInvestigationCommand;
 import io.softwareecg.awb.bookmark.ui.BookmarkEvent;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.metricview.ChartAnalyticsPanel;

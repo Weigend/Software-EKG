@@ -7,14 +7,14 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import io.softwareecg.awb.repository.port.query.expr.AndExpression;
-import io.softwareecg.awb.repository.port.query.expr.ExactFilterExpression;
-import io.softwareecg.awb.repository.port.query.expr.Expression;
-import io.softwareecg.awb.repository.port.query.expr.FullTextFilterExpression;
-import io.softwareecg.awb.repository.port.query.expr.NotExpression;
-import io.softwareecg.awb.repository.port.query.expr.OrExpression;
-import io.softwareecg.awb.repository.port.query.expr.RangeFilterExpression;
-import io.softwareecg.awb.repository.port.query.expr.WildcardFilterExpression;
+import io.softwareecg.awb.repository.port.search.expr.AndExpression;
+import io.softwareecg.awb.repository.port.search.expr.ExactFilterExpression;
+import io.softwareecg.awb.repository.port.search.expr.Expression;
+import io.softwareecg.awb.repository.port.search.expr.FullTextFilterExpression;
+import io.softwareecg.awb.repository.port.search.expr.NotExpression;
+import io.softwareecg.awb.repository.port.search.expr.OrExpression;
+import io.softwareecg.awb.repository.port.search.expr.RangeFilterExpression;
+import io.softwareecg.awb.repository.port.search.expr.WildcardFilterExpression;
 /**
  * Renders {@link Expression}s into Solr filter query Strings.
  *

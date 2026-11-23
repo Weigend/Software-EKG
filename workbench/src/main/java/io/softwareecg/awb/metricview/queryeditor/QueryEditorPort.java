@@ -1,10 +1,10 @@
 package io.softwareecg.awb.metricview.queryeditor;
 
-import io.softwareecg.awb.investigation.model.ComputationSpec;
-import io.softwareecg.awb.investigation.model.QuerySpec;
-import io.softwareecg.awb.investigation.model.SeriesCombineMode;
-import io.softwareecg.awb.investigation.model.SeriesSmoothingGranularity;
-import io.softwareecg.awb.investigation.model.SeriesSmoothingType;
+import io.softwareecg.awb.query.model.ComputationSpec;
+import io.softwareecg.awb.query.model.QuerySpec;
+import io.softwareecg.awb.query.model.SeriesCombineMode;
+import io.softwareecg.awb.query.model.SeriesSmoothingGranularity;
+import io.softwareecg.awb.query.model.SeriesSmoothingType;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.uitoolkit.events.OpeningMode;
 import javafx.stage.Window;

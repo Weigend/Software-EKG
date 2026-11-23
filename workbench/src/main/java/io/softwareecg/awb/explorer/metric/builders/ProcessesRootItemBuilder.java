@@ -2,10 +2,10 @@ package io.softwareecg.awb.explorer.metric.builders;
 
 import io.softwareecg.awb.uitoolkit.tree.api.ProgressNotifier;
 import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
-import io.softwareecg.awb.queryengine.MetricDataAccessService;
+import io.softwareecg.awb.query.MetricDataAccessService;
 import io.softwareecg.awb.timeseries.dimension.Process;
 import io.softwareecg.awb.timeseries.dimension.ProcessGroup;
-import io.softwareecg.awb.queryengine.model.MetricQuery;
+import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.explorer.metric.api.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.series.ProcessesRootItem;
 

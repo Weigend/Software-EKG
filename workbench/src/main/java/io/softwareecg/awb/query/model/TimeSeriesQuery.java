@@ -1,0 +1,51 @@
+package io.softwareecg.awb.query.model;
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * todo enter comment here
+ *
+ * @since 02.06.2018
+ */
+public class TimeSeriesQuery extends MetricQuery {
+
+    public static final String INITIAL_CURSOR_ID = "*";
+
+    private final List<SortClause> sortClauses = new ArrayList<>();
+
+    private final int maxMetricLimit;
+
+    private String cursorId = null;
+
+    public TimeSeriesQuery(QuerySpec metricQueryParams, int maxMetricLimit) {
+        super(metricQueryParams);
+        this.maxMetricLimit = maxMetricLimit;
+    }
+
+    public TimeSeriesQuery addSortClause(SortClause sortClause) {
+        sortClauses.add(sortClause);
+        return this;
+    }
+
+    public QuerySpec getQueryParams() {
+        return super.getQueryParams();
+    }
+
+    public void setCursorId(String cursorId) {
+        this.cursorId = cursorId;
+    }
+
+    public String getCursorId() {
+        return cursorId;
+    }
+
+    public int getMaxMetricLimit() {
+        return maxMetricLimit;
+    }
+
+    public List<SortClause> getSortClauses() {
+        return sortClauses;
+    }
+}

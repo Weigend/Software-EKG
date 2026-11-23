@@ -1,10 +1,10 @@
 package io.softwareecg.awb.metricview;
 
 import io.softwareecg.awb.uitoolkit.chart.ZoomableStackedChart;
-import io.softwareecg.awb.investigation.model.ComputationSpec;
-import io.softwareecg.awb.investigation.model.QuerySpec;
-import io.softwareecg.awb.queryengine.ComputedTimeSeriesResponse;
-import io.softwareecg.awb.queryengine.MetricQueryService;
+import io.softwareecg.awb.query.model.ComputationSpec;
+import io.softwareecg.awb.query.model.QuerySpec;
+import io.softwareecg.awb.query.ComputedTimeSeriesResponse;
+import io.softwareecg.awb.query.MetricQueryService;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.runtime.events.AwbErrorEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
