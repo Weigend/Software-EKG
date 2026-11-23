@@ -8,13 +8,13 @@ For the Software-EKG workbench, we tried a different route.
 
 We began with the product as a user experiences it: the handbook, screenshots, dialogs, workflows, and extension scenarios. From that evidence, we developed a hypothesis about the internal components the application should have. Then we made that hypothesis executable as a synthetic Java JAR and opened it in Structure202 (S202).
 
-Only after the target structure was visible, discussable, and reasonably stable did we start moving production code.
+Only after the target structure was visible, discussable, and reasonably stable did we start moving production code. We have since completed that package-level refactoring and built the real application JAR from the target structure.
 
 This changed the role of AI in the project. The AI was not asked to “clean up the architecture.” It helped extract a model, generate a complete refactoring map, create an executable skeleton, and revise hypotheses. S202 provided the visual feedback that allowed a human architect to evaluate the result.
 
 The combination was much more effective than either tool alone.
 
-> **Image for the Medium version:** The current Software-EKG workbench in S202, before the refactoring. Caption: “The implementation is buildable and functional, but its historical packages dominate the architectural picture.”
+> **Image for the Medium version:** The starting Software-EKG workbench in S202, before the refactoring. Caption: “The implementation is buildable and functional, but its historical packages dominate the architectural picture.”
 
 ## Starting with the handbook instead of the package tree
 
@@ -115,7 +115,7 @@ The visualization did not replace architectural judgment. It made that judgment 
 
 A project is the data envelope of an investigation. A repository is a local or remote data store. A project can refer to a repository, but repository technology does not belong inside project management.
 
-The target gained separate `projectcontext`, `projectmanagement`, and `repository` responsibilities. Concrete repository implementations moved into explicit adapter packages.
+The target gained separate `projectcontext` and `repository` responsibilities. Project-management dialogs became UI within `projectcontext`, while concrete repository technologies moved into explicit `repository.adapter` packages. Their time-series clients live separately below `timeseries.adapter`.
 
 ### The repository write service is a time-series port
 
@@ -127,7 +127,7 @@ The picture showed the better ownership: writing time-series data is a port of t
 
 Types such as `DiInjection`, `BeanProvider`, `ServiceDiscovery`, module contracts, and generic events were used across the application. Keeping them under `application` made “application” both a low-level library and the top-level composition root.
 
-They moved to `runtime`. The composition root became a separate `bootstrap` concern in the skeleton.
+They moved to `runtime`. Application startup and composition remained at the top under `application`, while reusable dependency-injection, discovery, event, and module infrastructure settled below it in `runtime`.
 
 ### Split classes require explicit semantics
 
@@ -135,7 +135,13 @@ Three historical classes carried multiple responsibilities. We marked them as `[
 
 That introduced a generator problem: every user of the old class initially received dependencies on every split result. One split produced thirty artificial dependencies into `metricview` from five components.
 
-The generator now directs existing users to the primary split result only. The remaining responsibilities will be decided while refactoring real behavior. A skeleton can identify that a class must split, but it cannot reliably allocate behavior that has not yet been separated in production code.
+The generator was changed to direct existing users to the primary split result only. During the production refactoring, the behavior was then allocated explicitly:
+
+- `QueryFilterParams` became the investigation-owned `QuerySpec`, with editable query state represented by `metricview.queryeditor.QueryDraft`;
+- `MetricQueryServiceImpl` became `queryengine.QueryRunner`, while combination, smoothing, simplification, and related transformations moved into `queryengine.pipeline.SeriesTransformPipeline`;
+- `ChartPanelController` became `metricview.MetricViewController`, with background investigation state in `investigation.InvestigationStore` and chart-layer composition in `metricview.LayerComposer`.
+
+This was an important boundary of the method: the skeleton identified that classes had to split, but allocating real behavior still required reading and changing the production implementation.
 
 ## AI was a model builder, not the architect of record
 
@@ -177,11 +183,19 @@ We created a Git branch from a clean baseline and began at the bottom of the dep
 - generic events to `runtime.events`;
 - module contracts to `runtime.module`.
 
-All imports and tests were updated mechanically. The complete workbench compiled: 592 Java sources. The test run completed with 306 workbench tests passing and five regularly skipped, plus the required collector tests.
+All imports and tests were updated mechanically. That intermediate workbench compiled with its 592 original Java sources, and the test run completed with 306 workbench tests passing and five regularly skipped, plus the required collector tests.
 
-When the real JAR was loaded into S202, the impact of this small first step was already visible. `runtime` appeared at level zero. The composition root stayed at the top. Historical areas such as `sdk`, `common`, and `da` remained, but they were now obvious candidates for the next iterations.
+When the real JAR was loaded into S202, the impact of this small first step was already visible. `runtime` appeared at level zero. The composition root stayed at the top. Historical areas such as `sdk`, `common`, and `da` remained, but they were now obvious candidates for the next iteration.
 
 > **Image for the Medium version:** The real application after the first runtime refactoring. Caption: “A small, verified code change immediately changes the architectural picture. Runtime services settle at the bottom; the composition root remains at the top.”
+
+We then applied the complete mapping to production code rather than stopping at the convincing skeleton. The final migration changed or moved 906 files. It removed all production classes from the historical `sdk`, `metricanalyzer`, `da`, `common`, and old `project` packages, migrated FXML, CSS, images, ServiceLoader registrations, distribution scripts, tests, and test data, and implemented the three planned splits as real collaborators.
+
+The resulting workbench contains 593 Java source files. The apparent increase from the 592-file baseline is deliberate: three split results were added while duplicate `package-info.java` files were consolidated. Excluding the remaining 11 `package-info.java` files, the application now contains the expected 582 production types.
+
+A clean reactor test run compiled the refactored application together with the required collector modules. All 306 workbench tests passed, with five regularly skipped. The final application JAR contained no class in any of the retired production packages. Loading that real JAR into S202 produced the architecture we had first explored as a hypothesis—not an identical picture, because real dependencies are richer, but the same understandable component vocabulary and direction.
+
+> **Image for the Medium version:** The fully refactored production JAR in S202. Caption: “The executable hypothesis has become the real package structure. Remaining dependency violations are now visible as concrete follow-up work instead of being hidden by historical package names.”
 
 ## A repeatable method for large refactorings
 
@@ -202,12 +216,12 @@ The unusual part was not using AI to rename Java packages. Coding agents are alr
 
 The unusual part was building a visual, executable target architecture before touching production code—and deriving that architecture from product evidence rather than from the current package tree.
 
-The skeleton gave the AI something concrete to maintain. S202 gave the human something concrete to judge. Git, compilation, and tests kept the transition honest.
+The skeleton gave the AI something concrete to maintain. S202 gave the human something concrete to judge. Git, compilation, and tests kept the transition honest. The final comparison of the production JAR with the skeleton also prevented the model from becoming a design artifact that was never implemented.
 
 That combination reduced a large refactoring from one intimidating rewrite to a sequence of visible architectural moves.
 
 We did not ask AI to decide what the system means.
 
-We used AI to make our hypotheses complete and executable, and we used visualization to decide whether those hypotheses made sense.
+We used AI to make our hypotheses complete and executable, used visualization to decide whether those hypotheses made sense, and then used compilation and tests to carry the accepted model into production code.
 
-That is a promising pattern for refactoring large systems: do not begin by moving code. First build a model you can see, challenge, compile, and eventually replace with the real thing.
+That is a promising pattern for refactoring large systems: do not begin by moving code. First build a model you can see, challenge, and compile—then replace the hypothesis with a tested real artifact and compare the two.
