@@ -550,7 +550,9 @@ public class NewAnalysisDialog extends Dialog<Void> {
         content.setAlignment(Pos.TOP_LEFT);
 
         ToggleButton tile = new ToggleButton();
-        tile.setId("source-" + topic.name() + "-" + option.source().id());
+        // Keep the established JavaFX/CSS identity while the provider contract uses stable,
+        // lower-case IDs such as "ssh-top". New IDs are normalized by the same rule.
+        tile.setId("source-" + topic.name() + "-" + sourceControlId(option.source().id()));
         tile.getStyleClass().setAll("topic-tile");
         tile.setUserData(option.source());
 
@@ -1169,6 +1171,10 @@ public class NewAnalysisDialog extends Dialog<Void> {
         Thread thread = new Thread(work, name);
         thread.setDaemon(true);
         thread.start();
+    }
+
+    private static String sourceControlId(String sourceId) {
+        return sourceId.replace('-', '_').toUpperCase(Locale.ROOT);
     }
 
     /** A field keeps its width; what stands next to it gets shortened instead. */
