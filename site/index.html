@@ -7,13 +7,13 @@
        German and Portuguese (site.js swaps them). Without JavaScript the page
        stays English and completely readable. -->
   <title data-de="Software-EKG — Sehen, welches System aus dem Takt gerät. Und seit wann." data-pt="Software-EKG — Veja qual sistema sai do ritmo. E desde quando.">Software-EKG — See which system falls out of rhythm. And since when.</title>
-  <meta name="description" content="Software-EKG is a diagnostic recorder and workbench for the comparative long-term analysis of software systems: many time series in one picture, analysed locally, with a built-in AI assistant. Free and open source." data-content-de="Das Software-EKG ist ein diagnostischer Rekorder und eine Workbench für die vergleichende Langzeitanalyse von Softwaresystemen: viele Zeitreihen in einem Bild, lokal ausgewertet, mit eingebautem AI Assistant. Kostenlos und Open Source." data-content-pt="O Software-EKG é um registrador de diagnóstico e uma workbench para a análise comparativa de longo prazo de sistemas de software: muitas séries temporais em uma única imagem, analisadas localmente, com assistente de IA integrado. Gratuito e open source.">
+  <meta name="description" content="Software-EKG is a workbench for comparing historical system data. It shows what differs between systems, time periods and releases—even when no threshold has been crossed." data-content-de="Das Software-EKG ist eine Workbench für die vergleichende Analyse historischer Systemdaten. Sie zeigt, was sich zwischen Systemen, Zeiträumen und Releases unterscheidet – auch wenn kein Grenzwert verletzt wurde." data-content-pt="O Software-EKG é uma workbench para a análise comparativa de dados históricos de sistemas. Ele mostra o que difere entre sistemas, períodos e releases, mesmo quando nenhum limite foi ultrapassado.">
   <meta name="author" content="Johannes Weigend">
   <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#05131a">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Software-EKG — a diagnostic recorder for the software emergency doctor">
-  <meta property="og:description" content="Put the curves of many systems on top of each other and see which one falls out of rhythm, and when. Local, open source, with a built-in AI assistant.">
+  <meta property="og:title" content="Software-EKG — compare historical system data">
+  <meta property="og:description" content="See what differs between systems, time periods and releases—even when no monitoring threshold has been crossed.">
   <meta property="og:image" content="https://www.software-ekg.de/img/fullscreen.png">
   <meta property="og:url" content="https://www.software-ekg.de/">
   <meta name="twitter:card" content="summary_large_image">
@@ -32,7 +32,7 @@
     "name": "Software-EKG",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Linux, macOS, Windows",
-    "description": "A diagnostic recorder and workbench for the comparative long-term analysis of software systems.",
+    "description": "A workbench for the comparative analysis of historical system data across systems, time periods and releases.",
     "url": "https://www.software-ekg.de/",
     "downloadUrl": "https://github.com/Weigend/Software-EKG/releases/latest",
     "license": "https://www.apache.org/licenses/LICENSE-2.0",
@@ -51,7 +51,7 @@
       <span>Software-EKG</span>
     </a>
     <nav class="nav-links" aria-label="Sections">
-      <a href="#why" class="nav-link" data-de="Wozu" data-pt="Para quê">Why</a>
+      <a href="#position" class="nav-link" data-de="Abgrenzung" data-pt="Diferença">Position</a>
       <a href="#example" class="nav-link" data-de="Beispiel" data-pt="Exemplo">Example</a>
       <a href="#ai" class="nav-link" data-de="AI" data-pt="IA">AI</a>
       <a href="#workbench" class="nav-link">Workbench</a>
@@ -80,8 +80,8 @@
       <span data-de="Open Source · Apache 2.0 · Linux, macOS und Windows" data-pt="Open Source · Apache 2.0 · Linux, macOS e Windows">Open source · Apache 2.0 · Linux, macOS and Windows</span>
     </div>
     <h1 data-de="Sehen, welches System <em>aus dem Takt</em> gerät.<br>Und seit wann." data-pt="Veja qual sistema sai <em>do ritmo</em>.<br>E desde quando.">See which system falls <em>out of rhythm</em>.<br>And since when.</h1>
-    <p class="hero-sub" data-de="Das Software-EKG ist ein diagnostischer Rekorder für den <strong>Software-Notarzt</strong>. Es legt die Kurven vieler Systeme übereinander, über Tage oder Monate, bis der entscheidende Unterschied sichtbar wird: lokal, abseits der Produktion, mit einem AI Assistant, der die Hypothese an den Daten prüft." data-pt="O Software-EKG é um registrador de diagnóstico para o <strong>médico de emergência do software</strong>. Ele sobrepõe as curvas de muitos sistemas, ao longo de dias ou meses, até que a diferença decisiva fique visível: localmente, longe da produção, com um assistente de IA que confere a hipótese com os dados.">
-      Software-EKG is a diagnostic recorder for the <strong>software emergency doctor</strong>. It puts the curves of many systems on top of each other, over days or months, until the decisive difference is visible: locally, away from production, with an AI assistant that checks the hypothesis against the data.
+    <p class="hero-sub" data-de="<strong>Das Software-EKG ist eine Workbench für die nachträgliche Performance- und Fehleranalyse verteilter Systeme.</strong> Sie vergleicht viele Zeitreihen über Tage, Wochen oder Releases. Der AI Assistant ist dabei Sparringspartner: Er hilft, Hypothesen zu Auffälligkeiten zu bilden und an den Daten zu prüfen." data-pt="<strong>O Software-EKG é uma workbench para a análise posterior de performance e falhas em sistemas distribuídos.</strong> Ele compara muitas séries temporais ao longo de dias, semanas ou releases. O assistente de IA é um parceiro de sparring: ajuda a formular hipóteses sobre o que chama atenção e a verificá-las nos dados.">
+      <strong>Software-EKG is a workbench for retrospective performance and failure analysis of distributed systems.</strong> It compares many time series across days, weeks or releases. The AI Assistant is a sparring partner: it helps form hypotheses about what stands out and verify them against the data.
     </p>
     <div class="hero-ctas">
       <a href="#download" class="btn-primary">
@@ -122,24 +122,56 @@
   </div>
 </section>
 
-<!-- KEY FIGURES -->
+<!-- POSITIONING -->
+<section id="position" class="positioning">
+  <div class="container">
+    <div class="positioning-intro reveal">
+      <div class="section-label" data-de="Ergänzt Monitoring, statt es zu ersetzen" data-pt="Complementa o monitoramento em vez de substituí-lo">Complements monitoring instead of replacing it</div>
+      <h2 class="section-title" data-de="Prometheus sammelt. Grafana überwacht.<br>Software-EKG vergleicht und untersucht." data-pt="Prometheus coleta. Grafana monitora.<br>Software-EKG compara e investiga.">Prometheus collects. Grafana monitors.<br>Software-EKG compares and investigates.</h2>
+      <p class="section-sub" data-de="Monitoring beantwortet laufend, ob bekannte Zustände gesund sind. Das Software-EKG hilft einem Analysten herauszufinden, was in diesem Fall anders ist – zwischen Systemen, Zeiträumen und Releases, auch wenn kein Alarm ausgelöst wurde." data-pt="O monitoramento responde continuamente se condições conhecidas estão saudáveis. O Software-EKG ajuda um analista a descobrir o que é diferente neste caso — entre sistemas, períodos e releases, mesmo quando nenhum alerta foi disparado.">Monitoring continuously answers whether known conditions are healthy. Software-EKG helps an analyst find what is different in this case—between systems, time periods and releases, even when no alert has fired.</p>
+    </div>
+    <div class="position-grid reveal">
+      <article class="position-card monitoring-card">
+        <span class="position-kicker" data-de="Monitoring" data-pt="Monitoramento">Monitoring</span>
+        <h3 data-de="Ist das System gerade gesund?" data-pt="O sistema está saudável agora?">Is the system healthy right now?</h3>
+        <ul>
+          <li data-de="Kontinuierlicher Betrieb" data-pt="Operação contínua">Continuous operation</li>
+          <li data-de="Bekannte Signale und Grenzwerte" data-pt="Sinais e limites conhecidos">Known signals and thresholds</li>
+          <li data-de="Dashboards und Alarme" data-pt="Dashboards e alertas">Dashboards and alerts</li>
+        </ul>
+      </article>
+      <article class="position-card ekg-card">
+        <span class="position-kicker">Software-EKG</span>
+        <h3 data-de="Was ist anders – wo und seit wann?" data-pt="O que é diferente — onde e desde quando?">What is different—where and since when?</h3>
+        <ul>
+          <li data-de="Konkrete, explorative Untersuchung" data-pt="Investigação concreta e exploratória">A concrete, exploratory investigation</li>
+          <li data-de="Zunächst unbekannte Muster" data-pt="Padrões inicialmente desconhecidos">Initially unknown patterns</li>
+          <li data-de="Vergleich vieler Systeme über lange Zeiträume" data-pt="Comparação de muitos sistemas por longos períodos">Comparison of many systems over long periods</li>
+        </ul>
+      </article>
+    </div>
+    <p class="position-note reveal" data-de="Kein Dashboard. Kein Alerting. Kein Ersatz für Prometheus oder Grafana. Ein Instrument für Performance-Analysten, Architekten und Experten – mit AI-Unterstützung für Einsteiger und mit Verifikation, die Fehldiagnosen vermeidet." data-pt="Não é dashboard. Não é alerta. Não substitui Prometheus ou Grafana. É um instrumento para analistas de performance, arquitetos e especialistas — com suporte de IA para iniciantes e com verificação que evita diagnósticos errados.">Not a dashboard. Not alerting. Not a replacement for Prometheus or Grafana. An instrument for performance analysts, architects and experts—with AI support for rookies and with verification that avoids misdiagnoses.</p>
+  </div>
+</section>
+
+<!-- CORE DIFFERENCES -->
 <div class="stats-bar">
   <div class="stats-grid">
     <div class="stat">
-      <div class="stat-num" data-de="15+ Jahre" data-pt="15+ anos">15+ years</div>
-      <div class="stat-label" data-de="von der ersten Idee bis Version&amp;nbsp;7.x" data-pt="da primeira ideia à versão&amp;nbsp;7.x">from the first idea to version&nbsp;7.x</div>
+      <div class="stat-num" data-de="Vergleichen" data-pt="Comparar">Compare</div>
+      <div class="stat-label" data-de="statt ein weiteres Dashboard zu bauen" data-pt="em vez de criar mais um dashboard">instead of building another dashboard</div>
     </div>
     <div class="stat">
-      <div class="stat-num" data-de="Milliarden" data-pt="Bilhões">Billions</div>
-      <div class="stat-label" data-de="Datenpunkte, falls nötig" data-pt="de pontos de dados, se necessário">of data points, if needed</div>
+      <div class="stat-num" data-de="Langfristig" data-pt="Longo prazo">Long-term</div>
+      <div class="stat-label" data-de="Tage, Wochen und Releases statt Momentaufnahme" data-pt="dias, semanas e releases em vez de um instantâneo">days, weeks and releases instead of a snapshot</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-de="Viele Systeme" data-pt="Muitos sistemas">Many systems</div>
+      <div class="stat-label" data-de="gemeinsam in einem Bild statt einzeln betrachtet" data-pt="juntos em uma imagem, não isoladamente">together in one picture instead of one by one</div>
     </div>
     <div class="stat">
       <div class="stat-num" data-de="Lokal" data-pt="Local">Local</div>
-      <div class="stat-label" data-de="Ausgewertet wird auf dem eigenen Rechner, nicht in der Produktion" data-pt="A análise roda na sua máquina, não na produção">Analysis runs on your machine, not on production</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">Apache 2.0</div>
-      <div class="stat-label" data-de="Kostenlos und Open Source" data-pt="Gratuito e open source">Free and open source</div>
+      <div class="stat-label" data-de="analysieren, ohne die Produktion erneut abzufragen" data-pt="analisar sem consultar a produção novamente">analyse without querying production again</div>
     </div>
   </div>
 </div>
@@ -148,7 +180,7 @@
 <section id="why">
   <div class="container">
     <div class="section-header text-center reveal">
-      <div class="section-label" data-de="Die Fragen, um die es geht" data-pt="As perguntas em questão">The questions it is about</div>
+      <div class="section-label" data-de="Wenn ein Dashboard nicht die Frage kennt" data-pt="Quando um dashboard não conhece a pergunta">When a dashboard does not know the question</div>
       <h2 class="section-title" data-de="Muster, nach denen niemand gefragt hat" data-pt="Padrões sobre os quais ninguém perguntou">Patterns nobody asked about</h2>
       <p class="section-sub" data-de="Der Name ist wörtlich gemeint: Wie ein EKG die Signale des Herzens über die Zeit aufzeichnet, zeichnet das Software-EKG die Messwerte der Systeme auf, die zusammen ein verteiltes System bilden. Der Kern ist der Vergleich, und viele Muster liegen innerhalb aller Grenzwerte, bei denen ein Alarm auslösen würde." data-pt="O nome é literal: EKG é a sigla alemã para eletrocardiograma (ECG). Assim como um ECG registra os sinais do coração ao longo do tempo, o Software-EKG registra as medições dos sistemas que, juntos, formam um sistema distribuído. O núcleo é a comparação, e muitos padrões ficam dentro de todos os limites que disparariam um alerta.">The name is meant literally: EKG is the German abbreviation for an electrocardiogram (ECG). Just as an ECG records the signals of the heart over time, Software-EKG records the measurements of the systems that together form a distributed system. The core is comparison, and many patterns lie within every threshold that would trigger an alert.</p>
     </div>
@@ -170,7 +202,7 @@
         <p data-de="Warum zeigen zwei eigentlich gleiche Systeme unterschiedliche Verläufe?<span>Gleiche Software, gleiche Last, andere Kurve.</span>" data-pt="Por que dois sistemas que deveriam ser idênticos mostram curvas diferentes?<span>Mesmo software, mesma carga, outra curva.</span>">Why do two systems that should be identical show different curves?<span>Same software, same load, a different curve.</span></p>
       </div>
     </div>
-    <p class="after-grid reveal" data-de="Ein Werkzeug für Menschen, die Performance-Analyse als Handwerk betreiben: Software-Notarzt, Performance Engineer, Troubleshooter. <span>Es ist der erste Schritt einer Root-Cause-Analyse, nicht ihr Ende: Das EKG zeigt, seit wann, wo und im Vergleich womit etwas auffällig ist.</span>" data-pt="Uma ferramenta para quem pratica análise de performance como ofício: médico de emergência do software, engenheiro de performance, troubleshooter. <span>É o primeiro passo de uma análise de causa raiz, não o fim dela: o Software-EKG mostra desde quando, onde e em comparação com o quê algo chama atenção.</span>">A tool for people who practise performance analysis as a craft: the software emergency doctor, the performance engineer, the troubleshooter. <span>It is the first step of a root cause analysis, not the end of it: Software-EKG shows since when, where and compared with what something is conspicuous.</span></p>
+    <p class="after-grid reveal" data-de="Erfahrene Analysten erkennen solche Muster aus Übung. Für viele andere bleiben es zunächst nur Kurven. <span>Der AI Assistant ist der Sparringspartner, der bisher fehlte: Er hilft, Hypothesen zu bilden und an den Daten zu prüfen. Die Entscheidung bleibt beim Menschen.</span>" data-pt="Analistas experientes reconhecem esses padrões pela prática. Para muitas outras pessoas, no início eles são apenas curvas. <span>O assistente de IA é o parceiro de sparring que faltava: ajuda a formular hipóteses e a verificá-las nos dados. A decisão continua sendo humana.</span>">Experienced analysts recognise such patterns through practice. To many others, they initially remain just curves. <span>The AI Assistant is the sparring partner that was missing: it helps form hypotheses and check them against the data. The decision remains with the human.</span></p>
   </div>
 </section>
 
@@ -211,7 +243,7 @@
     <div class="section-header reveal">
       <div class="section-label" data-de="So arbeitet man damit" data-pt="Como se trabalha com ele">How you work with it</div>
       <h2 class="section-title" data-de="Vom groben Überblick zum entscheidenden Unterschied" data-pt="Da visão geral à diferença decisiva">From a broad view to the decisive difference</h2>
-      <p class="section-sub" data-de="Der Rekorder wird für einen konkreten Einsatz zusammengestellt. Es gibt keinen für immer festgelegten Monitoring-Katalog; welche Messwerte wichtig sind, bestimmt der Fall." data-pt="O registrador é configurado para uma investigação concreta. Não há um catálogo de monitoramento fixado para sempre; o caso determina quais medições importam.">The recorder is configured for one concrete investigation. There is no permanently prescribed monitoring catalogue; what matters enough to record depends on the case.</p>
+      <p class="section-sub" data-de="Die Untersuchung wird für einen konkreten Fall zusammengestellt. Es gibt keinen für immer festgelegten Monitoring-Katalog; welche Messwerte wichtig sind, bestimmt die Frage, die beim Vergleichen entsteht." data-pt="A investigação é montada para um caso concreto. Não há um catálogo de monitoramento fixado para sempre; a pergunta que surge durante a comparação determina quais medições importam.">The investigation is assembled for one concrete case. There is no permanently prescribed monitoring catalogue; the question that emerges during comparison determines which measurements matter.</p>
     </div>
     <div class="steps">
       <div class="step reveal">
@@ -231,8 +263,8 @@
       </div>
       <div class="step reveal">
         <div class="step-num">4</div>
-        <h3 data-de="Prüfen" data-pt="Verificar">Verify</h3>
-        <p data-de="Der AI Assistant gleicht die Hypothese mit den Rohdaten ab und sucht Belege ebenso wie Gegenbelege." data-pt="O assistente de IA confronta a hipótese com os dados brutos e procura tanto evidências quanto contraevidências.">The AI Assistant checks the hypothesis against the raw data and looks for evidence as well as counter-evidence.</p>
+        <h3 data-de="Hypothesen prüfen" data-pt="Testar hipóteses">Test hypotheses</h3>
+        <p data-de="Der AI Assistant hilft, Hypothesen zu dem zu bilden, was auffällt, und gleicht sie mit den Rohdaten ab, mit Belegen und Gegenbelegen." data-pt="O assistente de IA ajuda a formular hipóteses sobre o que chama atenção e as confronta com os dados brutos, com evidências e contraevidências.">The AI Assistant helps form hypotheses about what stands out and checks them against the raw data, with evidence and counter-evidence.</p>
       </div>
       <div class="step reveal">
         <div class="step-num">5</div>
@@ -249,8 +281,8 @@
 <!-- AI -->
 <section id="ai" class="alt">
   <div class="container">
-    <div class="story-grid wide-left">
-      <figure class="reveal">
+    <div class="story-grid wide-left top">
+      <figure class="reveal sticky">
         <a class="shot" href="img/ui-ai-analysis.png" data-lightbox>
           <img src="img/ui-ai-analysis.png" width="1628" height="1095" loading="lazy" alt="The workbench with a chart of response times and the AI Assistant, which compares web03 with web01 and web02 and reads the growing heap as a memory leak." data-alt-de="Die Workbench mit einem Chart der Antwortzeiten und dem AI Assistant, der web03 mit web01 und web02 vergleicht und den wachsenden Heap als Memory Leak deutet." data-alt-pt="A workbench com um gráfico dos tempos de resposta e o assistente de IA, que compara web03 com web01 e web02 e interpreta o heap crescente como um memory leak.">
         </a>
@@ -258,9 +290,11 @@
       </figure>
       <div class="story-text reveal">
         <div class="section-label" data-de="Die Rolle der AI" data-pt="O papel da IA">The role of AI</div>
-        <h2 class="section-title" data-de="Ein Assistant, der prüft, statt nur zuzustimmen" data-pt="Um assistente que verifica, em vez de apenas concordar">An assistant that checks instead of just agreeing</h2>
+        <h2 class="section-title" data-de="Ein Sparringspartner für Fragen und Hypothesen" data-pt="Um parceiro de sparring para perguntas e hipóteses">A sparring partner for questions and hypotheses</h2>
         <p data-de="Die Idee ist über 15 Jahre alt und wurde seitdem stetig weiterentwickelt. Zuletzt kam mit Version 7.x die AI-Unterstützung dazu." data-pt="A ideia tem mais de 15 anos e vem sendo aprimorada desde então. Mais recentemente, com a versão 7.x, veio o suporte a IA.">The idea is more than 15 years old and has been developed further ever since. Most recently, version 7.x added AI support.</p>
-        <p data-de="Der eingebaute AI Assistant arbeitet auf denselben Daten, die der Analyst sieht. Der Mensch entdeckt und deutet; der Assistant recherchiert und prüft." data-pt="O assistente de IA integrado trabalha com os mesmos dados que o analista vê. A pessoa descobre e interpreta; o assistente pesquisa e verifica.">The built-in AI Assistant works on the same data the analyst sees. The human discovers and interprets; the assistant researches and verifies.</p>
+        <p data-de="Das Werkzeug hatte immer eine Hürde: Erfahrene Analysten, Architekten und Performance Engineers erkennen in dichten Kurvenbildern Muster, die Einsteiger leicht übersehen. Ohne einen Experten an der Seite waren die meisten Nutzer überfordert, sobald sich die Kurven zu widersprechen schienen, denn das Werkzeug bot keinerlei Erklärung für die Situation." data-pt="A ferramenta sempre teve uma barreira: analistas, arquitetos e engenheiros de performance experientes reconhecem em gráficos densos padrões que iniciantes facilmente deixam passar. Sem um especialista ao lado, a maioria dos usuários ficava perdida assim que as curvas pareciam se contradizer, pois a ferramenta não oferecia nenhuma explicação para a situação.">The tool always had a barrier: experienced analysts, architects and performance engineers recognise patterns in dense charts that beginners easily miss. Without an expert at hand, most users were overwhelmed as soon as the curves seemed to contradict each other, because the tool offered no explanation for the situation.</p>
+        <p data-de="Der eingebaute AI Assistant schließt diese Lücke als Sparringspartner. Er arbeitet nicht so umfassend, dass man ihm die ganze Analyse überlassen könnte. Aber er arbeitet auf denselben Daten, hilft beim Bilden von Hypothesen und prüft Fragen und Hypothesen an den Messwerten, mit Belegen und Gegenbelegen." data-pt="O assistente de IA integrado preenche essa lacuna como parceiro de sparring. Ele não é abrangente a ponto de se poder entregar a ele a análise inteira. Mas trabalha com os mesmos dados, ajuda a formular hipóteses e verifica perguntas e hipóteses nas medições, com evidências e contraevidências.">The built-in AI Assistant fills that gap as a sparring partner. It is not comprehensive enough to be handed the whole analysis. But it works on the same data, helps form hypotheses, and checks questions and hypotheses against the measurements, with evidence and counter-evidence.</p>
+        <p data-de="Die Prüfung schützt auch vor Fehldiagnosen, also vor Befunden, die eine andere Ursache haben als die naheliegende. Geht der Speicher aus, ist oft nicht der Heap zu klein konfiguriert. Es kann normal sein, weil mehr Benutzer auf dem System sind, oder abnormal: ein Memory Leak oder Speicher, der sich mit der Zahl der Nutzer vervielfacht." data-pt="A verificação também protege contra diagnósticos errados, isto é, achados cuja causa é outra que não a mais óbvia. Quando a memória acaba, muitas vezes o heap não está simplesmente configurado pequeno demais. Pode ser normal, com mais usuários no sistema, ou anormal: um memory leak ou memória que se multiplica com o número de usuários.">The check also guards against misdiagnosis: findings whose cause is a different one than the obvious. When memory runs out, the heap is often not simply configured too small. It can be normal, with more users on the system, or abnormal: a memory leak, or memory that multiplies with the number of users.</p>
         <ul class="finding-list">
           <li><span class="finding-num">chart</span><span data-de="Sieht den aktuellen Chart-Ausschnitt, in der Zeitzone des Charts" data-pt="Vê o trecho atual do gráfico, no fuso horário do gráfico">Sees the current chart section, in the time zone of the chart</span></li>
           <li><span class="finding-num">metrics</span><span data-de="Kennt die Metriken und Dimensionen des Projekts" data-pt="Conhece as métricas e as dimensões do projeto">Knows the metrics and dimensions of the project</span></li>
@@ -273,13 +307,13 @@
   </div>
 </section>
 
-<!-- QUOTE -->
+<!-- CUSTOMER FEEDBACK -->
 <div class="quote-section">
   <div class="container">
     <div class="quote-inner reveal">
       <div class="quote-mark" aria-hidden="true">&ldquo;</div>
-      <blockquote data-de="Ein Agent, der nur bestätigt, würde <em>den Bestätigungsfehler des Analysten automatisieren</em>." data-pt="Um agente que apenas confirma estaria <em>automatizando o viés de confirmação do analista</em>.">An agent that only confirms would <em>automate the analyst's confirmation bias</em>.</blockquote>
-      <div class="quote-source"><a class="textlink" href="https://github.com/Weigend/Software-EKG/blob/main/docs/positioning.md" data-href-de="https://github.com/Weigend/Software-EKG/blob/main/docs/positioning.de.md" rel="noopener" data-de="Aus der Positionierung des Software-EKG" data-pt="Do posicionamento do Software-EKG">From the positioning of Software-EKG</a></div>
+      <blockquote data-de="Viele besitzen ein EKG. Aber es gibt nur wenige <em>Chefärzte, die daraus wirklich etwas ableiten können</em>." data-pt="Muitos têm um ECG. Mas há poucos <em>médicos-chefes capazes de realmente tirar conclusões dele</em>.">Many have an ECG. But there are only a few <em>chief physicians who can really draw conclusions from it</em>.</blockquote>
+      <div class="quote-source" data-de="Sinngemäßes Kundenfeedback aus der Praxis · Der AI Assistant ersetzt den Chefarzt nicht. Er ist der Sparringspartner für alle anderen." data-pt="Feedback de cliente, reproduzido em essência · O assistente de IA não substitui o médico-chefe. Ele é o parceiro de sparring para todos os demais.">Customer feedback, paraphrased · The AI Assistant does not replace the chief physician. It is the sparring partner for everyone else.</div>
     </div>
   </div>
 </div>
@@ -436,7 +470,7 @@
     <div class="section-header reveal">
       <div class="section-label" data-de="Ehrliche Grenzen" data-pt="Limites honestos">Honest limits</div>
       <h2 class="section-title" data-de="Was es nicht ist" data-pt="O que ele não é">What it is not</h2>
-      <p class="section-sub" data-de="Das Software-EKG ergänzt das Monitoring und ersetzt es nicht. Das Monitoring beantwortet laufend, ob bekannte Zustände gesund sind. Der Rekorder hilft bei der Frage, was in diesem einen Fall anders ist." data-pt="O Software-EKG complementa o monitoramento, não o substitui. O monitoramento responde continuamente se condições conhecidas estão saudáveis. O registrador ajuda a perguntar o que há de diferente neste caso específico.">Software-EKG complements monitoring rather than replacing it. Monitoring continuously answers whether known conditions are healthy. The recorder helps to ask what is different in this particular case.</p>
+      <p class="section-sub" data-de="Was das Software-EKG anderen Werkzeugen überlässt und was es nicht verspricht." data-pt="O que o Software-EKG deixa para outras ferramentas e o que ele não promete.">What Software-EKG leaves to other tools, and what it does not promise.</p>
     </div>
     <div class="not-grid">
       <div class="not-card reveal">
@@ -449,7 +483,7 @@
       </div>
       <div class="not-card reveal">
         <h3 data-de="Kein Anomalie-Detektor" data-pt="Não é detector de anomalias">Not an anomaly detector</h3>
-        <p data-de="Die Muster findet der Mensch im Vergleich." data-pt="Os padrões são encontrados por uma pessoa, por comparação.">The patterns are found by a human, by comparison.</p>
+        <p data-de="Sondern ein Anomalie-Verifizierer mit Hypothesenbildung: Der Mensch bemerkt, was auffällt; der Assistant hilft, Hypothesen zu bilden und an den Daten zu prüfen." data-pt="É um verificador de anomalias com formulação de hipóteses: a pessoa percebe o que chama atenção; o assistente ajuda a formular hipóteses e a verificá-las nos dados.">It is an anomaly verifier with hypothesis formation: the human notices what stands out; the assistant helps form hypotheses and check them against the data.</p>
       </div>
       <div class="not-card reveal">
         <h3 data-de="Kein Versprechen der Ursache" data-pt="Não promete a causa">No promise of the cause</h3>
@@ -480,7 +514,7 @@
           <tr>
             <td data-de="AI-SRE-Agenten" data-pt="Agentes de IA para SRE">AI SRE agents</td>
             <td data-de="Einen Vorfall selbstständig eingrenzen, sobald ein Alarm aufgeht" data-pt="Delimitar um incidente de forma autônoma assim que um alerta dispara">Narrowing down an incident autonomously as soon as an alert fires</td>
-            <td data-de="Ein Experte entdeckt und deutet; der Agent recherchiert und prüft" data-pt="Um especialista descobre e interpreta; o agente pesquisa e verifica">An expert discovers and interprets; the agent researches and verifies</td>
+            <td data-de="Der Mensch bemerkt und entscheidet; der Assistant hilft, Hypothesen zu bilden, und prüft sie an den Daten" data-pt="A pessoa percebe e decide; o assistente ajuda a formular hipóteses e as verifica nos dados">The human notices and decides; the assistant helps form hypotheses and verifies them against the data</td>
           </tr>
           <tr>
             <td data-de="Notebook oder Coding-Agent auf exportierten Daten" data-pt="Notebook ou agente de código sobre dados exportados">Notebook or coding agent on exported data</td>

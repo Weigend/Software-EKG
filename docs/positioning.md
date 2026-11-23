@@ -2,7 +2,7 @@
 
 **English** | [Deutsch](positioning.de.md)
 
-As of 22 November 2026. This document records what Software-EKG is for and what it is not for. It is the result of a discussion, not a plan for a rebuild: what will be built or removed as a consequence has not been decided yet.
+As of 23 November 2026. This document records what Software-EKG is for and what it is not for. It is the result of a discussion, not a plan for a rebuild: what will be built or removed as a consequence has not been decided yet.
 
 ## Position
 
@@ -10,25 +10,29 @@ As of 22 November 2026. This document records what Software-EKG is for and what 
 
 Software-EKG is a diagnostic recorder and workbench for the comparative long-term analysis of software systems. A software emergency doctor configures it for one concrete assignment, compares locally and away from the production systems, begins with a broad view and narrows systems, periods and metrics until the decisive difference is visible. Useful views are preserved as bookmarks and become evidence for findings in the presentation or document appropriate to the assignment. A built-in AI agent helps to check the analyst's hypotheses against logs, release plans and documentation.
 
-The core is comparison, not the detection of anomalies. The analyst finds patterns they were not looking for, and many of them lie within all thresholds:
+The core is comparison, not automatic anomaly detection. Experienced analysts find patterns they were not looking for, and many of them lie within all thresholds:
 
 - Why does the heap grow steadily on three out of fifty systems?
 - Why does a load pattern occur every fourteen days?
 - Why did the behaviour change after a particular release?
 - Why do two systems that should be identical show different curves?
 
+The AI agent lowers the previous barrier to entry. It is not comprehensive enough to be handed the whole analysis. It is a sparring partner: it helps to form hypotheses about what stands out and to verify questions and hypotheses against the data.
+
 ## Who it is for
 
-For people who practise performance analysis as a craft. They are few; most SREs do not work this way. As long as a system keeps running, nobody looks into why the load or the number of connections went up in between. Those who do compare curves over long periods and find in them hints at temporal processes, updates and errors introduced by releases.
+Software-EKG remains an instrument for performance analysts, architects and other experts who investigate historical system data. Experienced users recognise patterns in dense charts through practice. To beginners, the same pictures often remain just curves without support. Without an expert at hand, most users were overwhelmed in contradictory situations, because the tool offered no explanation for the situation. The AI agent is the sparring partner that was missing: it helps to form hypotheses and to verify them; the professional decision remains with the human.
 
-This is an expert use case, and it often delivers only the first analysis of symptoms. Both are part of the position and are not glossed over.
+A customer summed up the previous barrier, paraphrased: “Many have an ECG. But there are only a few chief physicians who can really draw conclusions from it.” The AI agent does not replace the chief physician and does not automate professional responsibility. It gives everyone else a sparring partner for their questions and hypotheses.
+
+It remains an expert instrument, now with support for rookies and with verification that avoids misdiagnoses: findings whose cause is a different one than the obvious. When memory runs out, the cause is often not a heap that is configured too small. It can be normal, because more users are on the system, or abnormal: a memory leak, or memory that multiplies with the number of users. It often delivers only the first analysis of symptoms. Both are part of the position and are not glossed over.
 
 ## What the tool is not
 
 - Not a dashboard.
 - Not alerting.
 - Not live monitoring. A live display confirms at most that data is arriving.
-- Not an anomaly detector. The patterns are found by a human, by comparison.
+- Not an anomaly detector, but an anomaly verifier with hypothesis formation. The human notices what stands out; the assistant helps to form hypotheses and to check them against the data.
 - Not a tool that promises the cause. Software-EKG shows since when, where and in step with what something is conspicuous. The agent helps with the cause.
 - Not a substitute for knowledge of the architecture. If you do not know how the application is really built, you often will not get to the cause, and an AI cannot do better. It can ask the right questions. If they are answered, the case is clear; if nobody knows what is going on in the system, it stays open.
 
@@ -81,7 +85,7 @@ The picture shows the CPU load of the WebLogic Java process on eleven nodes of a
 | Agent on the data | AI chat with tools for chart section, metric list, time series query and SSH commands ([tools](../workbench/src/main/java/io/softwareecg/awb/aichat/bl/tools/)) |
 | Record places and pass them on | Bookmarks and bookmark groups, export as PNG and Excel |
 
-The technology is the means, not the position. The core is comparative analysis by a human.
+The technology is the means, not the position. The core is human-guided comparative analysis with AI support for forming and checking hypotheses.
 
 This also applies to local data storage. The functional core is the comparative, exploratory analysis of historical system data. Keeping the data locally and decoupled from production operations is the architectural approach to it: it makes investigations repeatable, does not load production several times and leaves control over the data with the analyst.
 
@@ -93,7 +97,7 @@ Software-EKG optimises the interactive comparison of many time series over long 
 | --- | --- | --- |
 | Grafana | Dashboards and alerts on the running system | Analysis afterwards, locally, with many series in one picture |
 | Prometheus and long-term storage such as Thanos or Mimir | Collecting, retaining and querying | A local data set prepared for interactive comparison |
-| AI SRE agents (Datadog, Grafana, Dynatrace and others) | Narrowing down an incident autonomously as soon as an alert fires | An expert discovers and interprets; the agent researches and verifies |
+| AI SRE agents (Datadog, Grafana, Dynatrace and others) | Narrowing down an incident autonomously as soon as an alert fires | The human notices and decides; the assistant helps form hypotheses and verifies them against the data |
 | Notebook or coding agent on exported data | Answering a specific question with code | Navigation between hundreds of series without programming, in a growing data set |
 
 The differentiation is based on purpose, not on weaknesses of the other tools. The following statements from November 2026 are default settings and individual findings, not fundamental limits, and may change:
@@ -135,7 +139,6 @@ If the answer is demonstrably yes, there is a robust product core. If not, the p
 
   Two limitations belong to it. Whoever has examined a data set once knows the patterns; each arm therefore needs its own comparable data set or a different analyst. And an analyst who has used Software-EKG for years is not equally practised in Grafana. With one person, the result is a case study, not a proof.
 - **A cheap first step.** An old case with a known result: give the raw data from back then to an agent alone and check whether it finds the findings of that time.
-- **Who recognises the patterns?** Today the analyst finds them in the picture. Nothing speaks against the agent querying a picture as well, just as a human would: filtered by wildcard, in the right period. The picture is then the same condensation for both. What has to be clarified is how reliably a model reads a dense picture with 100 lines and how it names the conspicuous series; it probably needs a short list of the outliers in addition to the picture. The decision which observation is interesting and which relationship is investigated stays with the analyst.
+- **Who recognises the patterns?** Today the human notices them; the agent helps to form hypotheses about them and to verify these. For that it works from metrics and queried values; in future it should also be able to request the same picture the human sees: filtered by wildcard, in the right period. What has to be clarified is how reliably a model reads a dense picture with 100 lines and names the conspicuous series; it probably needs a short list of the outliers in addition to the picture. The human retains the decision which observation matters to the case and which relationship is investigated.
 - Where release plans and documentation typically live and how the agent gets read access to them.
 - Which existing functions can be dropped under this position.
-- Whether Software-EKG remains the instrument of a few experts or should teach this way of working to others. That stays open for now; a tool for experts does not have to be a training tool.

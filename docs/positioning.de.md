@@ -2,7 +2,7 @@
 
 [English](positioning.md) | **Deutsch**
 
-Stand: 22.11.2026. Dieses Dokument hält fest, wofür das Software-EKG da ist und wofür nicht. Es ist das Ergebnis einer Diskussion, kein Umbauplan: Was daraus gebaut oder gestrichen wird, ist noch nicht entschieden.
+Stand: 23.11.2026. Dieses Dokument hält fest, wofür das Software-EKG da ist und wofür nicht. Es ist das Ergebnis einer Diskussion, kein Umbauplan: Was daraus gebaut oder gestrichen wird, ist noch nicht entschieden.
 
 ## Position
 
@@ -10,25 +10,29 @@ Stand: 22.11.2026. Dieses Dokument hält fest, wofür das Software-EKG da ist un
 
 Das Software-EKG ist ein diagnostischer Rekorder und eine Workbench für die vergleichende Langzeitanalyse von Softwaresystemen. Ein Software-Notarzt stellt es für einen konkreten Einsatz zusammen, vergleicht lokal und abseits der Produktionssysteme, beginnt mit einem groben Überblick und grenzt Systeme, Zeiträume und Metriken ein, bis der entscheidende Unterschied sichtbar wird. Aussagekräftige Ansichten hält er als Bookmarks fest; sie werden zu Belegen für den Befund in der zum Einsatz passenden Präsentation oder Dokumentation. Ein eingebauter AI-Agent hilft ihm, seine Hypothesen anhand von Logs, Release-Plänen und Dokumentation zu prüfen.
 
-Der Kern ist der Vergleich, nicht die Erkennung von Anomalien. Der Analyst findet Muster, nach denen er vorher nicht gesucht hat, und viele davon liegen innerhalb aller Grenzwerte:
+Der Kern ist der Vergleich, nicht die automatische Erkennung von Anomalien. Erfahrene Analysten finden darin Muster, nach denen sie vorher nicht gesucht haben, und viele davon liegen innerhalb aller Grenzwerte:
 
 - Warum steigt der Heap bei drei von fünfzig Systemen stetig?
 - Warum tritt ein Lastmuster alle vierzehn Tage auf?
 - Warum hat sich das Verhalten nach einem bestimmten Release verändert?
 - Warum zeigen zwei eigentlich gleiche Systeme unterschiedliche Verläufe?
 
+Der AI-Agent senkt die bisherige Einstiegshürde. Er arbeitet nicht so umfassend, dass man ihm die ganze Analyse überlassen könnte. Er ist ein Sparringspartner: Er hilft, Hypothesen zu dem zu bilden, was auffällt, und Fragen und Hypothesen anhand der Daten zu verifizieren.
+
 ## Für wen
 
-Für Menschen, die Performance-Analyse als Handwerk betreiben. Das sind wenige; die meisten SREs arbeiten nicht so. Solange ein System weiterläuft, schaut sich niemand an, warum die Last oder die Zahl der Connections zwischendurch hochging. Wer es doch tut, vergleicht Verläufe über lange Zeiträume und findet darin Hinweise auf zeitliche Prozesse, Updates und Fehler durch Releases.
+Das Software-EKG bleibt ein Instrument für Performance-Analysten, Architekten und andere Experten, die historische Systemdaten untersuchen. Erfahrene Nutzer erkennen in dichten Kurvenbildern Muster aus Übung. Für Einsteiger bleiben dieselben Bilder ohne Unterstützung oft nur Kurven. Ohne einen Experten an der Seite waren die meisten Nutzer in widersprüchlichen Situationen überfordert, weil das Werkzeug keinerlei Erklärung für die Situation bot. Der AI-Agent ist der Sparringspartner, der bisher fehlte: Er hilft, Hypothesen zu bilden und zu verifizieren; die fachliche Entscheidung bleibt beim Menschen.
 
-Das ist ein Experten-Use-Case, und er liefert oft nur die erste Symptomanalyse. Beides gehört zur Position und wird nicht kaschiert.
+Ein Kunde brachte die bisherige Hürde sinngemäß auf den Punkt: „Viele besitzen ein EKG. Aber es gibt nur wenige Chefärzte, die daraus wirklich etwas ableiten können.“ Der AI-Agent ersetzt den Chefarzt nicht und automatisiert nicht die fachliche Verantwortung. Er gibt allen anderen einen Sparringspartner für ihre Fragen und Hypothesen.
+
+Es bleibt ein Experteninstrument, jetzt mit Unterstützung für Einsteiger und mit Verifikation, die Fehldiagnosen vermeidet: Befunde, die eine andere Ursache haben als die naheliegende. Geht der Speicher aus, ist oft nicht der Heap zu klein konfiguriert. Es kann normal sein, weil mehr Benutzer auf dem System sind, oder abnormal: ein Memory Leak oder Speicher, der sich mit der Zahl der Nutzer vervielfacht. Es liefert oft nur die erste Symptomanalyse. Beides gehört zur Position und wird nicht kaschiert.
 
 ## Was das Tool nicht ist
 
 - Kein Dashboard.
 - Kein Alerting.
 - Kein Live-Monitoring. Eine laufende Anzeige bestätigt höchstens, dass Daten ankommen.
-- Kein Anomalie-Detektor. Die Muster findet der Mensch im Vergleich.
+- Kein Anomalie-Detektor, sondern ein Anomalie-Verifizierer mit Hypothesenbildung. Der Mensch bemerkt, was auffällt; der Assistant hilft, Hypothesen zu bilden und an den Daten zu prüfen.
 - Kein Werkzeug, das die Ursache verspricht. Das EKG zeigt, seit wann, wo und im Takt womit etwas auffällig ist. Bei der Ursache hilft der Agent.
 - Kein Ersatz für Wissen über die Architektur. Wer nicht weiß, wie die Anwendung wirklich aufgebaut ist, kommt oft nicht bis zur Ursache, und eine AI kann das nicht besser. Sie kann die richtigen Fragen stellen. Werden sie beantwortet, ist der Fall klar; weiß niemand, was im System vorgeht, bleibt er offen.
 
@@ -81,7 +85,7 @@ Das Bild zeigt die CPU-Last des WebLogic-Java-Prozesses auf elf Knoten eines Clu
 | Agent an den Daten | AI-Chat mit Werkzeugen für Chart-Ausschnitt, Metrikliste, Zeitreihenabfrage und SSH-Kommandos ([tools](../workbench/src/main/java/io/softwareecg/awb/aichat/bl/tools/)) |
 | Stellen festhalten und weitergeben | Bookmarks und Bookmark-Gruppen, Export als PNG und Excel |
 
-Die Technik ist das Mittel, nicht die Position. Der Kern ist die vergleichende Analyse durch einen Menschen.
+Die Technik ist das Mittel, nicht die Position. Der Kern ist eine vom Menschen geführte vergleichende Analyse mit AI-Unterstützung beim Bilden und Prüfen von Hypothesen.
 
 Das gilt auch für die lokale Datenhaltung. Fachlicher Kern ist die vergleichende, explorative Analyse historischer Systemdaten. Dass der Bestand lokal und vom Produktionsbetrieb entkoppelt liegt, ist der Architekturansatz dafür: Er macht Untersuchungen wiederholbar, belastet die Produktion nicht mehrfach und lässt die Kontrolle über die Daten beim Analysten.
 
@@ -93,7 +97,7 @@ Das EKG optimiert den interaktiven Vergleich vieler Zeitreihen über lange Zeitr
 | --- | --- | --- |
 | Grafana | Dashboards und Alarme auf dem laufenden System | Auswertung danach, lokal, mit vielen Serien in einem Bild |
 | Prometheus und Langzeitspeicher wie Thanos oder Mimir | Sammeln, Aufbewahren und Abfragen | ein lokaler Bestand, der für den interaktiven Vergleich aufbereitet ist |
-| AI-SRE-Agenten (Datadog, Grafana, Dynatrace und andere) | einen Vorfall selbstständig eingrenzen, sobald ein Alarm aufgeht | Ein Experte entdeckt und deutet; der Agent recherchiert und prüft |
+| AI-SRE-Agenten (Datadog, Grafana, Dynatrace und andere) | einen Vorfall selbstständig eingrenzen, sobald ein Alarm aufgeht | Der Mensch bemerkt und entscheidet; der Assistant hilft, Hypothesen zu bilden, und prüft sie an den Daten |
 | Notebook oder Coding-Agent auf exportierten Daten | eine konkrete Frage mit Code beantworten | Navigation zwischen hunderten Serien ohne Programmierung, in einem wachsenden Bestand |
 
 Die Abgrenzung beruht auf dem Zweck, nicht auf Schwächen der anderen Werkzeuge. Die folgenden Angaben vom November 2026 sind Voreinstellungen und Einzelbefunde, keine grundsätzlichen Grenzen, und können sich ändern:
@@ -135,7 +139,6 @@ Lautet die Antwort nachweisbar Ja, gibt es einen belastbaren Produktkern. Wenn n
 
   Zwei Einschränkungen gehören dazu. Wer einen Bestand einmal untersucht hat, kennt die Muster; jeder Arm braucht deshalb einen eigenen, vergleichbaren Bestand oder einen anderen Analysten. Und ein Analyst, der das EKG seit Jahren bedient, ist in Grafana nicht gleich geübt. Mit einer Person ist das Ergebnis eine Fallstudie, kein Beweis.
 - **Ein billiger erster Schritt.** Ein alter Fall mit bekanntem Ergebnis: die damaligen Rohdaten einem Agenten allein geben und prüfen, ob er die Befunde von damals findet.
-- **Wer erkennt die Muster?** Heute findet der Analyst sie selbst im Bild. Nichts spricht dagegen, dass auch der Agent ein Bild abfragt, so wie der Mensch es tun würde: per Wildcard gefiltert, im richtigen Zeitraum. Das Bild ist dann für beide dieselbe Verdichtung. Zu klären ist, wie zuverlässig ein Modell ein dichtes Bild mit 100 Linien liest und wie es die auffälligen Serien beim Namen nennt; vermutlich braucht es zum Bild eine kurze Liste der Ausreißer. Beim Analysten bleibt die Entscheidung, welche Beobachtung interessant ist und welcher Zusammenhang untersucht wird.
+- **Wer erkennt die Muster?** Heute bemerkt sie der Mensch; der Agent hilft, Hypothesen dazu zu bilden und sie zu verifizieren. Dafür arbeitet er mit den Metriken und abgefragten Werten; künftig soll er auch dasselbe Bild anfordern können, das der Mensch sieht: per Wildcard gefiltert, im richtigen Zeitraum. Zu klären ist, wie zuverlässig ein Modell ein dichtes Bild mit 100 Linien liest und die auffälligen Serien beim Namen nennt; vermutlich braucht es zum Bild eine kurze Liste der Ausreißer. Beim Menschen bleibt die Entscheidung, welche Beobachtung für den Fall interessant ist und welcher Zusammenhang untersucht wird.
 - Wo Release-Pläne und Dokumentation typischerweise liegen und wie der Agent lesend darauf zugreift.
 - Welche vorhandenen Funktionen unter dieser Position wegfallen können.
-- Ob das EKG das Instrument weniger Experten bleibt oder anderen diese Arbeitsweise vermitteln soll. Das bleibt vorerst offen; ein Werkzeug für Experten muss kein Ausbildungswerkzeug sein.
