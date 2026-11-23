@@ -146,6 +146,10 @@ and options.
 | `RepositoryFactory` | Java `ServiceLoader` | new Collector destination |
 | `ICollectorConnector` | Java `ServiceLoader` / registry property | external access to Collector memory |
 | `ImportModule` + capability interfaces | Workbench injection scan | new UI importer |
+| `AnalysisSourceProvider` + `AnalysisSourceWizardPage` | Workbench injection scan | [new source in New Analysis](workbench-analysis-sources.md) |
+| `TimeSeriesRepositoryProvider` + `EkgRepository.Factory` | Workbench injection scan | [new Workbench repository technology](workbench-repositories.md) |
+| five stores in `metadata.port` | Workbench injection scan | [other metadata database](workbench-metadata-backends.md) |
+| `SecretStore` | Workbench injection scan | [other place for secrets](workbench-secret-stores.md) |
 | `EkgApplicationController` menu methods | injected module | new Analysis/Import/Repository/Window entry |
 | smoother/combiner factories | code registration/enums | new chart computation |
 

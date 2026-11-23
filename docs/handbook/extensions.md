@@ -121,9 +121,9 @@ beyond localhost, and document its concurrency and shutdown behaviour.
 
 ## Build a Workbench importer
 
-Create a package below `io.softwareecg.awb.importer`, subclass `ImportModule`, annotate it as a
-singleton discovered by the application's injection scan, and implement the capabilities it really
-supports:
+Create a package `io.softwareecg.awb.importer.adapter.<name>`, next to `csv`, `prometheus` and
+`owid`. Subclass `ImportModule`, annotate it as a singleton discovered by the application's
+injection scan, and implement the capabilities it really supports:
 
 ```java
 @Singleton
@@ -149,12 +149,13 @@ Add parser unit tests and an import test that queries the stored rows through th
 
 ## Extend Workbench UI or analysis
 
-The Workbench now has three explicit extension contracts. Use the focused guide instead of adding
+The Workbench has four further extension contracts. Use the focused guide instead of adding
 another branch to a dialog or depending on an H2 class:
 
 - [Add a source to New Analysis](workbench-analysis-sources.md)
 - [Add a time-series repository](workbench-repositories.md)
 - [Replace the metadata backend](workbench-metadata-backends.md)
+- [Replace the secret store](workbench-secret-stores.md)
 
 The Metric Explorer is split into a coordinator, query editor/header, chart and legend. See
 [Metric view component boundaries](workbench-metric-view.md) before changing this area.
