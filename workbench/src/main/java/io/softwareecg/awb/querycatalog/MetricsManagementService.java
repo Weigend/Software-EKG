@@ -13,7 +13,7 @@
 package io.softwareecg.awb.querycatalog;
 
 
-import io.softwareecg.awb.timeseries.port.RepositoryException;
+import io.softwareecg.awb.repository.port.RepositoryException;
 import io.softwareecg.awb.timeseries.TimeSeries;
 
 import java.util.stream.Stream;

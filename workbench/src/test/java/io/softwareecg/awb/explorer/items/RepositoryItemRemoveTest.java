@@ -1,7 +1,7 @@
 package io.softwareecg.awb.explorer.items;
 
 import io.avaje.inject.BeanScope;
-import io.softwareecg.awb.timeseries.port.TimeSeriesRepository;
+import io.softwareecg.awb.repository.port.TimeSeriesRepository;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;

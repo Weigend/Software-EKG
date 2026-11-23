@@ -1,8 +1,8 @@
 package io.softwareecg.awb.datasource.adapter.collector;
 
 import io.softwareecg.awb.repository.api.Repository;
-import io.softwareecg.awb.timeseries.port.RepositoryException;
-import io.softwareecg.awb.timeseries.port.TimeSeriesWriteService;
+import io.softwareecg.awb.repository.port.RepositoryException;
+import io.softwareecg.awb.repository.port.TimeSeriesWriteService;
 import io.softwareecg.awb.timeseries.TimeSeries;
 import io.softwareecg.collector.repository.StaticTimeSeriesRepository;
 import org.junit.Test;
@@ -20,7 +20,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import io.softwareecg.awb.datasource.adapter.collector.ProjectSeriesOutput;
 /**
  * The output of the embedded collector towards the project repository.
  */

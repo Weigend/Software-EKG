@@ -3,14 +3,13 @@ package io.softwareecg.awb.queryengine;
 import io.softwareecg.awb.investigation.model.SeriesCombineMode;
 import io.softwareecg.awb.investigation.model.SeriesSmoothingGranularity;
 import io.softwareecg.awb.investigation.model.SeriesSmoothingType;
-import io.softwareecg.awb.queryengine.MetricDataAccessService;
 import io.softwareecg.awb.investigation.model.ComputationSpec;
 import io.softwareecg.awb.investigation.model.QuerySpec;
 import io.softwareecg.awb.queryengine.model.TimeSeriesQuery;
 import io.softwareecg.awb.queryengine.model.TimeSeriesQueryResponse;
 import io.softwareecg.awb.queryengine.pipeline.SeriesTransformPipeline;
-import io.softwareecg.awb.timeseries.port.TimeSeriesRepository;
-import io.softwareecg.awb.timeseries.port.RepositoryException;
+import io.softwareecg.awb.repository.port.TimeSeriesRepository;
+import io.softwareecg.awb.repository.port.RepositoryException;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.events.ProgressEvent;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
@@ -26,8 +25,6 @@ import java.util.*;
 
 import static io.softwareecg.awb.investigation.model.SeriesCombineMode.CONCAT;
 
-import io.softwareecg.awb.queryengine.ComputedTimeSeriesResponse;
-import io.softwareecg.awb.queryengine.MetricQueryService;
 /**
  * The default implementation of MetricsQueryService that will fetch the time series
  * data from types and do post processing on it like smoothing and vectorization.

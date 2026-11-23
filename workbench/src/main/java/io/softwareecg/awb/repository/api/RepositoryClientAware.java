@@ -1,6 +1,6 @@
 package io.softwareecg.awb.repository.api;
 
-import io.softwareecg.awb.timeseries.port.TimeSeriesRepository;
+import io.softwareecg.awb.repository.port.TimeSeriesRepository;
 
 /**
  * Interface implemented by all services that need an EKG repository client

@@ -15,7 +15,7 @@ package io.softwareecg.awb.repository.ui;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
 import io.softwareecg.awb.repository.events.RepositoryChangeEvent;
-import io.softwareecg.awb.timeseries.repositorytype.Embedded;
+import io.softwareecg.awb.repository.api.Embedded;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.RepositorySelector;
 import io.softwareecg.wfx.lookup.api.Lookup;

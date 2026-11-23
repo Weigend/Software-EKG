@@ -1,17 +1,17 @@
 package io.softwareecg.awb.repository.service;
 
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.timeseries.port.TimeSeriesRepository;
-import io.softwareecg.awb.timeseries.port.query.expr.Expression;
-import io.softwareecg.awb.timeseries.port.query.search.SearchParams;
-import io.softwareecg.awb.timeseries.port.query.search.SearchResult;
-import io.softwareecg.awb.timeseries.port.query.search.SortField;
-import io.softwareecg.awb.timeseries.schema.DocumentType;
-import io.softwareecg.awb.timeseries.schema.EkgSchemaField;
+import io.softwareecg.awb.repository.port.TimeSeriesRepository;
+import io.softwareecg.awb.repository.port.query.expr.Expression;
+import io.softwareecg.awb.repository.port.query.search.SearchParams;
+import io.softwareecg.awb.repository.port.query.search.SearchResult;
+import io.softwareecg.awb.repository.port.query.search.SortField;
+import io.softwareecg.awb.repository.schema.DocumentType;
+import io.softwareecg.awb.repository.schema.EkgSchemaField;
 import io.softwareecg.awb.repository.model.BinaryTimeSeries;
 import io.softwareecg.awb.repository.api.Repository;
-import io.softwareecg.awb.timeseries.port.RepositoryException;
-import io.softwareecg.awb.timeseries.port.TimeSeriesWriteService;
+import io.softwareecg.awb.repository.port.RepositoryException;
+import io.softwareecg.awb.repository.port.TimeSeriesWriteService;
 import io.softwareecg.awb.timeseries.codec.DateValuePairCodec;
 import io.softwareecg.awb.timeseries.TimeSeries;
 import jakarta.inject.Inject;
@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static io.softwareecg.awb.timeseries.port.query.expr.ExprFactory.exactFilter;
-import static io.softwareecg.awb.timeseries.schema.EkgSchemaField.*;
+import static io.softwareecg.awb.repository.port.query.expr.ExprFactory.exactFilter;
+import static io.softwareecg.awb.repository.schema.EkgSchemaField.*;
 
 /**
  * todo insert comment here

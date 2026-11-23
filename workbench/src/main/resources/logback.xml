@@ -42,7 +42,7 @@
     <logger name="com.espertech.esper.core.deploy.EPLModuleUtil" level="OFF"/>
     <logger name="com.espertech.esper.event.bean.PropertyHelper" level="OFF"/>
     <logger name="io.softwareecg.sdfx" level="INFO"/>
-    <logger name="io.softwareecg.awb.timeseries.adapter.solr.SolrRepositoryClient" level="WARN"/>
+    <logger name="io.softwareecg.awb.repository.adapter.solr.SolrRepositoryClient" level="WARN"/>
 
     <!-- ClickHouse JDBC driver loggt jeden Verbindungsfehler als ERROR mit Stacktrace.
          Bei nicht erreichbarem Server flutet das den Log; der Repository-Layer kuemmert

@@ -40,5 +40,5 @@ cd /d "%LOG_DIR%"
     --enable-native-access=ALL-UNNAMED,javafx.graphics ^
     "-Dekg.solr.template=%HERE%\solr" ^
     -cp "%HERE%\lib\*" ^
-    io.softwareecg.awb.application.EkgAvajeApplication %*
+    io.softwareecg.awb.EkgAvajeApplication %*
 endlocal

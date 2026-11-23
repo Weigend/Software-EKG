@@ -4,7 +4,7 @@ import io.softwareecg.awb.importer.adapter.prometheus.client.PrometheusClient;
 import io.softwareecg.awb.importer.adapter.prometheus.client.model.api.ResultStatus;
 import io.softwareecg.awb.importer.adapter.prometheus.client.model.api.label.ListLabelResult;
 import io.softwareecg.awb.importer.adapter.prometheus.client.model.api.query.SeriesDefinition;
-import io.softwareecg.awb.timeseries.port.TimeSeriesImportSource;
+import io.softwareecg.awb.repository.port.TimeSeriesImportSource;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import io.softwareecg.awb.secrets.security.SecurityContext;
 import io.softwareecg.awb.timeseries.RawSeriesData;

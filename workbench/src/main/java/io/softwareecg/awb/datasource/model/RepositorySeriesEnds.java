@@ -1,20 +1,20 @@
 package io.softwareecg.awb.datasource.model;
 
-import io.softwareecg.awb.timeseries.port.TimeSeriesRepository;
-import io.softwareecg.awb.timeseries.port.query.expr.Expression;
-import io.softwareecg.awb.timeseries.port.query.search.SearchParams;
-import io.softwareecg.awb.timeseries.port.query.search.SearchResult;
-import io.softwareecg.awb.timeseries.port.query.search.SortField;
-import io.softwareecg.awb.timeseries.schema.DocumentType;
-import io.softwareecg.awb.timeseries.schema.EkgSchemaField;
+import io.softwareecg.awb.repository.port.TimeSeriesRepository;
+import io.softwareecg.awb.repository.port.query.expr.Expression;
+import io.softwareecg.awb.repository.port.query.search.SearchParams;
+import io.softwareecg.awb.repository.port.query.search.SearchResult;
+import io.softwareecg.awb.repository.port.query.search.SortField;
+import io.softwareecg.awb.repository.schema.DocumentType;
+import io.softwareecg.awb.repository.schema.EkgSchemaField;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.model.BinaryTimeSeries;
-import io.softwareecg.awb.timeseries.port.RepositoryException;
+import io.softwareecg.awb.repository.port.RepositoryException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.softwareecg.awb.timeseries.port.query.expr.ExprFactory.exactFilter;
+import static io.softwareecg.awb.repository.port.query.expr.ExprFactory.exactFilter;
 
 /**
  * Reads the end of a series from the repository of the analyses: the newest stored part of

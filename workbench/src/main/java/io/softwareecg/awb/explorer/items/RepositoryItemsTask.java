@@ -17,7 +17,7 @@ import io.avaje.inject.External;
 import io.softwareecg.awb.uitoolkit.tree.api.AbstractItem;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
-import io.softwareecg.awb.timeseries.repositorytype.Embedded;
+import io.softwareecg.awb.repository.api.Embedded;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 

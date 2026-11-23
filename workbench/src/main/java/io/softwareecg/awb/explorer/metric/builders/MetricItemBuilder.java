@@ -9,7 +9,7 @@ import io.softwareecg.awb.queryengine.model.MetricQuery;
 import io.softwareecg.awb.investigation.model.QuerySpec;
 import io.softwareecg.awb.explorer.metric.api.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.series.MetricItem;
-import io.softwareecg.awb.timeseries.port.TimeSeriesImportSource;
+import io.softwareecg.awb.repository.port.TimeSeriesImportSource;
 import io.softwareecg.awb.repository.SourceRepositoryService;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;

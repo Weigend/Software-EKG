@@ -12,8 +12,8 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.repository.model;
 
-import io.softwareecg.awb.timeseries.schema.EkgSchemaField;
-import io.softwareecg.awb.timeseries.schema.PersistedField;
+import io.softwareecg.awb.repository.schema.EkgSchemaField;
+import io.softwareecg.awb.repository.schema.PersistedField;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;

@@ -1,7 +1,7 @@
 package io.softwareecg.awb.importer.testsupport.mocks;
 
 import io.softwareecg.awb.repository.api.Repository;
-import io.softwareecg.awb.timeseries.port.RepositoryException;
+import io.softwareecg.awb.repository.port.RepositoryException;
 import io.softwareecg.awb.timeseries.codec.DateValuePairCodec;
 import io.softwareecg.awb.timeseries.TimeSeries;
 import org.apache.http.client.HttpClient;

@@ -21,9 +21,9 @@ import io.softwareecg.awb.projectcontext.events.ShowProjectDataSourcesEvent;
 import io.softwareecg.awb.projectcontext.api.ProjectViewFlavorChangedEvent;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.timeseries.port.TimeSeriesRepository;
-import io.softwareecg.awb.timeseries.port.query.delete.DeleteParams;
-import io.softwareecg.awb.timeseries.schema.DocumentType;
+import io.softwareecg.awb.repository.port.TimeSeriesRepository;
+import io.softwareecg.awb.repository.port.query.delete.DeleteParams;
+import io.softwareecg.awb.repository.schema.DocumentType;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
 import io.softwareecg.wfx.platform.api.EventBus;
@@ -43,8 +43,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import org.slf4j.LoggerFactory;
 
-import static io.softwareecg.awb.timeseries.schema.EkgSchemaField.DOC_TYPE;
-import static io.softwareecg.awb.timeseries.schema.EkgSchemaField.PROJECT_NAME;
+import static io.softwareecg.awb.repository.schema.EkgSchemaField.DOC_TYPE;
+import static io.softwareecg.awb.repository.schema.EkgSchemaField.PROJECT_NAME;
 import static io.softwareecg.awb.runtime.TaskUtils.runAsTask;
 
 /**

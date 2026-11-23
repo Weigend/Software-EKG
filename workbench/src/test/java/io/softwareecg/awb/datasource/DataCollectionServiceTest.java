@@ -12,7 +12,7 @@ import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.projectcontext.model.CloudPlatformType;
 import io.softwareecg.awb.projectcontext.model.ProjectFlavor;
-import io.softwareecg.awb.timeseries.port.TimeSeriesWriteService;
+import io.softwareecg.awb.repository.port.TimeSeriesWriteService;
 import io.softwareecg.collector.config.CollectorConfiguration;
 import io.softwareecg.collector.control.CollectorEngine;
 import io.softwareecg.collector.repository.RepositoryFactory;
@@ -38,7 +38,6 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import io.softwareecg.awb.datasource.NewAnalysisService;
 import io.softwareecg.awb.datasource.model.AnalysisPlan;
 import io.softwareecg.awb.datasource.model.DataSourceInfo;
 import io.softwareecg.awb.datasource.model.SeriesEnds;

@@ -8,7 +8,7 @@ import io.softwareecg.awb.bookmark.model.Bookmark;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
 import io.softwareecg.awb.bookmark.model.MetricBookmark;
 import io.softwareecg.awb.bookmark.model.MetricQueryBookmark;
-import io.softwareecg.awb.timeseries.port.TimeSeriesRepository;
+import io.softwareecg.awb.repository.port.TimeSeriesRepository;
 import io.avaje.inject.External;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import io.softwareecg.wfx.lookup.api.Lookup;

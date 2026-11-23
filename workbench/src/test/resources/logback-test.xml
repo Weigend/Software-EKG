@@ -21,7 +21,7 @@
     <logger name="com.espertech.esper.event.bean.PropertyHelper" level="OFF"/>
     <logger name="io.softwareecg.sdfx" level="INFO"/>
     <logger name="org.apache.zookeeper.ClientCnxn" level="WARN"/>
-    <logger name="io.softwareecg.awb.timeseries.adapter.solr.SolrRepositoryClient" level="WARN"/>
+    <logger name="io.softwareecg.awb.repository.adapter.solr.SolrRepositoryClient" level="WARN"/>
 
     <!-- AI Chat debug log — tool calls, tool results, agent loop details -->
     <appender name="AICHAT_FILE" class="ch.qos.logback.core.FileAppender">

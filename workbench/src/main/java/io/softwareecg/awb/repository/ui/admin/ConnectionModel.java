@@ -13,7 +13,7 @@
 package io.softwareecg.awb.repository.ui.admin;
 
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.timeseries.spi.RepositoryTypeDescriptor;
+import io.softwareecg.awb.repository.spi.RepositoryTypeDescriptor;
 import io.softwareecg.awb.secrets.model.ResourceAuthType;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;

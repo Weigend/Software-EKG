@@ -34,6 +34,8 @@ public class LayerArchitectureTest {
                             "io.softwareecg.awb.metadata.model..",
                             "io.softwareecg.awb.projectcontext.model..",
                             "io.softwareecg.awb.repository.model..",
+                            "io.softwareecg.awb.repository.schema..",
+                            "io.softwareecg.awb.repository.spi..",
                             "io.softwareecg.awb.timeseries..",
                             "io.softwareecg.awb..port..",
                             "io.softwareecg.awb.queryengine..")
@@ -54,7 +56,7 @@ public class LayerArchitectureTest {
                             "io.softwareecg.awb.repository.api..",
                             "io.softwareecg.awb.projectcontext.api..",
                             "io.softwareecg.awb.investigation.api..",
-                            "io.softwareecg.awb.timeseries.port..")
+                            "io.softwareecg.awb.repository.port..")
                     .should().dependOnClassesThat().resideInAnyPackage(
                             "io.softwareecg.awb..bl..",
                             "io.softwareecg.awb..ui..")
@@ -69,6 +71,8 @@ public class LayerArchitectureTest {
             noClasses().that().resideOutsideOfPackages("io.softwareecg.awb.application..")
                     // the generated injection module wires every bean and so knows all of them
                     .and().areNotAssignableTo(io.avaje.inject.spi.AvajeModule.class)
+                    // so does the entry point beside it
+                    .and().resideOutsideOfPackage("io.softwareecg.awb")
                     .should().dependOnClassesThat()
                     .resideInAnyPackage(
                             "io.softwareecg.awb.application.about..",
@@ -82,7 +86,7 @@ public class LayerArchitectureTest {
     static final ArchRule persistence_adapters_must_not_depend_on_javafx =
             noClasses().that().resideInAnyPackage(
                             "io.softwareecg.awb.metadata.adapter..",
-                            "io.softwareecg.awb.timeseries.adapter..")
+                            "io.softwareecg.awb.repository.adapter..")
                     .should().dependOnClassesThat().resideInAnyPackage("javafx..")
                     .because("DA-Adapter sind reine Persistenz-Schichten und duerfen nicht JavaFX nutzen");
 
@@ -94,7 +98,7 @@ public class LayerArchitectureTest {
     static final ArchRule persistence_adapters_must_not_depend_on_ui =
             noClasses().that().resideInAnyPackage(
                             "io.softwareecg.awb.metadata.adapter..",
-                            "io.softwareecg.awb.timeseries.adapter..")
+                            "io.softwareecg.awb.repository.adapter..")
                     .should().dependOnClassesThat().resideInAPackage("io.softwareecg.awb..ui..")
                     .because("Persistenz darf nicht auf die Oberflaeche hoeren");
 
@@ -119,6 +123,14 @@ public class LayerArchitectureTest {
             slices().matching("io.softwareecg.awb.(*)..").should().beFreeOfCycles()
                     .because("Komponenten, die sich gegenseitig brauchen, sind in Wahrheit eine");
 
+    /**
+     * Alles zu einer Repository-Technologie liegt in einem Paket unter repository.adapter.
+     */
+    @ArchTest
+    static final ArchRule repository_technologies_must_not_know_each_other =
+            slices().matching("io.softwareecg.awb.repository.adapter.(*)..").should().notDependOnEachOther()
+                    .because("eine Technologie muss sich hinzufuegen und entfernen lassen, ohne eine andere anzufassen");
+
     @ArchTest
     static final ArchRule metadata_clients_must_use_ports_instead_of_h2 =
             noClasses().that().resideOutsideOfPackages(
@@ -133,7 +145,7 @@ public class LayerArchitectureTest {
     static final ArchRule repository_ui_must_not_know_repository_adapters =
             noClasses().that().resideInAPackage("io.softwareecg.awb.repository.ui..")
                     .should().dependOnClassesThat()
-                    .resideInAPackage("io.softwareecg.awb.timeseries.adapter..")
+                    .resideInAPackage("io.softwareecg.awb.repository.adapter..")
                     .because("Repository-Typen werden ueber TimeSeriesRepositoryProvider beschrieben");
 
     @ArchTest

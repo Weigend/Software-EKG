@@ -1,6 +1,6 @@
 package io.softwareecg.awb.repository;
 
-import io.softwareecg.awb.timeseries.port.TimeSeriesImportSource;
+import io.softwareecg.awb.repository.port.TimeSeriesImportSource;
 
 import java.util.List;
 

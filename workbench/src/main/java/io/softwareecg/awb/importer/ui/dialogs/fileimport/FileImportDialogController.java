@@ -2,7 +2,7 @@ package io.softwareecg.awb.importer.ui.dialogs.fileimport;
 
 import io.softwareecg.awb.projectcontext.api.ProjectSelector;
 import io.softwareecg.awb.repository.api.RepositorySelector;
-import io.softwareecg.awb.timeseries.port.TimeSeriesWriteService;
+import io.softwareecg.awb.repository.port.TimeSeriesWriteService;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import io.softwareecg.awb.importer.framework.LocalProjectImportStrategy;
 import io.softwareecg.awb.importer.framework.LocalProjectImportTask;

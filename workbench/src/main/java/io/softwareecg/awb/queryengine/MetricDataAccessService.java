@@ -11,7 +11,7 @@ import io.softwareecg.awb.queryengine.model.MetricQuery;
 import io.softwareecg.awb.queryengine.model.TimeSeriesQuery;
 import io.softwareecg.awb.queryengine.model.TimeSeriesQueryResponse;
 import io.softwareecg.awb.repository.api.RepositoryClientAware;
-import io.softwareecg.awb.timeseries.port.RepositoryException;
+import io.softwareecg.awb.repository.port.RepositoryException;
 import io.softwareecg.awb.timeseries.TimeSeries;
 
 import java.util.List;

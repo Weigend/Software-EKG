@@ -2,7 +2,7 @@ package io.softwareecg.awb.datasource.adapter.ssh;
 
 import io.softwareecg.awb.datasource.adapter.collector.ProjectSeriesOutput;
 import io.softwareecg.awb.repository.api.Repository;
-import io.softwareecg.awb.timeseries.port.TimeSeriesWriteService;
+import io.softwareecg.awb.repository.port.TimeSeriesWriteService;
 import io.softwareecg.awb.timeseries.TimeSeries;
 import io.softwareecg.collector.config.CollectorConfigurations;
 import io.softwareecg.collector.control.CollectorEngine;

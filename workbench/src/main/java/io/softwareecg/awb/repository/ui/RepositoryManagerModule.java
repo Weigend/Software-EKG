@@ -3,7 +3,7 @@ package io.softwareecg.awb.repository.ui;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
 import io.softwareecg.awb.repository.events.RepositoryModifyEvent;
-import io.softwareecg.awb.timeseries.repositorytype.Embedded;
+import io.softwareecg.awb.repository.api.Embedded;
 import io.softwareecg.awb.repository.ui.admin.EkgRepositoryAdmin;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.lookup.api.Lookup;

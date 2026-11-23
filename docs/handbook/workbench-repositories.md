@@ -2,16 +2,17 @@
 
 [Handbook home](README.md) · [Extensions](extensions.md)
 
-A repository technology in the Workbench consists of five parts. Solr, Elasticsearch and
-ClickHouse are each built this way; Elasticsearch is the smallest one to read.
+Everything a repository technology consists of is in one package,
+`io.softwareecg.awb.repository.adapter.<technology>`. Solr, Elasticsearch and ClickHouse are each
+built this way; Elasticsearch is the smallest one to read. There are five parts:
 
-| Part | Contract | Where |
-| --- | --- | --- |
-| The client that talks to the database | `TimeSeriesRepository` | `timeseries.adapter.<technology>` |
-| The factory for clients, and the description of the type | `TimeSeriesRepositoryProvider` | `timeseries.adapter.<technology>` |
-| A qualifier that names the technology for injection | an annotation like `@ElasticSearch` | `timeseries.repositorytype` |
-| The repository the rest of the Workbench works with | `RepositoryAdapterBase` | `repository.adapter.<technology>` |
-| The factory that turns a stored configuration into that repository | `EkgRepository.Factory` | inner class of the repository |
+| Part | Contract |
+| --- | --- |
+| The client that talks to the database | `TimeSeriesRepository` in `repository.port` |
+| The factory for clients, and the description of the type | `TimeSeriesRepositoryProvider` in `repository.spi` |
+| A qualifier that names the technology for injection | an annotation like `@ElasticSearch` |
+| The repository the rest of the Workbench works with | `RepositoryAdapterBase` in `repository.adapter` |
+| The factory that turns a stored configuration into that repository | `EkgRepository.Factory` in `repository.api` |
 
 The provider alone makes the type appear in repository administration. Only with the repository
 and its factory can a repository of that type be created and opened.
@@ -20,8 +21,7 @@ and its factory can a repository of that type be created and opened.
 
 1. **Write the client.** Implement the `TimeSeriesRepository` port: search, export, facets, adding
    and deleting entities, commit and close. It must not use JavaFX or any UI class.
-2. **Add a qualifier.** Copy `ElasticSearch.java` in `timeseries.repositorytype` under the name of
-   the technology.
+2. **Add a qualifier.** Copy `ElasticSearch.java` under the name of the technology.
 3. **Write the provider.** A `@Singleton` class with the qualifier that implements
    `TimeSeriesRepositoryProvider`:
    - `createRepositoryClient(url, user, password)` is the form `RepositoryAdapterBase` calls.
@@ -33,7 +33,7 @@ and its factory can a repository of that type be created and opened.
    - `repositoryTypes()` returns one `RepositoryTypeDescriptor` per type; see below.
    - Implement `TimeSeriesAdminProvider` as well if collections or tables are created and
      dropped from the Workbench.
-4. **Write the repository and its factory** in `repository.adapter.<technology>`:
+4. **Write the repository and its factory:**
 
    ```java
    public class ApplianceRepository extends RepositoryAdapterBase {
@@ -94,7 +94,7 @@ and its factory can a repository of that type be created and opened.
 - **`connectionValidator`** gives immediate feedback in the form. The provider remains
   responsible for the real errors: connection, authentication, timeout and cleanup.
 
-`EkgRepositoryDbType` in `timeseries.spi` is an open identity, not an enum. `descriptor.repositoryType()` defines the
+`EkgRepositoryDbType` in `repository.spi` is an open identity, not an enum. `descriptor.repositoryType()` defines the
 ID, so no central list of types has to be extended. `RepositoryTypeRegistry` rejects two types with
 the same ID.
 
@@ -107,4 +107,5 @@ them, but one with the same need has to be added there:
   preselects Solr (Classic) in the form.
 - `RepositoryDataAccessServiceImpl` derives the table name for ClickHouse.
 
-`LayerArchitectureTest` keeps the repository UI from importing an adapter class.
+`LayerArchitectureTest` keeps the repository UI from importing an adapter class, and the
+technologies from depending on each other.

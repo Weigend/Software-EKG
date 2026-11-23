@@ -1,11 +1,11 @@
 package io.softwareecg.awb.repository.model;
 
-import io.softwareecg.awb.timeseries.spi.EkgRepositoryDbType;
-import io.softwareecg.awb.timeseries.schema.DocumentType;
-import io.softwareecg.awb.timeseries.schema.PersistedField;
+import io.softwareecg.awb.repository.spi.EkgRepositoryDbType;
+import io.softwareecg.awb.repository.schema.DocumentType;
+import io.softwareecg.awb.repository.schema.PersistedField;
 import org.apache.commons.lang3.StringUtils;
 
-import static io.softwareecg.awb.timeseries.schema.EkgSchemaField.*;
+import static io.softwareecg.awb.repository.schema.EkgSchemaField.*;
 
 /**
  * todo insert comment here

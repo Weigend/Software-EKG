@@ -14,7 +14,7 @@ package io.softwareecg.awb.querycatalog;
 
 import io.softwareecg.awb.queryengine.MetricDataAccessService;
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.timeseries.port.RepositoryException;
+import io.softwareecg.awb.repository.port.RepositoryException;
 import io.softwareecg.awb.timeseries.TimeSeries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

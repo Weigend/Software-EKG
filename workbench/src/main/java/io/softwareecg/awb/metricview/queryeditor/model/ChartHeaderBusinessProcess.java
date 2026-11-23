@@ -26,7 +26,7 @@ import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
 import io.softwareecg.awb.queryengine.model.MetricQuery;
 import io.softwareecg.awb.investigation.model.QuerySpec;
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.timeseries.port.query.facet.FacetParams;
+import io.softwareecg.awb.repository.port.query.facet.FacetParams;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
