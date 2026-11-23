@@ -41,9 +41,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.softwareecg.awb.sdk.core.events.ChangedEvent.Change.ADD;
-import static io.softwareecg.awb.sdk.core.events.ChangedEvent.Change.DELETE;
-import static io.softwareecg.awb.sdk.core.events.ChangedEvent.Change.UPDATE;
+import static io.softwareecg.awb.runtime.events.ChangedEvent.Change.ADD;
+import static io.softwareecg.awb.runtime.events.ChangedEvent.Change.DELETE;
+import static io.softwareecg.awb.runtime.events.ChangedEvent.Change.UPDATE;
 
 /**
  *  A data access service that provides functionality to read, write & query

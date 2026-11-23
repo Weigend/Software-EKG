@@ -5,7 +5,7 @@ import io.softwareecg.awb.sdk.awbapi.repository.ImporterSourceRepository;
 import io.softwareecg.awb.sdk.awbapi.repository.Repository;
 import io.softwareecg.awb.sdk.awbapi.repository.SeriesImportService;
 import io.softwareecg.awb.sdk.awbapi.repository.SourceRepositoryService;
-import io.softwareecg.awb.sdk.core.lookup.ServiceDiscovery;
+import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import io.softwareecg.awb.sdk.datamodel.RawSeriesData;
 import io.softwareecg.awb.sdk.datamodel.SeriesData;
 import io.softwareecg.awb.sdk.importer.tasks.steps.writer.SeriesMetaWriter;

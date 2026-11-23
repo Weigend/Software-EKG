@@ -14,7 +14,7 @@ package io.softwareecg.awb.repository.api.events;
 
 
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.sdk.core.events.ChangedEvent;
+import io.softwareecg.awb.runtime.events.ChangedEvent;
 
 /**
  * An event that indicates that a types has been changed.

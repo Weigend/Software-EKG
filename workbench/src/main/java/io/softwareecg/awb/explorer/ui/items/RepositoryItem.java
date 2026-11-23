@@ -13,7 +13,7 @@
 package io.softwareecg.awb.explorer.ui.items;
 
 
-import io.softwareecg.awb.common.cdi.BeanProvider;
+import io.softwareecg.awb.runtime.di.BeanProvider;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.da.api.RepositoryNotAvailableException;
 import io.softwareecg.awb.repository.api.RepositoryService;

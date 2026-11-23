@@ -2,31 +2,47 @@
 //
 //                  Project:    Software EKG
 //______________________________________________________________________________
-package io.softwareecg.awb.common.cdi;
+package io.softwareecg.awb.runtime.di;
 
 import io.avaje.inject.BeanScope;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.platform.core.eventbus.AnnotationProcessor;
 import jakarta.inject.Inject;
+import jakarta.inject.Qualifier;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 /**
- * Performs dependency injection on instances that are not managed by the
- * active DI container themselves (FXML controllers, ServiceLoader-discovered
- * items, dialogs instantiated via {@code new}).
- * <p>Uses the Avaje {@link BeanScope} exposed through WFX {@link Lookup}.
+ * Performs reflection-based dependency injection on instances that are not
+ * managed by the active DI container themselves (FXML controllers,
+ * ServiceLoader-discovered items, dialogs instantiated via {@code new}).
+ * <p>
+ * Resolves {@code @Inject} fields through the Avaje {@link BeanScope}
+ * exposed via WFX {@link Lookup}, honouring JSR-330 {@code @Qualifier}
+ * annotations. After field injection, hands the instance to
+ * {@link AnnotationProcessor} so any {@code @EventSubscriber}-annotated
+ * methods are wired to the WFX event bus.
+ *
+ * <p>Avaje does not provide an out-of-the-box {@code BeanScope.inject(instance)}
+ * because its compile-time DI model expects beans to be wired by their
+ * generated {@code $DI} class. For non-bean instances the only path is
+ * reflection — which means classes injected this way require GraalVM
+ * reachability metadata for native-image builds.
+ *
+ * <p>Replaces the legacy {@code CdiInjection}/{@code AvajeInjection} helpers.
  */
-public final class BeanProvider {
+public final class DiInjection {
 
-    private BeanProvider() {
+    private DiInjection() {
     }
 
     /**
-     * Performs dependency injection on the given instance.
+     * Performs dependency injection on an instance, resolving the
+     * {@link BeanScope} through {@link Lookup}.
      *
-     * @param instance current instance, may be {@code null}
-     * @param <T>      current type
+     * @param instance the target instance, may be {@code null}
+     * @param <T>      the instance type
      * @return the same instance with {@code @Inject}-fields populated, or
      *         {@code null} if the input was {@code null}
      */
@@ -37,14 +53,20 @@ public final class BeanProvider {
         BeanScope scope = tryLookup(BeanScope.class);
         if (scope == null) {
             throw new IllegalStateException(
-                    "No DI container active - Avaje BeanScope is not reachable through Lookup");
+                    "No DI container active — Avaje BeanScope is not reachable through Lookup");
         }
-        injectViaAvaje(instance, scope);
-        AnnotationProcessor.process(instance);
-        return instance;
+        return injectFields(instance, scope);
     }
 
-    private static <T> T injectViaAvaje(T instance, BeanScope scope) {
+    /**
+     * Performs dependency injection on an instance using an explicit
+     * {@link BeanScope}. Useful for tests that build a scope directly without
+     * going through {@link Lookup}.
+     */
+    public static <T> T injectFields(T instance, BeanScope scope) {
+        if (instance == null) {
+            return null;
+        }
         Class<?> cls = instance.getClass();
         while (cls != null && cls != Object.class) {
             for (Field field : cls.getDeclaredFields()) {
@@ -68,13 +90,10 @@ public final class BeanProvider {
             }
             cls = cls.getSuperclass();
         }
+        AnnotationProcessor.process(instance);
         return instance;
     }
 
-    /**
-     * Tolerant {@code Lookup.lookup}: returns {@code null} if the strategy
-     * does not have the type registered (instead of throwing). The two DI
-     */
     private static <T> T tryLookup(Class<T> type) {
         try {
             return Lookup.lookup(type);
@@ -83,18 +102,13 @@ public final class BeanProvider {
         }
     }
 
-    /**
-     * Avaje stores a single qualifier name per bean (simple name of the
-     * {@code @Qualifier}-meta annotation). A field annotated {@code @Embedded}
-     * thus requests the bean named "Embedded".
-     */
     private static String qualifierName(Field field) {
-        for (java.lang.annotation.Annotation a : field.getAnnotations()) {
-            Class<? extends java.lang.annotation.Annotation> type = a.annotationType();
+        for (Annotation a : field.getAnnotations()) {
+            Class<? extends Annotation> type = a.annotationType();
             if (type == Inject.class) {
                 continue;
             }
-            if (type.isAnnotationPresent(jakarta.inject.Qualifier.class)) {
+            if (type.isAnnotationPresent(Qualifier.class)) {
                 return type.getSimpleName();
             }
         }

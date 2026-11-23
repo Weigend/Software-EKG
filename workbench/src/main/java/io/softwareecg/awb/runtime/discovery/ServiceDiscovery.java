@@ -1,6 +1,6 @@
-package io.softwareecg.awb.sdk.core.lookup;
+package io.softwareecg.awb.runtime.discovery;
 
-import io.softwareecg.awb.sdk.core.di.DiInjection;
+import io.softwareecg.awb.runtime.di.DiInjection;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 

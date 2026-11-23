@@ -3,7 +3,7 @@ package io.softwareecg.awb.repository.ui;
 import io.softwareecg.awb.application.api.EkgApplicationController;
 import io.softwareecg.awb.common.ui.explorer.ExplorerController;
 import io.softwareecg.awb.common.ui.explorer.RootItem;
-import io.softwareecg.awb.common.module.EkgModule;
+import io.softwareecg.awb.runtime.module.EkgModule;
 import io.softwareecg.awb.repository.ui.admin.EkgRepositoryAdmin;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.platform.api.Module;

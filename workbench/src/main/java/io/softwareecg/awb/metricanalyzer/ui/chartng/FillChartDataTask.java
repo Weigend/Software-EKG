@@ -6,7 +6,7 @@ import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.QueryFilterParams;
 import io.softwareecg.awb.metricanalyzer.bl.visualisation.ComputedTimeSeriesResponse;
 import io.softwareecg.awb.metricanalyzer.bl.visualisation.MetricQueryService;
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.sdk.core.events.AwbErrorEvent;
+import io.softwareecg.awb.runtime.events.AwbErrorEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.awb.sdk.core.log.EkgLogger;
 import io.softwareecg.wfx.lookup.api.Lookup;

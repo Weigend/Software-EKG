@@ -5,7 +5,7 @@ import io.softwareecg.awb.project.api.model.Project;
 import io.softwareecg.awb.project.ui.repositoryselector.RepositorySelectorPane;
 import io.softwareecg.awb.sdk.awbapi.explorer.ExplorerUpdateEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
-import io.softwareecg.awb.sdk.core.lookup.ServiceDiscovery;
+import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import jakarta.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonType;

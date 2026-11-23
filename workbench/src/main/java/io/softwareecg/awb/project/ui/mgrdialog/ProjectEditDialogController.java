@@ -5,7 +5,7 @@ import io.softwareecg.awb.project.api.model.Project;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.sdk.awbapi.explorer.ExplorerUpdateEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
-import io.softwareecg.awb.sdk.core.lookup.ServiceDiscovery;
+import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import jakarta.inject.Inject;
 import io.softwareecg.awb.sdk.importer.ui.controls.qdsselector.QuerySourceSelector;
 import javafx.fxml.FXML;

@@ -2,7 +2,7 @@
 //
 //                  Project:    Software EKG
 //______________________________________________________________________________
-package io.softwareecg.awb.sdk.core.events;
+package io.softwareecg.awb.runtime.events;
 
 import java.util.EventObject;
 import java.util.Objects;

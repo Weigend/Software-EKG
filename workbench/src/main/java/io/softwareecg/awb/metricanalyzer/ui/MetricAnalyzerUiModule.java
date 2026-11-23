@@ -12,7 +12,7 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.metricanalyzer.ui;
 
-import io.softwareecg.awb.common.module.EkgModule;
+import io.softwareecg.awb.runtime.module.EkgModule;
 import io.softwareecg.awb.explorer.ui.TreeIconsProviderRegistry;
 import io.softwareecg.awb.metricanalyzer.ui.api.MetricTreeIconsProvider;
 import io.softwareecg.awb.metricanalyzer.ui.explorer.ItemBuilderManager;

@@ -13,7 +13,7 @@
 package io.softwareecg.awb.common.ui.components;
 
 import io.softwareecg.awb.common.ui.bindings.Bindings;
-import io.softwareecg.awb.common.cdi.BeanProvider;
+import io.softwareecg.awb.runtime.di.BeanProvider;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import javafx.beans.property.*;
 import javafx.fxml.FXML;

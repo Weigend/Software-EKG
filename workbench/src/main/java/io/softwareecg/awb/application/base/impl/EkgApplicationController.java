@@ -17,8 +17,8 @@ import io.softwareecg.awb.application.api.events.BeforeRestoreDefaultLayoutEvent
 import io.softwareecg.awb.application.base.about.AboutDialogController;
 import io.softwareecg.awb.common.ui.events.FinishEvent;
 import io.softwareecg.awb.common.ui.view.AppWindowProvider;
-import io.softwareecg.awb.sdk.core.events.AwbErrorEvent;
-import io.softwareecg.awb.sdk.core.events.CancellableTaskEvent;
+import io.softwareecg.awb.runtime.events.AwbErrorEvent;
+import io.softwareecg.awb.runtime.events.CancellableTaskEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.awb.sdk.core.log.EkgLogger;
 import io.softwareecg.wfx.lookup.api.Lookup;

@@ -10,7 +10,7 @@
 // experienced craftsmen and innovators in Munich, Germany.
 // Changes should be done with respect to the original design.
 //______________________________________________________________________________
-package io.softwareecg.awb.sdk.core.events;
+package io.softwareecg.awb.runtime.events;
 
 import java.util.EventObject;
 

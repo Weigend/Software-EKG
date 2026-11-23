@@ -2,7 +2,7 @@ package io.softwareecg.awb.explorer.ui;
 
 import io.softwareecg.awb.common.ui.explorer.ExplorerController;
 import io.softwareecg.awb.common.ui.view.ViewMapper;
-import io.softwareecg.awb.common.module.ModuleException;
+import io.softwareecg.awb.runtime.module.ModuleException;
 import io.softwareecg.awb.sdk.core.log.EkgLogger;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.platform.api.Module;

@@ -5,7 +5,7 @@ import io.softwareecg.awb.sdk.awbapi.repository.*;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.events.ProgressEvent;
 import io.softwareecg.wfx.lookup.api.Lookup;
-import io.softwareecg.awb.sdk.core.lookup.ServiceDiscovery;
+import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import io.softwareecg.awb.sdk.datamodel.RawSeriesData;
 import io.softwareecg.awb.sdk.datamodel.SeriesData;
 import io.softwareecg.awb.sdk.importer.tasks.steps.filter.MetadataDeltaFilter;

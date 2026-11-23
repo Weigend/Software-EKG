@@ -40,7 +40,7 @@ public class SeriesImportServiceImpl implements SeriesImportService {
 
     /**
      * Default constructor used by Avaje for the singleton bean (acts as
-     * a class-discovery template for {@link io.softwareecg.awb.sdk.core.lookup.ServiceDiscovery},
+     * a class-discovery template for {@link io.softwareecg.awb.runtime.discovery.ServiceDiscovery},
      * which then creates per-call instances via the {@link Repository} ctor below).
      */
     @Inject

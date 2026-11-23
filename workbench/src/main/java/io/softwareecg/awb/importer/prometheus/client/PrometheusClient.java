@@ -6,7 +6,7 @@ import io.softwareecg.awb.importer.prometheus.client.model.api.label.ListLabelRe
 import io.softwareecg.awb.importer.prometheus.client.model.api.query.ListSeriesResult;
 import io.softwareecg.awb.importer.prometheus.client.model.api.query.QueryResult;
 import io.softwareecg.awb.importer.prometheus.client.model.api.query.RangeQuery;
-import io.softwareecg.awb.sdk.core.events.AwbErrorEvent;
+import io.softwareecg.awb.runtime.events.AwbErrorEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.awb.sdk.core.log.EkgLogger;
 import io.softwareecg.wfx.lookup.api.Lookup;

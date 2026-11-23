@@ -1,6 +1,6 @@
 package io.softwareecg.awb.metricanalyzer.ui.bookmarks;
 
-import io.softwareecg.awb.common.cdi.BeanProvider;
+import io.softwareecg.awb.runtime.di.BeanProvider;
 import io.softwareecg.awb.metricanalyzer.bl.bookmarks.et.BookmarkGroup;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.wfx.lookup.api.Lookup;

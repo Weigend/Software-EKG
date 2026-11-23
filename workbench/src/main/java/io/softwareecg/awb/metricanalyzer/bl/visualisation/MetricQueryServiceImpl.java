@@ -19,7 +19,7 @@ import io.softwareecg.awb.sdk.awbapi.repository.RepositoryException;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.events.ProgressEvent;
 import io.softwareecg.awb.sdk.core.log.EkgLogger;
-import io.softwareecg.awb.sdk.core.lookup.ServiceDiscovery;
+import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import io.softwareecg.awb.sdk.datamodel.TimeSeries;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;

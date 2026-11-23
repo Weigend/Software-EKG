@@ -1,4 +1,4 @@
-package io.softwareecg.awb.sdk.core.events;
+package io.softwareecg.awb.runtime.events;
 
 import org.apache.commons.lang3.StringUtils;
 

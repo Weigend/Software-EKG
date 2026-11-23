@@ -14,7 +14,7 @@ package io.softwareecg.awb.metricanalyzer.ui.explorer.items.bookmarks;
 
 import io.softwareecg.awb.common.ui.events.OpeningMode;
 import io.softwareecg.awb.common.ui.explorer.api.AbstractItem;
-import io.softwareecg.awb.common.cdi.BeanProvider;
+import io.softwareecg.awb.runtime.di.BeanProvider;
 import io.softwareecg.awb.metricanalyzer.bl.bookmarks.MetricsBookmarkService;
 import io.softwareecg.awb.metricanalyzer.bl.bookmarks.et.Bookmark;
 import io.softwareecg.awb.metricanalyzer.ui.api.ContextAwareItem;

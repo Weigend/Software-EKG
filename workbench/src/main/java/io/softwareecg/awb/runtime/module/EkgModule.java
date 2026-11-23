@@ -1,4 +1,4 @@
-package io.softwareecg.awb.common.module;
+package io.softwareecg.awb.runtime.module;
 
 /**
  * Module interface to implement the initialization and the shutdown

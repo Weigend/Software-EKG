@@ -10,7 +10,7 @@ import io.softwareecg.awb.project.api.model.ProjectType;
 import io.softwareecg.awb.sdk.awbapi.project.CloudPlatformType;
 import io.softwareecg.awb.sdk.awbapi.project.ProjectFlavor;
 import io.softwareecg.awb.sdk.awbapi.repository.Repository;
-import io.softwareecg.awb.sdk.core.lookup.ServiceDiscovery;
+import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import io.softwareecg.awb.sdk.importer.ui.skins.EkgComboBoxListViewSkin;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;

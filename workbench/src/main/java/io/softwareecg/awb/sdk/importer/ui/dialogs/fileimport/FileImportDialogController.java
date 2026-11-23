@@ -3,7 +3,7 @@ package io.softwareecg.awb.sdk.importer.ui.dialogs.fileimport;
 import io.softwareecg.awb.sdk.awbapi.project.ProjectSelector;
 import io.softwareecg.awb.sdk.awbapi.repository.RepositorySelector;
 import io.softwareecg.awb.sdk.awbapi.repository.SeriesImportService;
-import io.softwareecg.awb.sdk.core.lookup.ServiceDiscovery;
+import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import io.softwareecg.awb.sdk.importer.tasks.LocalProjectImportStrategy;
 import io.softwareecg.awb.sdk.importer.tasks.LocalProjectImportTask;
 import io.softwareecg.awb.sdk.importer.tasks.SplitSourceProjectImportStrategy;

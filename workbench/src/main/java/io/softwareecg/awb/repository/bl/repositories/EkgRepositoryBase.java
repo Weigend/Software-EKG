@@ -7,7 +7,7 @@ import io.softwareecg.awb.da.api.RepositoryClientFactory;
 import io.softwareecg.awb.repository.api.model.EkgRepositoryDbType;
 import io.softwareecg.awb.sdk.awbapi.repository.ResourceAuthType;
 import io.softwareecg.awb.sdk.core.log.EkgLogger;
-import io.softwareecg.awb.sdk.core.lookup.ServiceDiscovery;
+import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 

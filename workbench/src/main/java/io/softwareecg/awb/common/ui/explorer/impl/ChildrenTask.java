@@ -14,7 +14,7 @@ package io.softwareecg.awb.common.ui.explorer.impl;
 
 import io.softwareecg.awb.common.ui.explorer.api.AbstractItem;
 import io.softwareecg.awb.common.ui.explorer.api.ProgressNotifier;
-import io.softwareecg.awb.sdk.core.events.AwbErrorEvent;
+import io.softwareecg.awb.runtime.events.AwbErrorEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.events.ProgressEvent;
 import io.softwareecg.wfx.lookup.api.Lookup;

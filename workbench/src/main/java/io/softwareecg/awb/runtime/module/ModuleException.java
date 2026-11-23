@@ -1,4 +1,4 @@
-package io.softwareecg.awb.common.module;
+package io.softwareecg.awb.runtime.module;
 
 /**
  * Generic module exception.

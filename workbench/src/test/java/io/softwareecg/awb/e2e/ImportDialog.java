@@ -1,7 +1,7 @@
 package io.softwareecg.awb.e2e;
 
-import io.softwareecg.awb.sdk.core.events.AwbErrorEvent;
-import io.softwareecg.awb.sdk.core.events.CancellableTaskEvent;
+import io.softwareecg.awb.runtime.events.AwbErrorEvent;
+import io.softwareecg.awb.runtime.events.CancellableTaskEvent;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.EventBusListener;

@@ -7,7 +7,7 @@ import javafx.scene.Parent;
 import org.slf4j.Logger;
 
 import java.net.URL;
-import io.softwareecg.awb.sdk.core.di.DiInjection;
+import io.softwareecg.awb.runtime.di.DiInjection;
 
 /**
  * Helper class that prevent unnecessary glue code by providing functionality

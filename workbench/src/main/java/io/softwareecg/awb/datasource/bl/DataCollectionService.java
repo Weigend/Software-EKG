@@ -21,7 +21,7 @@ import io.softwareecg.awb.sdk.awbapi.explorer.ExplorerUpdateEvent;
 import io.softwareecg.awb.sdk.awbapi.project.CloudPlatformType;
 import io.softwareecg.awb.sdk.awbapi.project.ProjectFlavor;
 import io.softwareecg.awb.sdk.awbapi.repository.SeriesImportService;
-import io.softwareecg.awb.sdk.core.lookup.ServiceDiscovery;
+import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import io.softwareecg.collector.config.CollectorConfiguration;
 import io.softwareecg.collector.config.CollectorConfigurations;
 import io.softwareecg.collector.control.CollectorEngine;

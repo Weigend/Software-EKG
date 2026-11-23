@@ -12,7 +12,7 @@ import io.softwareecg.awb.metricanalyzer.ui.explorer.items.series.MetricItem;
 import io.softwareecg.awb.sdk.awbapi.repository.ImporterSourceRepository;
 import io.softwareecg.awb.sdk.awbapi.repository.SourceRepositoryService;
 import io.softwareecg.awb.sdk.core.log.EkgLogger;
-import io.softwareecg.awb.sdk.core.lookup.ServiceDiscovery;
+import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import io.softwareecg.awb.sdk.datamodel.Counter;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
