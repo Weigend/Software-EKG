@@ -2,6 +2,9 @@ package io.softwareecg.awb.sdk.importer.tasks;
 
 import io.softwareecg.awb.sdk.awbapi.project.TargetProjectConfig;
 import io.softwareecg.awb.sdk.awbapi.repository.*;
+import io.softwareecg.awb.timeseries.dimension.FilterDimension;
+import io.softwareecg.awb.timeseries.port.TimeSeriesImportSource;
+import io.softwareecg.awb.timeseries.port.TimeSeriesWriteService;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.events.ProgressEvent;
 import io.softwareecg.wfx.lookup.api.Lookup;
@@ -37,7 +40,7 @@ public abstract class SplitSourceProjectImportStrategy {
     /**
      *
      */
-    private SeriesImportService importService;
+    private TimeSeriesWriteService importService;
 
     /**
      *
@@ -48,7 +51,7 @@ public abstract class SplitSourceProjectImportStrategy {
      */
     public RemoteProjectImportTask createImportTask(Repository selectedRepository, TargetProjectConfig currentProjectConfig) {
         this.projectConfiguration = currentProjectConfig;
-        this.importService = ServiceDiscovery.lookup(SeriesImportService.class, selectedRepository);
+        this.importService = ServiceDiscovery.lookup(TimeSeriesWriteService.class, selectedRepository);
         return new RemoteProjectImportTask(importService, selectedRepository, projectConfiguration, this);
     }
 
@@ -130,7 +133,7 @@ public abstract class SplitSourceProjectImportStrategy {
         };
     }
 
-    protected abstract Stream<RawSeriesData> readRawSeriesData(ImporterSourceRepository sourceRepositoryDefinition);
+    protected abstract Stream<RawSeriesData> readRawSeriesData(TimeSeriesImportSource sourceRepositoryDefinition);
 
     //-----------------------------------------------------------------------------------------------------------------
     // helper methods for common event/update functionality that can used by deriving classes

@@ -1,5 +1,6 @@
 package io.softwareecg.awb.sdk.awbapi.repository;
 
+import io.softwareecg.awb.metadata.model.AliasMappingDefinition;
 
 /**
  * Interface that represents factory classes that provide

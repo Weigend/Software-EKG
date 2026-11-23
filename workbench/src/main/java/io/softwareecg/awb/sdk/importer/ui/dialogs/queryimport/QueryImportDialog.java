@@ -1,7 +1,7 @@
 package io.softwareecg.awb.sdk.importer.ui.dialogs.queryimport;
 
 import io.softwareecg.awb.sdk.awbapi.project.ProjectSelector;
-import io.softwareecg.awb.sdk.awbapi.repository.ImporterSourceRepository;
+import io.softwareecg.awb.timeseries.port.TimeSeriesImportSource;
 import io.softwareecg.awb.sdk.awbapi.repository.ResourceAuthType;
 import io.softwareecg.awb.sdk.core.resourceloader.CdiFxmlLoader;
 import io.softwareecg.awb.sdk.importer.tasks.LocalProjectImportStrategy;
@@ -34,7 +34,7 @@ public class QueryImportDialog extends ImportDialog {
         return controller.getProjectSelector();
     }
 
-    public ReadOnlyProperty<ImporterSourceRepository> getImportSourceRepositoryProperty() {
+    public ReadOnlyProperty<TimeSeriesImportSource> getImportSourceRepositoryProperty() {
         return controller.getQuerySourceSelector().getImportSourceRepositoryProperty();
     }
 

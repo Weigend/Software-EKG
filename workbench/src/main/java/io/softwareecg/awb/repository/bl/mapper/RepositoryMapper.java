@@ -3,7 +3,7 @@ package io.softwareecg.awb.repository.bl.mapper;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.api.model.EkgRepositoryDbType;
 import io.softwareecg.awb.repository.bl.repositories.RepositoryEt;
-import io.softwareecg.awb.sdk.awbapi.repository.ImporterSourceRepository;
+import io.softwareecg.awb.timeseries.port.TimeSeriesImportSource;
 import io.softwareecg.awb.sdk.awbapi.repository.ResourceAuthType;
 import io.softwareecg.awb.sdk.core.log.EkgLogger;
 import io.softwareecg.wfx.lookup.api.Lookup;
@@ -85,7 +85,7 @@ public class RepositoryMapper {
         return null;
     }
 
-    public static RepositoryEt mapToRepositoryEt(ImporterSourceRepository sourceRepository) {
+    public static RepositoryEt mapToRepositoryEt(TimeSeriesImportSource sourceRepository) {
         RepositoryEt entity = new RepositoryEt();
         entity.setId(sourceRepository.getId());
         entity.setAccordingProjectName(sourceRepository.getAccordingProjectName());
@@ -99,8 +99,8 @@ public class RepositoryMapper {
         return entity;
     }
 
-    public static ImporterSourceRepository mapToImporterSourceRepository(RepositoryEt repositoryEt) {
-        ImporterSourceRepository entity = new ImporterSourceRepository();
+    public static TimeSeriesImportSource mapToImporterSourceRepository(RepositoryEt repositoryEt) {
+        TimeSeriesImportSource entity = new TimeSeriesImportSource();
         entity.setId(repositoryEt.getId());
         entity.setAccordingProjectName(repositoryEt.getAccordingProjectName());
         entity.setRepositoryUrl(repositoryEt.getUrl());

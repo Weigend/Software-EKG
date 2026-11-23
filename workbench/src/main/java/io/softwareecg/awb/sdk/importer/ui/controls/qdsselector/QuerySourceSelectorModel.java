@@ -1,6 +1,6 @@
 package io.softwareecg.awb.sdk.importer.ui.controls.qdsselector;
 
-import io.softwareecg.awb.sdk.awbapi.repository.ImporterSourceRepository;
+import io.softwareecg.awb.timeseries.port.TimeSeriesImportSource;
 import io.softwareecg.awb.sdk.awbapi.repository.Repository;
 import io.softwareecg.awb.sdk.awbapi.repository.ResourceAuthType;
 import javafx.beans.binding.BooleanBinding;
@@ -43,18 +43,18 @@ public class QuerySourceSelectorModel {
 
     private final BooleanProperty isValidProjectConfig = new SimpleBooleanProperty(false);
 
-    private ImporterSourceRepository sourceRepository = null;
+    private TimeSeriesImportSource sourceRepository = null;
 
     //-----------------------------------------------------------------------------------------------------------------
     //  accessor for the properties
     //-----------------------------------------------------------------------------------------------------------------
 
 
-    public ImporterSourceRepository getSourceRepository() {
+    public TimeSeriesImportSource getSourceRepository() {
         return sourceRepository;
     }
 
-    public void setSourceRepository(ImporterSourceRepository sourceRepository) {
+    public void setSourceRepository(TimeSeriesImportSource sourceRepository) {
         this.sourceRepository = sourceRepository;
     }
 
@@ -155,24 +155,24 @@ public class QuerySourceSelectorModel {
         return selectedRepository;
     }
 
-    public ReadOnlyProperty<ImporterSourceRepository> getImportSourceRepositoryProperty() {
+    public ReadOnlyProperty<TimeSeriesImportSource> getImportSourceRepositoryProperty() {
 
         return new ReadOnlyObjectPropertyBase<>() {
 
             @Override
-            public ImporterSourceRepository get() {
+            public TimeSeriesImportSource get() {
 
                 if (!isValidProjectConfig()) {
                     return null;
                 }
 
-                ImporterSourceRepository sourceDefinition = getSourceRepository();
+                TimeSeriesImportSource sourceDefinition = getSourceRepository();
 
                 if (sourceDefinition != null) {
                     return sourceDefinition;
                 }
 
-                sourceDefinition = new ImporterSourceRepository();
+                sourceDefinition = new TimeSeriesImportSource();
                 sourceDefinition.setAccordingProjectName(getProjectName());
                 sourceDefinition.setRepositoryUrl(getRepositoryUrl());
                 sourceDefinition.setAuthType(getSelectedAuthTyp());

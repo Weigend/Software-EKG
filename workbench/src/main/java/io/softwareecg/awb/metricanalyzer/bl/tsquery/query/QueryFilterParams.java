@@ -22,7 +22,7 @@ import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.physical.Host;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.physical.HostGroup;
 import io.softwareecg.awb.project.api.model.Project;
 import io.softwareecg.awb.da.api.dataobject.facet.FacetParams;
-import io.softwareecg.awb.sdk.awbapi.repository.ImporterSourceRepository;
+import io.softwareecg.awb.timeseries.port.TimeSeriesImportSource;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -56,7 +56,7 @@ public class QueryFilterParams {
      * properties that used to access the remote data.
      * Only need to set than Project.isRemoteProject() == true
      */
-    private ImporterSourceRepository importerSourceRepository;
+    private TimeSeriesImportSource importerSourceRepository;
 
     //-----------------------------------------------------------------------------------------------------------------
     //  classic filter dimensions
@@ -290,11 +290,11 @@ public class QueryFilterParams {
         return hostGroup == null ? "" : hostGroup.getValueName();
     }
 
-    public ImporterSourceRepository getImporterSourceRepository() {
+    public TimeSeriesImportSource getImporterSourceRepository() {
         return importerSourceRepository;
     }
 
-    public void setImporterSourceRepository(ImporterSourceRepository importerSourceRepository) {
+    public void setImporterSourceRepository(TimeSeriesImportSource importerSourceRepository) {
         this.importerSourceRepository = importerSourceRepository;
     }
 
@@ -592,7 +592,7 @@ public class QueryFilterParams {
 
         private String rawQuery;
         private Project project;
-        private ImporterSourceRepository sourceRepositoryDefinition;
+        private TimeSeriesImportSource sourceRepositoryDefinition;
 
         private HostGroup hostGroup;
         private Host host;
@@ -765,7 +765,7 @@ public class QueryFilterParams {
         }
 
 
-        public Builder<T> withImporterSourceRepository(ImporterSourceRepository sourceRepositoryDefinition) {
+        public Builder<T> withImporterSourceRepository(TimeSeriesImportSource sourceRepositoryDefinition) {
             this.sourceRepositoryDefinition = sourceRepositoryDefinition;
             return this;
         }

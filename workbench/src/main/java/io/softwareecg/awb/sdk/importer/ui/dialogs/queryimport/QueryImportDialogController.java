@@ -4,7 +4,7 @@ import io.softwareecg.awb.sdk.awbapi.project.ProjectSelector;
 import io.softwareecg.awb.sdk.awbapi.project.TargetProjectConfig;
 import io.softwareecg.awb.sdk.awbapi.repository.RepositorySelector;
 import io.softwareecg.awb.sdk.awbapi.repository.ResourceAuthType;
-import io.softwareecg.awb.sdk.awbapi.repository.SeriesImportService;
+import io.softwareecg.awb.timeseries.port.TimeSeriesWriteService;
 import io.softwareecg.awb.sdk.core.log.EkgLogger;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import io.softwareecg.awb.sdk.importer.tasks.LocalProjectImportStrategy;
@@ -322,7 +322,7 @@ public class QueryImportDialogController implements Initializable {
             }
 
             LocalProjectImportTask task = localProjectImportStrategy.createImportTask(
-                    ServiceDiscovery.lookup(SeriesImportService.class, repositorySelector.getSelectedRepository()),
+                    ServiceDiscovery.lookup(TimeSeriesWriteService.class, repositorySelector.getSelectedRepository()),
                     config);
 
             task.start();

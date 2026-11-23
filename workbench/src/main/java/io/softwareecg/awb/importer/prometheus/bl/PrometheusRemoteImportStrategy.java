@@ -4,7 +4,7 @@ import io.softwareecg.awb.importer.prometheus.client.PrometheusClient;
 import io.softwareecg.awb.importer.prometheus.client.model.api.ResultStatus;
 import io.softwareecg.awb.importer.prometheus.client.model.api.label.ListLabelResult;
 import io.softwareecg.awb.importer.prometheus.client.model.api.query.SeriesDefinition;
-import io.softwareecg.awb.sdk.awbapi.repository.ImporterSourceRepository;
+import io.softwareecg.awb.timeseries.port.TimeSeriesImportSource;
 import io.softwareecg.awb.sdk.core.log.EkgLogger;
 import io.softwareecg.awb.sdk.core.security.SecurityContext;
 import io.softwareecg.awb.sdk.datamodel.RawSeriesData;
@@ -36,7 +36,7 @@ public class PrometheusRemoteImportStrategy extends SplitSourceProjectImportStra
      * @see io.softwareecg.awb.sdk.importer.tasks.SplitSourceProjectImportStrategy#readRawSeriesData
      */
     @Override
-    protected Stream<RawSeriesData> readRawSeriesData(ImporterSourceRepository sourceRepositoryDefinition) {
+    protected Stream<RawSeriesData> readRawSeriesData(TimeSeriesImportSource sourceRepositoryDefinition) {
 
         setupPrometheusClient(sourceRepositoryDefinition);
 
@@ -88,12 +88,12 @@ public class PrometheusRemoteImportStrategy extends SplitSourceProjectImportStra
 
     /**
      * Retrieves and configure the Prometheus client proxy that will used to load the time series
-     * metadata from the Prometheus database specified by the given {@link ImporterSourceRepository} instance.
+     * metadata from the Prometheus database specified by the given {@link TimeSeriesImportSource} instance.
      *
      * @param sourceRepository the source definition that specifies interface endpoints
      *                                   and credentials for the Prometheus database
      */
-    private void setupPrometheusClient(ImporterSourceRepository sourceRepository) {
+    private void setupPrometheusClient(TimeSeriesImportSource sourceRepository) {
         prometheusClient = new PrometheusClient();
         prometheusClient.bindToAddress(sourceRepository.getRepositoryUrl());
 

@@ -1,13 +1,15 @@
 package io.softwareecg.awb.sdk.awbapi.repository;
 
+import io.softwareecg.awb.timeseries.port.TimeSeriesImportSource;
+
 import java.util.List;
 
 /**
  * This interface represents service implementations that are
- * responsible for read and write {@link ImporterSourceRepository} object
+ * responsible for read and write {@link TimeSeriesImportSource} object
  * from/to the EKG repository.
  *
- * ImporterSourceRepository's are used to read TimeSeries data form remote data sources
+ * TimeSeriesImportSource's are used to read TimeSeries data form remote data sources
  * like webservice or databases.
  *
  * @since 03.02.2020
@@ -20,7 +22,7 @@ public interface SourceRepositoryService {
      *
      * @return a list of remote repositories
      */
-    List<ImporterSourceRepository> listImportSourceRepositories();
+    List<TimeSeriesImportSource> listImportSourceRepositories();
 
     /**
      * Searches for an import source types that belongs to the project
@@ -28,26 +30,26 @@ public interface SourceRepositoryService {
      * returned.
      *
      * @param projectName the name of the project the types belongs to
-     * @return an ImporterSourceRepository instance or null
+     * @return an TimeSeriesImportSource instance or null
      */
-    ImporterSourceRepository queryImportSourceRepository(String projectName);
+    TimeSeriesImportSource queryImportSourceRepository(String projectName);
 
     /**
-     * Persists the data of ImporterSourceRepository in the EKG repository.
+     * Persists the data of TimeSeriesImportSource in the EKG repository.
      *
-     * For more details use the documentation of {@link ImporterSourceRepository}
+     * For more details use the documentation of {@link TimeSeriesImportSource}
      * that provides further information about that special repository type.
      *
-     * @param sourceRepository an instance of ImporterSourceRepository to persist. If null nothing will happen.
+     * @param sourceRepository an instance of TimeSeriesImportSource to persist. If null nothing will happen.
      */
-    void persistImporterSourceRepository(ImporterSourceRepository sourceRepository);
+    void persistImporterSourceRepository(TimeSeriesImportSource sourceRepository);
 
     /**
      * Deletes an ImportSourceRepository by filtering with the name of the project
      * that references the repository.
      * The id of the repository will resolved from the project data.
      *
-     * For more details use the documentation of {@link ImporterSourceRepository}
+     * For more details use the documentation of {@link TimeSeriesImportSource}
      * that provides further information about that special repository type.
      *
      * @param projectName the name of the project that references the ImportSourceRepository that should deleted.

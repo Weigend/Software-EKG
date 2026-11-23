@@ -1,22 +1,23 @@
-package io.softwareecg.awb.sdk.awbapi.repository;
+package io.softwareecg.awb.timeseries.port;
 
-
+import io.softwareecg.awb.sdk.awbapi.repository.Repository;
+import io.softwareecg.awb.sdk.awbapi.repository.RepositoryException;
 import io.softwareecg.awb.sdk.datamodel.TimeSeries;
 
 import java.util.stream.Stream;
 
 /**
- * The SeriesImportService interface represents specialized services for
+ * The TimeSeriesWriteService interface represents specialized services for
  * importers with a set of methods designed to write series data into the
  * EKG repository and query information's need to insert (delta) data.
  *
  * @since 31.01.2020
  */
-public interface SeriesImportService {
+public interface TimeSeriesWriteService {
 
     /**
      * Returns the repository that is actually configured and used by
-     * this SeriesImportService.
+     * this TimeSeriesWriteService.
      *
      * @return the Repository that is used by the service
      */

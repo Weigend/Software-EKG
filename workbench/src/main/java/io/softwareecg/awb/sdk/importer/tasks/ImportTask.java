@@ -3,7 +3,7 @@ package io.softwareecg.awb.sdk.importer.tasks;
 import io.softwareecg.awb.sdk.awbapi.explorer.ExplorerUpdateEvent;
 import io.softwareecg.awb.sdk.awbapi.project.TargetProjectConfig;
 import io.softwareecg.awb.sdk.awbapi.repository.RepositoryDataEvent;
-import io.softwareecg.awb.sdk.awbapi.repository.SeriesImportService;
+import io.softwareecg.awb.timeseries.port.TimeSeriesWriteService;
 import io.softwareecg.awb.runtime.events.AwbErrorEvent;
 import io.softwareecg.awb.runtime.events.CancellableTaskEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
@@ -36,7 +36,7 @@ public abstract class ImportTask extends Task<Void> {
      * A service that provides the functionality to import time series data
      * and query some series metadata.
      */
-    private final SeriesImportService importService;
+    private final TimeSeriesWriteService importService;
 
     private final TargetProjectConfig projectConfig;
 
@@ -56,7 +56,7 @@ public abstract class ImportTask extends Task<Void> {
      * @param importService service that provides the functionality to import time series data
      * @param targetProjectConfig the name of the project the time-series belongs to
      */
-    public ImportTask(SeriesImportService importService, TargetProjectConfig targetProjectConfig) {
+    public ImportTask(TimeSeriesWriteService importService, TargetProjectConfig targetProjectConfig) {
         this.projectConfig = targetProjectConfig;
         this.importService = importService;
         this.eventBus = Lookup.lookup(EventBus.class);
@@ -70,7 +70,7 @@ public abstract class ImportTask extends Task<Void> {
         new Thread(this).start();
     }
 
-    public SeriesImportService getImportService() {
+    public TimeSeriesWriteService getImportService() {
         return importService;
     }
 

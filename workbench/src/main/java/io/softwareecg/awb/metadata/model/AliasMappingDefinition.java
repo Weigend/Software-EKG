@@ -1,5 +1,6 @@
-package io.softwareecg.awb.sdk.awbapi.repository;
+package io.softwareecg.awb.metadata.model;
 
+import io.softwareecg.awb.timeseries.dimension.FilterDimension;
 
 /**
  * This interface represents bean that provides the custom aliases

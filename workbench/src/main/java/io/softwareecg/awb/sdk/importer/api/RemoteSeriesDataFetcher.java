@@ -1,6 +1,6 @@
 package io.softwareecg.awb.sdk.importer.api;
 
-import io.softwareecg.awb.sdk.awbapi.repository.ImporterSourceRepository;
+import io.softwareecg.awb.timeseries.port.TimeSeriesImportSource;
 import io.softwareecg.awb.sdk.datamodel.Value;
 
 import java.util.Collection;
@@ -72,5 +72,5 @@ public interface RemoteSeriesDataFetcher {
      *
      * @param sourceRepository the remote type definition that provides address and credentials if necessary
      */
-    void setSourceRepositoryDefinition(ImporterSourceRepository sourceRepository);
+    void setSourceRepositoryDefinition(TimeSeriesImportSource sourceRepository);
 }

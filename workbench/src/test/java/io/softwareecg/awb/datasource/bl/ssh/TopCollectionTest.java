@@ -2,7 +2,7 @@ package io.softwareecg.awb.datasource.bl.ssh;
 
 import io.softwareecg.awb.datasource.bl.ProjectSeriesOutput;
 import io.softwareecg.awb.sdk.awbapi.repository.Repository;
-import io.softwareecg.awb.sdk.awbapi.repository.SeriesImportService;
+import io.softwareecg.awb.timeseries.port.TimeSeriesWriteService;
 import io.softwareecg.awb.sdk.datamodel.TimeSeries;
 import io.softwareecg.collector.config.CollectorConfigurations;
 import io.softwareecg.collector.control.CollectorEngine;
@@ -87,7 +87,7 @@ public class TopCollectionTest {
     }
 
     /** Records what is written to the project. */
-    private static final class Written implements SeriesImportService {
+    private static final class Written implements TimeSeriesWriteService {
 
         private final List<TimeSeries> chunks = new CopyOnWriteArrayList<>();
 

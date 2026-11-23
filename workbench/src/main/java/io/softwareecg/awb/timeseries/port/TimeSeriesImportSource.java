@@ -1,4 +1,6 @@
-package io.softwareecg.awb.sdk.awbapi.repository;
+package io.softwareecg.awb.timeseries.port;
+
+import io.softwareecg.awb.sdk.awbapi.repository.ResourceAuthType;
 
 import java.util.Objects;
 
@@ -9,7 +11,7 @@ import java.util.Objects;
  *
  * @since 29.07.2018
  */
-public class ImporterSourceRepository {
+public class TimeSeriesImportSource {
 
     private String id;
 
@@ -106,7 +108,7 @@ public class ImporterSourceRepository {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof ImporterSourceRepository that)) {
+        if (!(o instanceof TimeSeriesImportSource that)) {
             return false;
         }
         return Objects.equals(id, that.id) &&

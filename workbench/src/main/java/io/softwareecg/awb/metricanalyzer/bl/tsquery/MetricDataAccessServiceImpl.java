@@ -26,7 +26,7 @@ import io.softwareecg.awb.da.api.dataobject.search.SortField;
 import io.softwareecg.awb.da.api.schema.DocumentType;
 import io.softwareecg.awb.da.api.schema.EkgSchemaField;
 import io.softwareecg.awb.repository.bl.BinaryTimeSeries;
-import io.softwareecg.awb.sdk.awbapi.repository.ImporterSourceRepository;
+import io.softwareecg.awb.timeseries.port.TimeSeriesImportSource;
 import io.softwareecg.awb.sdk.awbapi.repository.RepositoryException;
 import io.softwareecg.awb.sdk.core.DateValuePairMapper;
 import io.softwareecg.awb.sdk.core.log.EkgLogger;
@@ -67,7 +67,7 @@ public class MetricDataAccessServiceImpl implements MetricDataAccessService {
 
     private RepositoryClient repositoryClient;
 
-    private static final Map<ImporterSourceRepository, RemoteSeriesDataFetcher> FETCHER_CACHE = new ConcurrentHashMap<>();
+    private static final Map<TimeSeriesImportSource, RemoteSeriesDataFetcher> FETCHER_CACHE = new ConcurrentHashMap<>();
 
     //=================================================================================================================
     //  various constructors

@@ -1,6 +1,6 @@
 package io.softwareecg.awb.sdk.importer.ui.controls.qdsselector;
 
-import io.softwareecg.awb.sdk.awbapi.repository.ImporterSourceRepository;
+import io.softwareecg.awb.timeseries.port.TimeSeriesImportSource;
 import io.softwareecg.awb.sdk.awbapi.repository.Repository;
 import io.softwareecg.awb.sdk.awbapi.repository.ResourceAuthType;
 import io.softwareecg.awb.sdk.core.resourceloader.CdiFxmlLoader;
@@ -35,7 +35,7 @@ public class QuerySourceSelector extends GridPane {
         return controller.getViewModel().selectedRepositoryProperty();
     }
 
-    public ReadOnlyProperty<ImporterSourceRepository> getImportSourceRepositoryProperty() {
+    public ReadOnlyProperty<TimeSeriesImportSource> getImportSourceRepositoryProperty() {
         return controller.getViewModel().getImportSourceRepositoryProperty();
     }
 

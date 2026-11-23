@@ -24,7 +24,7 @@ import io.softwareecg.awb.da.api.types.Embedded;
 import io.softwareecg.awb.repository.bl.mapper.RepositoryMapper;
 import io.softwareecg.awb.repository.bl.repositories.ClickHouseRepositoryNaming;
 import io.softwareecg.awb.repository.bl.repositories.RepositoryEt;
-import io.softwareecg.awb.sdk.awbapi.repository.ImporterSourceRepository;
+import io.softwareecg.awb.timeseries.port.TimeSeriesImportSource;
 import io.softwareecg.awb.sdk.awbapi.repository.Repository;
 import io.softwareecg.awb.sdk.awbapi.repository.ResourceAuthType;
 import io.softwareecg.awb.sdk.awbapi.repository.SourceRepositoryService;
@@ -114,7 +114,7 @@ public class RepositoryDataAccessServiceImpl implements RepositoryService, Sourc
     }
 
     @Override
-    public List<ImporterSourceRepository> listImportSourceRepositories() {
+    public List<TimeSeriesImportSource> listImportSourceRepositories() {
         return configStore.listAll().stream()
                 .filter(r -> r.isImportSource)
                 .map(RepositoryDataAccessServiceImpl::toImporterSourceRepository)
@@ -122,7 +122,7 @@ public class RepositoryDataAccessServiceImpl implements RepositoryService, Sourc
     }
 
     @Override
-    public ImporterSourceRepository queryImportSourceRepository(String projectName) {
+    public TimeSeriesImportSource queryImportSourceRepository(String projectName) {
         RepositoryConfigRow row = configStore.findImportSourceByProject(projectName);
         if (row == null) {
             return null;
@@ -136,16 +136,16 @@ public class RepositoryDataAccessServiceImpl implements RepositoryService, Sourc
     }
 
     @Override
-    public void persistImporterSourceRepository(ImporterSourceRepository sourceRepository) {
+    public void persistImporterSourceRepository(TimeSeriesImportSource sourceRepository) {
 
         // check for null values and invalid repositories.
         if (sourceRepository == null || StringUtils.isBlank(sourceRepository.getRepositoryUrl())) {
-            LOGGER.error("The given ImporterSourceRepository is null or has no connection URL.");
+            LOGGER.error("The given TimeSeriesImportSource is null or has no connection URL.");
             return;
         }
 
         if (StringUtils.isBlank(sourceRepository.getAccordingProjectName())) {
-            LOGGER.error("The given ImporterSourceRepository doesn't define the project it belongs to.");
+            LOGGER.error("The given TimeSeriesImportSource doesn't define the project it belongs to.");
             return;
         }
 
@@ -256,8 +256,8 @@ public class RepositoryDataAccessServiceImpl implements RepositoryService, Sourc
         return et;
     }
 
-    private static ImporterSourceRepository toImporterSourceRepository(RepositoryConfigRow row) {
-        ImporterSourceRepository entity = new ImporterSourceRepository();
+    private static TimeSeriesImportSource toImporterSourceRepository(RepositoryConfigRow row) {
+        TimeSeriesImportSource entity = new TimeSeriesImportSource();
         entity.setId(row.id);
         entity.setAccordingProjectName(row.accordingProjectName);
         entity.setRepositoryUrl(row.url);
@@ -271,7 +271,7 @@ public class RepositoryDataAccessServiceImpl implements RepositoryService, Sourc
         return entity;
     }
 
-    private static RepositoryConfigRow fromImporterSourceRepository(ImporterSourceRepository src) {
+    private static RepositoryConfigRow fromImporterSourceRepository(TimeSeriesImportSource src) {
         RepositoryConfigRow row = new RepositoryConfigRow();
         row.id = src.getId();
         row.accordingProjectName = src.getAccordingProjectName();

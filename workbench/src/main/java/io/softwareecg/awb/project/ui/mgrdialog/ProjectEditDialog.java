@@ -2,7 +2,7 @@ package io.softwareecg.awb.project.ui.mgrdialog;
 
 import io.softwareecg.awb.project.api.model.Project;
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.sdk.awbapi.repository.ImporterSourceRepository;
+import io.softwareecg.awb.timeseries.port.TimeSeriesImportSource;
 import io.softwareecg.awb.sdk.core.resourceloader.CachingSvgLoader;
 import io.softwareecg.awb.sdk.core.resourceloader.CdiFxmlLoader;
 import io.softwareecg.awb.sdk.core.resourceloader.ViewLoadResult;
@@ -16,7 +16,7 @@ import javafx.stage.Stage;
  * editable project properties including the optional ImportSourceRepository data to
  * the AWB user.
  * The dialog can used to change project settings after it's initial creation.
- * Especially change the access data for the {@link ImporterSourceRepository}
+ * Especially change the access data for the {@link TimeSeriesImportSource}
  * is the most imported use case of this dialog.
  *
  * @since 24.11.2018

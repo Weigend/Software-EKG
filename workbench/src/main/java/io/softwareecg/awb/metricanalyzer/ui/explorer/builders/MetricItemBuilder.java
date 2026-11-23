@@ -9,7 +9,7 @@ import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.MetricQuery;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.QueryFilterParams;
 import io.softwareecg.awb.metricanalyzer.ui.api.FilterContext;
 import io.softwareecg.awb.metricanalyzer.ui.explorer.items.series.MetricItem;
-import io.softwareecg.awb.sdk.awbapi.repository.ImporterSourceRepository;
+import io.softwareecg.awb.timeseries.port.TimeSeriesImportSource;
 import io.softwareecg.awb.sdk.awbapi.repository.SourceRepositoryService;
 import io.softwareecg.awb.sdk.core.log.EkgLogger;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
@@ -65,7 +65,7 @@ public class MetricItemBuilder<T extends RepositoryBaseItem> extends AbstractCon
 
         private final RepositoryBaseItem parentItem;
 
-        private final ImporterSourceRepository importerSourceRepository;
+        private final TimeSeriesImportSource importerSourceRepository;
 
         public MetricMapper(FilterContext filterContext, RepositoryBaseItem parentItem) {
             this.parentFilterContext = filterContext;

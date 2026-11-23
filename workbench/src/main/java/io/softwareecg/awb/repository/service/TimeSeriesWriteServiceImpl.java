@@ -1,4 +1,4 @@
-package io.softwareecg.awb.repository.bl.services;
+package io.softwareecg.awb.repository.service;
 
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.da.api.RepositoryClient;
@@ -11,7 +11,7 @@ import io.softwareecg.awb.da.api.schema.EkgSchemaField;
 import io.softwareecg.awb.repository.bl.BinaryTimeSeries;
 import io.softwareecg.awb.sdk.awbapi.repository.Repository;
 import io.softwareecg.awb.sdk.awbapi.repository.RepositoryException;
-import io.softwareecg.awb.sdk.awbapi.repository.SeriesImportService;
+import io.softwareecg.awb.timeseries.port.TimeSeriesWriteService;
 import io.softwareecg.awb.sdk.core.DateValuePairMapper;
 import io.softwareecg.awb.sdk.datamodel.TimeSeries;
 import jakarta.inject.Inject;
@@ -32,7 +32,7 @@ import static io.softwareecg.awb.da.api.schema.EkgSchemaField.*;
  * @since 31.01.2020
  */
 @Singleton
-public class SeriesImportServiceImpl implements SeriesImportService {
+public class TimeSeriesWriteServiceImpl implements TimeSeriesWriteService {
 
     private RepositoryClient repositoryClient;
 
@@ -44,14 +44,14 @@ public class SeriesImportServiceImpl implements SeriesImportService {
      * which then creates per-call instances via the {@link Repository} ctor below).
      */
     @Inject
-    public SeriesImportServiceImpl() {
+    public TimeSeriesWriteServiceImpl() {
         // NoOp
     }
 
-    public SeriesImportServiceImpl(Repository repository) {
+    public TimeSeriesWriteServiceImpl(Repository repository) {
         if (!(repository instanceof EkgRepository)) {
             throw new IllegalArgumentException("The given repository instance '" + repository.getRepositoryName()
-                    + "' isn't supported by the EKG AWB SeriesImportService");
+                    + "' isn't supported by the EKG AWB TimeSeriesWriteService");
         }
 
         this.repository = repository;
@@ -115,7 +115,7 @@ public class SeriesImportServiceImpl implements SeriesImportService {
 
     @Override
     public void add(Stream<TimeSeries> timeSeriesStream) throws RepositoryException {
-        repositoryClient.add(timeSeriesStream.map(SeriesImportServiceImpl::mapToBinarySeries).iterator());
+        repositoryClient.add(timeSeriesStream.map(TimeSeriesWriteServiceImpl::mapToBinarySeries).iterator());
     }
 
     @Override

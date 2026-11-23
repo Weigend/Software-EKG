@@ -6,9 +6,9 @@ import io.softwareecg.awb.importer.prometheus.client.model.api.ResultStatus;
 import io.softwareecg.awb.importer.prometheus.client.model.api.label.ListLabelResult;
 import io.softwareecg.awb.importer.prometheus.client.model.api.query.*;
 import io.softwareecg.awb.sdk.awbapi.project.TargetProjectConfig;
-import io.softwareecg.awb.sdk.awbapi.repository.ImporterSourceRepository;
+import io.softwareecg.awb.timeseries.port.TimeSeriesImportSource;
 import io.softwareecg.awb.sdk.awbapi.repository.RepositoryException;
-import io.softwareecg.awb.sdk.awbapi.repository.SeriesImportService;
+import io.softwareecg.awb.timeseries.port.TimeSeriesWriteService;
 import io.softwareecg.awb.sdk.core.log.EkgLogger;
 import io.softwareecg.awb.sdk.core.security.SecurityContext;
 import io.softwareecg.awb.sdk.datamodel.RawSeriesData;
@@ -61,7 +61,7 @@ public class PrometheusLocalImportStrategy extends LocalProjectImportStrategy {
     private static final DateTimeFormatter MEASUREMENT_FORMATTER = 
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").withZone(ZoneId.systemDefault());
 
-    private final Supplier<ImporterSourceRepository> sourceRepository;
+    private final Supplier<TimeSeriesImportSource> sourceRepository;
 
     private PrometheusClient prometheusClient;
 
@@ -78,14 +78,14 @@ public class PrometheusLocalImportStrategy extends LocalProjectImportStrategy {
     private GenericPrometheusMapper prometheusMapper;
 
     /**
-     * The SeriesImportService used for delta import to query the last import timestamp.
-     * Set in {@link #createImportTask(SeriesImportService, TargetProjectConfig)}.
+     * The TimeSeriesWriteService used for delta import to query the last import timestamp.
+     * Set in {@link #createImportTask(TimeSeriesWriteService, TargetProjectConfig)}.
      */
-    private SeriesImportService importService;
+    private TimeSeriesWriteService importService;
 
     /**
      * The project configuration containing delta import settings.
-     * Set in {@link #createImportTask(SeriesImportService, TargetProjectConfig)}.
+     * Set in {@link #createImportTask(TimeSeriesWriteService, TargetProjectConfig)}.
      */
     private TargetProjectConfig projectConfig;
 
@@ -97,7 +97,7 @@ public class PrometheusLocalImportStrategy extends LocalProjectImportStrategy {
      *                         runs. A supplier, not a JavaFX property: this is business
      *                         logic and knows nothing of the user interface.
      */
-    public PrometheusLocalImportStrategy(Supplier<ImporterSourceRepository> sourceRepository) {
+    public PrometheusLocalImportStrategy(Supplier<TimeSeriesImportSource> sourceRepository) {
         this.sourceRepository = sourceRepository;
     }
 
@@ -107,7 +107,7 @@ public class PrometheusLocalImportStrategy extends LocalProjectImportStrategy {
      * to query Solr for the last imported timestamp.
      */
     @Override
-    public LocalProjectImportTask createImportTask(SeriesImportService importService, TargetProjectConfig projectConfiguration) {
+    public LocalProjectImportTask createImportTask(TimeSeriesWriteService importService, TargetProjectConfig projectConfiguration) {
         this.importService = importService;
         this.projectConfig = projectConfiguration;
         return super.createImportTask(importService, projectConfiguration);
@@ -115,7 +115,7 @@ public class PrometheusLocalImportStrategy extends LocalProjectImportStrategy {
 
     @Override
     public Stream<RawSeriesData> readRawSeriesData() {
-        ImporterSourceRepository sourceRepository = this.sourceRepository.get();
+        TimeSeriesImportSource sourceRepository = this.sourceRepository.get();
 
         if (sourceRepository == null) {
             LOGGER.error("No source repository configuration available for Prometheus import");
@@ -331,7 +331,7 @@ public class PrometheusLocalImportStrategy extends LocalProjectImportStrategy {
     /**
      * Configures the Prometheus client with connection details from the source repository.
      */
-    private void setupPrometheusClient(ImporterSourceRepository sourceRepository) {
+    private void setupPrometheusClient(TimeSeriesImportSource sourceRepository) {
         prometheusClient = new PrometheusClient();
         prometheusClient.bindToAddress(sourceRepository.getRepositoryUrl());
 
@@ -570,7 +570,7 @@ public class PrometheusLocalImportStrategy extends LocalProjectImportStrategy {
      * This is used as the start time for delta imports to avoid re-importing existing data.
      * <p>
      * Creates a minimal TimeSeries with only the project name set, so that
-     * {@link SeriesImportService#resolveLastUpdate(io.softwareecg.awb.sdk.datamodel.TimeSeries)}
+     * {@link TimeSeriesWriteService#resolveLastUpdate(io.softwareecg.awb.sdk.datamodel.TimeSeries)}
      * matches all series in the project and returns the latest end timestamp.
      *
      * @return the last import timestamp in millis, or -1 if no existing data

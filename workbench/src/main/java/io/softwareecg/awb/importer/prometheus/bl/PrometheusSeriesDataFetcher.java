@@ -6,7 +6,7 @@ import io.softwareecg.awb.importer.prometheus.client.PrometheusClient;
 import io.softwareecg.awb.importer.prometheus.client.model.api.query.MatrixSeries;
 import io.softwareecg.awb.importer.prometheus.client.model.api.query.QueryResult;
 import io.softwareecg.awb.importer.prometheus.client.model.api.query.RangeQuery;
-import io.softwareecg.awb.sdk.awbapi.repository.ImporterSourceRepository;
+import io.softwareecg.awb.timeseries.port.TimeSeriesImportSource;
 import io.softwareecg.awb.sdk.core.log.EkgLogger;
 import io.softwareecg.awb.sdk.core.security.SecurityContext;
 import io.softwareecg.awb.sdk.datamodel.Value;
@@ -95,7 +95,7 @@ public class PrometheusSeriesDataFetcher implements RemoteSeriesDataFetcher {
     }
 
     @Override
-    public void setSourceRepositoryDefinition(ImporterSourceRepository sourceRepository) {
+    public void setSourceRepositoryDefinition(TimeSeriesImportSource sourceRepository) {
         prometheusClient = new PrometheusClient();
         prometheusClient.bindToAddress(sourceRepository.getRepositoryUrl());
 

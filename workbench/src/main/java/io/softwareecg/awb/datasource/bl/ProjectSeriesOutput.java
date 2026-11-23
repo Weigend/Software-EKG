@@ -3,7 +3,7 @@ package io.softwareecg.awb.datasource.bl;
 import io.softwareecg.awb.datasource.bl.prometheus.PrometheusDimensions;
 import io.softwareecg.collector.source.prometheus.PrometheusCounterSource;
 import io.softwareecg.awb.sdk.awbapi.repository.RepositoryException;
-import io.softwareecg.awb.sdk.awbapi.repository.SeriesImportService;
+import io.softwareecg.awb.timeseries.port.TimeSeriesWriteService;
 import io.softwareecg.awb.sdk.datamodel.SeriesData;
 import io.softwareecg.awb.sdk.datamodel.TimeSeries;
 import io.softwareecg.awb.sdk.datamodel.Value;
@@ -85,7 +85,7 @@ public final class ProjectSeriesOutput implements RepositoryFactory {
 
     private final String measurement;
 
-    private final SeriesImportService importService;
+    private final TimeSeriesWriteService importService;
 
     private final SeriesEnds seriesEnds;
 
@@ -107,12 +107,12 @@ public final class ProjectSeriesOutput implements RepositoryFactory {
      * @param onDataWritten called after values were written and committed, with the time of the
      *                      newest of them; lets the AWB refresh what it shows
      */
-    public ProjectSeriesOutput(String projectName, String measurement, SeriesImportService importService,
+    public ProjectSeriesOutput(String projectName, String measurement, TimeSeriesWriteService importService,
                                SeriesEnds seriesEnds, LongConsumer onDataWritten) {
         this(projectName, measurement, importService, seriesEnds, onDataWritten, System::currentTimeMillis);
     }
 
-    ProjectSeriesOutput(String projectName, String measurement, SeriesImportService importService,
+    ProjectSeriesOutput(String projectName, String measurement, TimeSeriesWriteService importService,
                         SeriesEnds seriesEnds, LongConsumer onDataWritten, LongSupplier clock) {
         this.projectName = projectName;
         this.measurement = measurement == null || measurement.isBlank() ? MEASUREMENT : measurement;

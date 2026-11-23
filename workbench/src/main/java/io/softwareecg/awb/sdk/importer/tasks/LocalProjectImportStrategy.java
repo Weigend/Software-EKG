@@ -1,9 +1,9 @@
 package io.softwareecg.awb.sdk.importer.tasks;
 
 import io.softwareecg.awb.sdk.awbapi.project.TargetProjectConfig;
-import io.softwareecg.awb.sdk.awbapi.repository.FilterDimension;
+import io.softwareecg.awb.timeseries.dimension.FilterDimension;
 import io.softwareecg.awb.sdk.awbapi.repository.RepositoryException;
-import io.softwareecg.awb.sdk.awbapi.repository.SeriesImportService;
+import io.softwareecg.awb.timeseries.port.TimeSeriesWriteService;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.events.ProgressEvent;
 import io.softwareecg.wfx.lookup.api.Lookup;
@@ -86,7 +86,7 @@ public abstract class LocalProjectImportStrategy {
      * @param projectConfiguration the project configuration that tell which project the data belong to
      * @return a new instance of LocalProjectImportTask
      */
-    public LocalProjectImportTask createImportTask(SeriesImportService importService, TargetProjectConfig projectConfiguration) {
+    public LocalProjectImportTask createImportTask(TimeSeriesWriteService importService, TargetProjectConfig projectConfiguration) {
         return new LocalProjectImportTask(importService, projectConfiguration, this);
     }
 
@@ -127,14 +127,14 @@ public abstract class LocalProjectImportStrategy {
 
             private static final int MAX_ENTRIES = 600;
 
-            private SeriesImportService seriesImportService;
+            private TimeSeriesWriteService seriesImportService;
 
             private boolean overwriteExistingData;
 
             private final Map<Thread, List<TimeSeries>> seriesCache = new HashMap<>();
 
             @Override
-            public void setSeriesImportService(SeriesImportService seriesImportService)  {
+            public void setSeriesImportService(TimeSeriesWriteService seriesImportService)  {
                 this.seriesImportService = seriesImportService;
             }
 

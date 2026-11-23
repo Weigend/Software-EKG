@@ -1,9 +1,9 @@
 package io.softwareecg.awb.sdk.importer.tasks;
 
 import io.softwareecg.awb.sdk.awbapi.project.TargetProjectConfig;
-import io.softwareecg.awb.sdk.awbapi.repository.ImporterSourceRepository;
+import io.softwareecg.awb.timeseries.port.TimeSeriesImportSource;
 import io.softwareecg.awb.sdk.awbapi.repository.Repository;
-import io.softwareecg.awb.sdk.awbapi.repository.SeriesImportService;
+import io.softwareecg.awb.timeseries.port.TimeSeriesWriteService;
 import io.softwareecg.awb.sdk.awbapi.repository.SourceRepositoryService;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import io.softwareecg.awb.sdk.datamodel.RawSeriesData;
@@ -29,10 +29,10 @@ public class RemoteProjectImportTask extends ImportTask {
     private final SplitSourceProjectImportStrategy importStrategy;
 
     /**
-     * An instance of ImporterSourceRepository that provides the time series data stored
+     * An instance of TimeSeriesImportSource that provides the time series data stored
      * remotely and the according meta data.
      */
-    private final ImporterSourceRepository importerSourceRepository;
+    private final TimeSeriesImportSource importerSourceRepository;
 
 
     /**
@@ -43,7 +43,7 @@ public class RemoteProjectImportTask extends ImportTask {
      * @param projectConfiguration the project configuration with project and additional metadata
      * @param importStrategy import strategy that provides the steps used at import procedure
      */
-    public RemoteProjectImportTask(SeriesImportService importService,
+    public RemoteProjectImportTask(TimeSeriesWriteService importService,
                                    Repository repository,
                                    TargetProjectConfig projectConfiguration,
                                    SplitSourceProjectImportStrategy importStrategy) {

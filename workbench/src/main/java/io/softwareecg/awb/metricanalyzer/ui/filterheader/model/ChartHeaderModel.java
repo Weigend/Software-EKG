@@ -30,8 +30,8 @@ import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.QueryComputeParams;
 import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.QueryFilterParams;
 import io.softwareecg.awb.project.api.model.Project;
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.sdk.awbapi.repository.FilterDimension;
-import io.softwareecg.awb.sdk.awbapi.repository.ImporterSourceRepository;
+import io.softwareecg.awb.timeseries.dimension.FilterDimension;
+import io.softwareecg.awb.timeseries.port.TimeSeriesImportSource;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 
@@ -134,7 +134,7 @@ public class ChartHeaderModel {
     private final BooleanProperty expertMode = new SimpleBooleanProperty(false);
     private final BooleanProperty multiMetricMode = new SimpleBooleanProperty(false);
     private final BooleanProperty cloudMode = new SimpleBooleanProperty(false);
-    private ImporterSourceRepository importerSourceRepository = null;
+    private TimeSeriesImportSource importerSourceRepository = null;
 
     /* -------------------------------- internal model state ------------------------------------ */
 

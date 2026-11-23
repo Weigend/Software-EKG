@@ -2,7 +2,7 @@ package io.softwareecg.awb.datasource.bl;
 
 import io.softwareecg.awb.sdk.awbapi.repository.Repository;
 import io.softwareecg.awb.sdk.awbapi.repository.RepositoryException;
-import io.softwareecg.awb.sdk.awbapi.repository.SeriesImportService;
+import io.softwareecg.awb.timeseries.port.TimeSeriesWriteService;
 import io.softwareecg.awb.sdk.datamodel.TimeSeries;
 import io.softwareecg.collector.repository.StaticTimeSeriesRepository;
 import org.junit.Test;
@@ -245,7 +245,7 @@ public class ProjectSeriesOutputTest {
     }
 
     /** Stands in for the repository of the project. */
-    private static final class FakeRepository implements SeriesImportService {
+    private static final class FakeRepository implements TimeSeriesWriteService {
 
         final List<TimeSeries> written = new ArrayList<>();
         int commits;

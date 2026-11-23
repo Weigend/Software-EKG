@@ -1,4 +1,4 @@
-package io.softwareecg.awb.sdk.awbapi.repository;
+package io.softwareecg.awb.timeseries.dimension;
 
 /**
  * An enumeration that represents the fixed set of filter dimensions
@@ -7,7 +7,7 @@ package io.softwareecg.awb.sdk.awbapi.repository;
  * This filter dimension can also use for other domain specific data like using the
  * METRIC_NAME to store the account name for time tracking.
  * In this case the importer is responsible to provide the information
- * to clarify which dimension stores which kind of data (see {@link AliasMappingDefinition})
+ * to clarify which dimension stores which kind of data through an alias mapping
  *
  * The dimension are divided into 3 groups. That are shown and hide by the filter panel in the metric workbench
  * depending with view flavor the user has selected.

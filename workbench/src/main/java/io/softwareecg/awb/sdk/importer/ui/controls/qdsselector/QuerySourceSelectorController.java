@@ -1,6 +1,6 @@
 package io.softwareecg.awb.sdk.importer.ui.controls.qdsselector;
 
-import io.softwareecg.awb.sdk.awbapi.repository.ImporterSourceRepository;
+import io.softwareecg.awb.timeseries.port.TimeSeriesImportSource;
 import io.softwareecg.awb.sdk.awbapi.repository.Repository;
 import io.softwareecg.awb.sdk.awbapi.repository.ResourceAuthType;
 import io.softwareecg.awb.sdk.awbapi.repository.SourceRepositoryService;
@@ -188,10 +188,10 @@ public class QuerySourceSelectorController implements Initializable {
             return;
         }
 
-        ImporterSourceRepository sourceDefinition = viewModel.getSourceRepository();
+        TimeSeriesImportSource sourceDefinition = viewModel.getSourceRepository();
 
         if (sourceDefinition == null) {
-            sourceDefinition = new ImporterSourceRepository();
+            sourceDefinition = new TimeSeriesImportSource();
         }
 
         String projectName = viewModel.getProjectName();
@@ -202,7 +202,7 @@ public class QuerySourceSelectorController implements Initializable {
         sourceDefinition.setPassword(viewModel.getPassword());
         sourceDefinition.setOAuthServerUrl(viewModel.getOAuthServerUrl());
 
-        ImporterSourceRepository existingSourceDefinition = getRepoService().queryImportSourceRepository(projectName);
+        TimeSeriesImportSource existingSourceDefinition = getRepoService().queryImportSourceRepository(projectName);
         if (sourceDefinition.equals(existingSourceDefinition)) {
             LOGGER.info("The defined source repository definition is equal to an existing one for project {}. " +
                     "Skip further actions!", projectName);
@@ -386,7 +386,7 @@ public class QuerySourceSelectorController implements Initializable {
             return;
         }
 
-        ImporterSourceRepository importerSourceRepo = getRepoService().queryImportSourceRepository(newProjectName);
+        TimeSeriesImportSource importerSourceRepo = getRepoService().queryImportSourceRepository(newProjectName);
 
         if (importerSourceRepo == null) {
             clearView();

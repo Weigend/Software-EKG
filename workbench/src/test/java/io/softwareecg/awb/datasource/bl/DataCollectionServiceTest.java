@@ -12,7 +12,7 @@ import io.softwareecg.awb.project.api.model.Project;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.sdk.awbapi.project.CloudPlatformType;
 import io.softwareecg.awb.sdk.awbapi.project.ProjectFlavor;
-import io.softwareecg.awb.sdk.awbapi.repository.SeriesImportService;
+import io.softwareecg.awb.timeseries.port.TimeSeriesWriteService;
 import io.softwareecg.collector.config.CollectorConfiguration;
 import io.softwareecg.collector.control.CollectorEngine;
 import io.softwareecg.collector.repository.RepositoryFactory;
@@ -95,8 +95,8 @@ public class DataCollectionServiceTest {
             }
 
             @Override
-            protected SeriesImportService importService() {
-                return mock(SeriesImportService.class);
+            protected TimeSeriesWriteService importService() {
+                return mock(TimeSeriesWriteService.class);
             }
 
             @Override

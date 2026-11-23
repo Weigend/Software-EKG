@@ -1,7 +1,7 @@
 package io.softwareecg.awb.sdk.importer.tasks;
 
 import io.softwareecg.awb.sdk.awbapi.project.TargetProjectConfig;
-import io.softwareecg.awb.sdk.awbapi.repository.SeriesImportService;
+import io.softwareecg.awb.timeseries.port.TimeSeriesWriteService;
 import io.softwareecg.awb.sdk.datamodel.RawSeriesData;
 import io.softwareecg.awb.sdk.datamodel.SeriesData;
 import io.softwareecg.awb.sdk.importer.tasks.steps.filter.SeriesDeltaFilter;
@@ -40,7 +40,7 @@ public class LocalProjectImportTask extends ImportTask {
      * @param projectConfiguration the project configuration with project and additional metadata
      * @param importStrategy import strategy that provides the steps used at import procedure
      */
-    public LocalProjectImportTask(SeriesImportService importService, TargetProjectConfig projectConfiguration,
+    public LocalProjectImportTask(TimeSeriesWriteService importService, TargetProjectConfig projectConfiguration,
                                   LocalProjectImportStrategy importStrategy) {
 
         super(importService, projectConfiguration);

@@ -42,7 +42,7 @@ import io.softwareecg.awb.project.api.model.Project;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.sdk.awbapi.project.ProjectFlavor;
 import io.softwareecg.awb.sdk.awbapi.project.ProjectViewFlavor;
-import io.softwareecg.awb.sdk.awbapi.repository.FilterDimension;
+import io.softwareecg.awb.timeseries.dimension.FilterDimension;
 import io.softwareecg.wfx.platform.api.EventSubscriber;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;

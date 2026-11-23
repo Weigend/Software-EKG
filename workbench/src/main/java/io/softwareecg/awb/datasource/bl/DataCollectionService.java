@@ -20,7 +20,7 @@ import io.softwareecg.awb.repository.api.events.ProjectDataChangedEvent;
 import io.softwareecg.awb.sdk.awbapi.explorer.ExplorerUpdateEvent;
 import io.softwareecg.awb.sdk.awbapi.project.CloudPlatformType;
 import io.softwareecg.awb.sdk.awbapi.project.ProjectFlavor;
-import io.softwareecg.awb.sdk.awbapi.repository.SeriesImportService;
+import io.softwareecg.awb.timeseries.port.TimeSeriesWriteService;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import io.softwareecg.collector.config.CollectorConfiguration;
 import io.softwareecg.collector.config.CollectorConfigurations;
@@ -567,8 +567,8 @@ public class DataCollectionService implements ProjectDataCollection {
     /**
      * @return the service that writes into the repository of the analyses. A seam for tests.
      */
-    protected SeriesImportService importService() {
-        return ServiceDiscovery.lookup(SeriesImportService.class, repository);
+    protected TimeSeriesWriteService importService() {
+        return ServiceDiscovery.lookup(TimeSeriesWriteService.class, repository);
     }
 
     /**

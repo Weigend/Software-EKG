@@ -1,6 +1,6 @@
 package io.softwareecg.awb.sdk.importer.api;
 
-import io.softwareecg.awb.sdk.awbapi.repository.FilterDimension;
+import io.softwareecg.awb.timeseries.dimension.FilterDimension;
 
 /**
  * A marker interface that represents all import modules that support the concept of

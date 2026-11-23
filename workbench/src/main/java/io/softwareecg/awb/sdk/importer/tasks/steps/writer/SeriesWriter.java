@@ -1,7 +1,7 @@
 package io.softwareecg.awb.sdk.importer.tasks.steps.writer;
 
 import io.softwareecg.awb.sdk.awbapi.project.TargetProjectConfig;
-import io.softwareecg.awb.sdk.awbapi.repository.SeriesImportService;
+import io.softwareecg.awb.timeseries.port.TimeSeriesWriteService;
 import io.softwareecg.awb.sdk.datamodel.SeriesData;
 
 import java.util.function.Function;
@@ -19,7 +19,7 @@ public interface SeriesWriter<TIN extends SeriesData, TOUT extends SeriesData> e
      *
      * @param seriesImportService todo write comment
      */
-    default void setSeriesImportService(SeriesImportService seriesImportService) {
+    default void setSeriesImportService(TimeSeriesWriteService seriesImportService) {
         // no op per default
     }
 

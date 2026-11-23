@@ -7,7 +7,7 @@ import de.siegmar.fastcsv.reader.CsvRow;
 import io.softwareecg.awb.importer.csv.et.Collector61Metadata;
 import io.softwareecg.awb.importer.csv.fileutil.CsvFormat;
 import io.softwareecg.awb.importer.csv.fileutil.FileUtil;
-import io.softwareecg.awb.sdk.awbapi.repository.FilterDimension;
+import io.softwareecg.awb.timeseries.dimension.FilterDimension;
 import io.softwareecg.awb.sdk.core.log.EkgLogger;
 import io.softwareecg.awb.sdk.datamodel.RawSeriesData;
 import io.softwareecg.awb.sdk.datamodel.Value;

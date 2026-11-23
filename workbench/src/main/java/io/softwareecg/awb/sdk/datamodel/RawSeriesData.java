@@ -2,7 +2,7 @@ package io.softwareecg.awb.sdk.datamodel;
 
 
 
-import io.softwareecg.awb.sdk.awbapi.repository.FilterDimension;
+import io.softwareecg.awb.timeseries.dimension.FilterDimension;
 
 import java.util.ArrayList;
 import java.util.HashMap;

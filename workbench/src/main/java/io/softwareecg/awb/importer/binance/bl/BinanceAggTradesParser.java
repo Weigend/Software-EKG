@@ -1,6 +1,6 @@
 package io.softwareecg.awb.importer.binance.bl;
 
-import io.softwareecg.awb.sdk.awbapi.repository.FilterDimension;
+import io.softwareecg.awb.timeseries.dimension.FilterDimension;
 import io.softwareecg.awb.sdk.core.log.EkgLogger;
 import io.softwareecg.awb.sdk.datamodel.RawSeriesData;
 import io.softwareecg.awb.sdk.datamodel.Value;

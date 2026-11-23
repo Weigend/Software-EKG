@@ -11,7 +11,7 @@ import io.softwareecg.awb.da.api.dataobject.search.SortField;
 import io.softwareecg.awb.da.api.schema.EkgSchemaField;
 import io.softwareecg.awb.da.api.schema.Field;
 import io.softwareecg.awb.sdk.awbapi.repository.RepositoryException;
-import io.softwareecg.awb.sdk.awbapi.repository.SeriesImportService;
+import io.softwareecg.awb.timeseries.port.TimeSeriesWriteService;
 
 import java.util.Iterator;
 import java.util.List;
@@ -146,7 +146,7 @@ public interface RepositoryClient extends AutoCloseable {
     }
 
     /**
-     * Closes the {@link SeriesImportService}.
+     * Closes the {@link TimeSeriesWriteService}.
      *
      * @throws RepositoryException on errors accessing the search index
      */
