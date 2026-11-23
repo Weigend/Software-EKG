@@ -39,6 +39,8 @@ deciding what the structure should be, and being sure of it before 900 files mov
 
 So we did not start with the code. We built the target architecture first, as a JAR of dummy classes, looked at it, argued about it, and only then moved the real thing.
 
+The pictures in this article come from [S202](https://github.com/Weigend/S202), our own open-source tool (Apache 2.0) for seeing the architecture of compiled code.
+
 ![S202 TreeView of the Software-EKG workbench before the refactoring](images/s202-1-before.png)
 
 *How to read the old S202 TreeView: feature names such as `repository`, `project`, `datasource`, and
@@ -94,7 +96,7 @@ file moved.
 
 Then a generator produced an empty stand-in for each type, in its new package, with the dependencies of the real class written in as method calls. The result compiled into a JAR that did nothing at all, but had the shape of the application we wanted.
 
-We opened that JAR in Structure202 (S202), a tool that reads compiled Java and draws it in levels: whatever uses something sits above it. For the first time we could look at an architecture that did not exist yet.
+We opened that JAR in S202. It reads compiled Java and draws it in levels: whatever uses something sits above it. For the first time we could look at an architecture that did not exist yet.
 
 ## The picture argued back
 
@@ -181,7 +183,7 @@ its supported technologies still came from a closed enum. H2 had moved under `me
 some consumers still depended directly on the H2 implementation.
 
 Those became the next, smaller refactoring: provider registries for analysis sources and repository
-types, a complete metadata-backend port, and narrow ports between metric view, query header, chart,
+types, a bookmark port that completes the metadata ports, and narrow ports between metric view, query header, chart,
 and legend. Architecture tests now protect those directions. The package migration did not solve
 all coupling; it created coherent places in which the coupling could finally be seen and removed.
 
@@ -213,3 +215,5 @@ What made the difference was having something to look at before any code moved, 
 We did not ask the AI what the system means. We asked it to make our own ideas complete enough to compile, and then looked at whether we still believed them.
 
 So do not begin by moving code. Build a model you can see, argue with, and compile. Then build the real thing and put the two side by side.
+
+*S202 is on GitHub: [github.com/Weigend/S202](https://github.com/Weigend/S202). So is the application it was used on: [github.com/Weigend/Software-EKG](https://github.com/Weigend/Software-EKG).*
