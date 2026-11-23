@@ -1,0 +1,63 @@
+name: Pages
+
+# Publishes the project site (site/) to GitHub Pages, served as www.software-ekg.de.
+#
+# Why a workflow and not "Pages from /docs"? docs/ is the workshop: handbook,
+# positioning, plans. The site is the shop window and therefore lives in site/.
+# It has no pictures of its own: site/img is a symbolic link to docs/images, so
+# that site, README and handbook show the same screenshots and cannot drift
+# apart. `cp -rL` resolves the link here.
+#
+# Look at it locally:  python3 -m http.server -d site   ->  http://localhost:8000
+#
+# Needed once (repository settings, not in this file):
+#   Settings -> Pages -> Source: "GitHub Actions". The custom domain is entered
+#   there as well - with deployments from Actions, GitHub does not read a CNAME
+#   file from the repository.
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'site/**'
+      - 'docs/images/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never two publications at the same time. A running one is not cancelled,
+# otherwise the site could be left half rolled out.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check out Software-EKG
+        uses: actions/checkout@v7
+
+      - name: Assemble the site
+        run: |
+          cp -rL site _site
+          # From docs/images only what a browser displays.
+          find _site/img -type f ! -name '*.png' ! -name '*.svg' -delete
+          find _site -type d -empty -delete
+          test -f _site/index.html
+          du -sh _site
+
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v5

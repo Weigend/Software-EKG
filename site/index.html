@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Languages: the text in an element is English, data-de and data-pt carry
+       German and Portuguese (site.js swaps them). Without JavaScript the page
+       stays English and completely readable. -->
+  <title data-de="Software-EKG — Sehen, welches System aus dem Takt gerät. Und seit wann." data-pt="Software-EKG — Veja qual sistema sai do ritmo. E desde quando.">Software-EKG — See which system falls out of rhythm. And since when.</title>
+  <meta name="description" content="Software-EKG is a diagnostic recorder and workbench for the comparative long-term analysis of software systems: many time series in one picture, analysed locally, with a built-in AI assistant. Free and open source." data-content-de="Das Software-EKG ist ein diagnostischer Rekorder und eine Workbench für die vergleichende Langzeitanalyse von Softwaresystemen: viele Zeitreihen in einem Bild, lokal ausgewertet, mit eingebautem AI Assistant. Kostenlos und Open Source." data-content-pt="O Software-EKG é um registrador de diagnóstico e uma workbench para a análise comparativa de longo prazo de sistemas de software: muitas séries temporais em uma única imagem, analisadas localmente, com assistente de IA integrado. Gratuito e open source.">
+  <meta name="author" content="Johannes Weigend">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#05131a">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Software-EKG — a diagnostic recorder for the software emergency doctor">
+  <meta property="og:description" content="Put the curves of many systems on top of each other and see which one falls out of rhythm, and when. Local, open source, with a built-in AI assistant.">
+  <meta property="og:image" content="https://www.software-ekg.de/img/fullscreen.png">
+  <meta property="og:url" content="https://www.software-ekg.de/">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://www.software-ekg.de/">
+  <link rel="alternate" hreflang="en" href="https://www.software-ekg.de/">
+  <link rel="alternate" hreflang="de" href="https://www.software-ekg.de/?lang=de">
+  <link rel="alternate" hreflang="pt" href="https://www.software-ekg.de/?lang=pt">
+  <link rel="alternate" hreflang="x-default" href="https://www.software-ekg.de/">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="style.css">
+  <script>document.documentElement.classList.add('js');</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Software-EKG",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Linux, macOS, Windows",
+    "description": "A diagnostic recorder and workbench for the comparative long-term analysis of software systems.",
+    "url": "https://www.software-ekg.de/",
+    "downloadUrl": "https://github.com/Weigend/Software-EKG/releases/latest",
+    "license": "https://www.apache.org/licenses/LICENSE-2.0",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+    "author": { "@type": "Person", "name": "Johannes Weigend", "url": "https://weigend.de/" }
+  }
+  </script>
+</head>
+<body>
+
+<!-- HEADER LINE -->
+<header class="nav" id="navbar">
+  <div class="nav-inner">
+    <a href="#top" class="brand">
+      <span class="badge-mark" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path d="M3.5 18h5.2l2.3-5 3.6 11.5 4-17.5 3 11h6.9" stroke="#a8f0ff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span>Software-EKG</span>
+    </a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#why" class="nav-link" data-de="Wozu" data-pt="Para quê">Why</a>
+      <a href="#example" class="nav-link" data-de="Beispiel" data-pt="Exemplo">Example</a>
+      <a href="#ai" class="nav-link" data-de="AI" data-pt="IA">AI</a>
+      <a href="#workbench" class="nav-link">Workbench</a>
+      <a href="#collector" class="nav-link">Collector</a>
+      <a href="#download" class="nav-link">Download</a>
+      <div class="lang-switcher" role="group" aria-label="Language">
+        <button class="lang-btn" data-lang="en" aria-pressed="true" title="English">EN</button>
+        <button class="lang-btn" data-lang="de" aria-pressed="false" title="Deutsch">DE</button>
+        <button class="lang-btn" data-lang="pt" aria-pressed="false" title="Português">PT</button>
+      </div>
+      <a href="https://github.com/Weigend/Software-EKG" rel="noopener" class="nav-cta">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        <span>GitHub</span>
+      </a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      <span data-de="Open Source · Apache 2.0 · Linux, macOS und Windows" data-pt="Open Source · Apache 2.0 · Linux, macOS e Windows">Open source · Apache 2.0 · Linux, macOS and Windows</span>
+    </div>
+    <h1 data-de="Sehen, welches System <em>aus dem Takt</em> gerät.<br>Und seit wann." data-pt="Veja qual sistema sai <em>do ritmo</em>.<br>E desde quando.">See which system falls <em>out of rhythm</em>.<br>And since when.</h1>
+    <p class="hero-sub" data-de="Das Software-EKG ist ein diagnostischer Rekorder für den <strong>Software-Notarzt</strong>. Es legt die Kurven vieler Systeme übereinander, über Tage oder Monate, bis der entscheidende Unterschied sichtbar wird: lokal, abseits der Produktion, mit einem AI Assistant, der die Hypothese an den Daten prüft." data-pt="O Software-EKG é um registrador de diagnóstico para o <strong>médico de emergência do software</strong>. Ele sobrepõe as curvas de muitos sistemas, ao longo de dias ou meses, até que a diferença decisiva fique visível: localmente, longe da produção, com um assistente de IA que confere a hipótese com os dados.">
+      Software-EKG is a diagnostic recorder for the <strong>software emergency doctor</strong>. It puts the curves of many systems on top of each other, over days or months, until the decisive difference is visible: locally, away from production, with an AI assistant that checks the hypothesis against the data.
+    </p>
+    <div class="hero-ctas">
+      <a href="#download" class="btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+        <span data-de="Software-EKG herunterladen" data-pt="Baixar o Software-EKG">Download Software-EKG</span>
+      </a>
+      <a href="https://github.com/Weigend/Software-EKG" rel="noopener" class="btn-secondary">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        <span data-de="Quellcode auf GitHub" data-pt="Código no GitHub">Source on GitHub</span>
+      </a>
+      <a href="https://github.com/Weigend/Software-EKG/blob/main/docs/handbook/README.md" rel="noopener" class="btn-secondary">
+        <span data-de="Handbuch" data-pt="Manual">Handbook</span>
+      </a>
+    </div>
+    <p class="hero-fine" data-de="Fertige Pakete mit eigener Java-Laufzeit. Entpacken und starten." data-pt="Pacotes prontos, com runtime Java próprio. Descompacte e inicie.">Ready-made packages with their own Java runtime. Unpack and start.</p>
+
+    <figure class="recorder reveal">
+      <div class="rec-head" aria-hidden="true">
+        <span class="rec-chip">host: <b>node*</b></span>
+        <span class="rec-chip opt">process: <b>java#1</b></span>
+        <span class="rec-chip">metric: <b>\CPU</b></span>
+        <span class="rec-count" data-de="11 Serien · 1 Woche" data-pt="11 séries · 1 semana">11 series · 1 week</span>
+      </div>
+      <div class="rec-plot">
+        <div class="rec-grid"></div>
+        <div class="rec-y" aria-hidden="true"><span style="top:0">100</span><span style="top:25%">75</span><span style="top:50%">50</span><span style="top:75%">25</span><span style="top:100%">0</span></div>
+        <div class="rec-series">
+          <img src="hero-series.svg" width="1000" height="340" alt="Eleven curves over one week: ten rise and fall together from Monday to Friday, one stays well above them all week." data-alt-de="Elf Kurven über eine Woche: Zehn steigen und fallen von Montag bis Freitag gemeinsam, eine liegt die ganze Woche deutlich darüber." data-alt-pt="Onze curvas ao longo de uma semana: dez sobem e descem juntas de segunda a sexta, uma fica bem acima delas a semana inteira.">
+        </div>
+        <div class="rec-pen"></div>
+        <div class="rec-label" aria-hidden="true">node-07<small data-de="die ganze Woche über den anderen" data-pt="acima dos outros a semana inteira">above the others all week</small></div>
+      </div>
+      <div class="rec-x" aria-hidden="true">
+        <span data-de="Mo" data-pt="seg">Mon</span><span data-de="Di" data-pt="ter">Tue</span><span data-de="Mi" data-pt="qua">Wed</span><span data-de="Do" data-pt="qui">Thu</span><span data-de="Fr" data-pt="sex">Fri</span><span data-de="Sa" data-pt="sáb">Sat</span><span data-de="So" data-pt="dom">Sun</span>
+      </div>
+      <figcaption class="rec-caption" data-de="Illustration: zehn Knoten im Takt, einer darüber. Den <a href=&quot;#example&quot;>echten Fall</a> dazu gibt es weiter unten." data-pt="Ilustração: dez nós no ritmo, um acima deles. O <a href=&quot;#example&quot;>caso real</a> está mais abaixo.">Illustration: ten nodes in rhythm, one above them. The <a href="#example">real case</a> behind it is further down.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- KEY FIGURES -->
+<div class="stats-bar">
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="stat-num" data-de="15+ Jahre" data-pt="15+ anos">15+ years</div>
+      <div class="stat-label" data-de="von der ersten Idee bis Version&amp;nbsp;7.x" data-pt="da primeira ideia à versão&amp;nbsp;7.x">from the first idea to version&nbsp;7.x</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-de="Milliarden" data-pt="Bilhões">Billions</div>
+      <div class="stat-label" data-de="Datenpunkte, falls nötig" data-pt="de pontos de dados, se necessário">of data points, if needed</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-de="Lokal" data-pt="Local">Local</div>
+      <div class="stat-label" data-de="Ausgewertet wird auf dem eigenen Rechner, nicht in der Produktion" data-pt="A análise roda na sua máquina, não na produção">Analysis runs on your machine, not on production</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">Apache 2.0</div>
+      <div class="stat-label" data-de="Kostenlos und Open Source" data-pt="Gratuito e open source">Free and open source</div>
+    </div>
+  </div>
+</div>
+
+<!-- THE QUESTIONS -->
+<section id="why">
+  <div class="container">
+    <div class="section-header text-center reveal">
+      <div class="section-label" data-de="Die Fragen, um die es geht" data-pt="As perguntas em questão">The questions it is about</div>
+      <h2 class="section-title" data-de="Muster, nach denen niemand gefragt hat" data-pt="Padrões sobre os quais ninguém perguntou">Patterns nobody asked about</h2>
+      <p class="section-sub" data-de="Der Name ist wörtlich gemeint: Wie ein EKG die Signale des Herzens über die Zeit aufzeichnet, zeichnet das Software-EKG die Messwerte der Systeme auf, die zusammen ein verteiltes System bilden. Der Kern ist der Vergleich, und viele Muster liegen innerhalb aller Grenzwerte, bei denen ein Alarm auslösen würde." data-pt="O nome é literal: EKG é a sigla alemã para eletrocardiograma (ECG). Assim como um ECG registra os sinais do coração ao longo do tempo, o Software-EKG registra as medições dos sistemas que, juntos, formam um sistema distribuído. O núcleo é a comparação, e muitos padrões ficam dentro de todos os limites que disparariam um alerta.">The name is meant literally: EKG is the German abbreviation for an electrocardiogram (ECG). Just as an ECG records the signals of the heart over time, Software-EKG records the measurements of the systems that together form a distributed system. The core is comparison, and many patterns lie within every threshold that would trigger an alert.</p>
+    </div>
+    <div class="question-grid">
+      <div class="question reveal">
+        <svg viewBox="0 0 64 40" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 30h60M2 34h60M2 26h60" stroke="#2b86a8" stroke-width="1.3"/><path d="M2 31 62 9M2 33 62 15M2 28 62 4" stroke="#ff6b6b" stroke-width="1.5"/></svg>
+        <p data-de="Warum steigt der Heap bei drei von fünfzig Systemen stetig?<span>Kein Grenzwert ist verletzt. Auffällig wird es erst neben den anderen 47.</span>" data-pt="Por que o heap cresce continuamente em três de cinquenta sistemas?<span>Nenhum limite é violado. Só chama atenção ao lado dos outros 47.</span>">Why does the heap grow steadily on three out of fifty systems?<span>No threshold is violated. It only stands out next to the other 47.</span></p>
+      </div>
+      <div class="question reveal">
+        <svg viewBox="0 0 64 40" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 32h7l3-20 3 20h13l3-20 3 20h13l3-20 3 20h6" stroke="#22c8f0" stroke-width="1.5"/></svg>
+        <p data-de="Warum tritt ein Lastmuster alle vierzehn Tage auf?<span>Sichtbar nur, wenn der Zeitraum lang genug ist.</span>" data-pt="Por que um padrão de carga aparece a cada quatorze dias?<span>Só é visível quando o período é longo o suficiente.</span>">Why does a load pattern occur every fourteen days?<span>Visible only when the period is long enough.</span></p>
+      </div>
+      <div class="question reveal">
+        <svg viewBox="0 0 64 40" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M31 3v34" stroke="#66848f" stroke-width="1.2" stroke-dasharray="3 3"/><path d="M2 29l5-2 5 3 5-3 5 2 5-2 4 1" stroke="#22c8f0" stroke-width="1.5"/><path d="M31 28l3-14 5 3 5-4 5 3 5-3 6 2" stroke="#ff6b6b" stroke-width="1.5"/></svg>
+        <p data-de="Warum hat sich das Verhalten nach einem bestimmten Release verändert?<span>Seit wann genau, und auf welchen Systemen?</span>" data-pt="Por que o comportamento mudou depois de um determinado release?<span>Desde quando exatamente, e em quais sistemas?</span>">Why did the behaviour change after a particular release?<span>Since when exactly, and on which systems?</span></p>
+      </div>
+      <div class="question reveal">
+        <svg viewBox="0 0 64 40" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 26c8-8 14-8 22-2s14 8 22 2 10-6 16-4" stroke="#22c8f0" stroke-width="1.5"/><path d="M2 26c8-8 14-8 22-3s12-2 20-10 12-6 18-9" stroke="#ff6b6b" stroke-width="1.5"/></svg>
+        <p data-de="Warum zeigen zwei eigentlich gleiche Systeme unterschiedliche Verläufe?<span>Gleiche Software, gleiche Last, andere Kurve.</span>" data-pt="Por que dois sistemas que deveriam ser idênticos mostram curvas diferentes?<span>Mesmo software, mesma carga, outra curva.</span>">Why do two systems that should be identical show different curves?<span>Same software, same load, a different curve.</span></p>
+      </div>
+    </div>
+    <p class="after-grid reveal" data-de="Ein Werkzeug für Menschen, die Performance-Analyse als Handwerk betreiben: Software-Notarzt, Performance Engineer, Troubleshooter. <span>Es ist der erste Schritt einer Root-Cause-Analyse, nicht ihr Ende: Das EKG zeigt, seit wann, wo und im Vergleich womit etwas auffällig ist.</span>" data-pt="Uma ferramenta para quem pratica análise de performance como ofício: médico de emergência do software, engenheiro de performance, troubleshooter. <span>É o primeiro passo de uma análise de causa raiz, não o fim dela: o Software-EKG mostra desde quando, onde e em comparação com o quê algo chama atenção.</span>">A tool for people who practise performance analysis as a craft: the software emergency doctor, the performance engineer, the troubleshooter. <span>It is the first step of a root cause analysis, not the end of it: Software-EKG shows since when, where and compared with what something is conspicuous.</span></p>
+  </div>
+</section>
+
+<!-- A REAL CASE -->
+<section id="example" class="alt">
+  <div class="container">
+    <div class="story-grid top">
+      <div class="story-text reveal">
+        <div class="section-label" data-de="Ein echter Fall" data-pt="Um caso real">A real case</div>
+        <h2 class="section-title" data-de="Elf Knoten, eine Woche, ein Ausreißer" data-pt="Onze nós, uma semana, um ponto fora da curva">Eleven nodes, one week, one outlier</h2>
+        <p data-de="Die CPU-Last des WebLogic-Java-Prozesses auf elf Knoten eines Clusters, eine Woche im März 2015, per Wildcard in einer Ansicht." data-pt="A carga de CPU do processo Java do WebLogic em onze nós de um cluster, uma semana em março de 2015, reunidos por wildcard em uma única visão.">The CPU load of the WebLogic Java process on eleven nodes of a cluster, one week in March 2015, selected by wildcard into one view.</p>
+        <ul class="finding-list stacked">
+          <li><span class="finding-num" data-de="zu sehen" data-pt="o que se vê">visible</span><span data-de="Die Anwendung wird nur tagsüber genutzt, von Montag bis Freitag. Und <strong>ein Server liegt die ganze Woche deutlich über den anderen</strong>." data-pt="A aplicação só é usada durante o dia, de segunda a sexta. E <strong>um servidor fica bem acima dos outros a semana inteira</strong>.">The application is only used during the day, Monday to Friday. And <strong>one server stays well above the others all week</strong>.</span></li>
+          <li><span class="finding-num red" data-de="nicht im Bild" data-pt="fora da imagem">not in the picture</span><span data-de="Warum das so ist. Das Bild liefert aber die drei Angaben, auf die es ankommt: <strong>welcher Server, welcher Zeitraum und womit man ihn vergleicht</strong>." data-pt="O porquê. Mas a imagem traz os três fatos que importam: <strong>qual servidor, qual período e com o que compará-lo</strong>.">Why this is so. But the picture gives the three facts that matter: <strong>which server, which period, and what to compare it with</strong>.</span></li>
+          <li><span class="finding-num" data-de="vorab gesichert" data-pt="garantido antes">established beforehand</span><span data-de="Der Collector erfasst auf jedem Host denselben Prozess unter derselben Nummer. Die Linien sind vergleichbar; ein Messfehler scheidet als Erklärung aus." data-pt="O Collector registra em cada host o mesmo processo sob o mesmo número. As linhas são comparáveis; um erro de medição está descartado como explicação.">The collector records the same process under the same number on every host. The lines are comparable; a measurement error is ruled out as an explanation.</span></li>
+        </ul>
+        <div class="resolution">
+          <div class="section-label" data-de="Die Auflösung" data-pt="A resolução">The resolution</div>
+          <p data-de="Die Ursache war das Load Balancing im Client, einer nativen Java-Anwendung. Der Server bekam tatsächlich mehr Last, aber die Ursache lag nicht auf den Servern. Das Bild führte zum richtigen Server und zur richtigen Frage; die Antwort brauchte Wissen über die Architektur." data-pt="A causa era o balanceamento de carga no cliente, uma aplicação Java nativa. O servidor de fato recebia mais carga, mas a causa não estava nos servidores. A imagem levou ao servidor certo e à pergunta certa; a resposta exigiu conhecimento da arquitetura.">The cause was the load balancing in the client, a native Java application. The server did receive more load, but the cause was not on the servers. The picture led to the right server and to the right question; the answer took knowledge of the architecture.</p>
+        </div>
+        <a href="https://github.com/Weigend/Software-EKG/blob/main/docs/positioning.md#an-example" data-href-de="https://github.com/Weigend/Software-EKG/blob/main/docs/positioning.de.md#ein-beispiel" rel="noopener" class="btn-secondary btn-small" style="margin-top:22px;">
+          <span data-de="Den ganzen Fall lesen →" data-pt="Ler o caso completo →">Read the whole case →</span>
+        </a>
+      </div>
+      <figure class="reveal sticky">
+        <a class="shot" href="img/beispiel-cpu-cluster-2015.png" data-lightbox>
+          <img src="img/beispiel-cpu-cluster-2015.png" width="1219" height="1020" loading="lazy" alt="Chart of the CPU load of one Java process on eleven cluster nodes over one week in March 2015; one line stays well above the others." data-alt-de="Chart der CPU-Last eines Java-Prozesses auf elf Cluster-Knoten über eine Woche im März 2015; eine Linie liegt deutlich über den anderen." data-alt-pt="Gráfico da carga de CPU de um processo Java em onze nós de um cluster ao longo de uma semana em março de 2015; uma linha fica bem acima das outras.">
+        </a>
+        <figcaption class="shot-caption" data-de="Das Original aus der Workbench. Die Hostnamen sind geschwärzt." data-pt="O original da workbench. Os nomes dos hosts estão ocultados.">The original from the workbench. The host names are blacked out.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- WORKFLOW -->
+<section id="workflow">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label" data-de="So arbeitet man damit" data-pt="Como se trabalha com ele">How you work with it</div>
+      <h2 class="section-title" data-de="Vom groben Überblick zum entscheidenden Unterschied" data-pt="Da visão geral à diferença decisiva">From a broad view to the decisive difference</h2>
+      <p class="section-sub" data-de="Der Rekorder wird für einen konkreten Einsatz zusammengestellt. Es gibt keinen für immer festgelegten Monitoring-Katalog; welche Messwerte wichtig sind, bestimmt der Fall." data-pt="O registrador é configurado para uma investigação concreta. Não há um catálogo de monitoramento fixado para sempre; o caso determina quais medições importam.">The recorder is configured for one concrete investigation. There is no permanently prescribed monitoring catalogue; what matters enough to record depends on the case.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">1</div>
+        <h3 data-de="Sammeln" data-pt="Coletar">Collect</h3>
+        <p data-de="Aus Prometheus importieren oder den Collector Systemmetriken, JMX und Logs per SSH lesen lassen. Die Daten liegen danach lokal, im eingebetteten Solr." data-pt="Importe do Prometheus ou deixe o Collector ler métricas de sistema, JMX e logs via SSH. Os dados ficam locais, no Solr embutido.">Import from Prometheus, or let the collector read system metrics, JMX and logs via SSH. The data then lies locally, in the embedded Solr.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">2</div>
+        <h3 data-de="Vergleichen" data-pt="Comparar">Compare</h3>
+        <p data-de="Viele Zeitreihen per Wildcard in ein Bild legen, das Zeitfenster verändern, weitere Systeme dazunehmen. Die Frage entsteht oft erst beim Vergleichen." data-pt="Reúna muitas séries em uma imagem por wildcard, mude a janela de tempo, acrescente sistemas. Muitas vezes a pergunta só surge ao comparar.">Put many time series into one picture by wildcard, change the time window, add further systems. Often the question only emerges while comparing.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">3</div>
+        <h3 data-de="Festhalten" data-pt="Marcar">Bookmark</h3>
+        <p data-de="Die Ansicht, in der etwas auffällt, als Bookmark sichern: welcher Server, welcher Zeitraum, womit verglichen." data-pt="Salve como bookmark a visão em que algo chama atenção: qual servidor, qual período, comparado com o quê.">Preserve the view in which something stands out: which server, which period, compared with what.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">4</div>
+        <h3 data-de="Prüfen" data-pt="Verificar">Verify</h3>
+        <p data-de="Der AI Assistant gleicht die Hypothese mit den Rohdaten ab und sucht Belege ebenso wie Gegenbelege." data-pt="O assistente de IA confronta a hipótese com os dados brutos e procura tanto evidências quanto contraevidências.">The AI Assistant checks the hypothesis against the raw data and looks for evidence as well as counter-evidence.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">5</div>
+        <h3 data-de="Weitergeben" data-pt="Entregar">Hand over</h3>
+        <p data-de="Der Chart als PNG, die Werte als Excel: Belege für den Bericht oder die Präsentation, in die der Befund gehört." data-pt="O gráfico em PNG, os valores em Excel: evidências para o relatório ou a apresentação onde o achado deve estar.">The chart as PNG, the values as Excel: evidence for the report or presentation in which the finding belongs.</p>
+      </div>
+    </div>
+    <p class="steps-after reveal" data-de="<strong>Danach geht es gezielt in die Tiefe.</strong> Speicherprofiler, CPU-Profiler oder Netzwerk-Tracing kommen für genau die Komponente und den Zeitraum zum Einsatz, die in der Metrikanalyse aufgefallen sind." data-pt="<strong>Depois, o aprofundamento é direcionado.</strong> Profilers de memória e de CPU ou ferramentas de tracing de rede entram exatamente no componente e no período que se destacaram na análise das métricas.">
+      <strong>After that, you go deeper where it counts.</strong> Memory profilers, CPU profilers or network tracing tools are used for exactly the component and period that stood out in the metric analysis.
+    </p>
+  </div>
+</section>
+
+<!-- AI -->
+<section id="ai" class="alt">
+  <div class="container">
+    <div class="story-grid wide-left">
+      <figure class="reveal">
+        <a class="shot" href="img/ui-ai-analysis.png" data-lightbox>
+          <img src="img/ui-ai-analysis.png" width="1628" height="1095" loading="lazy" alt="The workbench with a chart of response times and the AI Assistant, which compares web03 with web01 and web02 and reads the growing heap as a memory leak." data-alt-de="Die Workbench mit einem Chart der Antwortzeiten und dem AI Assistant, der web03 mit web01 und web02 vergleicht und den wachsenden Heap als Memory Leak deutet." data-alt-pt="A workbench com um gráfico dos tempos de resposta e o assistente de IA, que compara web03 com web01 e web02 e interpreta o heap crescente como um memory leak.">
+        </a>
+        <figcaption class="shot-caption" data-de="web03 wird gegen 13 Uhr langsam. Der Assistant vergleicht mit web01 und web02, deutet den Heap als Memory Leak und sagt dazu, was die Metriken nicht zeigen." data-pt="O web03 fica lento por volta das 13h. O assistente compara com web01 e web02, interpreta o heap como memory leak e diz o que as métricas não mostram.">web03 gets slow around 13:00. The assistant compares it with web01 and web02, reads the heap as a memory leak, and says what the metrics do not show.</figcaption>
+      </figure>
+      <div class="story-text reveal">
+        <div class="section-label" data-de="Die Rolle der AI" data-pt="O papel da IA">The role of AI</div>
+        <h2 class="section-title" data-de="Ein Assistant, der prüft, statt nur zuzustimmen" data-pt="Um assistente que verifica, em vez de apenas concordar">An assistant that checks instead of just agreeing</h2>
+        <p data-de="Die Idee ist über 15 Jahre alt und wurde seitdem stetig weiterentwickelt. Zuletzt kam mit Version 7.x die AI-Unterstützung dazu." data-pt="A ideia tem mais de 15 anos e vem sendo aprimorada desde então. Mais recentemente, com a versão 7.x, veio o suporte a IA.">The idea is more than 15 years old and has been developed further ever since. Most recently, version 7.x added AI support.</p>
+        <p data-de="Der eingebaute AI Assistant arbeitet auf denselben Daten, die der Analyst sieht. Der Mensch entdeckt und deutet; der Assistant recherchiert und prüft." data-pt="O assistente de IA integrado trabalha com os mesmos dados que o analista vê. A pessoa descobre e interpreta; o assistente pesquisa e verifica.">The built-in AI Assistant works on the same data the analyst sees. The human discovers and interprets; the assistant researches and verifies.</p>
+        <ul class="finding-list">
+          <li><span class="finding-num">chart</span><span data-de="Sieht den aktuellen Chart-Ausschnitt, in der Zeitzone des Charts" data-pt="Vê o trecho atual do gráfico, no fuso horário do gráfico">Sees the current chart section, in the time zone of the chart</span></li>
+          <li><span class="finding-num">metrics</span><span data-de="Kennt die Metriken und Dimensionen des Projekts" data-pt="Conhece as métricas e as dimensões do projeto">Knows the metrics and dimensions of the project</span></li>
+          <li><span class="finding-num">query</span><span data-de="Fragt Zeitreihen selbst ab" data-pt="Consulta as séries temporais por conta própria">Queries time series itself</span></li>
+          <li><span class="finding-num">ssh</span><span data-de="Sieht per SSH in Logs und Prozesse. <strong>Jedes Kommando erst nach Freigabe</strong> durch den Analysten" data-pt="Examina logs e processos via SSH. <strong>Cada comando só após aprovação</strong> do analista">Looks at logs and processes via SSH. <strong>Each command only after the analyst has approved it</strong></span></li>
+        </ul>
+        <p style="font-size:0.86rem;" data-de="Der Assistant spricht mit einem OpenAI-kompatiblen Endpunkt, derzeit OpenRouter mit einem Claude-Modell; der API-Schlüssel kommt aus <code>OPENROUTER_API_KEY</code>. Was er zu sehen bekommt, geht an diesen Dienst. Die Ausgabe einer AI ist eine Hilfe für Hypothesen, kein erhobener Beleg." data-pt="O assistente fala com um endpoint compatível com OpenAI, atualmente o OpenRouter com um modelo Claude; a chave de API vem de <code>OPENROUTER_API_KEY</code>. O que ele recebe é enviado a esse serviço. A saída de uma IA é um apoio para hipóteses, não uma evidência coletada.">The assistant talks to an OpenAI-compatible endpoint, at present OpenRouter with a Claude model; the API key comes from <code>OPENROUTER_API_KEY</code>. What it is shown goes to that service. AI output is a hypothesis aid, not collected evidence.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<div class="quote-section">
+  <div class="container">
+    <div class="quote-inner reveal">
+      <div class="quote-mark" aria-hidden="true">&ldquo;</div>
+      <blockquote data-de="Ein Agent, der nur bestätigt, würde <em>den Bestätigungsfehler des Analysten automatisieren</em>." data-pt="Um agente que apenas confirma estaria <em>automatizando o viés de confirmação do analista</em>.">An agent that only confirms would <em>automate the analyst's confirmation bias</em>.</blockquote>
+      <div class="quote-source"><a class="textlink" href="https://github.com/Weigend/Software-EKG/blob/main/docs/positioning.md" data-href-de="https://github.com/Weigend/Software-EKG/blob/main/docs/positioning.de.md" rel="noopener" data-de="Aus der Positionierung des Software-EKG" data-pt="Do posicionamento do Software-EKG">From the positioning of Software-EKG</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- WORKBENCH -->
+<section id="workbench">
+  <div class="container">
+    <div class="section-header text-center reveal">
+      <div class="section-label" data-de="Die Workbench" data-pt="A workbench">The workbench</div>
+      <h2 class="section-title" data-de="Gebaut für viele Serien in einem Bild" data-pt="Feita para muitas séries em uma única imagem">Built for many series in one picture</h2>
+      <p class="section-sub" data-de="Eine JavaFX-Anwendung für den eigenen Rechner: Explorer, Filterkopf, Chart, Legende und AI Assistant. Navigation zwischen hunderten Serien, ohne zu programmieren." data-pt="Uma aplicação JavaFX para a sua máquina: explorer, cabeçalho de filtros, gráfico, legenda e assistente de IA. Navegação entre centenas de séries, sem programar.">A JavaFX application for your own machine: explorer, filter header, chart, legend and AI Assistant. Navigation between hundreds of series, without programming.</p>
+    </div>
+    <div class="showcase">
+      <a class="showcase-item span2 reveal" href="img/ui-filter-wildcards.png" data-lightbox>
+        <img class="showcase-img" src="img/ui-filter-wildcards.png" width="1535" height="1065" loading="lazy" alt="Filter header with wildcards and a chart of all CPU values of three web servers." data-alt-de="Filterkopf mit Wildcards und ein Chart aller CPU-Werte von drei Webservern." data-alt-pt="Cabeçalho de filtros com wildcards e um gráfico de todos os valores de CPU de três servidores web.">
+        <div class="showcase-caption">
+          <h3 data-de="Wildcards auf jeder Dimension" data-pt="Wildcards em cada dimensão">Wildcards on every dimension</h3>
+          <p data-de="<code>web*</code> als Host und <code>\Cpu\*</code> als Metrik: alle CPU-Werte aller Webserver in einem Chart, mit Ausschlüssen. Für Cloud-native Projekte kommen Namespace, Service, Pod und Container dazu." data-pt="<code>web*</code> como host e <code>\Cpu\*</code> como métrica: todos os valores de CPU de todos os servidores web em um gráfico, com exclusões. Em projetos cloud-native entram também namespace, service, pod e container."><code>web*</code> as host and <code>\Cpu\*</code> as metric: every CPU value of every web server in one chart, with exclusions. Cloud-native projects add namespace, service, pod and container.</p>
+        </div>
+      </a>
+      <a class="showcase-item reveal" href="img/ui-background-chart.png" data-lightbox>
+        <img class="showcase-img" src="img/ui-background-chart.png" width="1320" height="1065" loading="lazy" alt="Request rate in front with its axis on the left, response times in the background with their axis on the right." data-alt-de="Request-Rate im Vordergrund mit Achse links, Antwortzeiten im Hintergrund mit Achse rechts." data-alt-pt="Taxa de requisições à frente com eixo à esquerda, tempos de resposta ao fundo com eixo à direita.">
+        <div class="showcase-caption">
+          <h3 data-de="Zwei Einheiten, eine Zeitachse" data-pt="Duas unidades, um eixo de tempo">Two units, one time axis</h3>
+          <p data-de="Charts im Hintergrund behalten ihre eigene Werteachse. So teilen sich Requests pro Sekunde und Millisekunden ein Bild: Je weniger Requests der Server beantwortet, desto länger braucht er." data-pt="Gráficos ao fundo mantêm seu próprio eixo de valores. Assim, requisições por segundo e milissegundos dividem a mesma imagem: quanto menos requisições o servidor responde, mais ele demora.">Charts in the background keep their own value axis. That lets requests per second and milliseconds share a picture: the fewer requests the server answers, the longer it takes.</p>
+        </div>
+      </a>
+      <a class="showcase-item reveal" href="img/ui-deviation.png" data-lightbox>
+        <img class="showcase-img" src="img/ui-deviation.png" width="1535" height="1065" loading="lazy" alt="Requests of web02 and web03 in percent of those of web01; web03 falls to 55 percent." data-alt-de="Requests von web02 und web03 in Prozent von web01; web03 fällt auf 55 Prozent." data-alt-pt="Requisições de web02 e web03 em percentual das de web01; web03 cai para 55 por cento.">
+        <div class="showcase-caption">
+          <h3 data-de="Prozentuale Abweichung" data-pt="Desvio percentual">Percentage deviation</h3>
+          <p data-de="Eine Serie wird zum Maß für 100 Prozent, die anderen stehen relativ dazu: web02 konstant knapp darunter, web03 darüber, bis es auf 55 Prozent fällt." data-pt="Uma série vira a medida de 100 por cento, as outras aparecem em relação a ela: web02 sempre um pouco abaixo, web03 acima, até cair para 55 por cento.">One series becomes the measure of 100 percent, the others are shown relative to it: web02 constantly a little below, web03 above it until it falls to 55 percent.</p>
+        </div>
+      </a>
+      <a class="showcase-item reveal" href="img/ui-chart-types.png" data-lightbox>
+        <img class="showcase-img" src="img/ui-chart-types.png" width="1528" height="542" loading="lazy" style="object-fit:contain;object-position:center;" alt="The same three series as line, area, sum and point chart." data-alt-de="Dieselben drei Serien als Linien-, Flächen-, Summen- und Punkt-Chart." data-alt-pt="As mesmas três séries como gráfico de linha, área, soma e pontos.">
+        <div class="showcase-caption">
+          <h3 data-de="Linie, Fläche, Summe, Punkte" data-pt="Linha, área, soma, pontos">Line, area, sum, points</h3>
+          <p data-de="Dieselben Serien in vier Darstellungen. Glättung und Granularität lassen sich je Abfrage wählen; ein Bookmark merkt sich den Chart-Typ." data-pt="As mesmas séries em quatro representações. Suavização e granularidade podem ser escolhidas por consulta; um bookmark guarda o tipo do gráfico.">The same series in four chart types. Smoothing and granularity can be chosen per query; a bookmark remembers the type of its chart.</p>
+        </div>
+      </a>
+      <a class="showcase-item reveal" href="img/importer-prometheus-result.png" data-lightbox>
+        <img class="showcase-img" src="img/importer-prometheus-result.png" width="1920" height="1200" loading="lazy" alt="The workbench after an import from a Prometheus server: the metrics in the explorer and a chart." data-alt-de="Die Workbench nach einem Import von einem Prometheus-Server: die Metriken im Explorer und ein Chart." data-alt-pt="A workbench após uma importação de um servidor Prometheus: as métricas no explorer e um gráfico.">
+        <div class="showcase-caption">
+          <h3 data-de="Import aus Prometheus" data-pt="Importação do Prometheus">Import from Prometheus</h3>
+          <p data-de="Über die HTTP-API, Rohwerte statt verdichteter Schritte. Die Serien werden in den lokalen Bestand kopiert oder bleiben im Prometheus und werden geholt, wenn ein Chart sie braucht." data-pt="Pela API HTTP, amostras brutas em vez de passos condensados. As séries são copiadas para o repositório local ou ficam no Prometheus e são buscadas quando um gráfico precisa delas.">Through the HTTP API, raw samples instead of condensed steps. The series are copied into the local repository, or stay in Prometheus and are fetched when a chart needs them.</p>
+        </div>
+      </a>
+    </div>
+
+    <div class="features-grid four" style="margin-top:20px;">
+      <div class="feature-card reveal">
+        <span class="kicker">bookmarks</span>
+        <h3 data-de="Ein Bookmark speichert die Abfrage, nicht das Bild" data-pt="Um bookmark guarda a consulta, não a imagem">A bookmark stores the query, not a picture</h3>
+        <p data-de="Die Filter, die die Serien auswählen, und der Zeitraum. Die Ansicht lässt sich wieder öffnen und verändern." data-pt="Os filtros que selecionam as séries e o período. A visão pode ser reaberta e alterada.">The filters that select its series, and the time range. The view can be opened again and changed.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="kicker">export</span>
+        <h3 data-de="PNG und Excel als Belege" data-pt="PNG e Excel como evidência">PNG and Excel as evidence</h3>
+        <p data-de="Das Bild für den Einsatzbericht, die Werte zum unabhängigen Nachprüfen. Das Dokument selbst entsteht dort, wo es hingehört." data-pt="A imagem para o relatório do incidente, os valores para verificação independente. O documento em si nasce onde deve estar.">The picture for the incident report, the values for independent checking. The document itself is written where it belongs.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="kicker">500 pts/line</span>
+        <h3 data-de="Lange Zeiträume bleiben bedienbar" data-pt="Períodos longos continuam interativos">Long periods stay interactive</h3>
+        <p data-de="Beim Anzeigen wird jede Serie auf eine feste Punktzahl reduziert: Wertwechsel, LTTB und Douglas-Peucker. Gespeichert bleiben die Rohdaten." data-pt="Na exibição, cada série é reduzida a um número fixo de pontos: mudança de valor, LTTB e Douglas-Peucker. Os dados brutos continuam armazenados.">At display time every series is reduced to a fixed number of points: value change, LTTB and Douglas-Peucker. The raw data stays stored.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="kicker">~/.ekg</span>
+        <h3 data-de="Ein lokaler, wiederholbarer Bestand" data-pt="Um conjunto local e reproduzível">A local, repeatable data set</h3>
+        <p data-de="Eingebettetes Solr auf dem eigenen Rechner; Solr, Elasticsearch oder ClickHouse als entferntes Repository. Die Produktion wird nicht bei jedem Blick erneut belastet." data-pt="Solr embutido na sua máquina; Solr, Elasticsearch ou ClickHouse como repositório remoto. A produção não é sobrecarregada a cada nova consulta.">Embedded Solr on your own machine; Solr, Elasticsearch or ClickHouse as a remote repository. Production is not loaded again with every look.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COLLECTOR -->
+<section id="collector" class="alt">
+  <div class="container">
+    <div class="story-grid top">
+      <div class="story-text reveal">
+        <div class="section-label" data-de="Der Collector" data-pt="O Collector">The collector</div>
+        <h2 class="section-title" data-de="Festlegen, was gemessen wird, wo, und was verglichen wird" data-pt="Defina o que medir, onde e o que comparar">Define what to measure, where, and what to compare</h2>
+        <p data-de="Der Collector ist ein Adapter zwischen den Systemen, die ihre Werte schon irgendwo preisgeben, und dem Bestand, den die Workbench auswertet. Für den ersten Chart braucht man ihn nicht, denn die Workbench bringt einen eigenen mit. Als eigenständiger Prozess läuft er auf einem Server, einem Jump Host oder einem Raspberry Pi." data-pt="O Collector é um adaptador entre os sistemas que já expõem seus valores em algum lugar e o repositório que a workbench analisa. Para o primeiro gráfico ele não é necessário, pois a workbench traz um próprio. Como processo independente, roda em um servidor, um jump host ou um Raspberry Pi.">The collector is an adapter between the systems that already expose their values somewhere and the repository the workbench analyses. You do not need it for a first chart, because the workbench has one of its own. As a standalone process it runs on a server, a jump host or a Raspberry Pi.</p>
+        <div class="chips-label" data-de="Quellen" data-pt="Fontes">Sources</div>
+        <div class="chips">
+          <span class="chip">unix · top</span><span class="chip">unixio · iostat</span><span class="chip">unixdf · df</span><span class="chip">win · perf counters</span><span class="chip">jmx</span><span class="chip">jolokia</span><span class="chip">prometheus</span><span class="chip">log · regex</span><span class="chip">calc</span>
+        </div>
+        <div class="chips-label" data-de="Schreibt nach" data-pt="Grava em">Writes to</div>
+        <div class="chips">
+          <span class="chip store">CSV</span><span class="chip store">Solr</span><span class="chip store">Elasticsearch</span>
+        </div>
+        <p data-de="<strong>Logzeilen werden zu Zeitreihen.</strong> Eine Metrik ist ein regulärer Ausdruck, ihre Serie die Zahl der passenden Zeilen je Intervall. Was eine Anwendung nur in ihr Log schreibt, war nie irgendwo eine Metrik." data-pt="<strong>Linhas de log viram séries temporais.</strong> Uma métrica é uma expressão regular; sua série, o número de linhas correspondentes por intervalo. O que uma aplicação só escreve no log nunca foi métrica em lugar nenhum."><strong>Log lines become time series.</strong> A metric is a regular expression, its series the number of matching lines per interval. What an application only writes into its log was never a metric anywhere.</p>
+        <p data-de="<strong>Eine Quelle ist ein kleines Plugin.</strong> Die mitgelieferte Mock-Quelle besteht aus einer Klasse mit rund 90 Zeilen und einem ServiceLoader-Eintrag. Ein Coding-Agent schreibt eine solche Quelle für eine proprietäre Schnittstelle in Minuten." data-pt="<strong>Uma fonte é um pequeno plugin.</strong> A fonte mock incluída é uma classe com cerca de 90 linhas e uma entrada de ServiceLoader. Um agente de código escreve uma fonte dessas para uma interface proprietária em minutos."><strong>A source is a small plugin.</strong> The bundled mock source is one class of about 90 lines and a ServiceLoader entry. A coding agent writes such a source for a proprietary interface in minutes.</p>
+        <a href="https://github.com/Weigend/Software-EKG/blob/main/docs/handbook/collector.md" rel="noopener" class="btn-secondary btn-small" style="margin-top:8px;">
+          <span data-de="Collector im Handbuch →" data-pt="O Collector no manual →">The collector in the handbook →</span>
+        </a>
+      </div>
+      <div class="reveal">
+        <div class="code-title">config.yaml</div>
+<pre class="code-block"><span class="k">metricGroups</span>:
+  host:
+    <span class="k">type</span>: unix                <span class="c"># top via SSH</span>
+    <span class="k">metrics</span>:
+      - <span class="s">'\CPU\us'</span>
+      - <span class="s">'\Load\one'</span>
+
+<span class="k">processGroups</span>:
+  system:
+    - <span class="k">name</span>: global
+      <span class="k">source</span>: <span class="s">'${REF:hostAddress}:22'</span>
+
+<span class="k">hostGroups</span>:
+  db:
+    <span class="k">username</span>: ekg
+    <span class="k">password</span>: <span class="s">'${ENV:EKG_SSH_PASSWORD}'</span>
+    <span class="k">hosts</span>: [db-01, db-02]
+
+<span class="k">collectors</span>:               <span class="c"># what × where × how often</span>
+  - <span class="k">metricGroup</span>: host
+    <span class="k">processGroup</span>: system
+    <span class="k">hostGroup</span>: db
+    <span class="k">interval</span>: 15s</pre>
+        <p class="shot-caption" data-de="Jeder Eintrag unter <code>collectors</code> wird zu einem Job je Host und Prozess ausmultipliziert. Die Namen der Gruppen sind später Dimensionen jeder Serie, also das, wonach verglichen wird." data-pt="Cada entrada em <code>collectors</code> é multiplicada em um job por host e processo. Os nomes dos grupos viram dimensões de cada série, ou seja, aquilo pelo qual se compara.">Every entry under <code>collectors</code> is multiplied out into one job per host and process. The names of the groups later are dimensions of every series: what you compare by.</p>
+      </div>
+    </div>
+
+    <div class="display-row">
+      <figure class="reveal">
+        <a class="shot" href="img/collector-display-overview.png" data-lightbox>
+          <img src="img/collector-display-overview.png" width="800" height="480" loading="lazy" alt="The display of a collector: five jobs, three OK, one problem, with the reason in words." data-alt-de="Die Anzeige eines Collectors: fünf Jobs, drei in Ordnung, ein Problem, mit dem Grund in Worten." data-alt-pt="O display de um Collector: cinco jobs, três OK, um problema, com o motivo por extenso.">
+        </a>
+        <figcaption class="shot-caption" data-de="Die Anzeige des Collectors für einen kleinen Touchscreen, etwa das 7-Zoll-Panel eines Raspberry Pi: die Jobs, die mit einem Problem zuerst." data-pt="O display do Collector para uma tela de toque pequena, como o painel de 7 polegadas de um Raspberry Pi: os jobs, primeiro os que têm problema.">The collector's display for a small touch screen, such as the 7 inch panel of a Raspberry Pi: the jobs, those with a problem first.</figcaption>
+      </figure>
+      <figure class="reveal">
+        <a class="shot" href="img/collector-display-job.png" data-lightbox>
+          <img src="img/collector-display-job.png" width="800" height="480" loading="lazy" alt="One job of the collector with its metrics, the values read last and small curves." data-alt-de="Ein Job des Collectors mit seinen Metriken, den zuletzt gelesenen Werten und kleinen Kurven." data-alt-pt="Um job do Collector com suas métricas, os últimos valores lidos e pequenas curvas.">
+        </a>
+        <figcaption class="shot-caption" data-de="Ein Job mit seinen Metriken: der zuletzt gelesene Wert, Minimum und Maximum und eine kleine Kurve." data-pt="Um job com suas métricas: o último valor lido, mínimo e máximo e uma pequena curva.">A job with its metrics: the value read last, minimum and maximum, and a small curve.</figcaption>
+      </figure>
+    </div>
+
+    <figure class="figure-wide reveal">
+      <a class="shot" href="img/architecture-collector-solr.svg" data-lightbox>
+        <img src="img/architecture-collector-solr.svg" width="1120" height="340" loading="lazy" alt="Architecture: an external collector reads Linux, Windows and Kubernetes systems and writes into a remote Solr, which the workbench on the analyst's workstation queries." data-alt-de="Architektur: Ein externer Collector liest Linux-, Windows- und Kubernetes-Systeme und schreibt in ein entferntes Solr, das die Workbench auf dem Rechner des Analysten abfragt." data-alt-pt="Arquitetura: um Collector externo lê sistemas Linux, Windows e Kubernetes e grava em um Solr remoto, que a workbench na estação do analista consulta.">
+      </a>
+      <figcaption class="shot-caption" data-de="Einer von vier Aufbauten: Ein externer Collector schreibt in ein entferntes Solr, die Workbench fragt es ab. Die Collectors holen die Daten; die gemessenen Systeme senden nichts von sich aus. <a class=&quot;textlink&quot; href=&quot;https://github.com/Weigend/Software-EKG/blob/main/docs/handbook/architecture.md&quot; rel=&quot;noopener&quot;>Alle vier im Handbuch</a>" data-pt="Uma de quatro configurações: um Collector externo grava em um Solr remoto e a workbench o consulta. Os Collectors buscam os dados; os sistemas medidos não enviam nada por conta própria. <a class=&quot;textlink&quot; href=&quot;https://github.com/Weigend/Software-EKG/blob/main/docs/handbook/architecture.md&quot; rel=&quot;noopener&quot;>As quatro no manual</a>">One of four setups: an external collector writes into a remote Solr, and the workbench queries it. The collectors fetch the data; the measured systems send nothing by themselves. <a class="textlink" href="https://github.com/Weigend/Software-EKG/blob/main/docs/handbook/architecture.md" rel="noopener">All four in the handbook</a></figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- WHAT IT IS NOT -->
+<section id="not">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label" data-de="Ehrliche Grenzen" data-pt="Limites honestos">Honest limits</div>
+      <h2 class="section-title" data-de="Was es nicht ist" data-pt="O que ele não é">What it is not</h2>
+      <p class="section-sub" data-de="Das Software-EKG ergänzt das Monitoring und ersetzt es nicht. Das Monitoring beantwortet laufend, ob bekannte Zustände gesund sind. Der Rekorder hilft bei der Frage, was in diesem einen Fall anders ist." data-pt="O Software-EKG complementa o monitoramento, não o substitui. O monitoramento responde continuamente se condições conhecidas estão saudáveis. O registrador ajuda a perguntar o que há de diferente neste caso específico.">Software-EKG complements monitoring rather than replacing it. Monitoring continuously answers whether known conditions are healthy. The recorder helps to ask what is different in this particular case.</p>
+    </div>
+    <div class="not-grid">
+      <div class="not-card reveal">
+        <h3 data-de="Kein Dashboard, kein Alerting" data-pt="Não é dashboard nem alerta">Not a dashboard, not alerting</h3>
+        <p data-de="Dashboards und Alarme auf dem laufenden System bleiben Sache von Werkzeugen wie Grafana." data-pt="Dashboards e alertas no sistema em operação continuam sendo tarefa de ferramentas como o Grafana.">Dashboards and alerts on the running system remain the job of tools such as Grafana.</p>
+      </div>
+      <div class="not-card reveal">
+        <h3 data-de="Kein Live-Monitoring" data-pt="Não é monitoramento ao vivo">Not live monitoring</h3>
+        <p data-de="Die Workbench hat eine laufende Anzeige, sie bestätigt aber vor allem, dass Daten ankommen." data-pt="A workbench tem uma exibição ao vivo, mas ela confirma principalmente que os dados estão chegando.">The workbench has a live display, but it mainly confirms that data is arriving.</p>
+      </div>
+      <div class="not-card reveal">
+        <h3 data-de="Kein Anomalie-Detektor" data-pt="Não é detector de anomalias">Not an anomaly detector</h3>
+        <p data-de="Die Muster findet der Mensch im Vergleich." data-pt="Os padrões são encontrados por uma pessoa, por comparação.">The patterns are found by a human, by comparison.</p>
+      </div>
+      <div class="not-card reveal">
+        <h3 data-de="Kein Versprechen der Ursache" data-pt="Não promete a causa">No promise of the cause</h3>
+        <p data-de="Das Bild führt zum richtigen Server und zur richtigen Frage. Die Antwort steht oft in keiner Zeitreihe; sie braucht Wissen über die Architektur." data-pt="A imagem leva ao servidor certo e à pergunta certa. A resposta muitas vezes não está em nenhuma série temporal; exige conhecimento da arquitetura.">The picture leads to the right server and to the right question. The answer is often not in any time series; it takes knowledge of the architecture.</p>
+      </div>
+    </div>
+
+    <div class="table-wrap reveal">
+      <table class="compare">
+        <thead>
+          <tr>
+            <th data-de="Werkzeug" data-pt="Ferramenta">Tool</th>
+            <th data-de="Optimiert für" data-pt="Otimizado para">Optimised for</th>
+            <th data-de="Das Software-EKG dagegen" data-pt="O Software-EKG, por sua vez">Software-EKG, by contrast</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Grafana</td>
+            <td data-de="Dashboards und Alarme auf dem laufenden System" data-pt="Dashboards e alertas no sistema em operação">Dashboards and alerts on the running system</td>
+            <td data-de="Auswertung danach, lokal, mit vielen Serien in einem Bild" data-pt="Análise posterior, local, com muitas séries em uma imagem">Analysis afterwards, locally, with many series in one picture</td>
+          </tr>
+          <tr>
+            <td data-de="Prometheus und Langzeitspeicher wie Thanos oder Mimir" data-pt="Prometheus e armazenamento de longo prazo como Thanos ou Mimir">Prometheus and long-term storage such as Thanos or Mimir</td>
+            <td data-de="Sammeln, Aufbewahren und Abfragen" data-pt="Coletar, reter e consultar">Collecting, retaining and querying</td>
+            <td data-de="Ein lokaler Bestand, der für den interaktiven Vergleich aufbereitet ist" data-pt="Um conjunto de dados local, preparado para a comparação interativa">A local data set prepared for interactive comparison</td>
+          </tr>
+          <tr>
+            <td data-de="AI-SRE-Agenten" data-pt="Agentes de IA para SRE">AI SRE agents</td>
+            <td data-de="Einen Vorfall selbstständig eingrenzen, sobald ein Alarm aufgeht" data-pt="Delimitar um incidente de forma autônoma assim que um alerta dispara">Narrowing down an incident autonomously as soon as an alert fires</td>
+            <td data-de="Ein Experte entdeckt und deutet; der Agent recherchiert und prüft" data-pt="Um especialista descobre e interpreta; o agente pesquisa e verifica">An expert discovers and interprets; the agent researches and verifies</td>
+          </tr>
+          <tr>
+            <td data-de="Notebook oder Coding-Agent auf exportierten Daten" data-pt="Notebook ou agente de código sobre dados exportados">Notebook or coding agent on exported data</td>
+            <td data-de="Eine konkrete Frage mit Code beantworten" data-pt="Responder a uma pergunta específica com código">Answering a specific question with code</td>
+            <td data-de="Navigation zwischen hunderten Serien ohne Programmierung, in einem wachsenden Bestand" data-pt="Navegação entre centenas de séries sem programar, em um conjunto de dados crescente">Navigation between hundreds of series without programming, in a growing data set</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note reveal" data-de="Die Abgrenzung beruht auf dem Zweck, nicht auf Schwächen der anderen Werkzeuge. Dass das Software-EKG für diese Art der Analyse besser ist als die Alternativen, ist nicht gezeigt; das kann nur ein reproduzierbarer Vergleich. <a class=&quot;textlink&quot; href=&quot;https://github.com/Weigend/Software-EKG/blob/main/docs/positioning.de.md&quot; rel=&quot;noopener&quot;>Die ganze Positionierung</a>" data-pt="A diferenciação se baseia no propósito, não em fraquezas das outras ferramentas. Não está demonstrado que o Software-EKG seja melhor para esse tipo de análise do que as alternativas; só uma comparação reproduzível pode mostrar isso. <a class=&quot;textlink&quot; href=&quot;https://github.com/Weigend/Software-EKG/blob/main/docs/positioning.md&quot; rel=&quot;noopener&quot;>O posicionamento completo (em inglês)</a>">The differentiation is based on purpose, not on weaknesses of the other tools. It has not been shown that Software-EKG is better for this kind of analysis than the alternatives; only a reproducible comparison can show that. <a class="textlink" href="https://github.com/Weigend/Software-EKG/blob/main/docs/positioning.md" rel="noopener">The whole positioning</a></p>
+  </div>
+</section>
+
+<!-- DOWNLOAD -->
+<section id="download" class="alt">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label" data-de="Ausprobieren" data-pt="Experimente">Try it</div>
+      <h2 class="section-title" data-de="Entpacken und starten" data-pt="Descompacte e inicie">Unpack and start</h2>
+      <p class="section-sub"><span data-de="Fertige Pakete, jeweils mit eigener Java-Laufzeit, rund 200 MB." data-pt="Pacotes prontos, cada um com runtime Java próprio, cerca de 200 MB.">Ready-made packages, each with its own Java runtime, about 200 MB.</span> <span class="rel-line" id="relLine" data-de="Das neueste Release, direkt von GitHub." data-pt="O release mais recente, direto do GitHub.">The latest release, straight from GitHub.</span></p>
+    </div>
+    <div class="cards">
+      <article class="card reveal" data-os="linux">
+        <h3>Linux</h3>
+        <p class="status" data-de="x64 · Desktop-Sitzung mit GTK 3" data-pt="x64 · sessão de desktop com GTK 3">x64 · desktop session with GTK 3</p>
+        <a class="btn-primary" data-asset="workbench-linux-x64" href="https://github.com/Weigend/Software-EKG/releases/latest" rel="noopener" data-de="Workbench für Linux" data-pt="Workbench para Linux">Workbench for Linux</a>
+        <a class="second textlink" data-asset="collector-linux-x64" href="https://github.com/Weigend/Software-EKG/releases/latest" rel="noopener" data-de="Collector für Linux" data-pt="Collector para Linux">Collector for Linux</a>
+        <ol>
+          <li data-de="ZIP entpacken." data-pt="Descompacte o ZIP.">Unpack the ZIP.</li>
+          <li data-de="Starten: <code>bin/software-ekg.sh</code>" data-pt="Inicie: <code>bin/software-ekg.sh</code>">Start: <code>bin/software-ekg.sh</code></li>
+          <li data-de="Prüfen, ob etwas fehlt: <code>bin/software-ekg.sh --check</code>" data-pt="Verifique se falta algo: <code>bin/software-ekg.sh --check</code>">Check whether something is missing: <code>bin/software-ekg.sh --check</code></li>
+        </ol>
+      </article>
+      <article class="card reveal" data-os="macos">
+        <h3>macOS</h3>
+        <p class="status" data-de="Apple Silicon · nicht signiert" data-pt="Apple Silicon · não assinado">Apple Silicon · not signed</p>
+        <a class="btn-primary" data-asset="workbench-macos-aarch64" href="https://github.com/Weigend/Software-EKG/releases/latest" rel="noopener" data-de="Workbench für macOS" data-pt="Workbench para macOS">Workbench for macOS</a>
+        <a class="second textlink" data-asset="collector-macos-aarch64" href="https://github.com/Weigend/Software-EKG/releases/latest" rel="noopener" data-de="Collector für macOS" data-pt="Collector para macOS">Collector for macOS</a>
+        <ol>
+          <li data-de="ZIP entpacken." data-pt="Descompacte o ZIP.">Unpack the ZIP.</li>
+          <li data-de="Quarantäne aufheben, weil das Paket nicht signiert ist: <code>xattr -dr com.apple.quarantine &lt;Verzeichnis&gt;</code>" data-pt="Remova a quarentena, pois o pacote não é assinado: <code>xattr -dr com.apple.quarantine &lt;diretório&gt;</code>">Lift the quarantine, because the package is not signed: <code>xattr -dr com.apple.quarantine &lt;directory&gt;</code></li>
+          <li data-de="Starten: <code>bin/software-ekg.sh</code>" data-pt="Inicie: <code>bin/software-ekg.sh</code>">Start: <code>bin/software-ekg.sh</code></li>
+        </ol>
+      </article>
+      <article class="card reveal" data-os="windows">
+        <h3>Windows</h3>
+        <p class="status">x64</p>
+        <a class="btn-primary" data-asset="workbench-windows-x64" href="https://github.com/Weigend/Software-EKG/releases/latest" rel="noopener" data-de="Workbench für Windows" data-pt="Workbench para Windows">Workbench for Windows</a>
+        <a class="second textlink" data-asset="collector-windows-x64" href="https://github.com/Weigend/Software-EKG/releases/latest" rel="noopener" data-de="Collector für Windows" data-pt="Collector para Windows">Collector for Windows</a>
+        <ol>
+          <li data-de="ZIP entpacken." data-pt="Descompacte o ZIP.">Unpack the ZIP.</li>
+          <li data-de="Starten: <code>bin\software-ekg.bat</code>" data-pt="Inicie: <code>bin\software-ekg.bat</code>">Start: <code>bin\software-ekg.bat</code></li>
+          <li data-de="Collector mit Beispielwerten: <code>ekg-collector.cmd</code>" data-pt="Collector com valores de exemplo: <code>ekg-collector.cmd</code>">Collector with sample values: <code>ekg-collector.cmd</code></li>
+        </ol>
+      </article>
+    </div>
+
+    <div class="story-grid top first-chart">
+      <div class="reveal">
+        <h3 data-de="Der kürzeste Weg zum ersten Chart" data-pt="O caminho mais curto até o primeiro gráfico">The shortest way to a first chart</h3>
+        <p data-de="Die Workbench enthält einen eigenen Collector. Eine erste Analyse braucht deshalb weder einen separaten Collector noch einen Import:" data-pt="A workbench contém um Collector próprio. Por isso, uma primeira análise não precisa de um Collector separado nem de importação:">The workbench contains a collector of its own. A first analysis therefore needs neither a separate collector nor an import:</p>
+        <ul class="finding-list">
+          <li><span class="finding-num">1</span><span data-de="<strong>Analysis → New Analysis...</strong> wählen: Linux / Unix, Windows Server oder Java / JVM." data-pt="Escolha <strong>Analysis → New Analysis...</strong>: Linux / Unix, Windows Server ou Java / JVM.">Choose <strong>Analysis → New Analysis...</strong>: Linux / Unix, Windows Server or Java / JVM.</span></li>
+          <li><span class="finding-num">2</span><span data-de="Sagen, wie die Daten kommen: über einen Prometheus-Server oder direkt von jedem Host, per SSH und <code>top</code>." data-pt="Diga como os dados chegam: por um servidor Prometheus ou diretamente de cada host, via SSH e <code>top</code>.">Say how the data comes: through a Prometheus server, or directly from each host by SSH and <code>top</code>.</span></li>
+          <li><span class="finding-num">3</span><span data-de="Adresse eingeben und den Dialog beenden. Der erste Chart öffnet sich, sobald die ersten Werte da sind." data-pt="Informe o endereço e conclua o diálogo. O primeiro gráfico abre assim que os primeiros valores chegam.">Enter the address and finish the dialog. The first chart opens as soon as the first values are there.</span></li>
+        </ul>
+        <p style="font-size:0.88rem;" data-de="Für den AI Assistant muss vor dem Start die Umgebungsvariable <code>OPENROUTER_API_KEY</code> gesetzt sein." data-pt="Para o assistente de IA, a variável de ambiente <code>OPENROUTER_API_KEY</code> precisa estar definida antes de iniciar.">For the AI Assistant, the environment variable <code>OPENROUTER_API_KEY</code> must be set before the start.</p>
+      </div>
+      <div class="reveal">
+        <h3 data-de="Aus dem Quellcode" data-pt="A partir do código-fonte">From source</h3>
+        <p data-de="Braucht JDK 25 mit JavaFX 25 (etwa Liberica Full JDK) und Maven ab 3.9. Auch der Weg für andere Plattformen, etwa macOS auf Intel." data-pt="Requer JDK 25 com JavaFX 25 (por exemplo, Liberica Full JDK) e Maven 3.9 ou superior. É também o caminho para outras plataformas, como macOS em Intel.">Needs JDK 25 with JavaFX 25 (for example Liberica Full JDK) and Maven 3.9 or newer. Also the way for other platforms, such as macOS on Intel.</p>
+<pre class="code-block">git clone https://github.com/Weigend/Software-EKG.git
+cd Software-EKG
+./install-wfx.sh          <span class="c"># UI framework WFX, once</span>
+
+./run-workbench.sh        <span class="c"># builds, then starts</span>
+./run-collector.sh        <span class="c"># sample values, source "mock"</span></pre>
+      </div>
+    </div>
+    <p class="more-links reveal">
+      <a class="textlink" href="https://github.com/Weigend/Software-EKG/releases" rel="noopener" data-de="Alle Releases" data-pt="Todos os releases">All releases</a>
+      <a class="textlink" href="https://github.com/Weigend/Software-EKG/blob/main/docs/handbook/getting-started.md" rel="noopener" data-de="Erste Schritte im Handbuch" data-pt="Primeiros passos no manual">Getting started in the handbook</a>
+      <a class="textlink" href="https://github.com/Weigend/Software-EKG/blob/main/docs/handbook/extensions.md" rel="noopener" data-de="Eigene Quellen und Importer" data-pt="Fontes e importadores próprios">Your own sources and importers</a>
+      <a class="textlink" href="https://github.com/Weigend/Software-EKG/blob/main/SECURITY.md" data-href-de="https://github.com/Weigend/Software-EKG/blob/main/SECURITY.de.md" rel="noopener" data-de="Sicherheitslücken melden" data-pt="Relatar vulnerabilidades">Reporting vulnerabilities</a>
+    </p>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="cta-section">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label" data-de="Kostenlos und Open Source" data-pt="Gratuito e open source">Free and open source</div>
+      <h2 class="section-title" data-de="Welches Ihrer Systeme ist aus dem Takt?" data-pt="Qual dos seus sistemas está fora do ritmo?">Which of your systems is out of rhythm?</h2>
+      <p data-de="Das Software-EKG steht unter der Apache-2.0-Lizenz. Lokal sammeln, vergleichen und mit einer begründeten Frage zu den richtigen Leuten gehen." data-pt="O Software-EKG é distribuído sob a licença Apache 2.0. Colete localmente, compare e leve uma pergunta bem fundamentada às pessoas certas.">Software-EKG is licensed under Apache 2.0. Collect locally, compare, and take a well-founded question to the right people.</p>
+      <div class="cta-buttons">
+        <a href="https://github.com/Weigend/Software-EKG" rel="noopener" class="github-btn">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          <span data-de="Auf GitHub ansehen" data-pt="Ver no GitHub">View on GitHub</span>
+        </a>
+        <a href="#download" class="btn-secondary">
+          <span>Download</span>
+        </a>
+        <a href="https://github.com/Weigend/Software-EKG/blob/main/docs/handbook/README.md" rel="noopener" class="btn-secondary">
+          <span data-de="Handbuch lesen" data-pt="Ler o manual">Read the handbook</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <span class="badge-mark" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path d="M3.5 18h5.2l2.3-5 3.6 11.5 4-17.5 3 11h6.9" stroke="#a8f0ff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span>Software-EKG</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/Weigend/Software-EKG" rel="noopener">GitHub</a>
+        <a href="https://github.com/Weigend/Software-EKG/blob/main/docs/handbook/README.md" rel="noopener" data-de="Handbuch" data-pt="Manual">Handbook</a>
+        <a href="https://github.com/Weigend/Software-EKG/blob/main/docs/positioning.md" data-href-de="https://github.com/Weigend/Software-EKG/blob/main/docs/positioning.de.md" rel="noopener" data-de="Positionierung" data-pt="Posicionamento">Positioning</a>
+        <a href="https://software-architektur.com/" rel="noopener">S202</a>
+        <a href="https://weigend.de/" rel="noopener">weigend.de</a>
+        <a href="https://weigend.de/" rel="noopener" data-de="Impressum und Datenschutz" data-pt="Aviso legal e privacidade">Imprint and privacy</a>
+      </div>
+      <div class="footer-copy" data-de="Apache-2.0-Lizenz · Entwickelt von Johannes Weigend" data-pt="Licença Apache 2.0 · Desenvolvido por Johannes Weigend">Apache 2.0 License · Built by Johannes Weigend</div>
+    </div>
+  </div>
+</footer>
+
+<!-- LARGE VIEW -->
+<dialog class="lightbox" id="lightbox" aria-label="Image">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close">✕</button>
+  <img id="lightboxImg" alt="">
+  <p id="lightboxCap"></p>
+</dialog>
+
+<script src="site.js"></script>
+</body>
+</html>
