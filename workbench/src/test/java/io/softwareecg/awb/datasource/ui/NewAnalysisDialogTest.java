@@ -1,22 +1,22 @@
 package io.softwareecg.awb.datasource.ui;
 
-import io.softwareecg.awb.datasource.bl.AnalysisPlan;
-import io.softwareecg.awb.datasource.bl.AnalysisTopic;
-import io.softwareecg.awb.datasource.bl.CollectionPlan;
-import io.softwareecg.awb.datasource.bl.DataCollectionService;
-import io.softwareecg.awb.datasource.bl.prometheus.MetricProfile;
-import io.softwareecg.awb.datasource.bl.prometheus.PrometheusEnvironment;
-import io.softwareecg.awb.datasource.bl.prometheus.PrometheusEnvironment.Group;
-import io.softwareecg.awb.datasource.bl.ssh.SshDiscovery;
-import io.softwareecg.awb.datasource.bl.ssh.SshPlan;
-import io.softwareecg.awb.datasource.bl.ssh.TopMetric;
-import io.softwareecg.awb.datasource.bl.windows.WindowsDiscovery;
-import io.softwareecg.awb.datasource.bl.windows.WindowsMetric;
-import io.softwareecg.awb.datasource.bl.windows.WindowsPlan;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.QueryContextEvent;
-import io.softwareecg.awb.project.api.model.Project;
+import io.softwareecg.awb.datasource.model.AnalysisPlan;
+import io.softwareecg.awb.datasource.spi.AnalysisTopic;
+import io.softwareecg.awb.datasource.model.CollectionPlan;
+import io.softwareecg.awb.datasource.NewAnalysisService;
+import io.softwareecg.awb.datasource.adapter.prometheus.MetricProfile;
+import io.softwareecg.awb.datasource.adapter.prometheus.PrometheusEnvironment;
+import io.softwareecg.awb.datasource.adapter.prometheus.PrometheusEnvironment.Group;
+import io.softwareecg.awb.datasource.adapter.ssh.SshDiscovery;
+import io.softwareecg.awb.datasource.adapter.ssh.SshPlan;
+import io.softwareecg.awb.datasource.adapter.ssh.TopMetric;
+import io.softwareecg.awb.datasource.adapter.windows.WindowsDiscovery;
+import io.softwareecg.awb.datasource.adapter.windows.WindowsMetric;
+import io.softwareecg.awb.datasource.adapter.windows.WindowsPlan;
+import io.softwareecg.awb.investigation.api.OpenInvestigationCommand;
+import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.repository.api.events.ProjectDataChangedEvent;
+import io.softwareecg.awb.repository.events.ProjectDataChangedEvent;
 import io.softwareecg.collector.source.prometheus.PrometheusException;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.lookup.api.LookupStrategy;
@@ -238,8 +238,8 @@ public class NewAnalysisDialogTest {
 
     @Test
     public void linuxHostsReadDirectlyAreNamedCheckedAndMultipliedOut() throws Exception {
-        List<QueryContextEvent> charts = new CopyOnWriteArrayList<>();
-        eventBus.subscribe(QueryContextEvent.class, charts::add);
+        List<OpenInvestigationCommand> charts = new CopyOnWriteArrayList<>();
+        eventBus.subscribe(OpenInvestigationCommand.class, charts::add);
         show(null);
         chooseLinuxBySsh();
 
@@ -323,8 +323,8 @@ public class NewAnalysisDialogTest {
 
     @Test
     public void windowsHostsAreNamedCheckedAndMultipliedOut() throws Exception {
-        List<QueryContextEvent> charts = new CopyOnWriteArrayList<>();
-        eventBus.subscribe(QueryContextEvent.class, charts::add);
+        List<OpenInvestigationCommand> charts = new CopyOnWriteArrayList<>();
+        eventBus.subscribe(OpenInvestigationCommand.class, charts::add);
         service.windowsProblem = null;
         show(null);
         onFx(() -> {
@@ -578,8 +578,8 @@ public class NewAnalysisDialogTest {
 
     @Test
     public void startHandsOverTheSelectionAndTheFirstChartOpensWhenDataArrives() throws Exception {
-        List<QueryContextEvent> charts = new CopyOnWriteArrayList<>();
-        eventBus.subscribe(QueryContextEvent.class, charts::add);
+        List<OpenInvestigationCommand> charts = new CopyOnWriteArrayList<>();
+        eventBus.subscribe(OpenInvestigationCommand.class, charts::add);
 
         open(null);
         connect();
@@ -605,7 +605,7 @@ public class NewAnalysisDialogTest {
         eventBus.publish(new ProjectDataChangedEvent(this, "local", "Shop", 2L));
         await(() -> !charts.isEmpty(), "the first chart to open");
 
-        QueryContextEvent chart = charts.get(0);
+        OpenInvestigationCommand chart = charts.get(0);
         assertEquals("Shop", chart.getFilterParams().getProjectName());
         assertEquals("node", chart.getFilterParams().getHostGroupName());
         assertEquals("cpu_usage_percent", chart.getFilterParams().getMetricName());
@@ -792,7 +792,7 @@ public class NewAnalysisDialogTest {
     }
 
     /** Stands in for the service: answers the discovery and records what the dialog asks for. */
-    private static final class FakeService extends DataCollectionService {
+    private static final class FakeService extends NewAnalysisService {
 
         final List<AnalysisPlan> started = new CopyOnWriteArrayList<>();
         final List<AnalysisPlan> added = new CopyOnWriteArrayList<>();

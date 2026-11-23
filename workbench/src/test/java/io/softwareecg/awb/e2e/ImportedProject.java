@@ -1,10 +1,10 @@
 package io.softwareecg.awb.e2e;
 
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.MetricDataAccessService;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.NamedValueEntity;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.MetricQuery;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.QueryFilterParams;
-import io.softwareecg.awb.project.api.ProjectDataAccessService;
+import io.softwareecg.awb.queryengine.MetricDataAccessService;
+import io.softwareecg.awb.timeseries.dimension.NamedValueEntity;
+import io.softwareecg.awb.queryengine.model.MetricQuery;
+import io.softwareecg.awb.investigation.model.QuerySpec;
+import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
 
 import java.time.Duration;
 import java.util.List;
@@ -98,7 +98,7 @@ public final class ImportedProject {
     }
 
     private MetricQuery query() {
-        QueryFilterParams.Builder<QueryFilterParams> filter = new QueryFilterParams.Builder<>();
+        QuerySpec.Builder<QuerySpec> filter = new QuerySpec.Builder<>();
         filter.withProject(name);
         return new MetricQuery(filter.build());
     }

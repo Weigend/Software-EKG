@@ -1,19 +1,19 @@
 package io.softwareecg.awb.repository.service;
 
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.da.api.RepositoryClient;
-import io.softwareecg.awb.da.api.dataobject.expr.Expression;
-import io.softwareecg.awb.da.api.dataobject.search.SearchParams;
-import io.softwareecg.awb.da.api.dataobject.search.SearchResult;
-import io.softwareecg.awb.da.api.dataobject.search.SortField;
-import io.softwareecg.awb.da.api.schema.DocumentType;
-import io.softwareecg.awb.da.api.schema.EkgSchemaField;
-import io.softwareecg.awb.repository.bl.BinaryTimeSeries;
-import io.softwareecg.awb.sdk.awbapi.repository.Repository;
-import io.softwareecg.awb.sdk.awbapi.repository.RepositoryException;
+import io.softwareecg.awb.timeseries.port.TimeSeriesRepository;
+import io.softwareecg.awb.timeseries.port.query.expr.Expression;
+import io.softwareecg.awb.timeseries.port.query.search.SearchParams;
+import io.softwareecg.awb.timeseries.port.query.search.SearchResult;
+import io.softwareecg.awb.timeseries.port.query.search.SortField;
+import io.softwareecg.awb.timeseries.schema.DocumentType;
+import io.softwareecg.awb.timeseries.schema.EkgSchemaField;
+import io.softwareecg.awb.repository.model.BinaryTimeSeries;
+import io.softwareecg.awb.repository.api.Repository;
+import io.softwareecg.awb.timeseries.port.RepositoryException;
 import io.softwareecg.awb.timeseries.port.TimeSeriesWriteService;
-import io.softwareecg.awb.sdk.core.DateValuePairMapper;
-import io.softwareecg.awb.sdk.datamodel.TimeSeries;
+import io.softwareecg.awb.timeseries.codec.DateValuePairCodec;
+import io.softwareecg.awb.timeseries.TimeSeries;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.apache.commons.lang3.StringUtils;
@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static io.softwareecg.awb.da.api.dataobject.expr.ExprFactory.exactFilter;
-import static io.softwareecg.awb.da.api.schema.EkgSchemaField.*;
+import static io.softwareecg.awb.timeseries.port.query.expr.ExprFactory.exactFilter;
+import static io.softwareecg.awb.timeseries.schema.EkgSchemaField.*;
 
 /**
  * todo insert comment here
@@ -34,7 +34,7 @@ import static io.softwareecg.awb.da.api.schema.EkgSchemaField.*;
 @Singleton
 public class TimeSeriesWriteServiceImpl implements TimeSeriesWriteService {
 
-    private RepositoryClient repositoryClient;
+    private TimeSeriesRepository repositoryClient;
 
     private Repository repository;
 
@@ -59,8 +59,8 @@ public class TimeSeriesWriteServiceImpl implements TimeSeriesWriteService {
     }
 
     @Override
-    public Repository getConfiguredRepository() {
-        return repository;
+    public String getRepositoryId() {
+        return repository.getId();
     }
 
     @Override
@@ -157,7 +157,7 @@ public class TimeSeriesWriteServiceImpl implements TimeSeriesWriteService {
 
         // other
         binaryTimeSeries.setRemoteSeriesKey(timeSeries.getRemoteSeriesKey());
-        binaryTimeSeries.setData(DateValuePairMapper.compressAndEncodeDataPlainBytes(timeSeries.getValues()));
+        binaryTimeSeries.setData(DateValuePairCodec.compressAndEncodeDataPlainBytes(timeSeries.getValues()));
 
         return binaryTimeSeries;
     }

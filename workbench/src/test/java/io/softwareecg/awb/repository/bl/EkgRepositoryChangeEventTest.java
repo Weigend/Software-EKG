@@ -13,7 +13,7 @@
 package io.softwareecg.awb.repository.bl;
 
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.repository.api.events.RepositoryChangeEvent;
+import io.softwareecg.awb.repository.events.RepositoryChangeEvent;
 import io.softwareecg.awb.runtime.events.ChangedEvent;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;

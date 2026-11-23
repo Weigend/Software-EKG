@@ -1,13 +1,13 @@
 package io.softwareecg.awb.datasource.ui;
 
-import io.softwareecg.awb.common.ui.events.OpeningMode;
-import io.softwareecg.awb.datasource.bl.CollectionPlan;
-import io.softwareecg.awb.datasource.bl.SeriesDimensions;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.QueryContextEvent;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.QueryFilterParams;
-import io.softwareecg.awb.project.api.model.Project;
+import io.softwareecg.awb.uitoolkit.events.OpeningMode;
+import io.softwareecg.awb.datasource.model.CollectionPlan;
+import io.softwareecg.awb.datasource.model.SeriesDimensions;
+import io.softwareecg.awb.investigation.api.OpenInvestigationCommand;
+import io.softwareecg.awb.investigation.model.QuerySpec;
+import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.repository.api.events.ProjectDataChangedEvent;
+import io.softwareecg.awb.repository.events.ProjectDataChangedEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.EventBusListener;
 import javafx.application.Platform;
@@ -99,7 +99,7 @@ final class FirstChartOpener {
         eventBus.unsubscribe(ProjectDataChangedEvent.class, listener);
 
         @SuppressWarnings({"unchecked", "rawtypes"})
-        QueryFilterParams query = (QueryFilterParams) new QueryFilterParams.Builder()
+        QuerySpec query = (QuerySpec) new QuerySpec.Builder()
                 .withProject(project)
                 .withHostGroup(group)
                 .withMetricGroup(SeriesDimensions.metricGroupOf(metric))
@@ -108,7 +108,7 @@ final class FirstChartOpener {
                 .build();
         // CLEAR_VIEW: shown in the active chart panel, replacing what is there. NEW_VIEW would
         // stack the new chart on top of an empty one.
-        Platform.runLater(() -> eventBus.publish(new QueryContextEvent(this, query, repository, OpeningMode.CLEAR_VIEW)));
+        Platform.runLater(() -> eventBus.publish(new OpenInvestigationCommand(this, query, repository, OpeningMode.CLEAR_VIEW)));
     }
 
     /**

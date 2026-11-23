@@ -1,8 +1,8 @@
 package io.softwareecg.awb.sdk.testsupport.mocks;
 
-import io.softwareecg.awb.sdk.awbapi.repository.Repository;
-import io.softwareecg.awb.sdk.awbapi.repository.RepositoryException;
-import io.softwareecg.awb.sdk.datamodel.TimeSeries;
+import io.softwareecg.awb.repository.api.Repository;
+import io.softwareecg.awb.timeseries.port.RepositoryException;
+import io.softwareecg.awb.timeseries.TimeSeries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +20,9 @@ public class SimpleCollectorSeriesImportService implements CollectorSeriesImport
     private final List<TimeSeries> timeSeries = new ArrayList<>();
 
     @Override
-    public Repository getConfiguredRepository() {
-        return null;
-    }
+    public String getRepositoryId() {
+            return null;
+        }
 
     @Override
     public long resolveLastUpdate(TimeSeries seriesWithoutValues) throws RepositoryException {

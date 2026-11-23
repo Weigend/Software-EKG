@@ -1,7 +1,7 @@
 package io.softwareecg.awb.aichat.ui;
 
-import io.softwareecg.awb.common.ui.view.ViewMapper;
-import io.softwareecg.awb.sdk.core.log.EkgLogger;
+import io.softwareecg.awb.uitoolkit.view.ViewMapper;
+import io.softwareecg.awb.runtime.logging.EkgLogger;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.platform.api.Module;
 import io.softwareecg.wfx.windowmanager.api.FXMLView;

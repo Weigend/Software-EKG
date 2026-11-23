@@ -12,7 +12,7 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.metricanalyzer.bl.bookmark;
 
-import io.softwareecg.awb.metricanalyzer.bl.bookmarks.et.MetricQueryBookmark;
+import io.softwareecg.awb.bookmark.model.MetricQueryBookmark;
 import org.junit.Test;
 
 import java.util.Stack;

@@ -9,7 +9,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
-import io.softwareecg.awb.common.ui.chartng.ZoomableStackedChart;
+import io.softwareecg.awb.uitoolkit.chart.ZoomableStackedChart;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

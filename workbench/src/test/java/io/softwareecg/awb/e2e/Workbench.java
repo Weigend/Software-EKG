@@ -1,10 +1,10 @@
 package io.softwareecg.awb.e2e;
 
-import io.softwareecg.awb.application.base.EkgAvajeApplication;
-import io.softwareecg.awb.common.ui.events.OpeningMode;
-import io.softwareecg.awb.datasource.bl.DataCollectionService;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.QueryContextEvent;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.QueryFilterParams;
+import io.softwareecg.awb.application.EkgAvajeApplication;
+import io.softwareecg.awb.uitoolkit.events.OpeningMode;
+import io.softwareecg.awb.datasource.NewAnalysisService;
+import io.softwareecg.awb.investigation.api.OpenInvestigationCommand;
+import io.softwareecg.awb.investigation.model.QuerySpec;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.platform.api.EventBus;
@@ -201,14 +201,14 @@ public final class Workbench {
 
     private void openChart(String project, String metricGroup, String metric, OpeningMode mode) {
         @SuppressWarnings({"unchecked", "rawtypes"})
-        QueryFilterParams query = (QueryFilterParams) new QueryFilterParams.Builder()
+        QuerySpec query = (QuerySpec) new QuerySpec.Builder()
                 .withProject(project)
                 .withMetricGroup(metricGroup)
                 .withMetric(metric)
                 .withMultiMetricMode(false)
                 .build();
         onFx(() -> {
-            eventBus().publish(new QueryContextEvent(this, query, embeddedRepository(), mode));
+            eventBus().publish(new OpenInvestigationCommand(this, query, embeddedRepository(), mode));
             return null;
         });
         awaitTrue("the chart of '" + metric + "'", Duration.ofSeconds(30),
@@ -265,7 +265,7 @@ public final class Workbench {
      * @return the repository the Workbench has on board
      */
     public EkgRepository embeddedRepository() {
-        return Lookup.lookup(DataCollectionService.class).getRepository();
+        return Lookup.lookup(NewAnalysisService.class).getRepository();
     }
 
     // ---------------------------------------------------------------------------------------------

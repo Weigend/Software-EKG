@@ -2,7 +2,7 @@ package io.softwareecg.awb.application.base;
 
 import io.avaje.inject.spi.AvajeModule;
 import io.avaje.inject.spi.InjectExtension;
-import io.softwareecg.awb.application.base.impl.EkgApplicationController;
+import io.softwareecg.awb.application.EkgApplicationController;
 import io.softwareecg.wfx.lookup.api.Priorities;
 import io.softwareecg.wfx.windowmanager.api.ApplicationWindow;
 import io.softwareecg.wfx.windowmanager.windows.DefaultApplicationWindow;
@@ -18,7 +18,7 @@ class ApplicationWindowWiringTest {
     void awbWindowIsProvidedByAnEarlierRuntimeModule() {
         AvajeModule awbModule = loadModule("io.softwareecg.awb.AwbModule");
         AvajeModule windowModule = loadModule(
-                "io.softwareecg.awb.application.base.impl.ApplicationBootstrapModule");
+                "io.softwareecg.awb.application.ApplicationBootstrapModule");
 
         assertThat(windowModule).isInstanceOf(AvajeModule.Custom.class);
         assertThat(windowModule.autoProvides())

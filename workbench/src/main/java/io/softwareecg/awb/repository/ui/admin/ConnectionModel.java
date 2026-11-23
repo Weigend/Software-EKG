@@ -13,8 +13,8 @@
 package io.softwareecg.awb.repository.ui.admin;
 
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.repository.api.model.EkgRepositoryDbType;
-import io.softwareecg.awb.sdk.awbapi.repository.ResourceAuthType;
+import io.softwareecg.awb.repository.model.EkgRepositoryDbType;
+import io.softwareecg.awb.secrets.model.ResourceAuthType;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 

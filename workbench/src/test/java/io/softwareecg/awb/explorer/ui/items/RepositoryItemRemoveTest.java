@@ -1,10 +1,10 @@
 package io.softwareecg.awb.explorer.ui.items;
 
 import io.avaje.inject.BeanScope;
-import io.softwareecg.awb.da.api.RepositoryClient;
+import io.softwareecg.awb.timeseries.port.TimeSeriesRepository;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
-import io.softwareecg.awb.sdk.awbapi.explorer.ExplorerUpdateEvent;
+import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.lookup.api.LookupStrategy;
 import io.softwareecg.wfx.lookup.api.TypeRef;
@@ -36,6 +36,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import io.softwareecg.awb.explorer.items.RepositoryItem;
 /**
  * Removing a repository from the explorer must always work - in particular while
  * its server is unreachable - and must remove exactly the repository of the node
@@ -107,8 +108,8 @@ public class RepositoryItemRemoveTest {
 
     @Test
     public void removesTheRepositoryOfThePickedNodeAndNotTheOneCreatedLast() throws Exception {
-        RepositoryClient pickedClient = offlineClient();
-        RepositoryClient lastClient = offlineClient();
+        TimeSeriesRepository pickedClient = offlineClient();
+        TimeSeriesRepository lastClient = offlineClient();
         EkgRepository picked = remoteRepository("picked", pickedClient);
         EkgRepository last = remoteRepository("last", lastClient);
 
@@ -126,7 +127,7 @@ public class RepositoryItemRemoveTest {
 
     @Test
     public void removingAnUnreachableRepositoryDoesNotContactIt() throws Exception {
-        RepositoryClient client = offlineClient();
+        TimeSeriesRepository client = offlineClient();
         EkgRepository repository = remoteRepository("offline", client);
 
         TreeItem<String> root = new TreeItem<>("Workbench");
@@ -151,7 +152,7 @@ public class RepositoryItemRemoveTest {
 
     @Test
     public void broadcastRefreshDoesNotQueryADisconnectedRepository() throws Exception {
-        RepositoryClient client = offlineClient();
+        TimeSeriesRepository client = offlineClient();
         EkgRepository repository = remoteRepository("disconnected", client);
 
         TreeItem<String> root = new TreeItem<>("Workbench");
@@ -169,7 +170,7 @@ public class RepositoryItemRemoveTest {
 
     @Test
     public void nodeDroppedByATreeRefreshStopsListening() throws Exception {
-        RepositoryClient client = offlineClient();
+        TimeSeriesRepository client = offlineClient();
         EkgRepository repository = remoteRepository("refreshed", client);
 
         TreeItem<String> root = new TreeItem<>("Workbench");
@@ -184,13 +185,13 @@ public class RepositoryItemRemoveTest {
         assertFalse(AnnotationProcessor.isProcessed(item));
     }
 
-    private static RepositoryClient offlineClient() {
-        RepositoryClient client = mock(RepositoryClient.class);
+    private static TimeSeriesRepository offlineClient() {
+        TimeSeriesRepository client = mock(TimeSeriesRepository.class);
         when(client.ping()).thenReturn(false);
         return client;
     }
 
-    private static EkgRepository remoteRepository(String id, RepositoryClient client) {
+    private static EkgRepository remoteRepository(String id, TimeSeriesRepository client) {
         EkgRepository repository = mock(EkgRepository.class);
         when(repository.getId()).thenReturn(id);
         when(repository.getRepositoryName()).thenReturn(id);

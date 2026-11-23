@@ -12,8 +12,8 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.da.solr;
 
-import io.softwareecg.awb.da.solr.embedded.DefaultSolrConfig;
-import io.softwareecg.awb.da.solr.embedded.SolrConfiguration;
+import io.softwareecg.awb.timeseries.adapter.solr.embedded.DefaultSolrConfig;
+import io.softwareecg.awb.timeseries.adapter.solr.embedded.SolrConfiguration;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;

@@ -5,6 +5,8 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import io.softwareecg.awb.investigation.model.SeriesCombineMode;
+import io.softwareecg.awb.investigation.model.SeriesSmoothingType;
 /**
  * The modes of the lists "Combine metrics" and "Smoothing" say what they do: the header of a
  * chart shows it as a tooltip, because names such as "Concatenate" do not tell.

@@ -1,10 +1,10 @@
 package io.softwareecg.awb.datasource.ui;
 
-import io.softwareecg.awb.da.api.collection.CollectionSourceEvent;
-import io.softwareecg.awb.datasource.bl.CollectorConfigCompiler;
-import io.softwareecg.awb.datasource.bl.DataCollectionService;
-import io.softwareecg.awb.datasource.bl.DataSourceInfo;
-import io.softwareecg.awb.datasource.bl.DataSourceInfo.State;
+import io.softwareecg.awb.metadata.port.CollectionSourceEvent;
+import io.softwareecg.awb.datasource.adapter.collector.CollectorConfigCompiler;
+import io.softwareecg.awb.datasource.NewAnalysisService;
+import io.softwareecg.awb.datasource.model.DataSourceInfo;
+import io.softwareecg.awb.datasource.model.DataSourceInfo.State;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -60,7 +60,7 @@ public class DataSourcesDialog extends Dialog<Void> {
 
     private static final Duration REFRESH_INTERVAL = Duration.seconds(3);
 
-    private final DataCollectionService service;
+    private final NewAnalysisService service;
 
     private final TableView<DataSourceInfo> table = new TableView<>();
     private final ListView<String> history = new ListView<>();
@@ -91,7 +91,7 @@ public class DataSourcesDialog extends Dialog<Void> {
     /**
      * Shows the data sources of all analyses.
      */
-    public DataSourcesDialog(DataCollectionService service) {
+    public DataSourcesDialog(NewAnalysisService service) {
         this(service, null);
     }
 
@@ -100,7 +100,7 @@ public class DataSourcesDialog extends Dialog<Void> {
      *
      * @param projectName the project, or {@code null} for all projects
      */
-    public DataSourcesDialog(DataCollectionService service, String projectName) {
+    public DataSourcesDialog(NewAnalysisService service, String projectName) {
         this.service = service;
         this.projectName = projectName;
 

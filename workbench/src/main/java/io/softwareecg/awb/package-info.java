@@ -10,4 +10,4 @@
 package io.softwareecg.awb;
 
 import io.avaje.inject.InjectModule;
-import io.softwareecg.awb.application.base.impl.EkgApplicationController;
+import io.softwareecg.awb.application.EkgApplicationController;

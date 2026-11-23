@@ -1,6 +1,6 @@
 package io.softwareecg.awb.repository.bl.repository;
 
-import io.softwareecg.awb.repository.bl.repositories.ClickHouseRepositoryNaming;
+import io.softwareecg.awb.repository.adapter.clickhouse.ClickHouseRepositoryNaming;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;

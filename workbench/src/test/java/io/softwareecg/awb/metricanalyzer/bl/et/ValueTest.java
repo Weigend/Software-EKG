@@ -12,7 +12,7 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.metricanalyzer.bl.et;
 
-import io.softwareecg.awb.sdk.datamodel.Value;
+import io.softwareecg.awb.timeseries.Value;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.*;

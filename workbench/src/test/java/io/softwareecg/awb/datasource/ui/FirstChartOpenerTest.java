@@ -1,6 +1,6 @@
 package io.softwareecg.awb.datasource.ui;
 
-import io.softwareecg.awb.datasource.bl.prometheus.MetricExpression;
+import io.softwareecg.awb.datasource.adapter.prometheus.MetricExpression;
 import org.junit.Test;
 
 import java.util.List;

@@ -13,10 +13,10 @@
 package io.softwareecg.awb.repository.api;
 
 
-import io.softwareecg.awb.da.api.RepositoryClient;
-import io.softwareecg.awb.repository.api.model.EkgRepositoryDbType;
-import io.softwareecg.awb.sdk.awbapi.repository.Repository;
-import io.softwareecg.awb.sdk.awbapi.repository.ResourceAuthType;
+import io.softwareecg.awb.timeseries.port.TimeSeriesRepository;
+import io.softwareecg.awb.repository.model.EkgRepositoryDbType;
+import io.softwareecg.awb.repository.api.Repository;
+import io.softwareecg.awb.secrets.model.ResourceAuthType;
 
 /**
  * Defines a types to store data within and query that data from a backend storage.
@@ -80,7 +80,7 @@ public interface EkgRepository extends Repository {
      *
      * @return a search client instance
      */
-    RepositoryClient getRepositoryClient();
+    TimeSeriesRepository getRepositoryClient();
 
 
     <T extends RepositoryClientAware> T getBoundedService(Class<T> serviceInterface);

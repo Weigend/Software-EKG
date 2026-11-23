@@ -1,6 +1,6 @@
 package io.softwareecg.awb.metricanalyzer.bl.visualisation.simplification.algorithms;
 
-import io.softwareecg.awb.sdk.datamodel.Value;
+import io.softwareecg.awb.timeseries.Value;
 import org.junit.Test;
 
 import java.util.ArrayList;

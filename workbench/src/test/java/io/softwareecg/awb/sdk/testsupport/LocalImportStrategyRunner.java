@@ -4,8 +4,8 @@ import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.lookup.serviceloader.ServiceLoaderLookupStrategy;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.EventBusListener;
-import io.softwareecg.awb.sdk.datamodel.TimeSeries;
-import io.softwareecg.awb.sdk.importer.tasks.LocalProjectImportStrategy;
+import io.softwareecg.awb.timeseries.TimeSeries;
+import io.softwareecg.awb.importer.framework.LocalProjectImportStrategy;
 import io.softwareecg.awb.sdk.testsupport.mocks.*;
 
 import java.util.EventObject;

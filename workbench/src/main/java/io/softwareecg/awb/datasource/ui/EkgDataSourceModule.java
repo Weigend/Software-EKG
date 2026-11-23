@@ -1,8 +1,8 @@
 package io.softwareecg.awb.datasource.ui;
 
 import io.softwareecg.awb.application.api.EkgApplicationController;
-import io.softwareecg.awb.datasource.bl.DataCollectionService;
-import io.softwareecg.awb.project.api.events.ShowProjectDataSourcesEvent;
+import io.softwareecg.awb.datasource.NewAnalysisService;
+import io.softwareecg.awb.projectcontext.events.ShowProjectDataSourcesEvent;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.Module;
@@ -43,7 +43,7 @@ public class EkgDataSourceModule implements Module {
         newAnalysis.setMnemonicParsing(false);
         newAnalysis.setAccelerator(KeyCombination.keyCombination("Shortcut+N"));
         newAnalysis.setOnAction(e -> {
-            NewAnalysisDialog dialog = new NewAnalysisDialog(Lookup.lookup(DataCollectionService.class));
+            NewAnalysisDialog dialog = new NewAnalysisDialog(Lookup.lookup(NewAnalysisService.class));
             dialog.initOwner(appController.getStage());
             dialog.showAndWait();
         });
@@ -69,7 +69,7 @@ public class EkgDataSourceModule implements Module {
             ((javafx.stage.Stage) dataSourcesDialog.getDialogPane().getScene().getWindow()).toFront();
             return;
         }
-        dataSourcesDialog = new DataSourcesDialog(Lookup.lookup(DataCollectionService.class));
+        dataSourcesDialog = new DataSourcesDialog(Lookup.lookup(NewAnalysisService.class));
         dataSourcesDialog.initOwner(appController.getStage());
         dataSourcesDialog.show();
     }
@@ -81,7 +81,7 @@ public class EkgDataSourceModule implements Module {
             ((javafx.stage.Stage) open.getDialogPane().getScene().getWindow()).toFront();
             return;
         }
-        DataSourcesDialog dialog = new DataSourcesDialog(Lookup.lookup(DataCollectionService.class), projectName);
+        DataSourcesDialog dialog = new DataSourcesDialog(Lookup.lookup(NewAnalysisService.class), projectName);
         dialog.initOwner(appController.getStage());
         projectDialogs.put(projectName, dialog);
         dialog.show();

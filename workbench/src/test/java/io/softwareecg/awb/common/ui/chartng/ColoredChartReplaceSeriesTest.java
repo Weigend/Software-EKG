@@ -23,6 +23,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import io.softwareecg.awb.uitoolkit.chart.ColoredChart;
 /**
  * A chart whose data is loaded again - as it is every few seconds while the data is collected -
  * keeps what the user set for its series.

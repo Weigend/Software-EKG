@@ -12,7 +12,7 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.common.ui;
 
-import io.softwareecg.awb.common.ui.events.FinishEvent;
+import io.softwareecg.awb.uitoolkit.events.FinishEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.core.eventbus.AnnotationProcessor;
 import io.softwareecg.wfx.platform.core.eventbus.SimpleEventBus;

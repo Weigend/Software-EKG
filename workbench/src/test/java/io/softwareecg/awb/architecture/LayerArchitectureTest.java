@@ -26,8 +26,16 @@ public class LayerArchitectureTest {
      * JavaFX gehoert ausschliesslich in UI-Pakete.
      */
     @ArchTest
-    static final ArchRule bl_must_not_depend_on_javafx =
-            noClasses().that().resideInAPackage("..bl..")
+    static final ArchRule domain_and_service_code_must_not_depend_on_javafx =
+            noClasses().that().resideInAnyPackage(
+                            "io.softwareecg.awb.datasource.model..",
+                            "io.softwareecg.awb.investigation.model..",
+                            "io.softwareecg.awb.metadata.model..",
+                            "io.softwareecg.awb.projectcontext.model..",
+                            "io.softwareecg.awb.repository.model..",
+                            "io.softwareecg.awb.timeseries..",
+                            "io.softwareecg.awb..port..",
+                            "io.softwareecg.awb.queryengine..")
                     .should().dependOnClassesThat().resideInAnyPackage("javafx..")
                     .because("BL darf nicht auf JavaFX hoeren - JavaFX nur in UI-Paketen");
 
@@ -42,9 +50,10 @@ public class LayerArchitectureTest {
     static final ArchRule api_packages_must_not_depend_on_bl_or_ui =
             noClasses().that().resideInAnyPackage(
                             "io.softwareecg.awb.application.api..",
-                            "io.softwareecg.awb.da.api..",
                             "io.softwareecg.awb.repository.api..",
-                            "io.softwareecg.awb.project.api..")
+                            "io.softwareecg.awb.projectcontext.api..",
+                            "io.softwareecg.awb.investigation.api..",
+                            "io.softwareecg.awb.timeseries.port..")
                     .should().dependOnClassesThat().resideInAnyPackage(
                             "io.softwareecg.awb..bl..",
                             "io.softwareecg.awb..ui..")
@@ -55,20 +64,24 @@ public class LayerArchitectureTest {
      * application.api einklinken; application.base.impl ist kein oeffentlicher Hook-Punkt.
      */
     @ArchTest
-    static final ArchRule features_must_not_depend_on_application_base_impl =
+    static final ArchRule features_must_not_depend_on_application_internals =
             noClasses().that().resideOutsideOfPackages("io.softwareecg.awb.application..")
                     // the generated injection module wires every bean and so knows all of them
                     .and().areNotAssignableTo(io.avaje.inject.spi.AvajeModule.class)
                     .should().dependOnClassesThat()
-                    .resideInAPackage("io.softwareecg.awb.application.base.impl..")
-                    .because("Features muessen via application.api einklinken, nicht via base.impl");
+                    .resideInAnyPackage(
+                            "io.softwareecg.awb.application.about..",
+                            "io.softwareecg.awb.application.composition..")
+                    .because("Features muessen via application.api einklinken, nicht via Application-Interna");
 
     /**
      * R5 (DA-Reinheit): DA-Adapter duerfen kein JavaFX nutzen.
      */
     @ArchTest
-    static final ArchRule da_must_not_depend_on_javafx =
-            noClasses().that().resideInAPackage("io.softwareecg.awb.da..")
+    static final ArchRule persistence_adapters_must_not_depend_on_javafx =
+            noClasses().that().resideInAnyPackage(
+                            "io.softwareecg.awb.metadata.adapter..",
+                            "io.softwareecg.awb.timeseries.adapter..")
                     .should().dependOnClassesThat().resideInAnyPackage("javafx..")
                     .because("DA-Adapter sind reine Persistenz-Schichten und duerfen nicht JavaFX nutzen");
 
@@ -77,8 +90,10 @@ public class LayerArchitectureTest {
      * Seit alles gemeinsam kompiliert wird, waere ein solcher Zugriff ohne diese Regel moeglich.
      */
     @ArchTest
-    static final ArchRule da_must_not_depend_on_ui =
-            noClasses().that().resideInAPackage("io.softwareecg.awb.da..")
+    static final ArchRule persistence_adapters_must_not_depend_on_ui =
+            noClasses().that().resideInAnyPackage(
+                            "io.softwareecg.awb.metadata.adapter..",
+                            "io.softwareecg.awb.timeseries.adapter..")
                     .should().dependOnClassesThat().resideInAPackage("io.softwareecg.awb..ui..")
                     .because("Persistenz darf nicht auf die Oberflaeche hoeren");
 

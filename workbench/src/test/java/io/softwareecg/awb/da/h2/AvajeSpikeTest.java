@@ -13,13 +13,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
+import io.softwareecg.awb.metadata.adapter.h2.H2BookmarkStore;
+import io.softwareecg.awb.metadata.adapter.h2.H2DimensionAliasStore;
+import io.softwareecg.awb.metadata.adapter.h2.H2MetadataDataSource;
+import io.softwareecg.awb.metadata.adapter.h2.H2ProjectStore;
+import io.softwareecg.awb.metadata.adapter.h2.H2RepositoryConfigStore;
 /**
  * Verifies the Avaje Inject setup for awb-da-h2.
  *
  * Validates:
  *   1. annotation processor generated $DI classes (compile-time check, implicit)
  *   2. BeanScope.builder().build() discovers all @Singleton beans
- *   3. field-injection (@Inject H2DataSource) works without opens-clauses
+ *   3. field-injection (@Inject H2MetadataDataSource) works without opens-clauses
  *   4. @PostConstruct fires on bean creation
  *   5. @PreDestroy fires on BeanScope.close()
  *
@@ -57,29 +62,29 @@ public class AvajeSpikeTest {
     public void beanScopeWiresAllH2Beans() throws Exception {
         try (BeanScope scope = BeanScope.builder().build()) {
 
-            H2DataSource dataSource = scope.get(H2DataSource.class);
-            assertThat("H2DataSource bean must exist", dataSource, is(notNullValue()));
+            H2MetadataDataSource dataSource = scope.get(H2MetadataDataSource.class);
+            assertThat("H2MetadataDataSource bean must exist", dataSource, is(notNullValue()));
 
-            H2BookmarkRepository bookmarkRepo = scope.get(H2BookmarkRepository.class);
-            assertThat("H2BookmarkRepository bean must exist", bookmarkRepo, is(notNullValue()));
+            H2BookmarkStore bookmarkRepo = scope.get(H2BookmarkStore.class);
+            assertThat("H2BookmarkStore bean must exist", bookmarkRepo, is(notNullValue()));
 
-            H2ProjectRepository projectRepo = scope.get(H2ProjectRepository.class);
-            assertThat("H2ProjectRepository bean must exist", projectRepo, is(notNullValue()));
+            H2ProjectStore projectRepo = scope.get(H2ProjectStore.class);
+            assertThat("H2ProjectStore bean must exist", projectRepo, is(notNullValue()));
 
-            H2DimensionAliasRepository aliasRepo = scope.get(H2DimensionAliasRepository.class);
-            assertThat("H2DimensionAliasRepository bean must exist", aliasRepo, is(notNullValue()));
+            H2DimensionAliasStore aliasRepo = scope.get(H2DimensionAliasStore.class);
+            assertThat("H2DimensionAliasStore bean must exist", aliasRepo, is(notNullValue()));
 
-            H2RepositoryConfigRepository configRepo = scope.get(H2RepositoryConfigRepository.class);
-            assertThat("H2RepositoryConfigRepository bean must exist", configRepo, is(notNullValue()));
+            H2RepositoryConfigStore configRepo = scope.get(H2RepositoryConfigStore.class);
+            assertThat("H2RepositoryConfigStore bean must exist", configRepo, is(notNullValue()));
 
             // Verify field-injection on a @Inject private field worked.
-            Field field = H2BookmarkRepository.class.getDeclaredField("dataSource");
+            Field field = H2BookmarkStore.class.getDeclaredField("dataSource");
             field.setAccessible(true);
             Object injected = field.get(bookmarkRepo);
             assertThat("@Inject field must be wired", injected, is(notNullValue()));
             assertThat("Injected instance must be the same singleton", injected == dataSource, is(true));
         }
-        // BeanScope.close() should have fired @PreDestroy on H2DataSource;
+        // BeanScope.close() should have fired @PreDestroy on H2MetadataDataSource;
         // a second call to dataSource.getConnection() would now fail. We do not
         // exercise that here to keep the spike hermetic.
     }

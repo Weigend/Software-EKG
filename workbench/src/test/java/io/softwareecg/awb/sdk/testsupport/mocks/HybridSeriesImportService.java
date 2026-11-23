@@ -1,9 +1,9 @@
 package io.softwareecg.awb.sdk.testsupport.mocks;
 
-import io.softwareecg.awb.sdk.awbapi.repository.Repository;
-import io.softwareecg.awb.sdk.awbapi.repository.RepositoryException;
-import io.softwareecg.awb.sdk.core.DateValuePairMapper;
-import io.softwareecg.awb.sdk.datamodel.TimeSeries;
+import io.softwareecg.awb.repository.api.Repository;
+import io.softwareecg.awb.timeseries.port.RepositoryException;
+import io.softwareecg.awb.timeseries.codec.DateValuePairCodec;
+import io.softwareecg.awb.timeseries.TimeSeries;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
@@ -60,9 +60,9 @@ public class HybridSeriesImportService implements CollectorSeriesImportService {
     }
 
     @Override
-    public Repository getConfiguredRepository() {
-        return null;
-    }
+    public String getRepositoryId() {
+            return null;
+        }
 
     @Override
     public long resolveLastUpdate(TimeSeries seriesWithoutValues) throws RepositoryException {
@@ -239,7 +239,7 @@ public class HybridSeriesImportService implements CollectorSeriesImportService {
         addIfNotBlank(inputDocument, "ts_start", new Date(seriesEntity.getStartDate()));
         addIfNotBlank(inputDocument, "ts_end", new Date(seriesEntity.getEndDate()));
 
-        addIfNotBlank(inputDocument, "ts_data", DateValuePairMapper.compressAndEncodeDataPlainBytes(seriesEntity.getValues()));
+        addIfNotBlank(inputDocument, "ts_data", DateValuePairCodec.compressAndEncodeDataPlainBytes(seriesEntity.getValues()));
 
         return inputDocument;
     }

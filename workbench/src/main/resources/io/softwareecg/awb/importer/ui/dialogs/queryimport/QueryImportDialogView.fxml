@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.softwareecg.awb.importer.ui.controls.qdsselector.QuerySourceSelector?>
+<?import io.softwareecg.awb.importer.ui.dialogs.queryimport.QueryImportDialog?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<?import io.softwareecg.awb.importer.ui.controls.RepositorySelectorProxy?>
+<?import io.softwareecg.awb.importer.ui.controls.ProjectSelectorProxy?>
+<fx:root type="QueryImportDialog" prefHeight="670.0" prefWidth="740.0"
+         xmlns="http://javafx.com/javafx" id="outerBorderPane" fx:id="importDialog" xmlns:fx="http://javafx.com/fxml"
+         fx:controller="io.softwareecg.awb.importer.ui.dialogs.queryimport.QueryImportDialogController">
+
+    <top>
+        <VBox id="header">
+            <!-- header -->
+            <Label fx:id="headerLabel" />
+        </VBox>
+    </top>
+
+
+    <center>
+        <AnchorPane id="CenterContentPane" >
+
+            <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" spacing="10">
+
+                <!--
+                ==============================================================================================
+                   target selection
+                ==============================================================================================
+                -->
+                <Label styleClass="lblHeadlines"  text="Select Repository and Target Project:" />
+
+                <RepositorySelectorProxy fx:id="repositorySelector" labelWidth="240" GridPane.rowIndex="0" GridPane.columnSpan="2"/>
+
+                <Separator />
+
+                <ProjectSelectorProxy fx:id="projectSelector" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+
+                <!-- Import options: delta import checkbox + time range selection -->
+                <GridPane fx:id="importOptionsGrid" styleClass="projectCtrlPane" vgap="4">
+                    <columnConstraints>
+                        <ColumnConstraints halignment="LEFT" prefWidth="240" hgrow="NEVER"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+
+                    <!-- Row 0: Delta Import (hidden for new projects) -->
+                    <Label fx:id="lblDeltaImport" styleClass="dialogLabel" text="Delta Import:"
+                           GridPane.columnIndex="0" GridPane.rowIndex="0" managed="false" visible="false"/>
+                    <HBox fx:id="deltaImportBox" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                          spacing="10" alignment="CENTER_LEFT" managed="false" visible="false">
+                        <CheckBox fx:id="chkDeltaImport" text="Load only what is new since the last import" />
+                    </HBox>
+
+                    <!-- Row 1: Import time range -->
+                    <Label styleClass="dialogLabel" text="Import Range:"
+                           GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <ComboBox fx:id="cmbImportRange" GridPane.columnIndex="1" GridPane.rowIndex="1" maxWidth="Infinity" />
+                </GridPane>
+
+                <!--
+                ==============================================================================================
+                  source selection
+                ==============================================================================================
+                -->
+
+                <Label styleClass="lblHeadlines" text="Specify Remote Data Source for Import:" />
+
+                <QuerySourceSelector fx:id="querySourceSelector" />
+
+
+                <Separator />
+            </VBox>
+        </AnchorPane>
+    </center>
+
+    <!-- bottom bar with close or submit action -->
+    <bottom>
+        <HBox id="footer" alignment="CENTER_RIGHT" spacing="10.0" >
+            <Button id="ok" fx:id="btnOK" text="Import Data"/>
+            <Button id="cancel" fx:id="btnCancel" text="Cancel"/>
+        </HBox>
+    </bottom>
+
+
+    <stylesheets>
+        <URL value="@QueryImportDialogStyle.css"/>
+    </stylesheets>
+
+
+</fx:root>

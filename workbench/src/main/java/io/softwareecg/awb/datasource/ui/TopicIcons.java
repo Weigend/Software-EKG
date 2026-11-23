@@ -1,6 +1,6 @@
 package io.softwareecg.awb.datasource.ui;
 
-import io.softwareecg.awb.datasource.bl.AnalysisTopic;
+import io.softwareecg.awb.datasource.spi.AnalysisTopic;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.SVGPath;

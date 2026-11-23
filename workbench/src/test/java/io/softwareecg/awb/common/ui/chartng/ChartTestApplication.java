@@ -1,7 +1,7 @@
 package io.softwareecg.awb.common.ui.chartng;
 
-import io.softwareecg.awb.common.ui.chartng.axis.DateAxis;
-import io.softwareecg.awb.common.ui.chartng.axis.MetricAxis;
+import io.softwareecg.awb.uitoolkit.chart.axis.DateAxis;
+import io.softwareecg.awb.uitoolkit.chart.axis.MetricAxis;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;

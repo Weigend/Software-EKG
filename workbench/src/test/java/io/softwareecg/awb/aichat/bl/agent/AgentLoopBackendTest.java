@@ -3,9 +3,9 @@ package io.softwareecg.awb.aichat.bl.agent;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpServer;
-import io.softwareecg.awb.aichat.bl.backend.AiBackendConfig;
-import io.softwareecg.awb.aichat.bl.backend.OpenAiCompatibleClient;
-import io.softwareecg.awb.aichat.bl.tools.AiTool;
+import io.softwareecg.awb.aichat.adapter.llm.AiBackendConfig;
+import io.softwareecg.awb.aichat.adapter.llm.OpenAiCompatibleClient;
+import io.softwareecg.awb.aichat.tools.AiTool;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +24,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import io.softwareecg.awb.aichat.agent.AgentLoop;
 /**
  * Runs the agent loop against a local stand-in for the chat completions
  * endpoint and looks at the requests it receives: what the loop sends decides

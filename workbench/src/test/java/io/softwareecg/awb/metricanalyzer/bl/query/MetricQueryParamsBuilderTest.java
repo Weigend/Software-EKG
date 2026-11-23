@@ -12,13 +12,13 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.metricanalyzer.bl.query;
 
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.Measurement;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.Metric;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.MetricGroup;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.Process;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.physical.Host;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.QueryFilterParams;
-import io.softwareecg.awb.project.api.model.Project;
+import io.softwareecg.awb.timeseries.dimension.Measurement;
+import io.softwareecg.awb.timeseries.dimension.Metric;
+import io.softwareecg.awb.timeseries.dimension.MetricGroup;
+import io.softwareecg.awb.timeseries.dimension.Process;
+import io.softwareecg.awb.timeseries.dimension.physical.Host;
+import io.softwareecg.awb.investigation.model.QuerySpec;
+import io.softwareecg.awb.projectcontext.model.Project;
 import org.junit.Test;
 
 import java.time.Instant;
@@ -29,7 +29,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
- * Unit test for the {@link QueryFilterParams.Builder}.
+ * Unit test for the {@link QuerySpec.Builder}.
  *
  */
 public class MetricQueryParamsBuilderTest {
@@ -42,7 +42,7 @@ public class MetricQueryParamsBuilderTest {
         metrics.add(new Metric("abc"));
         metrics.add(new Metric("abc1"));
 
-        QueryFilterParams query = new QueryFilterParams.Builder()
+        QuerySpec query = new QuerySpec.Builder()
                 .withMetric(new Metric("abc"))
                 .withExclude(new Metric("def"))
                 .withMetrics(metrics)
@@ -57,7 +57,7 @@ public class MetricQueryParamsBuilderTest {
                 .withStop(END)
                 .build();
 
-        QueryFilterParams query1 = new QueryFilterParams.Builder(query)
+        QuerySpec query1 = new QuerySpec.Builder(query)
                 .withMetric(new Metric("def"))
                 .withExclude((Metric) null)
                 .build();
@@ -80,13 +80,13 @@ public class MetricQueryParamsBuilderTest {
 
     @Test
     public void testWithMetricsNull() throws Exception {
-        QueryFilterParams context = new QueryFilterParams.Builder().withMetrics(null).build();
+        QuerySpec context = new QuerySpec.Builder().withMetrics(null).build();
         assertThat(context.getMetrics(), hasSize(0));
     }
 
     @Test
     public void testWithMetric() throws Exception {
-        QueryFilterParams query = new QueryFilterParams.Builder().withMetric(new Metric("abc")).build();
+        QuerySpec query = new QuerySpec.Builder().withMetric(new Metric("abc")).build();
         assertThat(query.getMetricName(), is(equalTo("abc")));
     }
 
@@ -95,34 +95,34 @@ public class MetricQueryParamsBuilderTest {
         Set<Metric> metrics = new HashSet<>();
         metrics.add(new Metric("abc"));
         metrics.add(new Metric("abc1"));
-        QueryFilterParams query = new QueryFilterParams.Builder().withMultiMetricMode(true).withMetrics(metrics).build();
+        QuerySpec query = new QuerySpec.Builder().withMultiMetricMode(true).withMetrics(metrics).build();
         assertThat(query.isMultiMetricMode(), is(true));
         assertThat(query.getMetrics(), hasSize(2));
     }
 
     @Test
     public void testWithExclude() throws Exception {
-        QueryFilterParams query = new QueryFilterParams.Builder().withExclude(new Metric("abc")).build();
+        QuerySpec query = new QuerySpec.Builder().withExclude(new Metric("abc")).build();
         assertThat(query.getExcludeMetricName(), is(equalTo("abc")));
     }
 
     @Test
     public void testWithIsExpertMode() throws Exception {
-        QueryFilterParams query = new QueryFilterParams.Builder().withExpertMode(true).build();
+        QuerySpec query = new QuerySpec.Builder().withExpertMode(true).build();
         assertThat(query.isExpertMode(), is(true));
     }
 
     @Test
     public void testWithIsMultiMetricMode() throws Exception {
-        QueryFilterParams query = new QueryFilterParams.Builder().withMultiMetricMode(true).build();
+        QuerySpec query = new QuerySpec.Builder().withMultiMetricMode(true).build();
         assertThat(query.isMultiMetricMode(), is(false));
     }
 
     @Test
     public void testBuild() throws Exception {
-        QueryFilterParams.Builder builder = new QueryFilterParams.Builder().withStop(Long.MAX_VALUE);
-        QueryFilterParams build1 = builder.build();
-        QueryFilterParams build2 = builder.build();
+        QuerySpec.Builder builder = new QuerySpec.Builder().withStop(Long.MAX_VALUE);
+        QuerySpec build1 = builder.build();
+        QuerySpec build2 = builder.build();
         assertThat(build1, is(notNullValue()));
         assertThat(build2, is(notNullValue()));
         assertThat(build2, is(equalTo(build1)));

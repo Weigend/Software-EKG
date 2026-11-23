@@ -12,13 +12,13 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.metricanalyzer.bl.query;
 
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.Measurement;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.Metric;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.MetricGroup;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.Process;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.physical.Host;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.QueryFilterParams;
-import io.softwareecg.awb.project.api.model.Project;
+import io.softwareecg.awb.timeseries.dimension.Measurement;
+import io.softwareecg.awb.timeseries.dimension.Metric;
+import io.softwareecg.awb.timeseries.dimension.MetricGroup;
+import io.softwareecg.awb.timeseries.dimension.Process;
+import io.softwareecg.awb.timeseries.dimension.physical.Host;
+import io.softwareecg.awb.investigation.model.QuerySpec;
+import io.softwareecg.awb.projectcontext.model.Project;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +40,7 @@ import static org.junit.Assert.*;
 public class MetricQueryParamsTest {
 
     @Mock
-    private QueryFilterParams mock;
+    private QuerySpec mock;
     @Mock
     private Metric metric;
     @Mock
@@ -59,11 +59,11 @@ public class MetricQueryParamsTest {
     private final long start = 0;
     private final long stop = 1;
 
-    private QueryFilterParams metricContext;
+    private QuerySpec metricContext;
 
     @Before
     public void setUp() throws Exception {
-        mock = new QueryFilterParams.Builder()
+        mock = new QuerySpec.Builder()
                 .withProject(project)
                 .withHost(host)
                 .withMeasurement(measurement)
@@ -74,7 +74,7 @@ public class MetricQueryParamsTest {
                 .build();
         metric = new Metric("A existing name");
         exclude = new Metric("Exclude");
-        metricContext = new QueryFilterParams.Builder(mock)
+        metricContext = new QuerySpec.Builder(mock)
                 .withMetric(metric)
                 .withExclude(exclude)
                 .withMetrics(metrics)
@@ -90,7 +90,7 @@ public class MetricQueryParamsTest {
 
     @Test
     public void testConstructorCaseMetricNull() throws Exception {
-        metricContext = new QueryFilterParams.Builder(mock)
+        metricContext = new QuerySpec.Builder(mock)
                 .withMetric((Metric) null)
                 .withExclude(exclude)
                 .withMetrics(metrics)
@@ -103,7 +103,7 @@ public class MetricQueryParamsTest {
 
     @Test
     public void testConstructorCaseExcludeNull() throws Exception {
-        metricContext = new QueryFilterParams.Builder(mock)
+        metricContext = new QuerySpec.Builder(mock)
                 .withMetric(metric)
                 .withExclude((Metric) null)
                 .withMetrics(metrics)
@@ -121,7 +121,7 @@ public class MetricQueryParamsTest {
 
     @Test
     public void testIsExpertModeCaseTrue() throws Exception {
-        metricContext = new QueryFilterParams.Builder(mock)
+        metricContext = new QuerySpec.Builder(mock)
                 .withMetric(metric)
                 .withExclude(exclude)
                 .withMetrics(metrics)
@@ -140,7 +140,7 @@ public class MetricQueryParamsTest {
     @Test
     public void testIsMultiMetricModeCaseTrue() throws Exception {
         metrics.add(new Metric("abc"));
-        metricContext = new QueryFilterParams.Builder(mock)
+        metricContext = new QuerySpec.Builder(mock)
                 .withMetric(metric)
                 .withExclude(exclude)
                 .withMetrics(metrics)
@@ -163,7 +163,7 @@ public class MetricQueryParamsTest {
 
     @Test
     public void testGetMetricNameCaseNull() throws Exception {
-        metricContext = new QueryFilterParams.Builder(mock)
+        metricContext = new QuerySpec.Builder(mock)
                 .withMetric((Metric) null)
                 .withExclude(exclude)
                 .withMetrics(metrics)
@@ -187,7 +187,7 @@ public class MetricQueryParamsTest {
         metrics = new ListOrderedSet<>();
         metrics.add(new Metric("first"));
         metrics.add(new Metric("second"));
-        metricContext = new QueryFilterParams.Builder(mock)
+        metricContext = new QuerySpec.Builder(mock)
                 .withMetric(metric)
                 .withExclude(exclude)
                 .withMetrics(metrics)

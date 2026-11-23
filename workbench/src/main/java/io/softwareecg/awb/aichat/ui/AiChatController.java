@@ -2,24 +2,24 @@ package io.softwareecg.awb.aichat.ui;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.softwareecg.awb.aichat.bl.agent.AgentCallback;
-import io.softwareecg.awb.aichat.bl.agent.AgentLoop;
+import io.softwareecg.awb.aichat.agent.AgentCallback;
+import io.softwareecg.awb.aichat.agent.AgentLoop;
 import io.softwareecg.awb.aichat.ui.agent.JavaFxAgentTask;
-import io.softwareecg.awb.aichat.bl.agent.SystemPrompts;
-import io.softwareecg.awb.aichat.bl.backend.AiBackendConfig;
-import io.softwareecg.awb.aichat.bl.backend.OpenAiCompatibleClient;
-import io.softwareecg.awb.aichat.bl.tools.AiTool;
-import io.softwareecg.awb.aichat.bl.tools.ChartContextProvider;
-import io.softwareecg.awb.aichat.bl.tools.GetCurrentContextTool;
-import io.softwareecg.awb.aichat.bl.tools.ListMetricsTool;
-import io.softwareecg.awb.aichat.bl.tools.QueryTimeSeriesTool;
-import io.softwareecg.awb.aichat.bl.tools.SshCommandTool;
-import io.softwareecg.awb.metricanalyzer.bl.api.SeriesCombineMode;
-import io.softwareecg.awb.metricanalyzer.bl.api.SeriesSmoothingType;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.MetricDataAccessService;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.QueryComputeParams;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.QueryFilterParams;
-import io.softwareecg.awb.metricanalyzer.ui.chartng.ChartPanelController;
+import io.softwareecg.awb.aichat.agent.SystemPrompts;
+import io.softwareecg.awb.aichat.adapter.llm.AiBackendConfig;
+import io.softwareecg.awb.aichat.adapter.llm.OpenAiCompatibleClient;
+import io.softwareecg.awb.aichat.tools.AiTool;
+import io.softwareecg.awb.aichat.tools.ChartContextProvider;
+import io.softwareecg.awb.aichat.tools.GetCurrentContextTool;
+import io.softwareecg.awb.aichat.tools.ListMetricsTool;
+import io.softwareecg.awb.aichat.tools.QueryTimeSeriesTool;
+import io.softwareecg.awb.aichat.tools.SshCommandTool;
+import io.softwareecg.awb.investigation.model.SeriesCombineMode;
+import io.softwareecg.awb.investigation.model.SeriesSmoothingType;
+import io.softwareecg.awb.queryengine.MetricDataAccessService;
+import io.softwareecg.awb.investigation.model.ComputationSpec;
+import io.softwareecg.awb.investigation.model.QuerySpec;
+import io.softwareecg.awb.metricview.MetricViewController;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -92,13 +92,13 @@ public class AiChatController implements Initializable {
 
     // ---- Chart context (unchanged) ----
 
-    private ChartPanelController resolveActiveChartController() {
+    private MetricViewController resolveActiveChartController() {
         try {
             Object manager = Lookup.lookup(
-                    Class.forName("io.softwareecg.awb.metricanalyzer.ui.adapter.ChartPanelAdapter$ChartPanelManager"));
+                    Class.forName("io.softwareecg.awb.metricview.adapter.ChartPanelAdapter$ChartPanelManager"));
             if (manager == null) return null;
             var getLastActive = manager.getClass().getMethod("getLastActiveController");
-            return (ChartPanelController) getLastActive.invoke(manager);
+            return (MetricViewController) getLastActive.invoke(manager);
         } catch (Exception e) {
             LOG.warn("Could not resolve active chart controller: {}", e.getMessage());
             return null;
@@ -106,15 +106,15 @@ public class AiChatController implements Initializable {
     }
 
     private MetricDataAccessService resolveMetricDataAccessService() {
-        ChartPanelController controller = resolveActiveChartController();
+        MetricViewController controller = resolveActiveChartController();
         return controller != null ? controller.getMetricDataAccessService() : null;
     }
 
     private String buildCurrentContextJson() {
         try {
-            ChartPanelController controller = resolveActiveChartController();
+            MetricViewController controller = resolveActiveChartController();
             if (controller == null) return null;
-            QueryFilterParams params = controller.getCurrentFilterParams();
+            QuerySpec params = controller.getCurrentFilterParams();
             if (params == null) return null;
 
             ObjectMapper mapper = new ObjectMapper();
@@ -142,7 +142,7 @@ public class AiChatController implements Initializable {
             if (params.isExpertMode()) ctx.put("expert_mode", true);
             if (params.isMultiMetricMode()) ctx.put("multi_metric_mode", true);
 
-            QueryComputeParams compute = controller.getCurrentComputeParams();
+            ComputationSpec compute = controller.getCurrentComputeParams();
             if (compute != null) {
                 if (compute.getSeriesCombineMode() != SeriesCombineMode.NONE)
                     ctx.put("combine_mode", compute.getSeriesCombineMode().name());
@@ -166,7 +166,7 @@ public class AiChatController implements Initializable {
 
     /** The time zone of the chart the assistant looks at; that of the computer if there is no chart. */
     private ZoneId chartTimeZone() {
-        ChartPanelController controller = resolveActiveChartController();
+        MetricViewController controller = resolveActiveChartController();
         return controller != null ? controller.getTimeZone() : ZoneId.systemDefault();
     }
 

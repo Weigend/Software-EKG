@@ -12,9 +12,9 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.common.ui;
 
-import io.softwareecg.awb.common.ui.events.FinishEvent;
+import io.softwareecg.awb.uitoolkit.events.FinishEvent;
 import io.softwareecg.wfx.platform.api.EventSubscriber;
-import io.softwareecg.awb.sdk.core.log.EkgLogger;
+import io.softwareecg.awb.runtime.logging.EkgLogger;
 import org.slf4j.Logger;
 
 /**

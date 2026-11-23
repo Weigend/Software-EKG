@@ -1,8 +1,7 @@
 package io.softwareecg.awb.timeseries.port;
 
-import io.softwareecg.awb.sdk.awbapi.repository.Repository;
-import io.softwareecg.awb.sdk.awbapi.repository.RepositoryException;
-import io.softwareecg.awb.sdk.datamodel.TimeSeries;
+import io.softwareecg.awb.timeseries.port.RepositoryException;
+import io.softwareecg.awb.timeseries.TimeSeries;
 
 import java.util.stream.Stream;
 
@@ -16,12 +15,12 @@ import java.util.stream.Stream;
 public interface TimeSeriesWriteService {
 
     /**
-     * Returns the repository that is actually configured and used by
+     * Returns the stable identifier of the repository configured for
      * this TimeSeriesWriteService.
      *
-     * @return the Repository that is used by the service
+     * @return the configured repository identifier
      */
-    Repository getConfiguredRepository();
+    String getRepositoryId();
 
     /**
      * Uses the filled filter dimensions of the given series instance to search

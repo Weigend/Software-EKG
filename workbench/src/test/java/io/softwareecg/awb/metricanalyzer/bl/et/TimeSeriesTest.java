@@ -15,9 +15,9 @@
 package io.softwareecg.awb.metricanalyzer.bl.et;
 
 
-import io.softwareecg.awb.sdk.datamodel.Counter;
-import io.softwareecg.awb.sdk.datamodel.TimeSeries;
-import io.softwareecg.awb.sdk.datamodel.Value;
+import io.softwareecg.awb.timeseries.Counter;
+import io.softwareecg.awb.timeseries.TimeSeries;
+import io.softwareecg.awb.timeseries.Value;
 import org.junit.Before;
 import org.junit.Test;
 

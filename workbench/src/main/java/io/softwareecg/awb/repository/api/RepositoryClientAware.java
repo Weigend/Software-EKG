@@ -1,6 +1,6 @@
 package io.softwareecg.awb.repository.api;
 
-import io.softwareecg.awb.da.api.RepositoryClient;
+import io.softwareecg.awb.timeseries.port.TimeSeriesRepository;
 
 /**
  * Interface implemented by all services that need an EKG repository client
@@ -10,7 +10,7 @@ import io.softwareecg.awb.da.api.RepositoryClient;
  */
 public interface RepositoryClientAware {
 
-    void initializeService(RepositoryClient client);
+    void initializeService(TimeSeriesRepository client);
 
     /**
      * Sets the repository ID this service is bound to.

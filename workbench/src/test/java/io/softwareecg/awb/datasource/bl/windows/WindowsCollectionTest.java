@@ -1,10 +1,10 @@
 package io.softwareecg.awb.datasource.bl.windows;
 
-import io.softwareecg.awb.datasource.bl.ProjectSeriesOutput;
-import io.softwareecg.awb.datasource.bl.ssh.SshPlan;
-import io.softwareecg.awb.sdk.awbapi.repository.Repository;
+import io.softwareecg.awb.datasource.adapter.collector.ProjectSeriesOutput;
+import io.softwareecg.awb.datasource.adapter.ssh.SshPlan;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.timeseries.port.TimeSeriesWriteService;
-import io.softwareecg.awb.sdk.datamodel.TimeSeries;
+import io.softwareecg.awb.timeseries.TimeSeries;
 import io.softwareecg.collector.config.CollectorConfigurations;
 import io.softwareecg.collector.control.CollectorEngine;
 import org.junit.After;
@@ -26,6 +26,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import io.softwareecg.awb.datasource.adapter.windows.WindowsDiscovery;
+import io.softwareecg.awb.datasource.adapter.windows.WindowsMetric;
+import io.softwareecg.awb.datasource.adapter.windows.WindowsPlan;
 /**
  * The whole way of a host read through its Windows performance counters: looking at the host,
  * plan, collector configuration, a real collector engine reading this machine, and the series
@@ -156,7 +159,7 @@ public class WindowsCollectionTest {
         }
 
         @Override
-        public Repository getConfiguredRepository() {
+        public String getRepositoryId() {
             return null;
         }
 

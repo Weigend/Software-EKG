@@ -1,1 +1,2 @@
-io.softwareecg.awb.application.base.impl.ApplicationBootstrapModule
+io.softwareecg.awb.AwbModule
+io.softwareecg.awb.application.ApplicationBootstrapModule

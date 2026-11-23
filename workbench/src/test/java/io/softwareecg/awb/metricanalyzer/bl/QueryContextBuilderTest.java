@@ -12,36 +12,36 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.metricanalyzer.bl;
 
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.Process;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.QueryFilterParams;
+import io.softwareecg.awb.timeseries.dimension.Process;
+import io.softwareecg.awb.investigation.model.QuerySpec;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
- * Unit test for the {@link QueryFilterParams.Builder}.
+ * Unit test for the {@link QuerySpec.Builder}.
  *
  */
 public class QueryContextBuilderTest {
 
     @Test
     public void testWithProcess() throws Exception {
-        QueryFilterParams query = new QueryFilterParams.Builder().withProcess(new Process("abc", "")).build();
+        QuerySpec query = new QuerySpec.Builder().withProcess(new Process("abc", "")).build();
         assertThat(query.getProcessName(), is(equalTo("abc")));
     }
 
     @Test
     public void testWithRawQuery() throws Exception {
-        QueryFilterParams query = new QueryFilterParams.Builder().withRawQuery("a Raw Query").build();
+        QuerySpec query = new QuerySpec.Builder().withRawQuery("a Raw Query").build();
         assertThat(query.getRawQuery(), is(equalTo("a Raw Query")));
     }
 
     @Test
     public void testBuild() throws Exception {
-        QueryFilterParams.Builder builder = new QueryFilterParams.Builder().withStop(Long.MAX_VALUE);
-        QueryFilterParams build1 = builder.build();
-        QueryFilterParams build2 = builder.build();
+        QuerySpec.Builder builder = new QuerySpec.Builder().withStop(Long.MAX_VALUE);
+        QuerySpec build1 = builder.build();
+        QuerySpec build2 = builder.build();
         assertThat(build1, is(notNullValue()));
         assertThat(build2, is(notNullValue()));
         assertThat(build2, is(equalTo(build1)));

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.softwareecg.awb.uitoolkit.chart.legend.StackedChartLegend?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="io.softwareecg.awb.metricview.MetricViewController"
+            prefHeight="400.0" minWidth="1082" maxWidth="Infinity" >
+    <!-- minWidth: what the header of the chart needs (ChartHeader.fxml). In a pane that is
+         narrower the chart keeps this width and loses its right edge, instead of being squeezed
+         until the fields of its header overlap. The pane is made wider by dragging the line
+         between it and its neighbours. -->
+
+    <!-- =========================================== filter header ================================================ -->
+
+    <!--
+      Top area that contains the static chart filter panel with search field, facet combo boxes and
+      controls to define the post computing behavior.
+    -->
+    <top>
+        <fx:include fx:id="chartHeader" source="../filterheader/ChartHeader.fxml"/>
+    </top>
+
+    <!-- ================================================ chart ================================================== -->
+
+    <center>
+        <AnchorPane fx:id="overlayPane">
+            <!--
+             the center area with the chart and the bottom area with legend and chart controls will separated
+             by a movable divider
+            -->
+            <SplitPane dividerPositions="0.7"  orientation="VERTICAL" AnchorPane.topAnchor="0"
+                       AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0" >
+
+                <!--
+                   Wrapper that contains the ZoomableStackedChart as primary chart view without any legend or
+                   other control blocks. The wrapper is used to make undock/dock easier and for overlay features.
+                -->
+                <BorderPane id="chartWrapper">
+                    <center>
+                        <StackPane alignment="BOTTOM_LEFT">
+                            <BorderPane fx:id="chartContainer" />
+                            <ComboBox fx:id="cbTimeZone" />
+                        </StackPane>
+                    </center>
+                </BorderPane>
+
+                <!-- ========================================= chart actions & legend ========================================= -->
+                <!--
+                  center area that stores the chart legend and an panel with different chart actions like export
+                  functionality on the left hand side.
+                -->
+                <GridPane>
+
+                    <rowConstraints>
+                        <RowConstraints minHeight="10" prefHeight="10" vgrow="NEVER"/>
+                        <RowConstraints minHeight="194" vgrow="ALWAYS"/>
+                        <RowConstraints minHeight="5" prefHeight="5" vgrow="NEVER"/>
+                    </rowConstraints>
+
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="5"   maxWidth="5"                         hgrow="NEVER"/>
+                        <ColumnConstraints minWidth="260" prefWidth="334"  maxWidth="334"      hgrow="ALWAYS"/>
+                        <ColumnConstraints minWidth="10"  maxWidth="10"                        hgrow="NEVER"/>
+                        <!-- the legend: with the column beside it not wider than the header above may get -->
+                        <ColumnConstraints minWidth="600" prefWidth="960" maxWidth="Infinity"  hgrow="SOMETIMES"  />
+                    </columnConstraints>
+
+                    <!--
+                      left side panel with a couple of actions (checkbox and buttons) used to trigger
+                      chart data export or other chart related stuff
+                    -->
+                    <AnchorPane GridPane.rowIndex="1" GridPane.columnIndex="1" maxHeight="Infinity" >
+
+                        <VBox fx:id="chartActionsPanel" styleClass="fieldWrapper"  maxHeight="Infinity"
+                              AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="10" AnchorPane.rightAnchor="0"  AnchorPane.leftAnchor="0" >
+
+                            <Label text="Chart Behavior" styleClass="actionGroupHeaderLabel" />
+
+                            <CheckBox fx:id="cbAlignYAxis" text="Shared Y-Axis Scaling" styleClass="actionGroupCheckbox"  />
+                            <CheckBox fx:id="cbShowGridLines" text="Show Grid Lines" styleClass="actionGroupCheckbox" selected="true"  />
+
+
+
+                            <Label text="Chart Export" styleClass="actionGroupHeaderLabel" id="chartExportActionsLabel" />
+
+                            <VBox id="buttonGapWrapper">
+                                <Button fx:id="btnExportToExcel" text="Export Displayed Data to Excel" styleClass="actionGroupBtn"  />
+                                <Button fx:id="btnExportToPNG" text="Export Displayed Data as PNG" styleClass="actionGroupBtn"  />
+                            </VBox>
+
+
+                        </VBox>
+
+                    </AnchorPane>
+
+                    <!--
+                      It is the common case that the series case the legend to expand out of view port.
+                      Use scroll pane to handle this.
+                    -->
+                    <ScrollPane hbarPolicy="NEVER" fitToWidth="true" GridPane.rowIndex="1" GridPane.columnIndex="3" >
+
+                        <!--
+                          right side chart legend that will show base chart and background charts as control line
+                          including all series.
+                        -->
+                        <StackedChartLegend fx:id="chartLegend" />
+
+                    </ScrollPane>
+                </GridPane>
+
+
+            </SplitPane>
+        </AnchorPane>
+    </center>
+
+    <stylesheets>
+        <URL value="@ChartPanelStyle.css"/>
+    </stylesheets>
+
+</BorderPane>

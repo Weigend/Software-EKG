@@ -1,0 +1,29 @@
+package io.softwareecg.awb.timeseries.dimension.logical;
+
+import io.softwareecg.awb.timeseries.dimension.NamedValueEntity;
+import org.apache.commons.lang3.StringUtils;
+
+/**
+ * Entity that represents an Kubernetes/OpenShift pod as
+ * atomic deployment unit inside an Cloud-Native environment.
+ *
+ * @since 23.06.2018
+ */
+public class Pod extends NamedValueEntity {
+
+    public static final Pod DEFAULT = new Pod("*");
+
+    public Pod() {
+        this("");
+    }
+
+    public Pod(String valueName) {
+        super(valueName);
+    }
+
+    @Override
+    public String toString() {
+        return Pod.class.getSimpleName() + "[ "
+                + (StringUtils.isBlank(getValueName()) ? "-BLANK-" : getValueName()) + " ]";
+    }
+}

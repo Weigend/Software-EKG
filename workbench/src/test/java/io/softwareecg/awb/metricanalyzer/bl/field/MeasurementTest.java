@@ -12,7 +12,7 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.metricanalyzer.bl.field;
 
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.Measurement;
+import io.softwareecg.awb.timeseries.dimension.Measurement;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

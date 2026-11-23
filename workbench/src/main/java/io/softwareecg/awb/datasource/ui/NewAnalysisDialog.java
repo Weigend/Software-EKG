@@ -1,15 +1,15 @@
 package io.softwareecg.awb.datasource.ui;
 
-import io.softwareecg.awb.datasource.bl.AnalysisPlan;
-import io.softwareecg.awb.datasource.bl.AnalysisSource;
-import io.softwareecg.awb.datasource.bl.AnalysisTopic;
-import io.softwareecg.awb.datasource.bl.CollectionPlan;
-import io.softwareecg.awb.datasource.bl.DataCollectionService;
-import io.softwareecg.awb.datasource.bl.prometheus.MetricExpression;
-import io.softwareecg.awb.datasource.bl.prometheus.MetricProfile;
-import io.softwareecg.awb.datasource.bl.prometheus.PrometheusEnvironment;
-import io.softwareecg.awb.datasource.bl.prometheus.PrometheusEnvironment.Group;
-import io.softwareecg.awb.datasource.bl.prometheus.WildcardPattern;
+import io.softwareecg.awb.datasource.model.AnalysisPlan;
+import io.softwareecg.awb.datasource.spi.AnalysisSourceDefinition;
+import io.softwareecg.awb.datasource.spi.AnalysisTopic;
+import io.softwareecg.awb.datasource.model.CollectionPlan;
+import io.softwareecg.awb.datasource.NewAnalysisService;
+import io.softwareecg.awb.datasource.adapter.prometheus.MetricExpression;
+import io.softwareecg.awb.datasource.adapter.prometheus.MetricProfile;
+import io.softwareecg.awb.datasource.adapter.prometheus.PrometheusEnvironment;
+import io.softwareecg.awb.datasource.adapter.prometheus.PrometheusEnvironment.Group;
+import io.softwareecg.awb.datasource.adapter.prometheus.WildcardPattern;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.platform.api.EventBus;
 import javafx.application.Platform;
@@ -61,7 +61,7 @@ import java.util.stream.Collectors;
  *   <li>What: the topics as tiles ({@link AnalysisTopic}) - Linux servers, Java processes and
  *       so on. Several can be chosen; topics that are planned but not built are shown greyed
  *       out. Whoever only has an address takes the tile "show me what is there" instead.</li>
- *   <li>How: for every topic the source ({@link AnalysisSource}). Linux hosts can come through a
+ *   <li>How: for every topic the source ({@link AnalysisSourceDefinition}). Linux hosts can come through a
  *       Prometheus server that already gathered their values, or be read directly by SSH and
  *       top - the choice says what each way needs and gives.</li>
  *   <li>Where: one step per source in use. A Prometheus server is one address; the systems it
@@ -83,7 +83,7 @@ public class NewAnalysisDialog extends Dialog<Void> {
     /** The width of one of several choices standing side by side, so that they form columns. */
     private static final double CHOICE_WIDTH = 240;
 
-    private final DataCollectionService service;
+    private final NewAnalysisService service;
 
     private final TextField urlField = new TextField("http://localhost:9090");
     private final Button connectButton = new Button("Connect");
@@ -111,7 +111,7 @@ public class NewAnalysisDialog extends Dialog<Void> {
     private final Set<AnalysisTopic> chosenTopics = EnumSet.noneOf(AnalysisTopic.class);
 
     /** How each topic is collected, as chosen in the second step. */
-    private final Map<AnalysisTopic, AnalysisSource> chosenSources = new EnumMap<>(AnalysisTopic.class);
+    private final Map<AnalysisTopic, AnalysisSourceDefinition> chosenSources = new EnumMap<>(AnalysisTopic.class);
 
     private final VBox sourceRows = new VBox(16);
 
@@ -156,7 +156,7 @@ public class NewAnalysisDialog extends Dialog<Void> {
     /**
      * Starts a new analysis.
      */
-    public NewAnalysisDialog(DataCollectionService service) {
+    public NewAnalysisDialog(NewAnalysisService service) {
         this(service, null);
     }
 
@@ -165,7 +165,7 @@ public class NewAnalysisDialog extends Dialog<Void> {
      *
      * @param existingAnalysis the name of the analysis, or {@code null} to start a new one
      */
-    public NewAnalysisDialog(DataCollectionService service, String existingAnalysis) {
+    public NewAnalysisDialog(NewAnalysisService service, String existingAnalysis) {
         this.service = service;
         this.existingAnalysis = existingAnalysis;
         this.windowsProblem = service.windowsCountersProblem();
@@ -310,7 +310,7 @@ public class NewAnalysisDialog extends Dialog<Void> {
 
     /** A way can be gone if it is built and - for Windows performance counters - this is a Windows. */
     private boolean usable(AnalysisTopic.SourceOption option) {
-        return option.available() && (option.source() != AnalysisSource.WINDOWS_COUNTERS || windowsProblem == null);
+        return option.available() && (option.source() != AnalysisSourceDefinition.WINDOWS_COUNTERS || windowsProblem == null);
     }
 
     /** The few words on a tile that is built but cannot be chosen on this machine. */
@@ -404,7 +404,7 @@ public class NewAnalysisDialog extends Dialog<Void> {
         } else if (currentStep() == Step.SOURCES) {
             chosenTopics.clear();
             chosenSources.forEach((topic, source) -> {
-                if (source == AnalysisSource.PROMETHEUS) {
+                if (source == AnalysisSourceDefinition.PROMETHEUS) {
                     chosenTopics.add(topic);
                 }
             });
@@ -412,10 +412,10 @@ public class NewAnalysisDialog extends Dialog<Void> {
             if (!chosenTopics.isEmpty()) {
                 next.add(Step.PROMETHEUS);
             }
-            if (chosenSources.containsValue(AnalysisSource.SSH_TOP)) {
+            if (chosenSources.containsValue(AnalysisSourceDefinition.SSH_TOP)) {
                 next.add(Step.SSH);
             }
-            if (chosenSources.containsValue(AnalysisSource.WINDOWS_COUNTERS)) {
+            if (chosenSources.containsValue(AnalysisSourceDefinition.WINDOWS_COUNTERS)) {
                 next.add(Step.WINDOWS);
             }
             steps = next;
@@ -507,7 +507,7 @@ public class NewAnalysisDialog extends Dialog<Void> {
                 if (selected == null) {
                     previous.setSelected(true);
                 } else {
-                    chosenSources.put(topic, (AnalysisSource) selected.getUserData());
+                    chosenSources.put(topic, (AnalysisSourceDefinition) selected.getUserData());
                 }
             });
             sourceRows.getChildren().add(new VBox(8, title, options));

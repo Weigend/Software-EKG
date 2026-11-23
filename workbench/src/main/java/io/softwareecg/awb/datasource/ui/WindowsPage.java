@@ -1,11 +1,11 @@
 package io.softwareecg.awb.datasource.ui;
 
-import io.softwareecg.awb.datasource.bl.DataCollectionService;
-import io.softwareecg.awb.datasource.bl.ssh.SshPlan;
-import io.softwareecg.awb.datasource.bl.windows.WindowsDiscovery.HostCheck;
-import io.softwareecg.awb.datasource.bl.windows.WindowsDiscovery.ProcessCandidate;
-import io.softwareecg.awb.datasource.bl.windows.WindowsMetric;
-import io.softwareecg.awb.datasource.bl.windows.WindowsPlan;
+import io.softwareecg.awb.datasource.NewAnalysisService;
+import io.softwareecg.awb.datasource.adapter.ssh.SshPlan;
+import io.softwareecg.awb.datasource.adapter.windows.WindowsDiscovery.HostCheck;
+import io.softwareecg.awb.datasource.adapter.windows.WindowsDiscovery.ProcessCandidate;
+import io.softwareecg.awb.datasource.adapter.windows.WindowsMetric;
+import io.softwareecg.awb.datasource.adapter.windows.WindowsPlan;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
@@ -50,7 +50,7 @@ import java.util.Map;
  */
 final class WindowsPage {
 
-    private final DataCollectionService service;
+    private final NewAnalysisService service;
 
     private final Runnable onChange;
 
@@ -90,7 +90,7 @@ final class WindowsPage {
      * @param existingAnalysis the analysis a source is added to, or {@code null} for a new one
      * @param onChange         called whenever what the page holds has changed
      */
-    WindowsPage(DataCollectionService service, String existingAnalysis, Runnable onChange) {
+    WindowsPage(NewAnalysisService service, String existingAnalysis, Runnable onChange) {
         this.service = service;
         this.onChange = onChange;
 

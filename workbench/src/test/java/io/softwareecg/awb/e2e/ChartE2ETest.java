@@ -1,10 +1,10 @@
 package io.softwareecg.awb.e2e;
 
-import io.softwareecg.awb.common.ui.chartng.ChartColorStyle;
-import io.softwareecg.awb.common.ui.chartng.ChartType;
-import io.softwareecg.awb.common.ui.chartng.ZoomableStackedChart;
-import io.softwareecg.awb.common.ui.chartng.axis.DateAxis;
-import io.softwareecg.awb.metricanalyzer.ui.chartng.ChartTimeZone;
+import io.softwareecg.awb.uitoolkit.chart.ChartColorStyle;
+import io.softwareecg.awb.uitoolkit.chart.ChartType;
+import io.softwareecg.awb.uitoolkit.chart.ZoomableStackedChart;
+import io.softwareecg.awb.uitoolkit.chart.axis.DateAxis;
+import io.softwareecg.awb.metricview.ChartTimeZone;
 import javafx.scene.Node;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.LineChart;

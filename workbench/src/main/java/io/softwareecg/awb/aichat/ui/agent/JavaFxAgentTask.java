@@ -1,7 +1,7 @@
 package io.softwareecg.awb.aichat.ui.agent;
 
-import io.softwareecg.awb.aichat.bl.agent.AgentCallback;
-import io.softwareecg.awb.aichat.bl.agent.AgentLoop;
+import io.softwareecg.awb.aichat.agent.AgentCallback;
+import io.softwareecg.awb.aichat.agent.AgentLoop;
 import javafx.concurrent.Task;
 
 /**

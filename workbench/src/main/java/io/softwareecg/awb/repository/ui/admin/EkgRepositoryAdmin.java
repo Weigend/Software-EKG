@@ -14,9 +14,9 @@ package io.softwareecg.awb.repository.ui.admin;
 
 import afester.javafx.svg.SvgLoader;
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.repository.api.events.RepositoryModifyEvent;
-import io.softwareecg.awb.sdk.core.resourceloader.CdiFxmlLoader;
-import io.softwareecg.awb.sdk.core.resourceloader.ViewLoadResult;
+import io.softwareecg.awb.repository.events.RepositoryModifyEvent;
+import io.softwareecg.awb.runtime.resources.CdiFxmlLoader;
+import io.softwareecg.awb.runtime.resources.ViewLoadResult;
 import javafx.scene.Group;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;

@@ -4,7 +4,7 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.repository.bl.repository;
 
-import io.softwareecg.awb.repository.bl.repositories.SolrCloudRepository;
+import io.softwareecg.awb.repository.adapter.solr.SolrCloudRepository;
 import org.junit.Test;
 
 /**

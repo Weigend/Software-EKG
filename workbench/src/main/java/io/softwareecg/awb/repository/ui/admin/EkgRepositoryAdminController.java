@@ -1,15 +1,15 @@
 package io.softwareecg.awb.repository.ui.admin;
 
-import io.softwareecg.awb.common.ui.bindings.StaticBoolProperty;
+import io.softwareecg.awb.uitoolkit.bindings.StaticBoolProperty;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
-import io.softwareecg.awb.repository.api.events.RepositoryModifyEvent;
-import io.softwareecg.awb.repository.api.model.EkgRepositoryDbType;
-import io.softwareecg.awb.da.api.types.Embedded;
-import io.softwareecg.awb.sdk.awbapi.explorer.ExplorerUpdateEvent;
-import io.softwareecg.awb.sdk.awbapi.repository.ResourceAuthType;
+import io.softwareecg.awb.repository.events.RepositoryModifyEvent;
+import io.softwareecg.awb.repository.model.EkgRepositoryDbType;
+import io.softwareecg.awb.timeseries.repositorytype.Embedded;
+import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
+import io.softwareecg.awb.secrets.model.ResourceAuthType;
 import io.softwareecg.wfx.platform.api.EventBus;
-import io.softwareecg.awb.sdk.importer.ui.skins.EkgComboBoxListViewSkin;
+import io.softwareecg.awb.uitoolkit.controls.EkgComboBoxListViewSkin;
 import jakarta.inject.Inject;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
@@ -23,9 +23,9 @@ import java.net.URL;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static io.softwareecg.awb.repository.api.model.EkgRepositoryDbType.*;
-import static io.softwareecg.awb.sdk.awbapi.repository.ResourceAuthType.*;
-import static io.softwareecg.awb.sdk.importer.ui.skins.EkgComboBoxListViewSkin.CellBehaviorResource;
+import static io.softwareecg.awb.repository.model.EkgRepositoryDbType.*;
+import static io.softwareecg.awb.secrets.model.ResourceAuthType.*;
+import static io.softwareecg.awb.uitoolkit.controls.EkgComboBoxListViewSkin.CellBehaviorResource;
 import static org.apache.commons.lang3.StringUtils.isNoneBlank;
 
 /**

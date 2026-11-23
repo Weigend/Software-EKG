@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<fx:root type="javafx.scene.layout.GridPane" xmlns:fx="http://javafx.com/fxml"
+         fx:controller="io.softwareecg.awb.projectcontext.ui.ProjectBarController" id="projectBar" disable="true"
+         minWidth="0">
+    <!-- minWidth 0: the columns below add up to 1763 pixels. Without it the bar asks for that
+         much, and a narrower window shows explorer, chart and assistant laid out for 1763 pixels
+         and cut off at its right edge. With it the bar itself is cut - the dates at its end. -->
+
+    <rowConstraints>
+        <RowConstraints minHeight="32.0" maxHeight="32.0" vgrow="NEVER"/>
+    </rowConstraints>
+
+    <columnConstraints>
+        <!-- 0 -->
+        <ColumnConstraints halignment="LEFT" minWidth="10" maxWidth="10" hgrow="NEVER"/>
+
+        <!-- 1,2 -->
+        <!-- project id label -->
+        <ColumnConstraints halignment="LEFT" minWidth="134" maxWidth="134" hgrow="NEVER"/>
+        <ColumnConstraints halignment="LEFT" minWidth="210" maxWidth="210" hgrow="NEVER"/>
+
+        <!-- 3,4 -->
+        <!--  label sources time series -->
+        <ColumnConstraints halignment="LEFT" minWidth="135" maxWidth="135" hgrow="NEVER"/>
+        <ColumnConstraints halignment="LEFT" minWidth="120" maxWidth="120" hgrow="NEVER"/>
+        <!-- data collection: whether data is being collected for the project right now -->
+        <!-- collapsed until a project with data sources is selected, see ProjectBarController -->
+        <ColumnConstraints halignment="LEFT" minWidth="0" maxWidth="0" hgrow="NEVER"/>
+        <ColumnConstraints halignment="LEFT" minWidth="0" maxWidth="0" hgrow="NEVER"/>
+
+        <!-- 5,6 -->
+        <!-- architecture / project flavor -->
+        <ColumnConstraints halignment="LEFT" minWidth="95" maxWidth="95" hgrow="NEVER"/>
+        <ColumnConstraints halignment="LEFT" minWidth="95" maxWidth="95" hgrow="NEVER"/>
+
+        <!-- 7,8 -->
+        <!-- cloud platform label -->
+        <ColumnConstraints halignment="LEFT" minWidth="102" maxWidth="102" hgrow="NEVER"/>
+        <ColumnConstraints halignment="LEFT" minWidth="100" maxWidth="100" hgrow="NEVER"/>
+
+        <!-- 9,10 -->
+        <!-- view flavor -->
+        <ColumnConstraints halignment="LEFT" minWidth="90" maxWidth="90" hgrow="NEVER"/>
+        <ColumnConstraints halignment="LEFT" minWidth="190" maxWidth="190" hgrow="NEVER"/>
+
+        <!-- 11,12 -->
+        <ColumnConstraints halignment="LEFT" minWidth="20" maxWidth="20" hgrow="NEVER"/>
+        <ColumnConstraints halignment="LEFT" minWidth="140" maxWidth="240" hgrow="NEVER"/>
+
+        <!-- 13,14 -->
+        <!-- created date -->
+        <ColumnConstraints halignment="LEFT" minWidth="15" maxWidth="15" hgrow="NEVER"/>
+        <ColumnConstraints halignment="LEFT" minWidth="65" maxWidth="65" hgrow="NEVER"/>
+        <ColumnConstraints halignment="LEFT" minWidth="80" maxWidth="80" hgrow="NEVER"/>
+
+        <!-- 16,17 -->
+        <!-- last modified date -->
+        <ColumnConstraints halignment="LEFT" minWidth="68" maxWidth="68" hgrow="NEVER"/>
+        <ColumnConstraints halignment="LEFT" minWidth="80" maxWidth="80" hgrow="NEVER"/>
+    </columnConstraints>
+
+    <stylesheets>
+        <URL value="@/io/softwareecg/awb/projectcontext/ui/ProjectBarView.css"/>
+    </stylesheets>
+
+
+    <Label text="Selected Project:" GridPane.columnIndex="1" GridPane.rowIndex="0"  />
+    <HBox spacing="10" maxHeight="Infinity" alignment="CENTER_LEFT" GridPane.columnIndex="2" GridPane.rowIndex="0">
+        <Button fx:id="btnEditProject" text=" "  />
+        <Label fx:id="lbProjectId" text="no project selected" prefWidth="160" styleClass="highlighted" translateX="-8" />
+    </HBox>
+
+    <Label text="Time Series Source:" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+    <Label fx:id="lbProjectType"  GridPane.columnIndex="4" GridPane.rowIndex="0" styleClass="highlighted" />
+
+    <Label fx:id="lbDataCollectionTitle" text="Data:" GridPane.columnIndex="5" GridPane.rowIndex="0" visible="false" />
+    <Label fx:id="lbDataCollection" GridPane.columnIndex="6" GridPane.rowIndex="0" styleClass="highlighted" visible="false" />
+
+    <Label text="Architecture:" GridPane.columnIndex="7" GridPane.rowIndex="0" />
+    <Label fx:id="lbProjectFlavor" GridPane.columnIndex="8" GridPane.rowIndex="0" styleClass="highlighted" />
+
+    <Label text="Cloud Platform:" GridPane.columnIndex="9" GridPane.rowIndex="0" />
+    <Label fx:id="lbPlatformFlavor" GridPane.columnIndex="10" GridPane.rowIndex="0" styleClass="highlighted" />
+
+    <Label text="Select View:" GridPane.columnIndex="11" GridPane.rowIndex="0"  />
+    <ComboBox fx:id="cbViewFlavor" GridPane.columnIndex="12" GridPane.rowIndex="0" maxWidth="Infinity" />
+
+    <Button fx:id="btnImportDataToProject" GridPane.columnIndex="14" GridPane.rowIndex="0" text="Import Data" translateY="-1" disable="true" />
+
+    <Label text="Created:" GridPane.columnIndex="16" GridPane.rowIndex="0" />
+    <Label fx:id="lbCreatedDate" GridPane.columnIndex="17" GridPane.rowIndex="0" styleClass="highlighted" />
+
+    <Label text="Modified:" GridPane.columnIndex="18" GridPane.rowIndex="0" />
+    <Label fx:id="lbModifiedDate" GridPane.columnIndex="19" GridPane.rowIndex="0" styleClass="highlighted" />
+
+
+</fx:root>

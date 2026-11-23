@@ -1,10 +1,10 @@
 package io.softwareecg.awb.datasource.ui;
 
-import io.softwareecg.awb.datasource.bl.DataCollectionService;
-import io.softwareecg.awb.datasource.bl.ssh.SshDiscovery.HostCheck;
-import io.softwareecg.awb.datasource.bl.ssh.SshDiscovery.ProcessCandidate;
-import io.softwareecg.awb.datasource.bl.ssh.SshPlan;
-import io.softwareecg.awb.datasource.bl.ssh.TopMetric;
+import io.softwareecg.awb.datasource.NewAnalysisService;
+import io.softwareecg.awb.datasource.adapter.ssh.SshDiscovery.HostCheck;
+import io.softwareecg.awb.datasource.adapter.ssh.SshDiscovery.ProcessCandidate;
+import io.softwareecg.awb.datasource.adapter.ssh.SshPlan;
+import io.softwareecg.awb.datasource.adapter.ssh.TopMetric;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
@@ -50,7 +50,7 @@ import java.util.Map;
  */
 final class SshPage {
 
-    private final DataCollectionService service;
+    private final NewAnalysisService service;
 
     private final Runnable onChange;
 
@@ -87,7 +87,7 @@ final class SshPage {
      * @param existingAnalysis the analysis a source is added to, or {@code null} for a new one
      * @param onChange         called whenever what the page holds has changed
      */
-    SshPage(DataCollectionService service, String existingAnalysis, Runnable onChange) {
+    SshPage(NewAnalysisService service, String existingAnalysis, Runnable onChange) {
         this.service = service;
         this.onChange = onChange;
 

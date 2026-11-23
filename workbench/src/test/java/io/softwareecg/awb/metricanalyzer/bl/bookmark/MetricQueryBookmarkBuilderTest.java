@@ -12,10 +12,10 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.metricanalyzer.bl.bookmark;
 
-import io.softwareecg.awb.metricanalyzer.bl.bookmarks.et.Bookmark;
-import io.softwareecg.awb.metricanalyzer.bl.bookmarks.et.MetricQueryBookmark;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.et.Metric;
-import io.softwareecg.awb.metricanalyzer.bl.tsquery.query.QueryFilterParams;
+import io.softwareecg.awb.bookmark.model.Bookmark;
+import io.softwareecg.awb.bookmark.model.MetricQueryBookmark;
+import io.softwareecg.awb.timeseries.dimension.Metric;
+import io.softwareecg.awb.investigation.model.QuerySpec;
 import org.junit.Test;
 
 import java.time.Instant;
@@ -30,7 +30,7 @@ import static org.junit.Assert.assertThat;
 public class MetricQueryBookmarkBuilderTest {
     @Test
     public void testBuildFormMetricContext() throws Exception {
-        QueryFilterParams query = new QueryFilterParams.Builder()
+        QuerySpec query = new QuerySpec.Builder()
                 .withMetric(new Metric("abc"))
                 .withExclude(new Metric("exclude"))
                 .withExpertMode(true)

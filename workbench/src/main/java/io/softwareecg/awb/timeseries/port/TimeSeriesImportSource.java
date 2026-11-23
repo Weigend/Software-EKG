@@ -1,6 +1,6 @@
 package io.softwareecg.awb.timeseries.port;
 
-import io.softwareecg.awb.sdk.awbapi.repository.ResourceAuthType;
+import io.softwareecg.awb.secrets.model.ResourceAuthType;
 
 import java.util.Objects;
 

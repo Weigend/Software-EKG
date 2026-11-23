@@ -1,12 +1,14 @@
 package io.softwareecg.awb.importer.prometheus.bl;
 
-import io.softwareecg.awb.sdk.datamodel.RawSeriesData;
-import io.softwareecg.awb.sdk.datamodel.SeriesData;
+import io.softwareecg.awb.timeseries.RawSeriesData;
+import io.softwareecg.awb.timeseries.SeriesData;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.softwareecg.awb.importer.adapter.prometheus.bl.GenericPrometheusMapper;
+import io.softwareecg.awb.importer.adapter.prometheus.bl.PrometheusDimensionMapper;
 /**
  * Demo test that shows the mapping results with REAL Prometheus data
  * from http://node0.cloud.local:9090
