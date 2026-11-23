@@ -206,6 +206,36 @@
   </div>
 </section>
 
+<!-- ACROSS ORGANISATIONAL BOUNDARIES -->
+<section id="boundaries" class="boundary-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label" data-de="Über Organisationsgrenzen hinweg" data-pt="Além das fronteiras organizacionais">Across organisational boundaries</div>
+      <h2 class="section-title" data-de="Jeder sagt: Bei mir funktioniert alles." data-pt="Todos dizem: do meu lado está tudo funcionando.">Everyone says: it works on my side.</h2>
+      <p class="section-sub" data-de="Große verteilte Anwendungen laufen über organisatorische Grenzen: verschiedene Lieferanten, Provider und Betriebsteams. Jeder sieht auf seinen Teil, und jeder Teil ist in Ordnung. Der Kunde steht trotzdem im Wald, denn die Anwendung funktioniert nicht, ist instabil oder fällt sporadisch aus." data-pt="Grandes aplicações distribuídas atravessam fronteiras organizacionais: diferentes fornecedores, provedores e equipes de operação. Cada um olha para a sua parte, e cada parte está em ordem. Ainda assim o cliente fica sem saída, porque a aplicação não funciona, é instável ou falha esporadicamente.">Large distributed applications cross organisational boundaries: different suppliers, providers and operations teams. Each of them looks at its own part, and each part is fine. The customer is still left stranded, because the application does not work, is unstable or fails sporadically.</p>
+    </div>
+    <div class="voices">
+      <div class="voice reveal">
+        <div class="who"><span data-de="Lieferant" data-pt="Fornecedor">Supplier</span><span class="state">OK</span></div>
+        <p data-de="„Unsere Software läuft.“" data-pt="“Nosso software está rodando.”">“Our software runs.”</p>
+      </div>
+      <div class="voice reveal">
+        <div class="who"><span data-de="Provider" data-pt="Provedor">Provider</span><span class="state">OK</span></div>
+        <p data-de="„Keine Störung auf der Plattform.“" data-pt="“Nenhum incidente na plataforma.”">“No incident on the platform.”</p>
+      </div>
+      <div class="voice reveal">
+        <div class="who"><span data-de="Betriebsteam" data-pt="Equipe de operação">Operations team</span><span class="state">OK</span></div>
+        <p data-de="„Alle Dashboards sind grün.“" data-pt="“Todos os dashboards estão verdes.”">“All dashboards are green.”</p>
+      </div>
+      <div class="voice customer reveal">
+        <div class="who"><span data-de="Kunde" data-pt="Cliente">Customer</span><span class="state" data-de="Problem" data-pt="Problema">Problem</span></div>
+        <p data-de="„Es fällt trotzdem aus. Sporadisch.“" data-pt="“Mesmo assim falha. Esporadicamente.”">“It still fails. Sporadically.”</p>
+      </div>
+    </div>
+    <p class="boundary-after reveal" data-de="<strong>Das Software-EKG legt die Messwerte aller Beteiligten auf eine Zeitachse</strong>, in einem lokalen Bestand und unabhängig davon, aus wessen Monitoring sie stammen. Wo es keinen direkten Zugriff gibt, läuft ein externer Collector innerhalb der Grenze, und seine Sammlung kommt als CSV-Dateien herüber, etwa über einen Share. Was innerhalb der eigenen Grenze niemand sieht, wird im Vergleich sichtbar: welches System, seit wann, im Takt womit. Das Ergebnis ist keine Schuldzuweisung, sondern eine begründete Frage an das richtige Team." data-pt="<strong>O Software-EKG coloca as medições de todas as partes em um único eixo de tempo</strong>, em um conjunto de dados local e independentemente de qual monitoramento elas vêm. Onde não há acesso direto, um Collector externo roda dentro da fronteira, e sua coleta a atravessa como arquivos CSV, por exemplo em um compartilhamento. O que ninguém vê dentro da própria fronteira fica visível na comparação: qual sistema, desde quando, em sintonia com o quê. O resultado não é atribuição de culpa, e sim uma pergunta bem fundamentada à equipe certa."><strong>Software-EKG puts the measurements of all parties on one time axis</strong>, in one local data set and independent of whose monitoring they come from. Where there is no direct access, an external collector runs inside the boundary and its collection crosses it as CSV files, for example on a share. What nobody sees within their own boundary becomes visible in the comparison: which system, since when, in step with what. The result is not blame but a well-founded question to the right team.</p>
+  </div>
+</section>
+
 <!-- A REAL CASE -->
 <section id="example" class="alt">
   <div class="container">
@@ -396,7 +426,7 @@
       <div class="story-text reveal">
         <div class="section-label" data-de="Der Collector" data-pt="O Collector">The collector</div>
         <h2 class="section-title" data-de="Festlegen, was gemessen wird, wo, und was verglichen wird" data-pt="Defina o que medir, onde e o que comparar">Define what to measure, where, and what to compare</h2>
-        <p data-de="Der Collector ist ein Adapter zwischen den Systemen, die ihre Werte schon irgendwo preisgeben, und dem Bestand, den die Workbench auswertet. Für den ersten Chart braucht man ihn nicht, denn die Workbench bringt einen eigenen mit. Als eigenständiger Prozess läuft er auf einem Server, einem Jump Host oder einem Raspberry Pi." data-pt="O Collector é um adaptador entre os sistemas que já expõem seus valores em algum lugar e o repositório que a workbench analisa. Para o primeiro gráfico ele não é necessário, pois a workbench traz um próprio. Como processo independente, roda em um servidor, um jump host ou um Raspberry Pi.">The collector is an adapter between the systems that already expose their values somewhere and the repository the workbench analyses. You do not need it for a first chart, because the workbench has one of its own. As a standalone process it runs on a server, a jump host or a Raspberry Pi.</p>
+        <p data-de="Der Collector ist ein Adapter zwischen den Systemen, die ihre Werte schon irgendwo preisgeben, und dem Bestand, den die Workbench auswertet. Für den ersten Chart braucht man ihn nicht, denn die Workbench bringt einen eigenen mit. Der eigenständige Collector ist für den Fall da, dass der direkte Zugriff endet: In Firmenumgebungen ist ein Direktzugriff oft problematischer, als irgendwo einen Java-Prozess laufen zu lassen und seine Daten auf einen Share zu legen. Er läuft auf einem Server, einem Jump Host oder einem Raspberry Pi." data-pt="O Collector é um adaptador entre os sistemas que já expõem seus valores em algum lugar e o repositório que a workbench analisa. Para o primeiro gráfico ele não é necessário, pois a workbench traz um próprio. O Collector independente existe para onde o acesso direto termina: em ambientes corporativos, o acesso direto costuma ser mais problemático do que deixar um processo Java rodando em algum lugar e colocar seus dados em um compartilhamento. Ele roda em um servidor, um jump host ou um Raspberry Pi.">The collector is an adapter between the systems that already expose their values somewhere and the repository the workbench analyses. You do not need it for a first chart, because the workbench has one of its own. The standalone collector is there for where direct access ends: in corporate environments, direct access is often more problematic than letting a Java process run somewhere and putting its data on a share. It runs on a server, a jump host or a Raspberry Pi.</p>
         <div class="chips-label" data-de="Quellen" data-pt="Fontes">Sources</div>
         <div class="chips">
           <span class="chip">unix · top</span><span class="chip">unixio · iostat</span><span class="chip">unixdf · df</span><span class="chip">win · perf counters</span><span class="chip">jmx</span><span class="chip">jolokia</span><span class="chip">prometheus</span><span class="chip">log · regex</span><span class="chip">calc</span>

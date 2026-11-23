@@ -27,6 +27,8 @@ Ein Kunde brachte die bisherige Hürde sinngemäß auf den Punkt: „Viele besit
 
 Es bleibt ein Experteninstrument, jetzt mit Unterstützung für Einsteiger und mit Verifikation, die Fehldiagnosen vermeidet: Befunde, die eine andere Ursache haben als die naheliegende. Geht der Speicher aus, ist oft nicht der Heap zu klein konfiguriert. Es kann normal sein, weil mehr Benutzer auf dem System sind, oder abnormal: ein Memory Leak oder Speicher, der sich mit der Zahl der Nutzer vervielfacht. Es liefert oft nur die erste Symptomanalyse. Beides gehört zur Position und wird nicht kaschiert.
 
+Ein typischer Einsatz geht über organisatorische Grenzen. An großen verteilten Anwendungen sind verschiedene Lieferanten, Provider und Betriebsteams beteiligt. Jeder sagt, bei ihm funktioniere alles, und trotzdem steht der Kunde im Wald, denn die Anwendung funktioniert nicht, ist instabil oder fällt sporadisch aus. Das Software-EKG legt die Messwerte aller Beteiligten auf eine Zeitachse, unabhängig davon, aus wessen Monitoring sie stammen. Das ist auch die Daseinsberechtigung des externen Collectors: In Firmenkontexten ist ein Direktzugriff oft problematischer, als irgendwo einen Collector in Java laufen zu lassen und die Daten auf einen Share zu legen. Das Ergebnis ist keine Schuldzuweisung, sondern eine begründete Frage an das richtige Team.
+
 ## Was das Tool nicht ist
 
 - Kein Dashboard.

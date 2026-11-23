@@ -242,6 +242,32 @@ section { padding: 96px 0; }
 }
 .after-grid span { color: var(--text-muted); }
 
+/* ── Across organisational boundaries ──
+   Every party reports OK, the customer has the problem. The bar and the
+   state in words are those of the collector's display. */
+.boundary-section {
+  border-top: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(34, 200, 240, 0.05) 0%, rgba(13, 92, 128, 0.14) 100%);
+}
+.boundary-section .section-sub { max-width: 760px; }
+.voices { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 40px; }
+.voice {
+  position: relative; padding: 18px 20px 20px 34px; border-radius: var(--radius);
+  background: var(--bg-card); border: 1px solid var(--border);
+}
+.voice::before { content: ''; position: absolute; left: 16px; top: 18px; bottom: 20px; width: 4px; border-radius: 4px; background: var(--green); }
+.voice .who {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px;
+  font-size: 0.76rem; font-weight: 650; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim);
+}
+.voice .state { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0; text-transform: none; color: var(--green); background: rgba(76, 208, 138, 0.1); padding: 2px 9px; border-radius: 100px; }
+.voice p { font-size: 1.02rem; font-weight: 550; line-height: 1.45; }
+.voice.customer { border-color: rgba(255, 107, 107, 0.45); }
+.voice.customer::before { background: var(--red); }
+.voice.customer .state { color: var(--red); background: rgba(255, 107, 107, 0.12); }
+.boundary-after { max-width: 860px; color: var(--text-muted); font-size: 1.02rem; }
+.boundary-after strong { color: var(--text); font-weight: 600; }
+
 /* ── Two-column sections with a picture ── */
 .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
 .story-grid > * { min-width: 0; }   /* a wide code block must not widen its column */
@@ -448,7 +474,7 @@ dialog.lightbox p { color: var(--text-muted); font-size: 0.88rem; text-align: ce
 /* ── Narrow windows ── */
 @media (max-width: 1040px) {
   .nav-links .nav-link { display: none; }
-  .not-grid, .features-grid.four { grid-template-columns: repeat(2, 1fr); }
+  .not-grid, .features-grid.four, .voices { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 860px) {
   section { padding: 72px 0; }
@@ -482,7 +508,7 @@ dialog.lightbox p { color: var(--text-muted); font-size: 0.88rem; text-align: ce
   .brand > span:not(.badge-mark) { display: none; }
   .nav-cta span { display: none; }
   .nav-cta { padding: 8px 10px; }
-  .not-grid, .features-grid.four { grid-template-columns: 1fr; }
+  .not-grid, .features-grid.four, .voices { grid-template-columns: 1fr; }
   .question { flex-direction: column; gap: 10px; padding: 22px; }
   .rec-plot { margin-left: 38px; margin-right: 12px; aspect-ratio: 1000 / 520; }
   .rec-x { margin-left: 38px; margin-right: 12px; }

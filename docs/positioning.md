@@ -27,6 +27,8 @@ A customer summed up the previous barrier, paraphrased: “Many have an ECG. But
 
 It remains an expert instrument, now with support for rookies and with verification that avoids misdiagnoses: findings whose cause is a different one than the obvious. When memory runs out, the cause is often not a heap that is configured too small. It can be normal, because more users are on the system, or abnormal: a memory leak, or memory that multiplies with the number of users. It often delivers only the first analysis of symptoms. Both are part of the position and are not glossed over.
 
+A typical assignment crosses organisational boundaries. Large distributed applications involve different suppliers, providers and operations teams. Each of them says that everything works on their side, and yet the customer is left stranded, because the application does not work, is unstable or fails sporadically. Software-EKG puts the measurements of all parties on one time axis, independent of whose monitoring they come from. This is also the reason for the external collector: in corporate contexts, direct access is often more problematic than running a collector in Java somewhere and putting its data on a share. The result is not blame but a well-founded question to the right team.
+
 ## What the tool is not
 
 - Not a dashboard.
