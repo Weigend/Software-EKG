@@ -1,6 +1,7 @@
 package io.softwareecg.awb.timeseries.spi;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,7 @@ public final class RepositoryTypeRegistry {
                 }
             }
         }
-        descriptors = Map.copyOf(indexed);
+        descriptors = Collections.unmodifiableMap(new LinkedHashMap<>(indexed));
     }
 
     public RepositoryTypeDescriptor require(String id) {

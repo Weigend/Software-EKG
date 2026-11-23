@@ -30,6 +30,19 @@ class AnalysisSourceRegistryTest {
                         AnalysisTopic.LINUX, "two"))));
     }
 
+    @Test
+    void preserves_provider_order_for_default_selection_and_wizard_steps() {
+        var prometheus = new AnalysisSourceDefinition("prometheus-test", "Prometheus", true, true);
+        var direct = new AnalysisSourceDefinition("direct-test", "Direct", false, true);
+
+        var options = new AnalysisSourceRegistry(List.of(
+                provider(prometheus, AnalysisTopic.LINUX, "usual"),
+                provider(direct, AnalysisTopic.LINUX, "alternative")))
+                .options(AnalysisTopic.LINUX);
+
+        assertEquals(List.of(prometheus, direct), options.stream().map(AnalysisSourceOption::source).toList());
+    }
+
     private static AnalysisSourceProvider provider(AnalysisSourceDefinition source,
                                                    AnalysisTopic topic,
                                                    String description) {

@@ -28,6 +28,16 @@ class RepositoryTypeRegistryTest {
                 provider(descriptor("duplicate")), provider(descriptor("duplicate")))));
     }
 
+    @Test
+    void preserves_provider_order_for_the_administration_ui() {
+        RepositoryTypeDescriptor first = descriptor("first");
+        RepositoryTypeDescriptor second = descriptor("second");
+
+        var registry = new RepositoryTypeRegistry(List.of(provider(first), provider(second)));
+
+        assertEquals(List.of(first, second), registry.all());
+    }
+
     private static RepositoryTypeDescriptor descriptor(String id) {
         return new RepositoryTypeDescriptor(id, "VictoriaMetrics", "repository-victoria",
                 true, "URL", "https://host", "Tenant", "optional", false,
