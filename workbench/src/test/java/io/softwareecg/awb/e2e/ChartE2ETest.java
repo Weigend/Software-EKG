@@ -1,5 +1,6 @@
 package io.softwareecg.awb.e2e;
 
+import io.softwareecg.awb.evidence.export.ScreenshotExportDialog;
 import io.softwareecg.awb.uitoolkit.chart.ChartColorStyle;
 import io.softwareecg.awb.uitoolkit.chart.ChartType;
 import io.softwareecg.awb.uitoolkit.chart.ZoomableStackedChart;
@@ -16,6 +17,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -182,6 +184,16 @@ class ChartE2ETest {
     private static List<String> seriesOfTheBackground() {
         return workbench.onFx(() -> stackedChart().getBackgroundCharts().stream()
                 .flatMap(chart -> chart.getAllSeries().stream()).map(XYChart.Series::getName).toList());
+    }
+
+    /** The dialog did not open in 7.4.0: its view and icons were not where its class is. */
+    @Test
+    void theDialogOfThePngExportOpens() {
+        ZoomableStackedChart chart = workbench.onFx(ChartE2ETest::stackedChart);
+        Stage dialog = workbench.openDialog("PNG export", () -> new ScreenshotExportDialog(chart).show());
+        workbench.screenshot(dialog, "chart-png-export-dialog");
+        assertThat(workbench.onFx(dialog::getTitle)).isEqualTo("Export Chart as Bitmap Image");
+        workbench.close(dialog);
     }
 
     private static String metricOfTheHeader() {

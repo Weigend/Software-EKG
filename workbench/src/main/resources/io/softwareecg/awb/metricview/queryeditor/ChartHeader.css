@@ -1,4 +1,4 @@
-@import "../MetricAnalyzerBaseStyle.css";
+@import "../MetricViewBaseStyle.css";
 
 #chartHeaderGridPane {
     -fx-padding: 10 10 10 6;

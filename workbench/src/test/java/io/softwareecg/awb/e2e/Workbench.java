@@ -135,10 +135,21 @@ public final class Workbench {
      * @return the window that opened
      */
     public Stage openDialog(String menu, String item) {
+        return openDialog(item, () -> menuItem(menu, item).fire());
+    }
+
+    /**
+     * Does something that opens a dialog.
+     *
+     * @param what   what opens it, for the message when nothing does
+     * @param action run on the JavaFX thread
+     * @return the window that opened
+     */
+    Stage openDialog(String what, Runnable action) {
         List<Window> before = onFx(() -> List.copyOf(Window.getWindows()));
-        // not waited for: the dialog is modal, and choosing the item returns when it is closed
-        Platform.runLater(() -> menuItem(menu, item).fire());
-        return await("the dialog of '" + item + "'", Duration.ofSeconds(30), () -> onFx(() ->
+        // not waited for: the dialog is modal, and the action returns when it is closed
+        Platform.runLater(action);
+        return await("the dialog of '" + what + "'", Duration.ofSeconds(30), () -> onFx(() ->
                 Window.getWindows().stream()
                         .filter(window -> !before.contains(window))
                         .filter(Stage.class::isInstance).map(Stage.class::cast)

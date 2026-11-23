@@ -1,4 +1,4 @@
-@import "../MetricAnalyzerBaseStyle.css";
+@import "MetricViewBaseStyle.css";
 
 #chartWrapper {
     -fx-background-color: #FDFDFC;
