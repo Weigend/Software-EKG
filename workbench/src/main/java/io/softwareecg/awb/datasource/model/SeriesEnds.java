@@ -1,6 +1,6 @@
 package io.softwareecg.awb.datasource.model;
 
-import io.softwareecg.awb.repository.port.RepositoryException;
+import io.softwareecg.awb.repository.api.RepositoryException;
 
 /**
  * Tells where the stored values of one series end. Collecting resumes there, series by series:

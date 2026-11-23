@@ -10,8 +10,8 @@ import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
 import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.TimeSeriesQuery;
 import io.softwareecg.awb.query.model.TimeSeriesQueryResponse;
-import io.softwareecg.awb.repository.api.RepositoryClientAware;
-import io.softwareecg.awb.repository.port.RepositoryException;
+import io.softwareecg.awb.repository.spi.RepositoryClientAware;
+import io.softwareecg.awb.repository.api.RepositoryException;
 import io.softwareecg.awb.timeseries.TimeSeries;
 
 import java.util.List;

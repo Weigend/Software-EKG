@@ -5,7 +5,7 @@ import io.softwareecg.awb.repository.adapter.solr.export.SolrExportIteratorFacto
 import io.softwareecg.awb.repository.adapter.solr.util.LoggingUtils;
 import io.softwareecg.awb.repository.adapter.solr.util.ObjectBinder;
 import io.softwareecg.awb.repository.port.TimeSeriesRepository;
-import io.softwareecg.awb.repository.port.RepositoryNotAvailableException;
+import io.softwareecg.awb.repository.api.RepositoryNotAvailableException;
 import io.softwareecg.awb.repository.port.DeleteParams;
 import io.softwareecg.awb.repository.port.search.expr.Expression;
 import io.softwareecg.awb.repository.port.search.facet.Facet;
@@ -19,7 +19,7 @@ import io.softwareecg.awb.repository.port.search.SortField;
 import io.softwareecg.awb.repository.port.search.QueryStatus;
 import io.softwareecg.awb.repository.schema.EkgSchemaField;
 import io.softwareecg.awb.repository.schema.Field;
-import io.softwareecg.awb.repository.port.RepositoryException;
+import io.softwareecg.awb.repository.api.RepositoryException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.time.StopWatch;

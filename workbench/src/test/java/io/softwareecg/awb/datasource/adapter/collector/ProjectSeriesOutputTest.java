@@ -1,8 +1,8 @@
 package io.softwareecg.awb.datasource.adapter.collector;
 
 import io.softwareecg.awb.repository.api.Repository;
-import io.softwareecg.awb.repository.port.RepositoryException;
-import io.softwareecg.awb.repository.port.TimeSeriesWriteService;
+import io.softwareecg.awb.repository.api.RepositoryException;
+import io.softwareecg.awb.repository.api.TimeSeriesWriteService;
 import io.softwareecg.awb.timeseries.TimeSeries;
 import io.softwareecg.collector.repository.StaticTimeSeriesRepository;
 import org.junit.Test;

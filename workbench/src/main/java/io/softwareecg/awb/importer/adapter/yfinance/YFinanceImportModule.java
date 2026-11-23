@@ -1,10 +1,8 @@
 package io.softwareecg.awb.importer.adapter.yfinance;
 
 import io.softwareecg.awb.importer.adapter.yfinance.ui.YFinanceImportDialog;
-import io.softwareecg.awb.importer.spi.ContextMenuAware;
-import io.softwareecg.awb.importer.spi.ContextMenuEntry;
 import io.softwareecg.awb.metadata.model.AliasMappingDefinition;
-import io.softwareecg.awb.metadata.spi.AliasMappingProvider;
+import io.softwareecg.awb.projectcontext.spi.AliasMappingProvider;
 import io.softwareecg.awb.timeseries.dimension.FilterDimension;
 import io.softwareecg.awb.importer.ImportModule;
 import jakarta.inject.Singleton;
@@ -19,7 +17,7 @@ import java.util.Map;
 @SuppressWarnings("unused")
 @Singleton
 public class YFinanceImportModule extends ImportModule
-        implements LocalProjectSupport, ClassicViewFlavorSupport, AliasMappingProvider, ContextMenuAware {
+        implements LocalProjectSupport, ClassicViewFlavorSupport, AliasMappingProvider {
 
     private YFinanceImportDialog importDialog;
 
@@ -83,10 +81,5 @@ public class YFinanceImportModule extends ImportModule
                 importDialog.isImportRepairedFlagEnabled(),
                 importDialog.isUseMetadataDimensionsEnabled()
         ));
-    }
-
-    @Override
-    public ContextMenuEntry getImportContextMenuItem() {
-        return () -> "Import Yahoo Finance Data";
     }
 }

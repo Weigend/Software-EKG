@@ -1,6 +1,6 @@
 package io.softwareecg.awb.projectcontext.api;
 
-import io.softwareecg.awb.metadata.spi.AliasMappingProvider;
+import io.softwareecg.awb.projectcontext.spi.AliasMappingProvider;
 import io.softwareecg.awb.projectcontext.model.ProjectTimeSeriesType;
 import io.softwareecg.awb.projectcontext.model.TargetProjectConfig;
 import io.softwareecg.awb.repository.api.Repository;

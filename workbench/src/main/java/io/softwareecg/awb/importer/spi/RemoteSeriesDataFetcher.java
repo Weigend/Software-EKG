@@ -1,6 +1,6 @@
 package io.softwareecg.awb.importer.spi;
 
-import io.softwareecg.awb.repository.port.TimeSeriesImportSource;
+import io.softwareecg.awb.repository.model.TimeSeriesImportSource;
 import io.softwareecg.awb.timeseries.Value;
 
 import java.util.Collection;

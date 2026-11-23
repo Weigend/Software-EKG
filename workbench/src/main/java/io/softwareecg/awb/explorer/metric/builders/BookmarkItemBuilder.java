@@ -5,7 +5,7 @@ import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
 import io.softwareecg.awb.bookmark.MetricsBookmarkService;
 import io.softwareecg.awb.bookmark.model.Bookmark;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
-import io.softwareecg.awb.explorer.metric.api.FilterContext;
+import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.bookmarks.BookmarkGroupItem;
 import io.softwareecg.awb.explorer.metric.items.bookmarks.BookmarkItem;
 import io.softwareecg.awb.explorer.metric.items.bookmarks.ProjectBookmarksItem;

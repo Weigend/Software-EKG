@@ -3,7 +3,7 @@ package io.softwareecg.awb.datasource.ui;
 import io.softwareecg.awb.datasource.model.AnalysisPlan;
 import io.softwareecg.awb.datasource.spi.AnalysisSourceDefinition;
 import io.softwareecg.awb.datasource.spi.AnalysisSourceOption;
-import io.softwareecg.awb.datasource.spi.AnalysisSourceRegistry;
+import io.softwareecg.awb.datasource.AnalysisSourceRegistry;
 import io.softwareecg.awb.datasource.spi.AnalysisTopic;
 import io.softwareecg.awb.datasource.model.CollectionPlan;
 import io.softwareecg.awb.datasource.NewAnalysisService;

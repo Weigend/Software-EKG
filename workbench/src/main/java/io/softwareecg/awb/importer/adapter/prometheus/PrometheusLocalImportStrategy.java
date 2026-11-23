@@ -2,12 +2,12 @@ package io.softwareecg.awb.importer.adapter.prometheus;
 
 import io.softwareecg.awb.importer.adapter.prometheus.GenericPrometheusMapper.DimensionalMetric;
 import io.softwareecg.awb.importer.adapter.prometheus.client.PrometheusClient;
-import io.softwareecg.awb.importer.adapter.prometheus.client.model.api.ResultStatus;
-import io.softwareecg.awb.importer.adapter.prometheus.client.model.api.label.ListLabelResult;
+import io.softwareecg.awb.importer.adapter.prometheus.client.model.ResultStatus;
+import io.softwareecg.awb.importer.adapter.prometheus.client.model.label.ListLabelResult;
 import io.softwareecg.awb.projectcontext.model.TargetProjectConfig;
-import io.softwareecg.awb.repository.port.TimeSeriesImportSource;
-import io.softwareecg.awb.repository.port.RepositoryException;
-import io.softwareecg.awb.repository.port.TimeSeriesWriteService;
+import io.softwareecg.awb.repository.model.TimeSeriesImportSource;
+import io.softwareecg.awb.repository.api.RepositoryException;
+import io.softwareecg.awb.repository.api.TimeSeriesWriteService;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import io.softwareecg.awb.secrets.security.SecurityContext;
 import io.softwareecg.awb.timeseries.RawSeriesData;
@@ -30,11 +30,11 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
-import io.softwareecg.awb.importer.adapter.prometheus.client.model.api.query.ListSeriesResult;
-import io.softwareecg.awb.importer.adapter.prometheus.client.model.api.query.MatrixSeries;
-import io.softwareecg.awb.importer.adapter.prometheus.client.model.api.query.QueryResult;
-import io.softwareecg.awb.importer.adapter.prometheus.client.model.api.query.RangeQuery;
-import io.softwareecg.awb.importer.adapter.prometheus.client.model.api.query.SeriesDefinition;
+import io.softwareecg.awb.importer.adapter.prometheus.client.model.query.ListSeriesResult;
+import io.softwareecg.awb.importer.adapter.prometheus.client.model.query.MatrixSeries;
+import io.softwareecg.awb.importer.adapter.prometheus.client.model.query.QueryResult;
+import io.softwareecg.awb.importer.adapter.prometheus.client.model.query.RangeQuery;
+import io.softwareecg.awb.importer.adapter.prometheus.client.model.query.SeriesDefinition;
 /**
  * A LocalProject import strategy that imports time series data (metadata AND values)
  * from a Prometheus server directly into the local EKG repository.

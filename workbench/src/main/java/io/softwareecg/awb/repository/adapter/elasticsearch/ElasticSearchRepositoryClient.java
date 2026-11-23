@@ -29,7 +29,7 @@ import io.softwareecg.awb.repository.port.search.SortField;
 import io.softwareecg.awb.repository.port.search.QueryStatus;
 import io.softwareecg.awb.repository.schema.EkgSchemaField;
 import io.softwareecg.awb.repository.schema.Field;
-import io.softwareecg.awb.repository.port.RepositoryException;
+import io.softwareecg.awb.repository.api.RepositoryException;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;

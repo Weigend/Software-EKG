@@ -2,7 +2,7 @@ package io.softwareecg.awb.projectcontext.ui.management;
 
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.repository.port.TimeSeriesImportSource;
+import io.softwareecg.awb.repository.model.TimeSeriesImportSource;
 import io.softwareecg.awb.runtime.resources.CachingSvgLoader;
 import io.softwareecg.awb.runtime.resources.CdiFxmlLoader;
 import io.softwareecg.awb.runtime.resources.ViewLoadResult;

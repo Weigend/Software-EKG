@@ -1,7 +1,7 @@
 package io.softwareecg.awb.datasource;
 
 import io.avaje.inject.External;
-import io.softwareecg.awb.metadata.port.CollectionSourceEvent;
+import io.softwareecg.awb.metadata.model.CollectionSourceEvent;
 import io.softwareecg.awb.metadata.model.CollectionSourceRow;
 import io.softwareecg.awb.metadata.port.CollectionSourceStore;
 import io.softwareecg.awb.secrets.port.SecretStore;
@@ -12,7 +12,7 @@ import io.softwareecg.awb.datasource.adapter.ssh.SshPlan;
 import io.softwareecg.awb.datasource.adapter.windows.WindowsDiscovery;
 import io.softwareecg.awb.datasource.adapter.prometheus.PrometheusEnvironment;
 import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
-import io.softwareecg.awb.projectcontext.api.ProjectDataCollection;
+import io.softwareecg.awb.projectcontext.spi.ProjectDataCollection;
 import io.softwareecg.awb.projectcontext.events.ProjectDataCollectionChangedEvent;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.repository.api.EkgRepository;
@@ -20,7 +20,7 @@ import io.softwareecg.awb.repository.events.ProjectDataChangedEvent;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.awb.projectcontext.model.CloudPlatformType;
 import io.softwareecg.awb.projectcontext.model.ProjectFlavor;
-import io.softwareecg.awb.repository.port.TimeSeriesWriteService;
+import io.softwareecg.awb.repository.api.TimeSeriesWriteService;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import io.softwareecg.collector.config.CollectorConfiguration;
 import io.softwareecg.collector.config.CollectorConfigurations;

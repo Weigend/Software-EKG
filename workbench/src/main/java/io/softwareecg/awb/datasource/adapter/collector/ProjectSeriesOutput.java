@@ -2,8 +2,8 @@ package io.softwareecg.awb.datasource.adapter.collector;
 
 import io.softwareecg.awb.datasource.adapter.prometheus.PrometheusDimensions;
 import io.softwareecg.collector.source.prometheus.PrometheusCounterSource;
-import io.softwareecg.awb.repository.port.RepositoryException;
-import io.softwareecg.awb.repository.port.TimeSeriesWriteService;
+import io.softwareecg.awb.repository.api.RepositoryException;
+import io.softwareecg.awb.repository.api.TimeSeriesWriteService;
 import io.softwareecg.awb.timeseries.SeriesData;
 import io.softwareecg.awb.timeseries.TimeSeries;
 import io.softwareecg.awb.timeseries.Value;

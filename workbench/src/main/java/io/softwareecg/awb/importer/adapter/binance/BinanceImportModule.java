@@ -1,10 +1,8 @@
 package io.softwareecg.awb.importer.adapter.binance;
 
 import io.softwareecg.awb.importer.adapter.binance.ui.BinanceImportDialog;
-import io.softwareecg.awb.importer.spi.ContextMenuAware;
-import io.softwareecg.awb.importer.spi.ContextMenuEntry;
 import io.softwareecg.awb.metadata.model.AliasMappingDefinition;
-import io.softwareecg.awb.metadata.spi.AliasMappingProvider;
+import io.softwareecg.awb.projectcontext.spi.AliasMappingProvider;
 import io.softwareecg.awb.timeseries.dimension.FilterDimension;
 import io.softwareecg.awb.importer.ImportModule;
 import jakarta.inject.Singleton;
@@ -24,7 +22,7 @@ import java.util.Map;
 @SuppressWarnings("unused") // used by CDI scan and automatic instantiation
 @Singleton
 public class BinanceImportModule extends ImportModule
-        implements LocalProjectSupport, AliasMappingProvider, ContextMenuAware {
+        implements LocalProjectSupport, AliasMappingProvider {
 
     private BinanceImportDialog importDialog;
 
@@ -93,14 +91,5 @@ public class BinanceImportModule extends ImportModule
     @Override
     public LocalProjectImportStrategy getLocalProjectImportStrategy() {
         return new BinanceImportStrategy(importDialog.getSelectedFilesPaths());
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    // ContextMenuAware
-    //------------------------------------------------------------------------------------------------------------------
-
-    @Override
-    public ContextMenuEntry getImportContextMenuItem() {
-        return () -> "Import Binance Data";
     }
 }

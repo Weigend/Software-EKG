@@ -9,7 +9,7 @@ import io.softwareecg.awb.query.model.TimeSeriesQuery;
 import io.softwareecg.awb.query.model.TimeSeriesQueryResponse;
 import io.softwareecg.awb.query.pipeline.SeriesTransformPipeline;
 import io.softwareecg.awb.repository.port.TimeSeriesRepository;
-import io.softwareecg.awb.repository.port.RepositoryException;
+import io.softwareecg.awb.repository.api.RepositoryException;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.events.ProgressEvent;
 import io.softwareecg.awb.runtime.logging.EkgLogger;

@@ -1,6 +1,5 @@
 package io.softwareecg.awb.repository.model;
 
-import io.softwareecg.awb.repository.spi.EkgRepositoryDbType;
 import io.softwareecg.awb.repository.schema.DocumentType;
 import io.softwareecg.awb.repository.schema.PersistedField;
 import org.apache.commons.lang3.StringUtils;

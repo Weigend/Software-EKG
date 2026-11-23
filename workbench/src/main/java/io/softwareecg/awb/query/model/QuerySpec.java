@@ -21,7 +21,7 @@ import io.softwareecg.awb.timeseries.dimension.physical.Host;
 import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.repository.port.search.facet.FacetParams;
-import io.softwareecg.awb.repository.port.TimeSeriesImportSource;
+import io.softwareecg.awb.repository.model.TimeSeriesImportSource;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;

@@ -1,5 +1,7 @@
 package io.softwareecg.awb.repository.spi;
 
+import io.softwareecg.awb.repository.model.EkgRepositoryDbType;
+
 import io.softwareecg.awb.runtime.NamedEnum;
 import java.net.URI;
 import java.util.Objects;

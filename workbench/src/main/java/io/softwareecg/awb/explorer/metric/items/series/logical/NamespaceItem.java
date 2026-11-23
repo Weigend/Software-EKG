@@ -1,8 +1,8 @@
 package io.softwareecg.awb.explorer.metric.items.series.logical;
 
 import io.softwareecg.awb.timeseries.dimension.logical.Namespace;
-import io.softwareecg.awb.explorer.metric.api.ContextAwareItem;
-import io.softwareecg.awb.explorer.metric.api.FilterContext;
+import io.softwareecg.awb.explorer.metric.ContextAwareItem;
+import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.repository.api.EkgRepository;
 
 /**

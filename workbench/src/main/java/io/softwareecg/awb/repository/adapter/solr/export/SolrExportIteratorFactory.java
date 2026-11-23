@@ -1,6 +1,6 @@
 package io.softwareecg.awb.repository.adapter.solr.export;
 
-import io.softwareecg.awb.repository.port.RepositoryException;
+import io.softwareecg.awb.repository.api.RepositoryException;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.io.stream.StreamContext;
 import org.apache.solr.common.params.SolrParams;

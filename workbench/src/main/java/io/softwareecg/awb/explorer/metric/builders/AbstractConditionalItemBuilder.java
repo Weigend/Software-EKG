@@ -2,8 +2,8 @@ package io.softwareecg.awb.explorer.metric.builders;
 
 import io.softwareecg.awb.uitoolkit.tree.api.ProgressNotifier;
 import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
-import io.softwareecg.awb.explorer.metric.api.ContextAwareItem;
-import io.softwareecg.awb.explorer.metric.api.FilterContext;
+import io.softwareecg.awb.explorer.metric.ContextAwareItem;
+import io.softwareecg.awb.explorer.metric.FilterContext;
 
 import java.util.Collections;
 import java.util.List;

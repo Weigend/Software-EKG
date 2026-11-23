@@ -1,5 +1,7 @@
 package io.softwareecg.awb.repository.port;
 
+import io.softwareecg.awb.repository.api.RepositoryException;
+
 
 import java.util.Collection;
 

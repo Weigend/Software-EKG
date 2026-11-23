@@ -31,8 +31,6 @@ and its factory can a repository of that type be created and opened.
      `getRepositoryClient()` and calls it, as `SolrCloudRepository` and
      `ClickHouseCloudRepository` do.
    - `repositoryTypes()` returns one `RepositoryTypeDescriptor` per type; see below.
-   - Implement `TimeSeriesAdminProvider` as well if collections or tables are created and
-     dropped from the Workbench.
 4. **Write the repository and its factory:**
 
    ```java
@@ -94,7 +92,7 @@ and its factory can a repository of that type be created and opened.
 - **`connectionValidator`** gives immediate feedback in the form. The provider remains
   responsible for the real errors: connection, authentication, timeout and cleanup.
 
-`EkgRepositoryDbType` in `repository.spi` is an open identity, not an enum. `descriptor.repositoryType()` defines the
+`EkgRepositoryDbType` in `repository.model` is an open identity, not an enum. `descriptor.repositoryType()` defines the
 ID, so no central list of types has to be extended. `RepositoryTypeRegistry` rejects two types with
 the same ID.
 

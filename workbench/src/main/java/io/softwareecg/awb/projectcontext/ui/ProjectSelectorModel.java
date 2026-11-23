@@ -9,7 +9,7 @@ import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.projectcontext.model.CloudPlatformType;
 import io.softwareecg.awb.projectcontext.model.ProjectFlavor;
 import io.softwareecg.awb.metadata.model.AliasMappingDefinition;
-import io.softwareecg.awb.metadata.spi.AliasMappingProvider;
+import io.softwareecg.awb.projectcontext.spi.AliasMappingProvider;
 import io.softwareecg.awb.timeseries.dimension.FilterDimension;
 import io.softwareecg.awb.repository.api.Repository;
 import javafx.beans.InvalidationListener;

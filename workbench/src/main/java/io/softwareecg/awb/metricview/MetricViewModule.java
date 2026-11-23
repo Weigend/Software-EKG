@@ -14,7 +14,7 @@ package io.softwareecg.awb.metricview;
 
 import io.softwareecg.awb.runtime.module.EkgModule;
 import io.softwareecg.awb.explorer.TreeIconsProviderRegistry;
-import io.softwareecg.awb.explorer.metric.api.MetricTreeIconsProvider;
+import io.softwareecg.awb.explorer.metric.MetricTreeIconsProvider;
 import io.softwareecg.awb.explorer.metric.ItemBuilderManager;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import jakarta.inject.Singleton;

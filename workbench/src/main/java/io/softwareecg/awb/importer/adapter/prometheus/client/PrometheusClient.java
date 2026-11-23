@@ -2,10 +2,10 @@ package io.softwareecg.awb.importer.adapter.prometheus.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
-import io.softwareecg.awb.importer.adapter.prometheus.client.model.api.label.ListLabelResult;
-import io.softwareecg.awb.importer.adapter.prometheus.client.model.api.query.ListSeriesResult;
-import io.softwareecg.awb.importer.adapter.prometheus.client.model.api.query.QueryResult;
-import io.softwareecg.awb.importer.adapter.prometheus.client.model.api.query.RangeQuery;
+import io.softwareecg.awb.importer.adapter.prometheus.client.model.label.ListLabelResult;
+import io.softwareecg.awb.importer.adapter.prometheus.client.model.query.ListSeriesResult;
+import io.softwareecg.awb.importer.adapter.prometheus.client.model.query.QueryResult;
+import io.softwareecg.awb.importer.adapter.prometheus.client.model.query.RangeQuery;
 import io.softwareecg.awb.runtime.events.AwbErrorEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.awb.runtime.logging.EkgLogger;

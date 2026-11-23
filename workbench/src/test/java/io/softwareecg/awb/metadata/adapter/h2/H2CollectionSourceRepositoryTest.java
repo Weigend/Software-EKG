@@ -1,6 +1,6 @@
 package io.softwareecg.awb.metadata.adapter.h2;
 
-import io.softwareecg.awb.metadata.port.CollectionSourceEvent;
+import io.softwareecg.awb.metadata.model.CollectionSourceEvent;
 import io.softwareecg.awb.metadata.model.CollectionSourceRow;
 import org.junit.After;
 import org.junit.Before;
@@ -18,8 +18,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import io.softwareecg.awb.metadata.adapter.h2.H2CollectionSourceStore;
-import io.softwareecg.awb.metadata.adapter.h2.H2MetadataDataSource;
 /**
  * The storage of data sources against a real H2 database with the real schema, in memory.
  */

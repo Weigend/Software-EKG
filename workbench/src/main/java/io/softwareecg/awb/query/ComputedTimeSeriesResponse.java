@@ -1,6 +1,6 @@
 package io.softwareecg.awb.query;
 
-import io.softwareecg.awb.repository.port.RepositoryException;
+import io.softwareecg.awb.repository.api.RepositoryException;
 import io.softwareecg.awb.timeseries.TimeSeries;
 
 import java.util.ArrayList;

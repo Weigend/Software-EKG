@@ -2,8 +2,8 @@ package io.softwareecg.awb.importer.framework;
 
 import io.softwareecg.awb.projectcontext.model.TargetProjectConfig;
 import io.softwareecg.awb.timeseries.dimension.FilterDimension;
-import io.softwareecg.awb.repository.port.RepositoryException;
-import io.softwareecg.awb.repository.port.TimeSeriesWriteService;
+import io.softwareecg.awb.repository.api.RepositoryException;
+import io.softwareecg.awb.repository.api.TimeSeriesWriteService;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.events.ProgressEvent;
 import io.softwareecg.wfx.lookup.api.Lookup;

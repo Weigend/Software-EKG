@@ -1,7 +1,5 @@
 package io.softwareecg.awb.importer.adapter.prometheus;
 
-import io.softwareecg.awb.importer.spi.ContextMenuAware;
-import io.softwareecg.awb.importer.spi.ContextMenuEntry;
 import io.softwareecg.awb.importer.ImportModule;
 import jakarta.inject.Singleton;
 import io.softwareecg.awb.importer.framework.LocalProjectImportStrategy;
@@ -26,8 +24,7 @@ import io.softwareecg.awb.importer.spi.SplitSourceProjectSupport;
  */
 @SuppressWarnings("unused") // resolved and instantiated via CDI classpath scan
 @Singleton
-public class PrometheusImportModule extends ImportModule implements ContextMenuAware,
-        SplitSourceProjectSupport, LocalProjectSupport, CloudViewFlavorSupport, ClassicViewFlavorSupport {
+public class PrometheusImportModule extends ImportModule implements SplitSourceProjectSupport, LocalProjectSupport, CloudViewFlavorSupport, ClassicViewFlavorSupport {
 
     public static final String IMPORT_MODULE_ID = "PrometheusImporter";
 
@@ -65,15 +62,6 @@ public class PrometheusImportModule extends ImportModule implements ContextMenuA
     @Override
     public String getImporterID() {
         return IMPORT_MODULE_ID;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    // implementation of ContextMenuAware interface
-    //------------------------------------------------------------------------------------------------------------------
-
-    @Override
-    public ContextMenuEntry getImportContextMenuItem() {
-        return () -> "Import Prometheus Data";
     }
 
     //------------------------------------------------------------------------------------------------------------------

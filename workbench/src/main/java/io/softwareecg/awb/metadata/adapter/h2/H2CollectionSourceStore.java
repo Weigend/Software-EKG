@@ -1,6 +1,6 @@
 package io.softwareecg.awb.metadata.adapter.h2;
 
-import io.softwareecg.awb.metadata.port.CollectionSourceEvent;
+import io.softwareecg.awb.metadata.model.CollectionSourceEvent;
 import io.softwareecg.awb.metadata.model.CollectionSourceRow;
 import io.softwareecg.awb.metadata.port.CollectionSourceStore;
 import jakarta.inject.Inject;

@@ -1,10 +1,10 @@
 package io.softwareecg.awb.importer.adapter.prometheus.client;
 
 import com.google.common.base.Stopwatch;
-import io.softwareecg.awb.importer.adapter.prometheus.client.model.api.ResultStatus;
-import io.softwareecg.awb.importer.adapter.prometheus.client.model.api.query.ListSeriesResult;
-import io.softwareecg.awb.importer.adapter.prometheus.client.model.api.query.QueryResult;
-import io.softwareecg.awb.importer.adapter.prometheus.client.model.api.query.RangeQuery;
+import io.softwareecg.awb.importer.adapter.prometheus.client.model.ResultStatus;
+import io.softwareecg.awb.importer.adapter.prometheus.client.model.query.ListSeriesResult;
+import io.softwareecg.awb.importer.adapter.prometheus.client.model.query.QueryResult;
+import io.softwareecg.awb.importer.adapter.prometheus.client.model.query.RangeQuery;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -12,7 +12,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 
-import io.softwareecg.awb.importer.adapter.prometheus.client.PrometheusClient;
 public class PrometheusClientTest {
 
     private final PrometheusClient client = new PrometheusClient(null);

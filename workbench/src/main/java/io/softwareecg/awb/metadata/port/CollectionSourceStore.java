@@ -1,5 +1,7 @@
 package io.softwareecg.awb.metadata.port;
 
+import io.softwareecg.awb.metadata.model.CollectionSourceEvent;
+
 import java.util.List;
 
 import io.softwareecg.awb.metadata.model.CollectionSourceRow;

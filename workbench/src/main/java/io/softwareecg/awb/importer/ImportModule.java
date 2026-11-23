@@ -2,10 +2,10 @@ package io.softwareecg.awb.importer;
 
 import io.softwareecg.awb.importer.spi.ImporterTreeIconProvider;
 import io.softwareecg.awb.importer.spi.TreeIconProviderPluginRegistry;
-import io.softwareecg.awb.projectcontext.api.ProjectImporter;
+import io.softwareecg.awb.projectcontext.spi.ProjectImporter;
 import io.softwareecg.awb.projectcontext.api.ProjectSelector;
 import io.softwareecg.awb.projectcontext.model.ProjectTimeSeriesType;
-import io.softwareecg.awb.metadata.spi.AliasMappingProvider;
+import io.softwareecg.awb.projectcontext.spi.AliasMappingProvider;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.awb.importer.spi.ClassicViewFlavorSupport;

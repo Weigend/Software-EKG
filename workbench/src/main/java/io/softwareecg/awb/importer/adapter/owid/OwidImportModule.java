@@ -1,11 +1,9 @@
 package io.softwareecg.awb.importer.adapter.owid;
 
 import io.softwareecg.awb.importer.adapter.owid.ui.OwidImportDialog;
-import io.softwareecg.awb.importer.spi.ContextMenuAware;
-import io.softwareecg.awb.importer.spi.ContextMenuEntry;
 import io.softwareecg.awb.projectcontext.model.ProjectTimeSeriesType;
 import io.softwareecg.awb.metadata.model.AliasMappingDefinition;
-import io.softwareecg.awb.metadata.spi.AliasMappingProvider;
+import io.softwareecg.awb.projectcontext.spi.AliasMappingProvider;
 import io.softwareecg.awb.timeseries.dimension.FilterDimension;
 import io.softwareecg.awb.importer.ImportModule;
 import jakarta.inject.Singleton;
@@ -26,7 +24,7 @@ import java.util.Map;
 @SuppressWarnings("unused") // used by CDI scan and automatic instantiation
 @Singleton
 public class OwidImportModule extends ImportModule
-        implements AliasMappingProvider, LocalProjectSupport, ClassicViewFlavorSupport, ContextMenuAware {
+        implements AliasMappingProvider, LocalProjectSupport, ClassicViewFlavorSupport {
 
     private OwidImportDialog importDialog;
 
@@ -89,14 +87,5 @@ public class OwidImportModule extends ImportModule
     @Override
     public LocalProjectImportStrategy getLocalProjectImportStrategy() {
         return new OwidImportStrategy(importDialog.getSelectedFilesPaths());
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    // ContextMenuAware
-    //------------------------------------------------------------------------------------------------------------------
-
-    @Override
-    public ContextMenuEntry getImportContextMenuItem() {
-        return () -> "Import OWID COVID-19 Data";
     }
 }

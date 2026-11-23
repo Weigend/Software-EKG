@@ -4,7 +4,7 @@ import io.softwareecg.awb.projectcontext.api.ProjectConfiguration;
 import io.softwareecg.awb.projectcontext.api.ProjectSelector;
 import io.softwareecg.awb.projectcontext.model.ProjectTimeSeriesType;
 import io.softwareecg.awb.projectcontext.model.TargetProjectConfig;
-import io.softwareecg.awb.metadata.spi.AliasMappingProvider;
+import io.softwareecg.awb.projectcontext.spi.AliasMappingProvider;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.runtime.resources.CdiFxmlLoader;
 import io.avaje.inject.Prototype;

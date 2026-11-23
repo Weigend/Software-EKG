@@ -1,5 +1,7 @@
 package io.softwareecg.awb.repository.port;
 
+import io.softwareecg.awb.repository.api.RepositoryException;
+
 import io.softwareecg.awb.repository.port.search.expr.Expression;
 import io.softwareecg.awb.repository.port.search.facet.FacetParams;
 import io.softwareecg.awb.repository.port.search.facet.FacetResult;

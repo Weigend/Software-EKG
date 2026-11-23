@@ -1,10 +1,17 @@
 package io.softwareecg.awb.architecture;
 
+import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
+import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
+import com.tngtech.archunit.lang.ConditionEvents;
+import com.tngtech.archunit.lang.SimpleConditionEvent;
 
+import java.util.function.BiPredicate;
+
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
 
@@ -129,6 +136,57 @@ public class LayerArchitectureTest {
     static final ArchRule repository_technologies_must_not_know_each_other =
             slices().matching("io.softwareecg.awb.repository.adapter.(*)..").should().notDependOnEachOther()
                     .because("eine Technologie muss sich hinzufuegen und entfernen lassen, ohne eine andere anzufassen");
+
+    /**
+     * api: von anderen aufgerufen, von der eigenen Komponente implementiert. Ein Proxy reicht nur
+     * weiter und implementiert die Schnittstelle deshalb nicht im eigentlichen Sinn.
+     */
+    @ArchTest
+    static final ArchRule an_api_is_implemented_by_its_own_component =
+            classes().that().areInterfaces().and().resideInAPackage("io.softwareecg.awb.*.api..")
+                    .should(beImplementedOnlyIn("der eigenen Komponente", (type, implementation) ->
+                            componentOf(implementation).equals(componentOf(type))
+                                    || implementation.getSimpleName().endsWith("Proxy")))
+                    .because("was andere Komponenten implementieren, gehoert in spi");
+
+    /**
+     * spi: von anderen oder von Erweiterungen implementiert. Hier steht nur der Vertrag.
+     */
+    @ArchTest
+    static final ArchRule an_spi_holds_contracts_only =
+            classes().that().resideInAPackage("io.softwareecg.awb.*.spi..").and().areTopLevelClasses()
+                    .should().beInterfaces().orShould().beRecords().orShould().beEnums()
+                    .because("Implementierungen und Registries gehoeren nicht in spi");
+
+    /**
+     * port: die Schnittstelle zu einer Technik, implementiert von den Adaptern der Komponente.
+     */
+    @ArchTest
+    static final ArchRule a_port_is_implemented_by_adapters =
+            classes().that().areInterfaces().and().resideInAPackage("io.softwareecg.awb.*.port")
+                    .should(beImplementedOnlyIn("den Adaptern der eigenen Komponente", (type, implementation) ->
+                            implementation.getPackageName().startsWith(
+                                    "io.softwareecg.awb." + componentOf(type) + ".adapter")))
+                    .because("ein port trennt die Komponente von einer Technik");
+
+    private static ArchCondition<JavaClass> beImplementedOnlyIn(String place, BiPredicate<JavaClass, JavaClass> allowed) {
+        return new ArchCondition<>("nur implementiert sein in " + place) {
+            @Override
+            public void check(JavaClass type, ConditionEvents events) {
+                for (JavaClass implementation : type.getAllSubclasses()) {
+                    if (!allowed.test(type, implementation)) {
+                        events.add(SimpleConditionEvent.violated(type,
+                                type.getName() + " wird implementiert von " + implementation.getName()));
+                    }
+                }
+            }
+        };
+    }
+
+    private static String componentOf(JavaClass type) {
+        String rest = type.getPackageName().substring("io.softwareecg.awb".length());
+        return rest.isEmpty() ? "" : rest.substring(1).split("\\.")[0];
+    }
 
     @ArchTest
     static final ArchRule metadata_clients_must_use_ports_instead_of_h2 =

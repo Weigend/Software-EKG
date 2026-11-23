@@ -6,7 +6,7 @@ import io.softwareecg.awb.repository.api.RepositoryService;
 import io.softwareecg.awb.repository.events.RepositoryModifyEvent;
 import io.softwareecg.awb.repository.api.Embedded;
 import io.softwareecg.awb.repository.spi.RepositoryTypeDescriptor;
-import io.softwareecg.awb.repository.spi.RepositoryTypeRegistry;
+import io.softwareecg.awb.repository.service.RepositoryTypeRegistry;
 import io.softwareecg.awb.repository.spi.TimeSeriesRepositoryProvider;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;

@@ -16,7 +16,7 @@ import io.softwareecg.awb.bookmark.model.Bookmark;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
 import io.softwareecg.awb.bookmark.model.MetricBookmark;
 import io.softwareecg.awb.bookmark.model.MetricQueryBookmark;
-import io.softwareecg.awb.repository.api.RepositoryClientAware;
+import io.softwareecg.awb.repository.spi.RepositoryClientAware;
 
 import java.util.List;
 

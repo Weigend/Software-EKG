@@ -1,9 +1,6 @@
 package io.softwareecg.awb.importer.adapter.csv;
 
-import io.softwareecg.awb.importer.adapter.csv.CollectorLogImportStrategy;
 import io.softwareecg.awb.importer.ui.csv.CsvImportDialog;
-import io.softwareecg.awb.importer.spi.ContextMenuAware;
-import io.softwareecg.awb.importer.spi.ContextMenuEntry;
 import io.softwareecg.awb.importer.ImportModule;
 import jakarta.inject.Singleton;
 import io.softwareecg.awb.importer.spi.ClassicViewFlavorSupport;
@@ -23,7 +20,7 @@ import javafx.scene.image.Image;
 @SuppressWarnings("unused") // used by CDI scan and automatic instantiation
 @Singleton
 public class CsvImportModule extends ImportModule
-        implements ContextMenuAware, LocalProjectSupport, CloudViewFlavorSupport, ClassicViewFlavorSupport {
+        implements LocalProjectSupport, CloudViewFlavorSupport, ClassicViewFlavorSupport {
 
     /**
      * The generic CsvImportDialog used to setup an import procedure
@@ -61,15 +58,6 @@ public class CsvImportModule extends ImportModule
     @Override
     public String getImporterID() {
         return "CollectorCsvImporter";
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    // implementation of ContextMenuAware interface
-    //------------------------------------------------------------------------------------------------------------------
-
-    @Override
-    public ContextMenuEntry getImportContextMenuItem() {
-        return () -> "Import Collector Logs";
     }
 
     //------------------------------------------------------------------------------------------------------------------

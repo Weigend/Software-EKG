@@ -1,6 +1,6 @@
 package io.softwareecg.awb.importer.testsupport.mocks;
 
-import io.softwareecg.awb.repository.port.TimeSeriesWriteService;
+import io.softwareecg.awb.repository.api.TimeSeriesWriteService;
 import io.softwareecg.awb.timeseries.TimeSeries;
 
 import java.util.List;

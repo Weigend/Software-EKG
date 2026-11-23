@@ -1,7 +1,7 @@
 package io.softwareecg.awb.importer.framework.steps.writer;
 
 import io.softwareecg.awb.projectcontext.model.TargetProjectConfig;
-import io.softwareecg.awb.repository.port.TimeSeriesWriteService;
+import io.softwareecg.awb.repository.api.TimeSeriesWriteService;
 import io.softwareecg.awb.timeseries.SeriesData;
 
 import java.util.function.Function;

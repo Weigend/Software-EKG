@@ -1,7 +1,7 @@
 package io.softwareecg.awb.projectcontext.api;
 
 import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.repository.api.RepositoryClientAware;
+import io.softwareecg.awb.repository.spi.RepositoryClientAware;
 
 import java.util.List;
 

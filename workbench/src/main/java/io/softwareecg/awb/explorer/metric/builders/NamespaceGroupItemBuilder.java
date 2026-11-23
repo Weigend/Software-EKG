@@ -3,7 +3,7 @@ package io.softwareecg.awb.explorer.metric.builders;
 import io.softwareecg.awb.uitoolkit.tree.api.ProgressNotifier;
 import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
 import io.softwareecg.awb.timeseries.dimension.logical.Namespace;
-import io.softwareecg.awb.explorer.metric.api.FilterContext;
+import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.series.logical.NamespaceGroupItem;
 import io.softwareecg.awb.projectcontext.model.CloudPlatformType;
 import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;

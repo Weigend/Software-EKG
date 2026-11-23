@@ -9,7 +9,7 @@ import io.softwareecg.awb.repository.schema.DocumentType;
 import io.softwareecg.awb.repository.schema.EkgSchemaField;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.model.BinaryTimeSeries;
-import io.softwareecg.awb.repository.port.RepositoryException;
+import io.softwareecg.awb.repository.api.RepositoryException;
 
 import java.util.ArrayList;
 import java.util.List;

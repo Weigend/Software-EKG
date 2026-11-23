@@ -15,7 +15,7 @@ package io.softwareecg.awb.explorer.items;
 import io.softwareecg.awb.explorer.ExplorerTreeIconsProvider;
 import io.softwareecg.awb.explorer.TreeIconsProviderRegistry;
 import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
-import io.softwareecg.awb.projectcontext.api.ProjectDataCollection;
+import io.softwareecg.awb.projectcontext.spi.ProjectDataCollection;
 import io.softwareecg.awb.projectcontext.events.ProjectDataCollectionChangedEvent;
 import io.softwareecg.awb.projectcontext.events.ShowProjectDataSourcesEvent;
 import io.softwareecg.awb.projectcontext.api.ProjectViewFlavorChangedEvent;

@@ -1,7 +1,7 @@
 package io.softwareecg.awb.repository.adapter.solr.export;
 
 import io.softwareecg.awb.repository.adapter.solr.util.LoggingUtils;
-import io.softwareecg.awb.repository.port.RepositoryException;
+import io.softwareecg.awb.repository.api.RepositoryException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.io.Tuple;

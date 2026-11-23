@@ -2,7 +2,7 @@ package io.softwareecg.awb.query;
 
 import io.softwareecg.awb.query.model.ComputationSpec;
 import io.softwareecg.awb.query.model.QuerySpec;
-import io.softwareecg.awb.repository.api.RepositoryClientAware;
+import io.softwareecg.awb.repository.spi.RepositoryClientAware;
 
 /**
  * This interface represents series that can use to fetch and compute time series from the repositories.

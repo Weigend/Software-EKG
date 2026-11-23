@@ -128,16 +128,13 @@ injection scan, and implement the capabilities it really supports:
 ```java
 @Singleton
 public final class ApplianceImportModule extends ImportModule
-        implements LocalProjectSupport, ClassicViewFlavorSupport, ContextMenuAware {
+        implements LocalProjectSupport, ClassicViewFlavorSupport {
 
     @Override public String getMenuText() { return "Appliance Export"; }
     @Override public String getImporterID() { return "ApplianceExportImporter"; }
     @Override public ImportDialog getImportDialog() { return dialog; }
     @Override public LocalProjectImportStrategy getLocalProjectImportStrategy() {
         return new ApplianceImportStrategy(dialog.selectedPaths());
-    }
-    @Override public ContextMenuEntry getImportContextMenuItem() {
-        return () -> "Import Appliance Export";
     }
 }
 ```
@@ -164,6 +161,18 @@ Modules add items through `EkgApplicationController` to Analysis, Import, Reposi
 Keep JavaFX in UI packages; architecture tests enforce that business logic and data access do not
 depend on UI classes or bypass their layer. New smoothing/combination algorithms belong behind the
 existing factories and enums, with tests for time alignment, missing values and calendar boundaries.
+
+## Where an interface belongs
+
+The packages of a component say who implements what is in them. `LayerArchitectureTest` checks it.
+
+| Package | Implemented by | Called by |
+| --- | --- | --- |
+| `api` | the component itself | other components |
+| `spi` | other components or extensions | the component |
+| `port` | the adapters of the component, one per technology | the component and others |
+
+Data belongs in `model`, events in `events`.
 
 ## Contribution checklist
 

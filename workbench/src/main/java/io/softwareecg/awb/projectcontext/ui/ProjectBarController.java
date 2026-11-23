@@ -1,7 +1,7 @@
 package io.softwareecg.awb.projectcontext.ui;
 
-import io.softwareecg.awb.projectcontext.api.ProjectDataCollection;
-import io.softwareecg.awb.projectcontext.api.ProjectImporter;
+import io.softwareecg.awb.projectcontext.spi.ProjectDataCollection;
+import io.softwareecg.awb.projectcontext.spi.ProjectImporter;
 import io.softwareecg.awb.projectcontext.events.ProjectDataCollectionChangedEvent;
 import io.softwareecg.awb.projectcontext.events.ShowProjectDataSourcesEvent;
 import javafx.application.Platform;

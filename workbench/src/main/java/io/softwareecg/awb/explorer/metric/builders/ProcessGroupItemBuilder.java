@@ -7,7 +7,7 @@ import io.softwareecg.awb.timeseries.dimension.Process;
 import io.softwareecg.awb.timeseries.dimension.ProcessGroup;
 import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.QuerySpec;
-import io.softwareecg.awb.explorer.metric.api.FilterContext;
+import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.series.ProcessGroupItem;
 
 import java.util.ArrayList;

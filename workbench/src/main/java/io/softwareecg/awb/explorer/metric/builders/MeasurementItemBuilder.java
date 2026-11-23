@@ -7,7 +7,7 @@ import io.softwareecg.awb.query.MetricDataAccessService;
 import io.softwareecg.awb.timeseries.dimension.Measurement;
 import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.QuerySpec;
-import io.softwareecg.awb.explorer.metric.api.FilterContext;
+import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.series.MeasurementItem;
 
 import java.util.List;

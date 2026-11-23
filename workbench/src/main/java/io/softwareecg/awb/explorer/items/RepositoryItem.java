@@ -15,13 +15,13 @@ package io.softwareecg.awb.explorer.items;
 
 import io.softwareecg.awb.runtime.di.BeanProvider;
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.repository.port.RepositoryNotAvailableException;
+import io.softwareecg.awb.repository.api.RepositoryNotAvailableException;
 import io.softwareecg.awb.repository.api.RepositoryService;
 import io.softwareecg.awb.repository.events.RepositoryModifyEvent;
 import io.softwareecg.awb.repository.schema.EkgSchemaField;
 import io.softwareecg.awb.repository.api.Embedded;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
-import io.softwareecg.awb.repository.port.RepositoryException;
+import io.softwareecg.awb.repository.api.RepositoryException;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.EventSubscriber;
 import io.softwareecg.wfx.platform.core.eventbus.AnnotationProcessor;

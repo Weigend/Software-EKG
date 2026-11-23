@@ -1,6 +1,6 @@
 package io.softwareecg.awb.repository.ui.sourceselector;
 
-import io.softwareecg.awb.repository.port.TimeSeriesImportSource;
+import io.softwareecg.awb.repository.model.TimeSeriesImportSource;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.secrets.model.ResourceAuthType;
 import io.softwareecg.awb.runtime.resources.CdiFxmlLoader;

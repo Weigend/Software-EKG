@@ -6,7 +6,7 @@ import io.softwareecg.awb.query.MetricDataAccessService;
 import io.softwareecg.awb.timeseries.dimension.physical.Host;
 import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
 import io.softwareecg.awb.query.model.MetricQuery;
-import io.softwareecg.awb.explorer.metric.api.FilterContext;
+import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.series.physical.HostsRootItem;
 import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
 
