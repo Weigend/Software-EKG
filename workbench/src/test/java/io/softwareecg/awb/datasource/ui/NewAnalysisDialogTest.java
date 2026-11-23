@@ -1,6 +1,10 @@
 package io.softwareecg.awb.datasource.ui;
 
 import io.softwareecg.awb.datasource.model.AnalysisPlan;
+import io.softwareecg.awb.datasource.spi.AnalysisSourceDefinition;
+import io.softwareecg.awb.datasource.spi.AnalysisSourceOption;
+import io.softwareecg.awb.datasource.spi.AnalysisSourceProvider;
+import io.softwareecg.awb.datasource.spi.AnalysisSourceRegistry;
 import io.softwareecg.awb.datasource.spi.AnalysisTopic;
 import io.softwareecg.awb.datasource.model.CollectionPlan;
 import io.softwareecg.awb.datasource.NewAnalysisService;
@@ -24,6 +28,7 @@ import io.softwareecg.wfx.lookup.api.TypeRef;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.core.eventbus.SimpleEventBus;
 import javafx.application.Platform;
+import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBase;
@@ -34,6 +39,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -44,6 +50,7 @@ import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -649,6 +656,94 @@ public class NewAnalysisDialogTest {
     //-----------------------------------------------------------------------------------------------------------
 
     /** Opens the dialog and takes the way without topics: "show me what is there". */
+    /**
+     * The extension point of the dialog, end to end: a source that is not built into it appears
+     * as a way for its topic, its page becomes a step, and its plan is what the analysis starts with.
+     */
+    @Test
+    public void aContributedSourceIsOfferedShownAndStarted() throws Exception {
+        AnalysisSourceDefinition appliance = new AnalysisSourceDefinition("appliance", "Appliance", false, true);
+        List<AnalysisSourceProvider> providers = new ArrayList<>();
+        AnalysisSourceRegistry.standard().definitions().forEach(definition ->
+                providers.add(AnalysisSourceRegistry.standard().require(definition.id())));
+        providers.add(new AnalysisSourceProvider() {
+            @Override public AnalysisSourceDefinition definition() { return appliance; }
+            @Override public Map<AnalysisTopic, AnalysisSourceOption> topics() {
+                return Map.of(AnalysisTopic.LINUX, new AnalysisSourceOption(appliance, "Each appliance is asked directly."));
+            }
+        });
+        onFx(() -> {
+            dialog = new NewAnalysisDialog(service, null, new AnalysisSourceRegistry(providers), List.of(new AppliancePage()));
+            dialog.show();
+            tile(AnalysisTopic.LINUX).setSelected(true);
+            button("#continue").fire();
+            source("LINUX-APPLIANCE").fire();
+            button("#continue").fire();
+            return null;
+        });
+
+        assertEquals("Where are the appliances for Linux / Unix?", text("#stepTitle"));
+        assertTrue("the page of the source is the last step", onFx(() -> visible("#applianceAddress")));
+        assertTrue("nothing entered, nothing to start", onFx(() -> button("#startAnalysis").isDisabled()));
+
+        type("#applianceAddress", "appliance-01");
+        assertTrue("the analysis needs its name", onFx(() -> button("#startAnalysis").isDisabled()));
+        type("#applianceName", "Appliances");
+        assertFalse(onFx(() -> button("#startAnalysis").isDisabled()));
+
+        onFx(() -> {
+            button("#startAnalysis").fire();
+            return null;
+        });
+        await(() -> !service.startedAny.isEmpty(), "the analysis to start");
+        CollectionPlan plan = service.startedAny.get(0);
+        assertEquals("Appliances", plan.projectName());
+        assertEquals("appliance", plan.sourceType());
+        assertEquals("appliance-01", plan.endpoint());
+    }
+
+    /** A page as a source outside this dialog contributes it: an address, and the name of the analysis. */
+    private static final class AppliancePage implements AnalysisSourceWizardPage {
+        private final TextField address = new TextField();
+        private final TextField name = new TextField();
+        private final VBox node = new VBox(address, name);
+
+        AppliancePage() {
+            address.setId("applianceAddress");
+            name.setId("applianceName");
+        }
+
+        @Override public String sourceId() { return "appliance"; }
+        @Override public Node node() { return node; }
+        @Override public String title(Set<AnalysisTopic> topics) {
+            return "Where are the appliances for " + topics.iterator().next().title() + "?";
+        }
+        @Override public String hint(Set<AnalysisTopic> topics, String existingAnalysis) { return "Name one appliance."; }
+        @Override public boolean isComplete() { return address.getText() != null && !address.getText().isBlank(); }
+
+        @Override
+        public void attach(StringProperty analysisName, boolean nameIsFixed, Runnable changed) {
+            name.textProperty().bindBidirectional(analysisName);
+            name.setDisable(nameIsFixed);
+            address.textProperty().addListener((o, ov, nv) -> changed.run());
+        }
+
+        @Override
+        public CollectionPlan plan(String projectName) {
+            String endpoint = address.getText();
+            return new CollectionPlan() {
+                @Override public String projectName() { return projectName; }
+                @Override public String sourceType() { return "appliance"; }
+                @Override public String endpoint() { return endpoint; }
+                @Override public String secret() { return null; }
+                @Override public String toCollectorConfig(String storedProjectName) { return "metricGroups: {}"; }
+                @Override public boolean isComplete() { return true; }
+                @Override public String firstHostGroup() { return "appliances"; }
+                @Override public List<String> firstMetrics() { return List.of("load"); }
+            };
+        }
+    }
+
     private void open(String existingAnalysis) throws Exception {
         show(existingAnalysis);
         onFx(() -> {

@@ -211,6 +211,7 @@ public class NewAnalysisDialog extends Dialog<Void> {
             if (sourcePages.putIfAbsent(page.sourceId(), page) != null) {
                 throw new IllegalArgumentException("Duplicate analysis source wizard page: " + page.sourceId());
             }
+            page.attach(nameField.textProperty(), existingAnalysis != null, this::updateStartButton);
         }
         sourceRegistry.definitions().stream().filter(AnalysisSourceDefinition::isAvailable)
                 .filter(definition -> !sourcePages.containsKey(definition.id())).findFirst()
@@ -473,7 +474,8 @@ public class NewAnalysisDialog extends Dialog<Void> {
         } else {
             AnalysisSourceWizardPage page = sourcePages.get(step);
             Set<AnalysisTopic> topics = chosenSources.entrySet().stream()
-                    .filter(entry -> entry.getValue().id().equals(step)).map(Map.Entry::getKey).collect(Collectors.toSet());
+                    .filter(entry -> entry.getValue().id().equals(step)).map(Map.Entry::getKey)
+                    .collect(Collectors.toCollection(() -> EnumSet.noneOf(AnalysisTopic.class)));
             describeStep(page.title(topics), page.hint(topics, existingAnalysis));
         }
 
@@ -1153,7 +1155,9 @@ public class NewAnalysisDialog extends Dialog<Void> {
         } else if (currentStep().equals(SOURCES_STEP)) {
             startButton.setDisable(false);
         } else {
-            startButton.setDisable(!sourcePages.get(currentStep()).isComplete());
+            // the pages of this dialog ask for the name themselves; a contributed one may not
+            boolean nameMissing = isLastStep() && (nameField.getText() == null || nameField.getText().isBlank());
+            startButton.setDisable(nameMissing || !sourcePages.get(currentStep()).isComplete());
         }
     }
 
