@@ -1,7 +1,7 @@
 package io.softwareecg.awb.importer.adapter.owid.bl;
 
 import io.softwareecg.awb.timeseries.TimeSeries;
-import io.softwareecg.awb.sdk.testsupport.LocalImportStrategyRunner;
+import io.softwareecg.awb.importer.testsupport.LocalImportStrategyRunner;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

@@ -41,7 +41,7 @@ class RepositoryTypeRegistryTest {
     private static RepositoryTypeDescriptor descriptor(String id) {
         return new RepositoryTypeDescriptor(id, "VictoriaMetrics", "repository-victoria",
                 true, "URL", "https://host", "Tenant", "optional", false,
-                RepositoryCapabilities.remoteSearchRepository(), value -> value.startsWith("http"));
+                value -> value.startsWith("http"));
     }
 
     private static TimeSeriesRepositoryProvider provider(RepositoryTypeDescriptor descriptor) {

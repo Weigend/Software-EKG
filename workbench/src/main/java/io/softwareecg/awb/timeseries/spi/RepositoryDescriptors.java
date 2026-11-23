@@ -18,32 +18,32 @@ public final class RepositoryDescriptors {
     public static RepositoryTypeDescriptor solrStandalone() {
         return descriptor("SOLR_STANDALONE", "Solr (Classic)", "icons/repository-db-type-solr.svg",
                 "Repository URL:", "Absolute Solr URL including core name", "Index Name:", "", true,
-                RepositoryCapabilities.remoteSearchRepository(), RepositoryDescriptors::httpUrl);
+                RepositoryDescriptors::httpUrl);
     }
 
     public static RepositoryTypeDescriptor solrCloud() {
         return descriptor("SOLR_CLOUD", "Solr Cloud", "icons/repository-db-type-solr-cloud.svg",
                 "ZooKeeper Host/Port:", "host:port,host:port", "Collection:", "Solr collection", false,
-                RepositoryCapabilities.remoteSearchRepository(), value -> ZOOKEEPER.matcher(value).matches());
+                value -> ZOOKEEPER.matcher(value).matches());
     }
 
     public static RepositoryTypeDescriptor embeddedSolr() {
         return new RepositoryTypeDescriptor("SOLR_EMBEDDED", "Solr Embedded",
                 "icons/repository-db-type-solr.svg", false, "Repository URL:", "", "Index Name:", "", true,
-                RepositoryCapabilities.embeddedSearchRepository(), value -> true);
+                value -> true);
     }
 
     public static RepositoryTypeDescriptor elasticsearch() {
         return descriptor("ELASTICSEARCH_STANDALONE", "Elasticsearch",
                 "icons/repository-db-type-elasticsearch.svg", "Repository URL:",
                 "Elasticsearch URL including index", "Index Name:", "Index", false,
-                RepositoryCapabilities.remoteSearchRepository(), RepositoryDescriptors::httpUrl);
+                RepositoryDescriptors::httpUrl);
     }
 
     public static RepositoryTypeDescriptor clickhouse() {
         return descriptor("CLICKHOUSE_CLOUD", "ClickHouse Cloud", "icons/repository-db-type-clickhouse.svg",
                 "ClickHouse JDBC URL:", "jdbc:clickhouse://node1:8123/database", "Table Name:",
-                "Optional table name", false, RepositoryCapabilities.remoteSearchRepository(),
+                "Optional table name", false,
                 value -> CLICKHOUSE.matcher(value).matches());
     }
 
@@ -51,10 +51,9 @@ public final class RepositoryDescriptors {
                                                        String connectionLabel, String connectionPrompt,
                                                        String indexLabel, String indexPrompt,
                                                        boolean indexDisabled,
-                                                       RepositoryCapabilities capabilities,
                                                        java.util.function.Predicate<String> validator) {
         return new RepositoryTypeDescriptor(id, name, icon, true, connectionLabel, connectionPrompt,
-                indexLabel, indexPrompt, indexDisabled, capabilities, validator);
+                indexLabel, indexPrompt, indexDisabled, validator);
     }
 
     private static boolean httpUrl(String value) {

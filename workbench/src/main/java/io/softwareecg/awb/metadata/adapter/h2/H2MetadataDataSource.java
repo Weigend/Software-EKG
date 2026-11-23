@@ -18,9 +18,6 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Proxy;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -43,9 +40,6 @@ public class H2MetadataDataSource {
     private static final String DB_NAME = "metadata";
 
     private volatile JdbcDataSource dataSource;
-
-    /** Connection shared by all stores while the current thread executes one backend transaction. */
-    private final ThreadLocal<Connection> transactionConnection = new ThreadLocal<>();
 
     /**
      * The JDBC URL to use instead of the database in the user's home; {@code null} in production.
@@ -73,65 +67,10 @@ public class H2MetadataDataSource {
      * @throws SQLException if a connection cannot be obtained
      */
     public Connection getConnection() throws SQLException {
-        Connection current = transactionConnection.get();
-        if (current != null) {
-            return nonClosingView(current);
-        }
         if (dataSource == null) {
             ensureInitialized();
         }
         return dataSource.getConnection();
-    }
-
-    /** Executes all store calls made by this thread on one JDBC transaction. */
-    <T> T inTransaction(Supplier<T> work) {
-        if (transactionConnection.get() != null) {
-            return work.get();
-        }
-        try (Connection connection = physicalConnection()) {
-            connection.setAutoCommit(false);
-            transactionConnection.set(connection);
-            try {
-                T result = work.get();
-                connection.commit();
-                return result;
-            } catch (RuntimeException | Error failure) {
-                rollback(connection, failure);
-                throw failure;
-            } finally {
-                transactionConnection.remove();
-            }
-        } catch (SQLException e) {
-            throw new IllegalStateException("H2 metadata transaction failed", e);
-        }
-    }
-
-    private Connection physicalConnection() throws SQLException {
-        if (dataSource == null) {
-            ensureInitialized();
-        }
-        return dataSource.getConnection();
-    }
-
-    private static void rollback(Connection connection, Throwable failure) {
-        try {
-            connection.rollback();
-        } catch (SQLException rollbackFailure) {
-            failure.addSuppressed(rollbackFailure);
-        }
-    }
-
-    private static Connection nonClosingView(Connection connection) {
-        return (Connection) Proxy.newProxyInstance(Connection.class.getClassLoader(),
-                new Class<?>[]{Connection.class}, (proxy, method, arguments) -> {
-                    if (method.getName().equals("close")) return null;
-                    if (method.getName().equals("isClosed")) return false;
-                    try {
-                        return method.invoke(connection, arguments);
-                    } catch (InvocationTargetException e) {
-                        throw e.getCause();
-                    }
-                });
     }
 
     private synchronized void ensureInitialized() {

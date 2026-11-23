@@ -16,14 +16,12 @@ public record RepositoryTypeDescriptor(
         String indexLabel,
         String indexPrompt,
         boolean indexDisabled,
-        RepositoryCapabilities capabilities,
         Predicate<String> connectionValidator) implements NamedEnum {
 
     public RepositoryTypeDescriptor {
         Objects.requireNonNull(id);
         Objects.requireNonNull(displayName);
         Objects.requireNonNull(icon);
-        Objects.requireNonNull(capabilities);
         Objects.requireNonNull(connectionValidator);
     }
 
