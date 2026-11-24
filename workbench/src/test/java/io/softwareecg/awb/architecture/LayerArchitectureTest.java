@@ -1,5 +1,6 @@
 package io.softwareecg.awb.architecture;
 
+import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
@@ -196,23 +197,45 @@ public class LayerArchitectureTest {
      */
     @ArchTest
     static final ArchRule only_the_api_of_repository_is_used_from_outside =
-            noClasses().that().resideOutsideOfPackage("io.softwareecg.awb.repository..")
-                    // the generated injection module wires every bean and so knows all of them
-                    .and().areNotAssignableTo(io.avaje.inject.spi.AvajeModule.class)
-                    .should().dependOnClassesThat(resideInAPackage("io.softwareecg.awb.repository..")
-                            .and(not(resideInAPackage("io.softwareecg.awb.repository.api..")))
-                            .and(not(name("io.softwareecg.awb.repository.ui.RepositorySelectorPane")))
-                            .and(not(name("io.softwareecg.awb.repository.ui.sourceselector.QuerySourceSelector")))
-                            .as("liegen in repository, aber nicht in seiner api"))
-                    .because("was innen ist, muss sich aendern lassen, ohne die anderen anzufassen");
+            onlyTheApiIsUsedFromOutside("repository",
+                    "io.softwareecg.awb.repository.ui.RepositorySelectorPane",
+                    "io.softwareecg.awb.repository.ui.sourceselector.QuerySourceSelector");
 
     /**
-     * Die Pakete in repository: api kennt keines der anderen.
+     * Die Aussenkante von bookmark ist api. Wie ein Bookmark gespeichert ist und die Dialoge bleiben
+     * in der Komponente.
      */
     @ArchTest
-    static final ArchRule packages_of_repository_must_be_free_of_cycles =
-            slices().matching("io.softwareecg.awb.repository.(*)..").should().beFreeOfCycles()
-                    .because("Pakete, die sich gegenseitig brauchen, sind in Wahrheit eines");
+    static final ArchRule only_the_api_of_bookmark_is_used_from_outside =
+            onlyTheApiIsUsedFromOutside("bookmark");
+
+    /**
+     * Die Pakete in einer Komponente: api kennt keines der anderen.
+     */
+    @ArchTest
+    static final ArchRule packages_of_repository_must_be_free_of_cycles = packagesAreFreeOfCycles("repository");
+
+    @ArchTest
+    static final ArchRule packages_of_bookmark_must_be_free_of_cycles = packagesAreFreeOfCycles("bookmark");
+
+    private static ArchRule onlyTheApiIsUsedFromOutside(String component, String... exceptions) {
+        String root = "io.softwareecg.awb." + component;
+        DescribedPredicate<JavaClass> inside = resideInAPackage(root + "..")
+                .and(not(resideInAPackage(root + ".api..")));
+        for (String exception : exceptions) {
+            inside = inside.and(not(name(exception)));
+        }
+        return noClasses().that().resideOutsideOfPackage(root + "..")
+                // the generated injection module wires every bean and so knows all of them
+                .and().areNotAssignableTo(io.avaje.inject.spi.AvajeModule.class)
+                .should().dependOnClassesThat(inside.as("liegen in " + component + ", aber nicht in seiner api"))
+                .because("was innen ist, muss sich aendern lassen, ohne die anderen anzufassen");
+    }
+
+    private static ArchRule packagesAreFreeOfCycles(String component) {
+        return slices().matching("io.softwareecg.awb." + component + ".(*)..").should().beFreeOfCycles()
+                .because("Pakete, die sich gegenseitig brauchen, sind in Wahrheit eines");
+    }
 
     @ArchTest
     static final ArchRule metadata_clients_must_use_ports_instead_of_h2 =
