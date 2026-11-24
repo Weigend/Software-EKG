@@ -1,6 +1,6 @@
 package io.softwareecg.awb.explorer.metric;
 
-import io.softwareecg.awb.explorer.TreeIconsProviderRegistry;
+import io.softwareecg.awb.explorer.icons.TreeIconsProviderRegistry;
 import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.wfx.lookup.api.Lookup;

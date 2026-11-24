@@ -1,6 +1,6 @@
 package io.softwareecg.awb.importer.framework.steps.writer;
 
-import io.softwareecg.awb.timeseries.SeriesData;
+import io.softwareecg.awb.importer.model.SeriesData;
 
 /**
  * Interface that represents a specialized type of SeriesWriter implementation that

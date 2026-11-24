@@ -1,7 +1,7 @@
 package io.softwareecg.awb.importer.framework.steps.reader;
 
 import io.softwareecg.awb.projectcontext.api.ProjectView;
-import io.softwareecg.awb.timeseries.SeriesData;
+import io.softwareecg.awb.importer.model.SeriesData;
 
 import java.util.function.Function;
 

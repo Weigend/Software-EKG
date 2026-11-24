@@ -1,5 +1,7 @@
 package io.softwareecg.awb.bookmark;
 
+import io.softwareecg.awb.bookmark.api.MetricsBookmarkService;
+
 import io.softwareecg.awb.metadata.model.BookmarkGroupRow;
 import io.softwareecg.awb.metadata.model.MetricBookmarkRow;
 import io.softwareecg.awb.metadata.model.MetricQueryBookmarkRow;

@@ -10,7 +10,7 @@
 // experienced craftsmen and innovators in Munich, Germany.
 // Changes should be done with respect to the original design.
 //______________________________________________________________________________
-package io.softwareecg.awb.runtime;
+package io.softwareecg.awb.explorer.items;
 
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;

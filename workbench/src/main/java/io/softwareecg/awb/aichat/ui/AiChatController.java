@@ -16,9 +16,10 @@ import io.softwareecg.awb.aichat.tools.QueryTimeSeriesTool;
 import io.softwareecg.awb.aichat.tools.SshCommandTool;
 import io.softwareecg.awb.query.model.SeriesCombineMode;
 import io.softwareecg.awb.query.model.SeriesSmoothingType;
-import io.softwareecg.awb.query.MetricDataAccessService;
+import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.query.model.ComputationSpec;
 import io.softwareecg.awb.query.model.QuerySpec;
+import io.softwareecg.awb.metricview.ChartPanelManager;
 import io.softwareecg.awb.metricview.MetricViewController;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import javafx.application.Platform;
@@ -94,11 +95,8 @@ public class AiChatController implements Initializable {
 
     private MetricViewController resolveActiveChartController() {
         try {
-            Object manager = Lookup.lookup(
-                    Class.forName("io.softwareecg.awb.metricview.adapter.ChartPanelAdapter$ChartPanelManager"));
-            if (manager == null) return null;
-            var getLastActive = manager.getClass().getMethod("getLastActiveController");
-            return (MetricViewController) getLastActive.invoke(manager);
+            ChartPanelManager manager = Lookup.lookup(ChartPanelManager.class);
+            return manager == null ? null : manager.getLastActiveController();
         } catch (Exception e) {
             LOG.warn("Could not resolve active chart controller: {}", e.getMessage());
             return null;

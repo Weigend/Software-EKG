@@ -2,7 +2,7 @@ package io.softwareecg.awb.importer.adapter.csv;
 
 import io.softwareecg.wfx.platform.api.events.ProgressEvent;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
-import io.softwareecg.awb.timeseries.RawSeriesData;
+import io.softwareecg.awb.importer.model.RawSeriesData;
 import io.softwareecg.awb.importer.framework.LocalProjectImportStrategy;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;

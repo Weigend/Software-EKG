@@ -3,7 +3,7 @@ package io.softwareecg.awb.repository.ui.sourceselector;
 import io.softwareecg.awb.repository.model.TimeSeriesImportSource;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.secrets.model.ResourceAuthType;
-import io.softwareecg.awb.repository.SourceRepositoryService;
+import io.softwareecg.awb.repository.api.SourceRepositoryService;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import io.softwareecg.awb.uitoolkit.controls.EkgComboBoxListViewSkin;

@@ -3,7 +3,6 @@ package io.softwareecg.awb.metricview;
 import io.softwareecg.awb.application.api.EkgApplicationController;
 import io.softwareecg.awb.application.api.events.BeforeRestoreDefaultLayoutEvent;
 import io.softwareecg.awb.uitoolkit.events.FinishEvent;
-import io.softwareecg.awb.metricview.adapter.ChartPanelAdapter;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.Module;
@@ -30,7 +29,7 @@ public class EkgMetricViewModule extends MetricViewModule implements Module {
             Thread.sleep(500);
             eventBus.publish(new ProgressEvent("Start local Solr Server...", 0, this));
 
-            ChartPanelAdapter.ChartPanelManager chartPanelManager = Lookup.lookup(ChartPanelAdapter.ChartPanelManager.class);
+            ChartPanelManager chartPanelManager = Lookup.lookup(ChartPanelManager.class);
             chartPanelManager.init();
             eventBus.subscribe(BeforeRestoreDefaultLayoutEvent.class, event -> {
                 chartPanelManager.removeAllDynamicChartPanels();
@@ -50,7 +49,7 @@ public class EkgMetricViewModule extends MetricViewModule implements Module {
         EkgApplicationController appController = Lookup.lookup(EkgApplicationController.class);
         MenuItem newChart = new MenuItem("New Chart");
         newChart.setMnemonicParsing(false);
-        newChart.setOnAction(e -> Lookup.lookup(ChartPanelAdapter.ChartPanelManager.class).createNewChartPanel());
+        newChart.setOnAction(e -> Lookup.lookup(ChartPanelManager.class).createNewChartPanel());
         appController.addWindowMenuItem(newChart);
     }
 }

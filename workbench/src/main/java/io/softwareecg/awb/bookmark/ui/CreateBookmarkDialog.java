@@ -14,7 +14,7 @@ package io.softwareecg.awb.bookmark.ui;
 
 import io.softwareecg.awb.uitoolkit.components.FilterableComboBox;
 import io.softwareecg.awb.runtime.di.BeanProvider;
-import io.softwareecg.awb.bookmark.MetricsBookmarkService;
+import io.softwareecg.awb.bookmark.api.MetricsBookmarkService;
 import io.softwareecg.awb.bookmark.model.Bookmark;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
 import io.softwareecg.awb.repository.api.Repository;

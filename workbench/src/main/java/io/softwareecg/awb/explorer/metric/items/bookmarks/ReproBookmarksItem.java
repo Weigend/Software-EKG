@@ -2,7 +2,7 @@ package io.softwareecg.awb.explorer.metric.items.bookmarks;
 
 import io.softwareecg.awb.uitoolkit.view.AppWindowProvider;
 import io.softwareecg.awb.runtime.di.BeanProvider;
-import io.softwareecg.awb.bookmark.MetricsBookmarkService;
+import io.softwareecg.awb.bookmark.api.MetricsBookmarkService;
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.bookmark.ui.CreateBookmarkGroupDialog;

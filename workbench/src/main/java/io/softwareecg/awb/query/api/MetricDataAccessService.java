@@ -1,4 +1,4 @@
-package io.softwareecg.awb.query;
+package io.softwareecg.awb.query.api;
 
 import io.softwareecg.awb.timeseries.dimension.Process;
 import io.softwareecg.awb.timeseries.dimension.logical.Container;

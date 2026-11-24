@@ -1,7 +1,7 @@
 package io.softwareecg.awb.importer.framework.steps.mapper;
 
-import io.softwareecg.awb.timeseries.RawSeriesData;
-import io.softwareecg.awb.timeseries.SeriesData;
+import io.softwareecg.awb.importer.model.RawSeriesData;
+import io.softwareecg.awb.importer.model.SeriesData;
 
 import java.util.function.Function;
 

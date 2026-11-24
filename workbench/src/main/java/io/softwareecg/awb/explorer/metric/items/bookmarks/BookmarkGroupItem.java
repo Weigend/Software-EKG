@@ -15,7 +15,7 @@ package io.softwareecg.awb.explorer.metric.items.bookmarks;
 import io.softwareecg.awb.uitoolkit.tree.api.AbstractItem;
 import io.softwareecg.awb.uitoolkit.view.AppWindowProvider;
 import io.softwareecg.awb.runtime.di.BeanProvider;
-import io.softwareecg.awb.bookmark.MetricsBookmarkService;
+import io.softwareecg.awb.bookmark.api.MetricsBookmarkService;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
@@ -34,7 +34,7 @@ import javafx.stage.Stage;
 import java.util.EventObject;
 import java.util.Optional;
 
-import static io.softwareecg.awb.runtime.TaskUtils.runAsTask;
+import static io.softwareecg.awb.explorer.items.TaskUtils.runAsTask;
 
 /**
  * A tree node item that represents a domain specific/topic specific group

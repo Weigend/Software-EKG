@@ -7,7 +7,7 @@ import de.siegmar.fastcsv.reader.CsvReader;
 import de.siegmar.fastcsv.reader.CsvRow;
 import io.softwareecg.awb.timeseries.dimension.FilterDimension;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
-import io.softwareecg.awb.timeseries.RawSeriesData;
+import io.softwareecg.awb.importer.model.RawSeriesData;
 import io.softwareecg.awb.timeseries.Value;
 import org.slf4j.Logger;
 

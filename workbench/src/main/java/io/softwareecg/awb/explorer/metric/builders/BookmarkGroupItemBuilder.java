@@ -3,7 +3,7 @@ package io.softwareecg.awb.explorer.metric.builders;
 import io.softwareecg.awb.uitoolkit.tree.api.ProgressNotifier;
 import io.softwareecg.awb.explorer.items.ItemBuilder;
 import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
-import io.softwareecg.awb.bookmark.MetricsBookmarkService;
+import io.softwareecg.awb.bookmark.api.MetricsBookmarkService;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.bookmarks.BookmarkGroupItem;

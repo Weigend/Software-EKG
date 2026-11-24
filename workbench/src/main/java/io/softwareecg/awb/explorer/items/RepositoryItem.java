@@ -25,7 +25,6 @@ import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.EventSubscriber;
 import io.softwareecg.wfx.platform.core.eventbus.AnnotationProcessor;
 import io.softwareecg.wfx.lookup.api.Lookup;
-import io.softwareecg.awb.runtime.TaskUtils;
 import io.avaje.inject.External;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;

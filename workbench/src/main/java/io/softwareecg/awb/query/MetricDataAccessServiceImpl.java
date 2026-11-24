@@ -1,5 +1,7 @@
 package io.softwareecg.awb.query;
 
+import io.softwareecg.awb.query.api.MetricDataAccessService;
+
 import io.softwareecg.awb.timeseries.dimension.Process;
 import io.softwareecg.awb.timeseries.dimension.logical.Container;
 import io.softwareecg.awb.timeseries.dimension.logical.Namespace;

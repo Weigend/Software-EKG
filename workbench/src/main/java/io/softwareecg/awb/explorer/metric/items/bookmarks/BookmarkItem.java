@@ -15,7 +15,7 @@ package io.softwareecg.awb.explorer.metric.items.bookmarks;
 import io.softwareecg.awb.uitoolkit.events.OpeningMode;
 import io.softwareecg.awb.uitoolkit.tree.api.AbstractItem;
 import io.softwareecg.awb.runtime.di.BeanProvider;
-import io.softwareecg.awb.bookmark.MetricsBookmarkService;
+import io.softwareecg.awb.bookmark.api.MetricsBookmarkService;
 import io.softwareecg.awb.bookmark.model.Bookmark;
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
@@ -29,7 +29,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
-import static io.softwareecg.awb.runtime.TaskUtils.runAsTask;
+import static io.softwareecg.awb.explorer.items.TaskUtils.runAsTask;
 
 /**
  * Show a  single bookmark within the explorerView tree.

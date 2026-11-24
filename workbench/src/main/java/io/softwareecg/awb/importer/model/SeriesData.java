@@ -1,4 +1,7 @@
-package io.softwareecg.awb.timeseries;
+package io.softwareecg.awb.importer.model;
+
+import io.softwareecg.awb.timeseries.TimeSeries;
+import io.softwareecg.awb.timeseries.Value;
 
 
 import java.util.List;

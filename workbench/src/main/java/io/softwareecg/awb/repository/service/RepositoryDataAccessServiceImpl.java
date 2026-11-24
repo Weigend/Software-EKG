@@ -27,7 +27,7 @@ import io.softwareecg.awb.repository.model.RepositoryDefinition;
 import io.softwareecg.awb.repository.model.TimeSeriesImportSource;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.secrets.model.ResourceAuthType;
-import io.softwareecg.awb.repository.SourceRepositoryService;
+import io.softwareecg.awb.repository.api.SourceRepositoryService;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.avaje.inject.External;

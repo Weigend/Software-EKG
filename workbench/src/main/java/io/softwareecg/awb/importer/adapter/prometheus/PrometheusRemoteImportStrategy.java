@@ -7,8 +7,8 @@ import io.softwareecg.awb.importer.adapter.prometheus.client.model.query.SeriesD
 import io.softwareecg.awb.repository.model.TimeSeriesImportSource;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import io.softwareecg.awb.secrets.security.SecurityContext;
-import io.softwareecg.awb.timeseries.RawSeriesData;
-import io.softwareecg.awb.timeseries.SeriesData;
+import io.softwareecg.awb.importer.model.RawSeriesData;
+import io.softwareecg.awb.importer.model.SeriesData;
 import io.softwareecg.awb.importer.framework.SplitSourceProjectImportStrategy;
 import io.softwareecg.awb.importer.framework.steps.mapper.RawToMetadataMapper;
 import org.slf4j.Logger;

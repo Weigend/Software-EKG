@@ -1,6 +1,6 @@
 package io.softwareecg.awb.e2e;
 
-import io.softwareecg.awb.query.MetricDataAccessService;
+import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.timeseries.dimension.NamedValueEntity;
 import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.QuerySpec;

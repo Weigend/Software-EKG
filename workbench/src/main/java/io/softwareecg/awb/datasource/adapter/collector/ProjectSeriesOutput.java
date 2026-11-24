@@ -4,7 +4,7 @@ import io.softwareecg.awb.datasource.adapter.prometheus.PrometheusDimensions;
 import io.softwareecg.collector.source.prometheus.PrometheusCounterSource;
 import io.softwareecg.awb.repository.api.RepositoryException;
 import io.softwareecg.awb.repository.api.TimeSeriesWriteService;
-import io.softwareecg.awb.timeseries.SeriesData;
+import io.softwareecg.awb.importer.model.SeriesData;
 import io.softwareecg.awb.timeseries.TimeSeries;
 import io.softwareecg.awb.timeseries.Value;
 import io.softwareecg.collector.config.CounterDescriptor;

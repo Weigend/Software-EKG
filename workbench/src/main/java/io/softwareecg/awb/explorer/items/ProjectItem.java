@@ -12,8 +12,8 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.explorer.items;
 
-import io.softwareecg.awb.explorer.ExplorerTreeIconsProvider;
-import io.softwareecg.awb.explorer.TreeIconsProviderRegistry;
+import io.softwareecg.awb.explorer.icons.ExplorerTreeIconsProvider;
+import io.softwareecg.awb.explorer.icons.TreeIconsProviderRegistry;
 import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
 import io.softwareecg.awb.projectcontext.spi.ProjectDataCollection;
 import io.softwareecg.awb.projectcontext.events.ProjectDataCollectionChangedEvent;
@@ -40,7 +40,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import org.slf4j.LoggerFactory;
 
-import static io.softwareecg.awb.runtime.TaskUtils.runAsTask;
+import static io.softwareecg.awb.explorer.items.TaskUtils.runAsTask;
 
 /**
  * The explorerView item that shows a specific project.

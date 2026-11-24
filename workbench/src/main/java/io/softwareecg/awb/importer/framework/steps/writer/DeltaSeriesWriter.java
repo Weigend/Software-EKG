@@ -1,6 +1,6 @@
 package io.softwareecg.awb.importer.framework.steps.writer;
 
-import io.softwareecg.awb.timeseries.SeriesData;
+import io.softwareecg.awb.importer.model.SeriesData;
 
 /**
  * todo enter comment here

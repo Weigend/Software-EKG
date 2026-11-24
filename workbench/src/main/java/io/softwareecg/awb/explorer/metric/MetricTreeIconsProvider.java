@@ -1,6 +1,6 @@
 package io.softwareecg.awb.explorer.metric;
 
-import io.softwareecg.awb.explorer.ExplorerTreeIconsProvider;
+import io.softwareecg.awb.explorer.icons.ExplorerTreeIconsProvider;
 import javafx.scene.Node;
 
 

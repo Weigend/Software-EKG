@@ -1,4 +1,6 @@
-package io.softwareecg.awb.timeseries;
+package io.softwareecg.awb.importer.model;
+
+import io.softwareecg.awb.timeseries.Value;
 
 
 

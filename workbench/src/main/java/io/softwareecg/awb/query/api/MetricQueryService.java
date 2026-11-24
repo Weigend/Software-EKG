@@ -1,4 +1,4 @@
-package io.softwareecg.awb.query;
+package io.softwareecg.awb.query.api;
 
 import io.softwareecg.awb.query.model.ComputationSpec;
 import io.softwareecg.awb.query.model.QuerySpec;

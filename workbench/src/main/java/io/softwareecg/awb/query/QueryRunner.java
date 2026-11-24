@@ -1,5 +1,9 @@
 package io.softwareecg.awb.query;
 
+import io.softwareecg.awb.query.api.ComputedTimeSeriesResponse;
+import io.softwareecg.awb.query.api.MetricDataAccessService;
+import io.softwareecg.awb.query.api.MetricQueryService;
+
 import io.softwareecg.awb.query.model.SeriesCombineMode;
 import io.softwareecg.awb.query.model.SeriesSmoothingGranularity;
 import io.softwareecg.awb.query.model.SeriesSmoothingType;

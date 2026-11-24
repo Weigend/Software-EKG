@@ -1,6 +1,6 @@
 package io.softwareecg.awb.importer.framework.steps.filter;
 
-import io.softwareecg.awb.timeseries.RawSeriesData;
+import io.softwareecg.awb.importer.model.RawSeriesData;
 
 import java.util.function.Predicate;
 

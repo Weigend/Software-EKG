@@ -4,10 +4,10 @@ import io.softwareecg.awb.projectcontext.model.TargetProjectConfig;
 import io.softwareecg.awb.repository.model.TimeSeriesImportSource;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.TimeSeriesWriteService;
-import io.softwareecg.awb.repository.SourceRepositoryService;
+import io.softwareecg.awb.repository.api.SourceRepositoryService;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
-import io.softwareecg.awb.timeseries.RawSeriesData;
-import io.softwareecg.awb.timeseries.SeriesData;
+import io.softwareecg.awb.importer.model.RawSeriesData;
+import io.softwareecg.awb.importer.model.SeriesData;
 import io.softwareecg.awb.importer.framework.steps.writer.SeriesMetaWriter;
 
 import java.util.stream.Stream;

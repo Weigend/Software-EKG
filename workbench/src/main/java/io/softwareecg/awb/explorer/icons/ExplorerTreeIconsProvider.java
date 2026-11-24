@@ -1,4 +1,4 @@
-package io.softwareecg.awb.explorer;
+package io.softwareecg.awb.explorer.icons;
 
 import io.softwareecg.awb.uitoolkit.tree.api.TreeIconsProvider;
 import io.softwareecg.awb.explorer.items.ProjectItem;

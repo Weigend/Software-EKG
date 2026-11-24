@@ -1,6 +1,6 @@
 package io.softwareecg.awb.importer.adapter.owid;
 
-import io.softwareecg.awb.timeseries.RawSeriesData;
+import io.softwareecg.awb.importer.model.RawSeriesData;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

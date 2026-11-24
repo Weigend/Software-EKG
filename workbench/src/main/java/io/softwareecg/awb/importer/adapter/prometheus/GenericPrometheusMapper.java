@@ -1,7 +1,7 @@
 package io.softwareecg.awb.importer.adapter.prometheus;
 
 import io.softwareecg.awb.runtime.logging.EkgLogger;
-import io.softwareecg.awb.timeseries.RawSeriesData;
+import io.softwareecg.awb.importer.model.RawSeriesData;
 import org.slf4j.Logger;
 
 import java.util.*;
