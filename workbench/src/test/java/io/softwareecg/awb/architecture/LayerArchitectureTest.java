@@ -219,6 +219,20 @@ public class LayerArchitectureTest {
             onlyTheApiIsUsedFromOutside("query");
 
     /**
+     * Die Aussenkante von evidence ist api. Dialoge und Dateiformate bleiben in der Komponente.
+     */
+    @ArchTest
+    static final ArchRule only_the_api_of_evidence_is_used_from_outside =
+            onlyTheApiIsUsedFromOutside("evidence");
+
+    /**
+     * Die Aussenkante von secrets ist api. Wo die Geheimnisse liegen, bleibt in der Komponente.
+     */
+    @ArchTest
+    static final ArchRule only_the_api_of_secrets_is_used_from_outside =
+            onlyTheApiIsUsedFromOutside("secrets");
+
+    /**
      * Die Pakete in einer Komponente: api kennt keines der anderen.
      */
     @ArchTest
@@ -229,6 +243,12 @@ public class LayerArchitectureTest {
 
     @ArchTest
     static final ArchRule packages_of_query_must_be_free_of_cycles = packagesAreFreeOfCycles("query");
+
+    @ArchTest
+    static final ArchRule packages_of_evidence_must_be_free_of_cycles = packagesAreFreeOfCycles("evidence");
+
+    @ArchTest
+    static final ArchRule packages_of_secrets_must_be_free_of_cycles = packagesAreFreeOfCycles("secrets");
 
     /**
      * api wird von anderen benutzt, spi von anderen implementiert: beides darf von aussen importiert
