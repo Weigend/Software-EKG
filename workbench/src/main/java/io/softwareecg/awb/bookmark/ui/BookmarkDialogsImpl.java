@@ -1,9 +1,9 @@
 package io.softwareecg.awb.bookmark.ui;
 
-import io.softwareecg.awb.bookmark.MetricsBookmarkServiceImpl;
+import io.softwareecg.awb.bookmark.store.MetricsBookmarkServiceImpl;
 import io.softwareecg.awb.bookmark.api.BookmarkDialogs;
-import io.softwareecg.awb.bookmark.model.BookmarkGroup;
-import io.softwareecg.awb.bookmark.model.MetricQueryBookmark;
+import io.softwareecg.awb.bookmark.api.BookmarkGroup;
+import io.softwareecg.awb.bookmark.store.MetricQueryBookmark;
 import io.softwareecg.awb.query.model.QuerySpec;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;

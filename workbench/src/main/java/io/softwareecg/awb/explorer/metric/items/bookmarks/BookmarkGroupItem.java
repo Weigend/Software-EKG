@@ -16,7 +16,7 @@ import io.softwareecg.awb.uitoolkit.tree.api.AbstractItem;
 import io.softwareecg.awb.uitoolkit.view.AppWindowProvider;
 import io.softwareecg.awb.runtime.di.BeanProvider;
 import io.softwareecg.awb.bookmark.api.BookmarkDialogs;
-import io.softwareecg.awb.bookmark.model.BookmarkGroup;
+import io.softwareecg.awb.bookmark.api.BookmarkGroup;
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;

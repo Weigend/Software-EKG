@@ -4,7 +4,7 @@ import io.softwareecg.awb.uitoolkit.events.OpeningMode;
 import io.softwareecg.awb.uitoolkit.view.EkgView;
 import io.softwareecg.awb.uitoolkit.view.ViewMapper;
 import io.softwareecg.awb.query.api.OpenInvestigationCommand;
-import io.softwareecg.awb.bookmark.ui.BookmarkEvent;
+import io.softwareecg.awb.bookmark.api.BookmarkEvent;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.EventSubscriber;

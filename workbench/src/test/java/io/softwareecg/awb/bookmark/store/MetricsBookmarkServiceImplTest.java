@@ -1,9 +1,8 @@
-package io.softwareecg.awb.bookmark;
+package io.softwareecg.awb.bookmark.store;
 
 import io.softwareecg.awb.bookmark.api.Bookmark;
 import io.softwareecg.awb.bookmark.api.BookmarkContent;
-import io.softwareecg.awb.bookmark.model.BookmarkGroup;
-import io.softwareecg.awb.bookmark.model.MetricQueryBookmark;
+import io.softwareecg.awb.bookmark.api.BookmarkGroup;
 import io.softwareecg.awb.metadata.model.BookmarkGroupRow;
 import io.softwareecg.awb.metadata.model.MetricQueryBookmarkRow;
 import io.softwareecg.awb.metadata.port.BookmarkStore;

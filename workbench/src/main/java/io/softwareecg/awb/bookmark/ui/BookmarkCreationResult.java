@@ -1,7 +1,7 @@
 package io.softwareecg.awb.bookmark.ui;
 
-import io.softwareecg.awb.bookmark.model.StoredBookmark;
-import io.softwareecg.awb.bookmark.model.BookmarkGroup;
+import io.softwareecg.awb.bookmark.store.StoredBookmark;
+import io.softwareecg.awb.bookmark.api.BookmarkGroup;
 
 /**
  * Container that holds the result of the {@link CreateBookmarkDialog}:

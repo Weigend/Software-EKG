@@ -12,7 +12,6 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.bookmark.api;
 
-import io.softwareecg.awb.bookmark.model.BookmarkGroup;
 
 import java.util.List;
 

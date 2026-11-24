@@ -1,6 +1,5 @@
 package io.softwareecg.awb.bookmark.api;
 
-import io.softwareecg.awb.bookmark.model.BookmarkGroup;
 import io.softwareecg.awb.query.model.QuerySpec;
 import javafx.stage.Window;
 

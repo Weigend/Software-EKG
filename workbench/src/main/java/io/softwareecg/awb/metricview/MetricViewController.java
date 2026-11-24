@@ -26,7 +26,7 @@ import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.query.api.OpenInvestigationCommand;
 import io.softwareecg.awb.query.model.ComputationSpec;
 import io.softwareecg.awb.query.model.QuerySpec;
-import io.softwareecg.awb.bookmark.ui.BookmarkEvent;
+import io.softwareecg.awb.bookmark.api.BookmarkEvent;
 import io.softwareecg.awb.evidence.export.ExcelExportSeriesData;
 import io.softwareecg.awb.evidence.export.ExcelExporter;
 import io.softwareecg.awb.evidence.export.ScreenshotExportDialog;

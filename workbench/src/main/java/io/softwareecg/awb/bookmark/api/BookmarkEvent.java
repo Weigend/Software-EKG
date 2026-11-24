@@ -10,11 +10,10 @@
 // experienced craftsmen and innovators in Munich, Germany.
 // Changes should be done with respect to the original design.
 //______________________________________________________________________________
-package io.softwareecg.awb.bookmark.ui;
+package io.softwareecg.awb.bookmark.api;
 
 import io.softwareecg.awb.uitoolkit.events.OpeningMode;
 import io.softwareecg.awb.uitoolkit.events.WindowOpenEvent;
-import io.softwareecg.awb.bookmark.api.Bookmark;
 import io.softwareecg.awb.repository.api.Repository;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

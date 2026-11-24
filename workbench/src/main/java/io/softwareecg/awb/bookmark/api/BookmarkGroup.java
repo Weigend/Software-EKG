@@ -1,4 +1,4 @@
-package io.softwareecg.awb.bookmark.model;
+package io.softwareecg.awb.bookmark.api;
 
 import java.io.Serializable;
 import java.util.Objects;

@@ -1,7 +1,7 @@
 package io.softwareecg.awb.bookmark.ui;
 
 import io.softwareecg.awb.runtime.di.BeanProvider;
-import io.softwareecg.awb.bookmark.model.BookmarkGroup;
+import io.softwareecg.awb.bookmark.api.BookmarkGroup;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

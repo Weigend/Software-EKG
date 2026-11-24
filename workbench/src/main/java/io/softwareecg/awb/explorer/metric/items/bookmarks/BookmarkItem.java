@@ -19,7 +19,7 @@ import io.softwareecg.awb.bookmark.api.MetricsBookmarkService;
 import io.softwareecg.awb.bookmark.api.Bookmark;
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
-import io.softwareecg.awb.bookmark.ui.BookmarkEvent;
+import io.softwareecg.awb.bookmark.api.BookmarkEvent;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.platform.api.EventBus;
 import javafx.application.Platform;

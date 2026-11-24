@@ -1,7 +1,7 @@
 package io.softwareecg.awb.bookmark.ui;
 
 import io.softwareecg.awb.uitoolkit.components.FilterableComboBoxStringConverter;
-import io.softwareecg.awb.bookmark.model.BookmarkGroup;
+import io.softwareecg.awb.bookmark.api.BookmarkGroup;
 import org.apache.commons.lang3.StringUtils;
 
 /**
