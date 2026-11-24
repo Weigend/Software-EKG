@@ -5,7 +5,7 @@ import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.timeseries.dimension.physical.Host;
 import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
-import io.softwareecg.awb.query.model.MetricQuery;
+import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.series.physical.HostsRootItem;
 import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
@@ -30,7 +30,7 @@ public class HostsRootItemBuilder<T extends RepositoryBaseItem> extends Abstract
     protected List<HostsRootItem> getChildItemsFor(T item, FilterContext context, ProgressNotifier notifier) {
 
         MetricDataAccessService metricDataAccess = context.metrics();
-        MetricQuery query = new MetricQuery(context.getQueryParameter());
+        QuerySpec query = context.getQueryParameter();
 
         List<Host> hosts = metricDataAccess.getHosts(query);
         if (hasOnlyPlaceholderValues(hosts)) {

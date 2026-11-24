@@ -9,7 +9,6 @@ import io.softwareecg.awb.timeseries.dimension.logical.Pod;
 import io.softwareecg.awb.timeseries.dimension.logical.Service;
 import io.softwareecg.awb.timeseries.dimension.physical.Host;
 import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
-import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.query.model.TimeSeriesQuery;
 import io.softwareecg.awb.query.model.TimeSeriesQueryResponse;
@@ -105,7 +104,6 @@ public class MetricDataAccessServiceImpl implements MetricDataAccessService {
      * @param query a query instance that defines the filter parameters for time series search
      * @return a response with 0 to n time series data
      */
-    @Override
     public TimeSeriesQueryResponse queryTimeSeriesData(TimeSeriesQuery query) throws RepositoryException {
 
         try {
@@ -169,80 +167,80 @@ public class MetricDataAccessServiceImpl implements MetricDataAccessService {
     }
 
     @Override
-    public List<Process> getProcesses(MetricQuery query) {
-        QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withProcess("*").build();
+    public List<Process> getProcesses(QuerySpec query) {
+        QuerySpec queryClone = new QuerySpec.Builder(query).withProcess("*").build();
         return queryFacets(queryClone, FilterDimension.PROCESS,
                 new Process("*", "all"), name -> new Process(name, name));
     }
 
     @Override
-    public List<ProcessGroup> getProcessGroups(MetricQuery query) {
-        QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withProcessGroup("*").build();
+    public List<ProcessGroup> getProcessGroups(QuerySpec query) {
+        QuerySpec queryClone = new QuerySpec.Builder(query).withProcessGroup("*").build();
         return queryFacets(queryClone, FilterDimension.PROCESS_GROUP,
                 new ProcessGroup("*"), ProcessGroup::new);
     }
 
     @Override
-    public List<HostGroup> getHostGroups(MetricQuery query) {
-        QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withHostGroup("*").build();
+    public List<HostGroup> getHostGroups(QuerySpec query) {
+        QuerySpec queryClone = new QuerySpec.Builder(query).withHostGroup("*").build();
         return queryFacets(queryClone,
                 FilterDimension.HOST_GROUP, new HostGroup("*"), HostGroup::new);
 
     }
 
     @Override
-    public List<Host> getHosts(MetricQuery query) {
-        QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withHost("*").build();
+    public List<Host> getHosts(QuerySpec query) {
+        QuerySpec queryClone = new QuerySpec.Builder(query).withHost("*").build();
         return queryFacets(queryClone, FilterDimension.HOST,
                 new Host("*"), Host::new);
     }
 
     @Override
-    public List<Namespace> getNamespaces(MetricQuery query) {
-        QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withNamespace("*").build();
+    public List<Namespace> getNamespaces(QuerySpec query) {
+        QuerySpec queryClone = new QuerySpec.Builder(query).withNamespace("*").build();
         return queryFacets(queryClone, FilterDimension.NAMESPACE,
                 new Namespace("*"), Namespace::new);
 
     }
 
     @Override
-    public List<Service> getServices(MetricQuery query) {
-        QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withService("*").build();
+    public List<Service> getServices(QuerySpec query) {
+        QuerySpec queryClone = new QuerySpec.Builder(query).withService("*").build();
         return queryFacets(queryClone, FilterDimension.SERVICE,
                 new Service("*"), Service::new);
     }
 
     @Override
-    public List<Pod> getPods(MetricQuery query) {
-        QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withPod("*").build();
+    public List<Pod> getPods(QuerySpec query) {
+        QuerySpec queryClone = new QuerySpec.Builder(query).withPod("*").build();
         return queryFacets(queryClone, FilterDimension.POD,
                 new Pod("*"), Pod::new);
     }
 
     @Override
-    public List<Container> getContainers(MetricQuery query) {
-        QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withContainer("*").build();
+    public List<Container> getContainers(QuerySpec query) {
+        QuerySpec queryClone = new QuerySpec.Builder(query).withContainer("*").build();
         return queryFacets(queryClone, FilterDimension.CONTAINER,
                 new Container("*"), Container::new);
     }
 
     @Override
-    public List<Measurement> getMeasurements(MetricQuery query) {
-        QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withMeasurement("*").build();
+    public List<Measurement> getMeasurements(QuerySpec query) {
+        QuerySpec queryClone = new QuerySpec.Builder(query).withMeasurement("*").build();
         return queryFacets(queryClone, FilterDimension.MEASUREMENT,
                 new Measurement("*"), Measurement::new);
     }
 
     @Override
-    public List<MetricGroup> getMetricGroups(MetricQuery query) {
-        QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withMetricGroup("*").build();
+    public List<MetricGroup> getMetricGroups(QuerySpec query) {
+        QuerySpec queryClone = new QuerySpec.Builder(query).withMetricGroup("*").build();
         return queryFacets(queryClone, FilterDimension.METRIC_GROUP,
                 new MetricGroup("*"), MetricGroup::new);
     }
 
     @Override
-    public List<Metric> getMetricsNames(MetricQuery query) {
-        QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withMetric("*").build();
+    public List<Metric> getMetricsNames(QuerySpec query) {
+        QuerySpec queryClone = new QuerySpec.Builder(query).withMetric("*").build();
         return queryFacets(queryClone, FilterDimension.METRIC_NAME,
                 new Metric("*"), Metric::new);
     }

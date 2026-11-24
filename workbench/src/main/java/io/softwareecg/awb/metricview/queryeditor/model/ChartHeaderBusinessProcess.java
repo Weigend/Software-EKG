@@ -23,7 +23,6 @@ import io.softwareecg.awb.timeseries.dimension.logical.Namespace;
 import io.softwareecg.awb.timeseries.dimension.logical.Pod;
 import io.softwareecg.awb.timeseries.dimension.physical.Host;
 import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
-import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.repository.api.Repository;
 import javafx.collections.ObservableList;
@@ -89,7 +88,7 @@ public class ChartHeaderBusinessProcess extends QueryDraft {
 
     private <T> Service<Collection<T>> createService(ObservableList<T> itemsList,
                                               final Function<QuerySpec.Builder, QuerySpec.Builder<?>> builder,
-                                              final Function<MetricQuery, Collection<T>> fetcher) {
+                                              final Function<QuerySpec, Collection<T>> fetcher) {
 
         return new Service<>() {
             @Override
@@ -100,7 +99,7 @@ public class ChartHeaderBusinessProcess extends QueryDraft {
                         QuerySpec.Builder<QuerySpec> filterBuilder = new QuerySpec.Builder<>(
                                 ChartHeaderBusinessProcess.super.asQueryParams());
 
-                        return fetcher.apply(new MetricQuery(filterBuilder.build()));
+                        return fetcher.apply(filterBuilder.build());
                     }
 
                     @Override

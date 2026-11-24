@@ -5,7 +5,6 @@ import io.softwareecg.awb.explorer.items.ItemBuilder;
 import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.timeseries.dimension.logical.Pod;
-import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.series.logical.PodItem;
@@ -24,7 +23,7 @@ public class PodItemBuilder<T extends RepositoryBaseItem>  extends AbstractItemB
 
         MetricDataAccessService metricDataAccess = context.metrics();
 
-        List<Pod> pods = metricDataAccess.getPods(new MetricQuery(context.getQueryParameter()));
+        List<Pod> pods = metricDataAccess.getPods(context.getQueryParameter());
 
         return ItemBuilder.getItems(pods.stream(),
                 pod -> {

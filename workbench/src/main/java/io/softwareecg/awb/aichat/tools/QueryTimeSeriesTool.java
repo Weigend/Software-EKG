@@ -9,7 +9,6 @@ import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.query.api.MetricQueryService;
 import io.softwareecg.awb.query.model.ComputationSpec;
 import io.softwareecg.awb.timeseries.dimension.NamedValueEntity;
-import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.timeseries.TimeSeries;
 import io.softwareecg.awb.timeseries.Value;
@@ -143,8 +142,7 @@ public class QueryTimeSeriesTool implements AiTool {
             if (hasText(args, "metric") && !hasText(args, "metricgroup")) {
                 try {
                     QuerySpec resolveParams = builder.build();
-                    MetricQuery resolveQuery = new MetricQuery(resolveParams);
-                    List<String> groups = service.getMetricGroups(resolveQuery).stream()
+                    List<String> groups = service.getMetricGroups(resolveParams).stream()
                             .map(NamedValueEntity::getValueName)
                             .filter(name -> !"*".equals(name))
                             .toList();

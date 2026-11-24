@@ -7,10 +7,7 @@ import io.softwareecg.awb.timeseries.dimension.logical.Pod;
 import io.softwareecg.awb.timeseries.dimension.logical.Service;
 import io.softwareecg.awb.timeseries.dimension.physical.Host;
 import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
-import io.softwareecg.awb.query.model.MetricQuery;
-import io.softwareecg.awb.query.model.TimeSeriesQuery;
-import io.softwareecg.awb.query.model.TimeSeriesQueryResponse;
-import io.softwareecg.awb.repository.api.RepositoryException;
+import io.softwareecg.awb.query.model.QuerySpec;
 
 import java.util.List;
 
@@ -19,25 +16,12 @@ import io.softwareecg.awb.timeseries.dimension.Metric;
 import io.softwareecg.awb.timeseries.dimension.MetricGroup;
 import io.softwareecg.awb.timeseries.dimension.ProcessGroup;
 /**
- * Interface that represents services that provide the access to
- * time series and it metadata.
- * This interface has two groups of methods:
- * - one to query time series data (mass data) with paging/cursor function
- * - a second with some methods query facet data about the time series meta data (filter data/labels)
+ * What a repository holds: the values the dimensions of the time series have. The series themselves
+ * are queried with {@link MetricQueryService}.
  *
  * @since 18.08.2018
  */
 public interface MetricDataAccessService {
-
-    /**
-     * Fetches time series data from persistence storage that matches to the specified filters in
-     * the given query and post filter all values in the series that are not inside an (optional)
-     * specified time interval
-     *
-     * @param query a query instance that defines the filter parameters for time series search
-     * @return a response with 0 to n time series data
-     */
-    TimeSeriesQueryResponse queryTimeSeriesData(TimeSeriesQuery query) throws RepositoryException ;
 
     //==================================================================================================================
     // facet methods for classic / physical time series filter dimensions
@@ -53,7 +37,7 @@ public interface MetricDataAccessService {
      * @param query the filter query that will used to find the right set of facet that matches to the filter set.
      * @return the facets based on the given query in alphabetical order
      */
-    List<HostGroup> getHostGroups(MetricQuery query);
+    List<HostGroup> getHostGroups(QuerySpec query);
 
 
     /**
@@ -66,7 +50,7 @@ public interface MetricDataAccessService {
      * @param query the filter query that will used to find the right set of facet that matches to the filter set.
      * @return the facets based on the given query in alphabetical order
      */
-    List<Host> getHosts(MetricQuery query);
+    List<Host> getHosts(QuerySpec query);
 
 
     //==================================================================================================================
@@ -83,7 +67,7 @@ public interface MetricDataAccessService {
      * @param query the filter query that will used to find the right set of facet that matches to the filter set.
      * @return the facets based on the given query in alphabetical order
      */
-    List<Namespace> getNamespaces(MetricQuery query);
+    List<Namespace> getNamespaces(QuerySpec query);
 
     /**
      * Fetches and returns the facet data for the CloudPlatform services.
@@ -95,7 +79,7 @@ public interface MetricDataAccessService {
      * @param query the filter query that will used to find the right set of facet that matches to the filter set.
      * @return the facets based on the given query in alphabetical order
      */
-    List<Service> getServices(MetricQuery query);
+    List<Service> getServices(QuerySpec query);
 
     /**
      * Fetches and returns the facet data for pods (deployment units of Kubernetes/OpenShift).
@@ -107,7 +91,7 @@ public interface MetricDataAccessService {
      * @param query the filter query that will used to find the right set of facet that matches to the filter set.
      * @return the facets based on the given query in alphabetical order
      */
-    List<Pod> getPods(MetricQuery query);
+    List<Pod> getPods(QuerySpec query);
 
     /**
      * Fetches and returns the facet data for the container that are parts of pods.
@@ -119,7 +103,7 @@ public interface MetricDataAccessService {
      * @param query the filter query that will used to find the right set of facet that matches to the filter set.
      * @return the facets based on the given query in alphabetical order
      */
-    List<Container> getContainers(MetricQuery query);
+    List<Container> getContainers(QuerySpec query);
 
 
     //==================================================================================================================
@@ -134,7 +118,7 @@ public interface MetricDataAccessService {
      * @param query
      * @return a List of processes.
      */
-    List<Process> getProcesses(MetricQuery query);
+    List<Process> getProcesses(QuerySpec query);
 
     /**
      * Returns a list of process groups.
@@ -142,14 +126,14 @@ public interface MetricDataAccessService {
      * @param query the filter query that will used to find the right set of facet that matches to the filter set.
      * @return a List of process groups. The list can be empty but not null.
      */
-    List<ProcessGroup> getProcessGroups(MetricQuery query);
+    List<ProcessGroup> getProcessGroups(QuerySpec query);
 
     /**
      * Return all available series series.
      * @param query
      * @return a list of measurements. The list can be empty but not null.
      */
-    List<Measurement> getMeasurements(MetricQuery query);
+    List<Measurement> getMeasurements(QuerySpec query);
 
     /**
      *
@@ -157,9 +141,9 @@ public interface MetricDataAccessService {
      * @param query
      * @return
      */
-    List<MetricGroup> getMetricGroups(MetricQuery query);
+    List<MetricGroup> getMetricGroups(QuerySpec query);
 
 
 
-    List<Metric> getMetricsNames(MetricQuery metricQuery);
+    List<Metric> getMetricsNames(QuerySpec metricQuery);
 }

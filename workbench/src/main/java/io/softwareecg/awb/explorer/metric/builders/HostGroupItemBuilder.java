@@ -5,7 +5,6 @@ import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.timeseries.dimension.physical.Host;
 import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
-import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.series.physical.HostGroupItem;
@@ -31,7 +30,7 @@ public class HostGroupItemBuilder<T extends RepositoryBaseItem> extends Abstract
     protected List<HostGroupItem> getChildItemsFor(T item, FilterContext context, ProgressNotifier notifier) {
 
         MetricDataAccessService metricDataAccess = context.metrics();
-        List<HostGroup> hostGroups = metricDataAccess.getHostGroups(new MetricQuery(context.getQueryParameter()));
+        List<HostGroup> hostGroups = metricDataAccess.getHostGroups(context.getQueryParameter());
 
         if (hostGroups.isEmpty() || (hostGroups.size() == 1 && "*".equals(hostGroups.get(0).getValueName()))) {
             return List.of();

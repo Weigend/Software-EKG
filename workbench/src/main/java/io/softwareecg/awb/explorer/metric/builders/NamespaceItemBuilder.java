@@ -5,7 +5,6 @@ import io.softwareecg.awb.explorer.items.ItemBuilder;
 import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.timeseries.dimension.logical.Namespace;
-import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.series.logical.NamespaceItem;
@@ -25,7 +24,7 @@ public class NamespaceItemBuilder<T extends RepositoryBaseItem>  extends Abstrac
 
         MetricDataAccessService metricDataAccess = parentContext.metrics();
 
-        List<Namespace> namespaces = metricDataAccess.getNamespaces(new MetricQuery(parentContext.getQueryParameter()));
+        List<Namespace> namespaces = metricDataAccess.getNamespaces(parentContext.getQueryParameter());
 
         CloudPlatformType platformType = parentContext.getQueryParameter().getProject().getCloudPlatformType();
         final String itemName = platformType == CloudPlatformType.OPEN_SHIFT ? "Projekt (Namespace)" : "Namespace";

@@ -5,7 +5,6 @@ import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.timeseries.dimension.Process;
 import io.softwareecg.awb.timeseries.dimension.ProcessGroup;
-import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.series.ProcessGroupItem;
@@ -31,7 +30,7 @@ public class ProcessGroupItemBuilder<T extends RepositoryBaseItem> extends Abstr
     protected List<ProcessGroupItem> getChildItemsFor(T item, FilterContext context, ProgressNotifier notifier) {
 
         MetricDataAccessService metricDataAccess = context.metrics();
-        List<ProcessGroup> processGroups = metricDataAccess.getProcessGroups(new MetricQuery(context.getQueryParameter()));
+        List<ProcessGroup> processGroups = metricDataAccess.getProcessGroups(context.getQueryParameter());
 
         if (processGroups.isEmpty() || (processGroups.size() == 1 && "*".equals(processGroups.get(0).getValueName()))) {
             return List.of();

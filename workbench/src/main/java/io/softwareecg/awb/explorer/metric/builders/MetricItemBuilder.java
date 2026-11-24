@@ -5,7 +5,6 @@ import io.softwareecg.awb.explorer.items.ItemBuilder;
 import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.timeseries.dimension.Metric;
-import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.series.MetricItem;
@@ -40,7 +39,7 @@ public class MetricItemBuilder<T extends RepositoryBaseItem> extends AbstractCon
 
         MetricDataAccessService metricDataAccess = context.metrics();
 
-        List<Metric> metrics = metricDataAccess.getMetricsNames(new MetricQuery(context.getQueryParameter()));
+        List<Metric> metrics = metricDataAccess.getMetricsNames(context.getQueryParameter());
 
         StopWatch stopWatch = StopWatch.createStarted();
         try {

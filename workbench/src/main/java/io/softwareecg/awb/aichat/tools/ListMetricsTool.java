@@ -11,7 +11,6 @@ import io.softwareecg.awb.timeseries.dimension.logical.Pod;
 import io.softwareecg.awb.timeseries.dimension.logical.Service;
 import io.softwareecg.awb.timeseries.dimension.physical.Host;
 import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
-import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.QuerySpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -142,7 +141,6 @@ public class ListMetricsTool implements AiTool {
             }
 
             QuerySpec params = builder.build();
-            MetricQuery query = new MetricQuery(params);
 
             ObjectNode result = objectMapper.createObjectNode();
             result.put("facet", facet);
@@ -152,18 +150,18 @@ public class ListMetricsTool implements AiTool {
 
             switch (facet) {
                 // Physical / classic hierarchy
-                case "hostgroups" -> addItems(items, result, service.getHostGroups(query));
-                case "hosts" -> addItems(items, result, service.getHosts(query));
-                case "measurements" -> addItems(items, result, service.getMeasurements(query));
-                case "processes" -> addItems(items, result, service.getProcesses(query));
-                case "processgroups" -> addItems(items, result, service.getProcessGroups(query));
-                case "metricgroups" -> addItems(items, result, service.getMetricGroups(query));
-                case "metrics" -> addItems(items, result, service.getMetricsNames(query));
+                case "hostgroups" -> addItems(items, result, service.getHostGroups(params));
+                case "hosts" -> addItems(items, result, service.getHosts(params));
+                case "measurements" -> addItems(items, result, service.getMeasurements(params));
+                case "processes" -> addItems(items, result, service.getProcesses(params));
+                case "processgroups" -> addItems(items, result, service.getProcessGroups(params));
+                case "metricgroups" -> addItems(items, result, service.getMetricGroups(params));
+                case "metrics" -> addItems(items, result, service.getMetricsNames(params));
                 // Cloud-native / logical hierarchy
-                case "namespaces" -> addItems(items, result, service.getNamespaces(query));
-                case "services" -> addItems(items, result, service.getServices(query));
-                case "pods" -> addItems(items, result, service.getPods(query));
-                case "containers" -> addItems(items, result, service.getContainers(query));
+                case "namespaces" -> addItems(items, result, service.getNamespaces(params));
+                case "services" -> addItems(items, result, service.getServices(params));
+                case "pods" -> addItems(items, result, service.getPods(params));
+                case "containers" -> addItems(items, result, service.getContainers(params));
                 default -> throw new IllegalArgumentException("Unknown facet: " + facet);
             }
 

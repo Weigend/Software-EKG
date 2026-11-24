@@ -5,7 +5,6 @@ import io.softwareecg.awb.explorer.items.ItemBuilder;
 import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.timeseries.dimension.logical.Service;
-import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.series.logical.ServiceItem;
@@ -23,7 +22,7 @@ public class ServiceItemBuilder<T extends RepositoryBaseItem>  extends AbstractI
     protected List<ServiceItem> getChildItemsFor(T item, FilterContext parentContext, ProgressNotifier notifier) {
 
         MetricDataAccessService metricDataAccess = parentContext.metrics();
-        List<Service> services = metricDataAccess.getServices(new MetricQuery(parentContext.getQueryParameter()));
+        List<Service> services = metricDataAccess.getServices(parentContext.getQueryParameter());
 
         return ItemBuilder.getItems(services.stream(),
                 service -> {

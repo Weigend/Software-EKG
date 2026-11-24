@@ -6,7 +6,6 @@ import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.timeseries.dimension.Process;
 import io.softwareecg.awb.timeseries.dimension.ProcessGroup;
-import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.series.ProcessGroupItem;
@@ -29,13 +28,13 @@ public class ProcessItemBuilder<T extends RepositoryBaseItem>  extends AbstractI
         MetricDataAccessService metricDataAccess = context.metrics();
 
         // Check if process groups exist - if so, processes should only appear under ProcessGroupItem
-        List<ProcessGroup> processGroups = metricDataAccess.getProcessGroups(new MetricQuery(context.getQueryParameter()));
+        List<ProcessGroup> processGroups = metricDataAccess.getProcessGroups(context.getQueryParameter());
         if (!(item instanceof ProcessGroupItem) &&
                 !(processGroups.isEmpty() || (processGroups.size() == 1 && "*".equals(processGroups.get(0).getValueName())))) {
             return List.of();
         }
 
-        List<Process> metricProcesses = metricDataAccess.getProcesses(new MetricQuery(context.getQueryParameter()));
+        List<Process> metricProcesses = metricDataAccess.getProcesses(context.getQueryParameter());
 
         return ItemBuilder.getItems(metricProcesses.stream(),
                 process -> {

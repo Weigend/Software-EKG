@@ -2,7 +2,6 @@ package io.softwareecg.awb.e2e;
 
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.timeseries.dimension.NamedValueEntity;
-import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
@@ -118,10 +117,10 @@ public final class ImportedProject {
         return names;
     }
 
-    private MetricQuery query() {
+    private QuerySpec query() {
         QuerySpec.Builder<QuerySpec> filter = new QuerySpec.Builder<>();
         filter.withProject(name);
-        return new MetricQuery(filter.build());
+        return filter.build();
     }
 
     private MetricDataAccessService metrics() {

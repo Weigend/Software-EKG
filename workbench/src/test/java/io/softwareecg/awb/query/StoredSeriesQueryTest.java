@@ -6,7 +6,6 @@ import io.softwareecg.awb.datasource.model.SeriesDimensions;
 import io.softwareecg.awb.importer.spi.RemoteSeriesDataFetcher;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
-import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.query.model.TimeSeriesQuery;
 import io.softwareecg.awb.query.model.TimeSeriesQueryResponse;
@@ -75,7 +74,7 @@ public class StoredSeriesQueryTest {
 
     private final StoreRepository repository = new StoreRepository(store);
 
-    private MetricDataAccessService service;
+    private MetricDataAccessServiceImpl service;
 
     @Before
     public void startLookup() throws Exception {
@@ -105,7 +104,7 @@ public class StoredSeriesQueryTest {
                 return List.of();
             }
         });
-        service = repository.getBoundedService(MetricDataAccessService.class);
+        service = (MetricDataAccessServiceImpl) repository.getBoundedService(MetricDataAccessService.class);
         answerSearch(0, null);
         answerFacet();
     }
@@ -217,7 +216,7 @@ public class StoredSeriesQueryTest {
 
     @Test
     public void theValuesOfADimensionAreNotRestrictedByItself() throws Exception {
-        Map<EkgSchemaField, BiFunction<MetricDataAccessService, MetricQuery, List<? extends NamedValueEntity>>> values = Map.ofEntries(
+        Map<EkgSchemaField, BiFunction<MetricDataAccessService, QuerySpec, List<? extends NamedValueEntity>>> values = Map.ofEntries(
                 Map.entry(EkgSchemaField.TS_HOST_GROUP_NAME, MetricDataAccessService::getHostGroups),
                 Map.entry(EkgSchemaField.TS_HOST_NAME, MetricDataAccessService::getHosts),
                 Map.entry(EkgSchemaField.TS_NAMESPACE_NAME, MetricDataAccessService::getNamespaces),
@@ -232,7 +231,7 @@ public class StoredSeriesQueryTest {
 
         for (var entry : values.entrySet()) {
             clearInvocations(store);
-            List<? extends NamedValueEntity> found = entry.getValue().apply(service, new MetricQuery(everything().build()));
+            List<? extends NamedValueEntity> found = entry.getValue().apply(service, everything().build());
 
             ArgumentCaptor<FacetParams> facet = ArgumentCaptor.forClass(FacetParams.class);
             verify(store).facet(facet.capture());
@@ -251,7 +250,7 @@ public class StoredSeriesQueryTest {
     public void thereAreNoValuesWhileTheRepositoryIsOffline() throws Exception {
         when(store.facet(any())).thenThrow(new RepositoryException("offline"));
 
-        assertEquals(List.of(), service.getHosts(new MetricQuery(spec().build())));
+        assertEquals(List.of(), service.getHosts(spec().build()));
     }
 
     @Test

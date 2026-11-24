@@ -5,7 +5,6 @@ import io.softwareecg.awb.explorer.items.ItemBuilder;
 import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.timeseries.dimension.MetricGroup;
-import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.series.MetricGroupItem;
@@ -24,7 +23,7 @@ public class MetricGroupItemBuilder<T extends RepositoryBaseItem>  extends Abstr
 
         MetricDataAccessService metricDataAccess = context.metrics();
 
-        List<MetricGroup> metricGroups = metricDataAccess.getMetricGroups(new MetricQuery(context.getQueryParameter()));
+        List<MetricGroup> metricGroups = metricDataAccess.getMetricGroups(context.getQueryParameter());
 
         return ItemBuilder.getItems(metricGroups.stream(),
                 metricGroup -> {

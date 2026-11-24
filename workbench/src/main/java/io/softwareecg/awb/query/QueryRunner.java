@@ -2,7 +2,6 @@ package io.softwareecg.awb.query;
 
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.awb.query.api.ComputedTimeSeriesResponse;
-import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.query.api.MetricQueryService;
 
 import io.softwareecg.awb.query.model.SeriesCombineMode;
@@ -48,7 +47,7 @@ public class QueryRunner implements MetricQueryService {
     /**
      * The MetricQueryService that provides the metric time-series low-level access to types data
      */
-    private MetricDataAccessService metricDataAccess;
+    private MetricDataAccessServiceImpl metricDataAccess;
 
     protected final EventBus<EventObject> eventBus;
 
@@ -73,7 +72,7 @@ public class QueryRunner implements MetricQueryService {
     @SuppressWarnings("unchecked")
     public QueryRunner(Repository repository) {
         this(Lookup.lookup(EventBus.class), Lookup.lookup(SeriesTransformPipeline.class));
-        this.metricDataAccess = ServiceDiscovery.lookup(MetricDataAccessService.class, repository);
+        this.metricDataAccess = new MetricDataAccessServiceImpl(repository);
     }
 
 

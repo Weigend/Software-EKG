@@ -4,7 +4,6 @@ import io.softwareecg.awb.uitoolkit.tree.api.ProgressNotifier;
 import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.timeseries.dimension.Measurement;
-import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.series.MeasurementGroupItem;
 import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
@@ -30,7 +29,7 @@ public class MeasurementGroupItemBuilder<T extends RepositoryBaseItem> extends A
     protected List<MeasurementGroupItem> getChildItemsFor(T item, FilterContext context, ProgressNotifier notifier) {
 
         MetricDataAccessService metricDataAccess = context.metrics();
-        List<Measurement> measurements = metricDataAccess.getMeasurements(new MetricQuery(context.getQueryParameter()));
+        List<Measurement> measurements = metricDataAccess.getMeasurements(context.getQueryParameter());
         if (hasOnlyPlaceholderValues(measurements)) {
             return List.of();
         }
