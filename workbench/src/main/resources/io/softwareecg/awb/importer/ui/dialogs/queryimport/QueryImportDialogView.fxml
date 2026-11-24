@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 <fx:root type="QueryImportDialog" prefHeight="670.0" prefWidth="740.0"
-         xmlns="http://javafx.com/javafx" id="outerBorderPane" fx:id="importDialog" xmlns:fx="http://javafx.com/fxml"
+         xmlns="http://javafx.com/javafx" id="outerBorderPane" xmlns:fx="http://javafx.com/fxml"
          fx:controller="io.softwareecg.awb.importer.ui.dialogs.queryimport.QueryImportDialogController">
 
     <top>

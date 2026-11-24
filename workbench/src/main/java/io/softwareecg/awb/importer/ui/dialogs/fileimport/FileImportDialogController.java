@@ -9,6 +9,7 @@ import io.softwareecg.awb.importer.framework.LocalProjectImportTask;
 import io.softwareecg.awb.importer.framework.SplitSourceProjectImportStrategy;
 import io.softwareecg.awb.importer.ui.controls.fileselector.LabeledFileSelector;
 import io.softwareecg.wfx.lookup.api.Lookup;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -34,13 +35,6 @@ import java.util.function.Supplier;
  */
 @SuppressWarnings("unused")  // intellij isn't able to resolve all injections
 public class FileImportDialogController implements Initializable {
-
-    /**
-     * The modal ImportDialog itself that contain all UI components
-     * controls by this controller as child's
-     */
-    @FXML
-    private FileImportDialog importDialog;
 
     /**
      * The label in the header section that will display a static
@@ -117,9 +111,6 @@ public class FileImportDialogController implements Initializable {
         bpRepositorySelector.setCenter(repositorySelector.asJfxComponent());
         bpProjectSelector.setCenter(projectSelector.asJfxComponent());
 
-        // bind header description text to data from outside
-        headerLabel.textProperty().bind(importDialog.getHeaderDescriptionProperty());
-
         // init default behaviour (validation, filter, ...0) and binding
         // before calling methods overwritten by deriving classes
         initViewBehavior();
@@ -135,6 +126,11 @@ public class FileImportDialogController implements Initializable {
 
     public ProjectSelector getProjectSelector() {
        return projectSelector;
+    }
+
+    /** @return the description in the header of the dialog */
+    public StringProperty headerTextProperty() {
+        return headerLabel.textProperty();
     }
 
     public RepositorySelector getRepositorySelector() {

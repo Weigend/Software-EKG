@@ -14,6 +14,7 @@ import io.softwareecg.awb.importer.framework.RemoteProjectImportTask;
 import io.softwareecg.awb.importer.framework.SplitSourceProjectImportStrategy;
 import jakarta.inject.Inject;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -45,13 +46,6 @@ public class QueryImportDialogController implements Initializable {
      * The logger used by the controller to log errors and special events
      */
     private static final Logger LOGGER = EkgLogger.get();
-
-    /**
-     * The modal ImportDialog itself that contain all UI components
-     * controls by this controller as child's
-     */
-    @FXML
-    private QueryImportDialog importDialog;
 
     /**
      * The label in the header section that will display a static
@@ -162,7 +156,6 @@ public class QueryImportDialogController implements Initializable {
         bpRepositorySelector.setCenter(repositorySelector.asJfxComponent());
         bpProjectSelector.setCenter(projectSelector.asJfxComponent());
         bpQuerySourceSelector.setCenter(querySourceSelector.asJfxComponent());
-        headerLabel.textProperty().bind(importDialog.getHeaderDescriptionProperty());
 
         // init pseudo classes and other view styles that
         // will setup programmatically
@@ -191,6 +184,11 @@ public class QueryImportDialogController implements Initializable {
         return projectSelector;
     }
 
+
+    /** @return the description in the header of the dialog */
+    public StringProperty headerTextProperty() {
+        return headerLabel.textProperty();
+    }
 
     public RepositorySelector getRepositorySelector() {
         return repositorySelector;

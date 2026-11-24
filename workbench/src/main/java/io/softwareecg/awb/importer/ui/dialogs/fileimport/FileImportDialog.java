@@ -45,6 +45,7 @@ public class FileImportDialog extends ImportDialog {
         } else {
             controller = CdiFxmlLoader.loadView(DEFAULT_VIEW, this, controller).getController();
         }
+        controller.headerTextProperty().bind(getHeaderDescriptionProperty());
     }
 
     /**

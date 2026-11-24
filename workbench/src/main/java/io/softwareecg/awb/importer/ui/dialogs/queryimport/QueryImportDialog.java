@@ -22,6 +22,7 @@ public class QueryImportDialog extends ImportDialog {
 
     public QueryImportDialog() {
         controller = CdiFxmlLoader.loadView("QueryImportDialogView.fxml", this).getController();
+        controller.headerTextProperty().bind(getHeaderDescriptionProperty());
     }
 
     @Override
