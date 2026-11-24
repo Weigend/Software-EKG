@@ -1,6 +1,6 @@
 # The Components Were There. Their Code Was Everywhere.
 
-## How we restored the boundaries of a growing Java application by building its target architecture before moving 906 files
+## We built the target architecture first, moved 906 files, and learned that a picture can be clean and still be wrong
 
 Every long-lived codebase has questions it should answer from its structure. Ours could not answer a
 simple one: where do I put a new data source?
@@ -88,11 +88,10 @@ da.solr.SolrRepositoryClient
     -> timeseries.adapter.solr.SolrRepositoryClient
 ```
 
-These are not cosmetic renames. Together, the three lines reunite a capability that had been split
-between `sdk`, `project`, and `da`: the write contract moves to the low-level time-series boundary,
-the repository UI moves to repository ownership, and the Solr client becomes an adapter of the
-time-series component. The mapping made every such ownership decision explicit before a source
-file moved.
+These are not cosmetic renames. Each line is a decision about ownership, taken from what had been
+split between `sdk`, `project`, and `da`, and made explicit before a source file moved. That does not
+make it right. Two of these three lines did not survive, and how we found out is the second half of
+this story.
 
 Then a generator produced an empty stand-in for each type, in its new package, with the dependencies of the real class written in as method calls. The result compiled into a JAR that did nothing at all, but had the shape of the application we wanted.
 
@@ -108,7 +107,7 @@ Then it started to teach us things.
 
 **Project and repository are not the same topic.** An early version of the target had the Solr and ClickHouse repositories inside project management, because that is where their dialogs had always been. Seeing database technology inside a box called “project management” settled a discussion that words had not. Repositories got their own component.
 
-**Nobody had been sure who owns writing data.** The service that writes time series was used by importers and data sources and implemented by repository code. We first placed it with the importer, then with the repository. Both times an arrow pointed upward in the picture. The third home was the right one: writing time series is a contract of the time-series component itself.
+**Nobody had been sure who owns writing data.** The service that writes time series was used by importers and data sources and implemented by repository code. We first placed it with the importer, then with the repository. Both times an arrow pointed upward in the picture. So it became a contract of the time-series component, and the arrows were gone. Remember this one.
 
 **“Application” was two things at once.** It held the startup code, and also small helpers that everything else used, which belong at the very bottom. Once those helpers had their own `runtime` component, it settled on the lowest level.
 
@@ -151,48 +150,101 @@ After that, the whole mapping was applied. The migration touched 906 files: clas
 
 Three classes could not simply be moved. They did too many things, and the mapping had marked them as splits from the start. Here the method reached its limit. The skeleton could say that a class had to become two or three. Deciding which behavior goes where meant reading the real code and deciding case by case. The former chart controller, for example, became a view controller, a store for the state of an investigation, and a composer for chart layers.
 
-Then came the comparison we had been working toward. We loaded the finished production JAR into S202 and put it next to the skeleton. The two pictures are not identical, because real code has more dependencies than a hypothesis. But they show the same components, with the same names, stacked in the same direction.
+Then came the comparison we had been working toward. We loaded the production JAR into S202 and put it next to the skeleton. The two pictures are not identical, because real code has more dependencies than a hypothesis. But they show the same components, with the same names, stacked in the same direction.
 
-![The fully refactored production JAR in S202](images/s202-4-after.png)
+![The production JAR in S202 after the move](images/s202-4-first-move.png)
 
-*After: the historical buckets have disappeared. `repository`, `datasource`, `metricview`,
-`projectcontext`, and the other feature components now own their internal API/model/UI structure.
-Shared technical capabilities are named by purpose—`timeseries`, `metadata`, `runtime`,
-`uitoolkit`, and `infrastructure`—rather than by their former module history.*
+*After the move: the historical buckets have disappeared. Features own their model and UI, and shared
+capabilities are named by purpose: `timeseries`, `metadata`, `runtime`, `uitoolkit`, and
+`infrastructure`.*
 
-The change is easiest to see by following the scattered repository example through both trees:
+An earlier version of this article ended about here.
 
-| Before | After | Ownership decision |
+## A clean picture is not a correct one
+
+A package move is not a decoupling, and the new structure made the remaining work visible. "New
+Analysis" still used a central list of sources. Repository administration still knew its
+technologies from a closed enum. The main controller of the metric view still knew its header and
+its legend too well. We replaced those with registries and narrow ports, and called it done.
+
+Then we asked a question the picture does not answer: are the components more cohesive than before?
+
+We took the classes that existed in both versions and measured, for each component, how many of its
+dependencies stay inside. The result was sobering. Explorer and importer had clearly gained.
+Repository had not:
+
+| Component | Before | After the move | Now |
+| --- | --- | --- | --- |
+| Explorer | 14% | 45% | 45% |
+| Importer | 34% | 49% | 50% |
+| Repository | 18% | 20% | **55%** |
+
+There were also cycles between components. The old code had none. Our move had made one visible that
+used to hide inside `sdk`, and our follow-up work had added a second one, with a single class
+reference. Nothing in the build had complained.
+
+![The moved JAR with dependency violations shown](images/s202-5-first-move-violations.png)
+
+*The moved JAR with S202's violation overlay. Each dashed arrow points against the layering. Two of
+them run from `projectcontext` up into `importer`: that is a cycle between components.*
+
+## "Repository belongs in repository"
+
+What had gone wrong did not come out of the numbers. It came from the person who knows the product,
+who looked at the packages and said: the repository things do not belong in time series. And query is
+wrong there too.
+
+They were right, and it was plain once said. `timeseries` held two subjects under one name. One is
+the data: a series, its values, the hosts and metrics it belongs to. The other is storage: how a
+repository is searched, described, and reached. Solr, Elasticsearch, and ClickHouse had each been cut
+in two, one half in `repository`, one half in `timeseries`.
+
+Remember the service that writes series? We had moved it until no arrow pointed upward. That was the
+mistake. We had let the picture choose the owner. The layering was clean because we had put a
+repository contract in a low place, not because it belonged there.
+
+The second look found more of the same kind:
+
+- **Everything about a repository is in `repository` now.** A technology is one package.
+  `timeseries` is a data model and depends on nothing but itself.
+- **`investigation` was the model of a query.** Its name sounded like the product, but it held the
+  objects the query engine runs. They are one component, `query`.
+- **`querycatalog` was no catalog.** It wrote series, and nothing used it. It had been carried along
+  faithfully, with a nice new name.
+- **`api`, `spi`, and `port` had been used as decoration.** Now they say who implements what: an API
+  is implemented by its own component, an SPI by others, a port by adapters.
+
+The path of one capability shows the difference:
+
+| Before | After the move | Now |
 | --- | --- | --- |
-| `sdk.awbapi.repository` | `timeseries.port` | Reading and writing series is a storage contract, not an SDK grab bag. |
-| `project.ui.repositoryselector` | `repository.ui` | Selecting a repository belongs to repository administration, not project context. |
-| `da.solr`, `da.elasticsearch`, `da.clickhouse` | `timeseries.adapter.*` | Database technologies implement the time-series ports. |
-| `repository.bl`, `repository.ui`, `repository.api` | `repository.service`, `repository.ui`, `repository.api` | Repository configuration remains one coherent feature. |
+| `sdk.awbapi.repository` | `timeseries.port` | `repository.api`, `repository.port` |
+| `project.ui.repositoryselector` | `repository.ui` | `repository.ui` |
+| `da.solr` and its siblings | `timeseries.adapter.solr` | `repository.adapter.solr` |
+| `repository.bl`, `repository.ui` | `repository.service`, `repository.ui` | `repository.service`, `repository.ui` |
 
-The important difference is not that the new tree has nicer words. It is that changing one
-capability no longer requires knowing which former module happened to own each fragment.
+![The architecture today, with dependency violations shown](images/s202-6-final.png)
 
-## What the package move did not fix by itself
+*Today, with the same overlay. Every remaining arrow stays inside its component. Between components
+there is none.*
 
-A package move is not a decoupling, and the new structure made the remaining work visible.
+## What we got wrong, and what it did not fix
 
-Immediately after the move, the metric view was easy to find, but its main controller still knew
-its header and legend too well. The data-source component had an obvious home, but “New Analysis”
-still used a central list and source-specific branches. Repository administration was visible, but
-its supported technologies still came from a closed enum. H2 had moved under `metadata`, while
-some consumers still depended directly on the H2 implementation.
+We had already released the first result. In it, the dialog that exports a chart as a picture did not
+open. Its classes had moved, and its view and icons had not. All tests passed, because no test opened
+that dialog, and the compiler does not look at file names in strings. The release was withdrawn.
 
-Those became the next, smaller refactoring: provider registries for analysis sources and repository
-types, a bookmark port that completes the metadata ports, and narrow ports between metric view, query header, chart,
-and legend. Architecture tests now protect those directions. The package migration did not solve
-all coupling; it created coherent places in which the coupling could finally be seen and removed.
+So the build checks more than it did. One test looks up every view, stylesheet, and icon that is
+written out in the sources. The architecture tests forbid cycles between components, keep the
+repository technologies apart, and check what `api`, `spi`, and `port` promise. We ran the checks
+for files, cycles, and interfaces against the versions that had the problem, to see them fail.
 
-That distinction matters. “Move classes into components” and “make components independently
-extensible” are different operations. We completed them in that order and measured after each one.
+Some things did not get better. Counted over the whole application, more dependencies cross component
+boundaries than before, partly because eighteen components have more boundaries than twelve.
+The metric view is still the least cohesive feature. And inside some components, packages depend on
+each other in circles, more of them now than before the last move.
 
-![The refactored production JAR with dependency violations shown](images/s202-5-after-violations.png)
-
-*The same picture with S202's violation overlay switched on. Each dashed arrow is a dependency that points against the layering, with the number of class dependencies behind it.*
+Moving classes does not remove a dependency. It decides where you look for one.
 
 ## The method, in short
 
@@ -205,15 +257,18 @@ Nothing here is specific to Software-EKG or to Java:
 5. **Review the picture, not the plan.** Look for technology inside feature components, arrows pointing upward, and anything that sits higher or lower than you expected.
 6. **Move from the bottom up.** Shared foundations first, features last, with a build and a test run after each step.
 7. **Compare the result with the hypothesis.** The skeleton is a claim. The production JAR is the evidence.
+8. **Measure afterwards.** Count cycles and cohesion before and after. A layered picture does not show cohesion, and a cycle of one class reference is easy to overlook.
+9. **Look up what the compiler does not.** Views, stylesheets, icons, and scripts move too.
+10. **Ask the person who knows the product again at the end.** Whether a component holds one subject is not in the arrows.
 
 ## What we would tell another team
 
 Using AI to rename Java packages is not remarkable. Coding agents are good at mechanical work.
 
-What made the difference was having something to look at before any code moved, and deriving it from the product instead of from the existing package tree. The skeleton gave the AI something concrete to keep complete. The picture gave the human something concrete to judge. Compilation and tests kept the move itself honest.
+What made the difference was having something to look at before any code moved, and deriving it from the product instead of from the existing package tree. What nearly undid it was trusting that picture too long. The skeleton gave the AI something concrete to keep complete. The picture gave the human something concrete to judge. Compilation and tests kept the move itself honest.
 
 We did not ask the AI what the system means. We asked it to make our own ideas complete enough to compile, and then looked at whether we still believed them.
 
-So do not begin by moving code. Build a model you can see, argue with, and compile. Then build the real thing and put the two side by side.
+So do not begin by moving code. Build a model you can see, argue with, and compile. Then build the real thing, put the two side by side, and argue once more.
 
 *S202 is on GitHub: [github.com/Weigend/S202](https://github.com/Weigend/S202). So is the application it was used on: [github.com/Weigend/Software-EKG](https://github.com/Weigend/Software-EKG).*
