@@ -225,6 +225,28 @@ class ExplorerE2ETest {
         awaitGone("Local Repository", "Explorer", "Bookmarks", "Cpu of the user");
     }
 
+    /** A new bookmark loads the tree anew. What is open in it stays open: it used to close down to the repository. */
+    @Test
+    void theTreeStaysOpenWhenABookmarkIsMade() {
+        node("Local Repository", "Explorer", "Metrics", "os", "\\Cpu\\hi");
+        workbench.openChart("Explorer", "os", "\\Cpu\\us");
+        TreeItem<Object> before = node("Local Repository");
+
+        bookmark("Seen with an open tree", null);
+
+        workbench.awaitTrue("the tree to be loaded anew", Duration.ofSeconds(30),
+                () -> workbench.onFx(() -> !tree().getRoot().getChildren().isEmpty() && before.getParent() == null));
+        workbench.awaitTrue("the metrics to be shown again", Duration.ofSeconds(30),
+                () -> workbench.onFx(() -> isShown("Local Repository", "Explorer", "Metrics", "os", "\\Cpu\\hi")));
+
+        TreeItem<Object> bookmark = node("Local Repository", "Explorer", "Bookmarks", "Seen with an open tree");
+        workbench.onFx(() -> {
+            choose(bookmark, "Delete Bookmark");
+            return null;
+        });
+        awaitGone("Local Repository", "Explorer", "Bookmarks", "Seen with an open tree");
+    }
+
     /** A bookmark in a group that is not there yet creates the group, which is not of one project. */
     @Test
     void aBookmarkInANewGroupIsGlobal() {
@@ -385,6 +407,23 @@ class ExplorerE2ETest {
                     }
                     return Optional.of(item);
                 }));
+    }
+
+    /** Whether the node at the end of a way is in a row of the tree. Opens nothing. To be called on the JavaFX thread. */
+    private static boolean isShown(String... way) {
+        TreeItem<Object> item = tree().getRoot();
+        for (String name : way) {
+            if (!item.isExpanded()) {
+                return false;
+            }
+            Optional<TreeItem<Object>> child = item.getChildren().stream()
+                    .filter(candidate -> isNamed(candidate, name)).findFirst();
+            if (child.isEmpty()) {
+                return false;
+            }
+            item = child.get();
+        }
+        return tree().getRow(item) >= 0;
     }
 
     /**

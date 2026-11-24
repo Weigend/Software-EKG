@@ -68,6 +68,11 @@ public class RepositoryItem extends RepositoryBaseItem {
     private volatile boolean connected = true;
 
     /**
+     * Set while this node waits for its server to open again. Used on the JavaFX thread only.
+     */
+    private boolean openWhenConnected;
+
+    /**
      * The periodic connectivity check of a remote repository; {@code null} for the embedded one.
      */
     private Timer pingTimer;
@@ -306,6 +311,10 @@ public class RepositoryItem extends RepositoryBaseItem {
             if (connected) {
                 icon.setEffect(null);
                 icon.setOpacity(1.0);
+                if (openWhenConnected) {
+                    openWhenConnected = false;
+                    setExpanded(true);
+                }
             } else {
                 ColorAdjust desaturate = new ColorAdjust();
                 desaturate.setSaturation(-1);
@@ -319,6 +328,31 @@ public class RepositoryItem extends RepositoryBaseItem {
 
     public boolean isConnected() {
         return connected;
+    }
+
+    /**
+     * The label also says how many values there are, or that there is no connection.
+     */
+    @Override
+    protected String getExpansionKey() {
+        return getId();
+    }
+
+    @Override
+    protected boolean isOpen() {
+        return openWhenConnected || super.isOpen();
+    }
+
+    /**
+     * A repository with a server is taken for disconnected until the server has answered.
+     */
+    @Override
+    protected void reopen() {
+        if (connected) {
+            super.reopen();
+        } else {
+            openWhenConnected = true;
+        }
     }
 
     @Override

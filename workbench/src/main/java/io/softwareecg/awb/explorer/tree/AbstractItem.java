@@ -53,7 +53,7 @@ public abstract class AbstractItem<T> extends TreeItem<T> implements Comparable<
     /**
      * Stores expanded state passed down from a parent node during tree refresh.
      * Used to recursively restore the expanded state of child nodes after service restart.
-     * Structure: key = child value string, value = nested map for that child's children.
+     * Structure: key = expansion key of the child, value = nested map for that child's children.
      */
     private Map<String, Object> pendingExpandedState;
 
@@ -309,23 +309,51 @@ public abstract class AbstractItem<T> extends TreeItem<T> implements Comparable<
     }
 
     /**
+     * What a node is recognized by when the tree is loaded anew and has new nodes: the same for the
+     * old node and the new one, and different from the other children of the same parent.
+     *
+     * @return the value as a text, unless a node knows better
+     */
+    protected String getExpansionKey() {
+        return String.valueOf(getValue());
+    }
+
+    /**
+     * @return whether the children are shown, or will be as soon as they can be
+     */
+    protected boolean isOpen() {
+        return isExpanded();
+    }
+
+    /**
+     * Shows the children again, after the tree was loaded anew.
+     */
+    protected void reopen() {
+        setExpanded(true);
+    }
+
+    /**
      * Recursively collects the expanded state of all children into a tree-structured map.
-     * Keys are the string representation of each expanded child's value; values are nested maps
-     * representing the expanded state of that child's own children.
+     * Keys are the expansion keys of the open children; values are nested maps
+     * representing the expanded state of that child's own children. A child that has not got its
+     * own children yet passes on what was to be opened below it.
      */
     private Map<String, Object> collectExpandedState(Collection<? extends TreeItem<T>> children) {
         Map<String, Object> state = new HashMap<>();
         for (TreeItem<T> child : children) {
-            if (child.isExpanded()) {
-                String key = String.valueOf(child.getValue());
-                state.put(key, collectExpandedState(child.getChildren()));
+            if (child instanceof AbstractItem<T> item && item.isOpen()) {
+                Map<String, Object> below = item.alreadyLoad ? collectExpandedState(item.getChildren()) : new HashMap<>();
+                if (item.pendingExpandedState != null) {
+                    below.putAll(item.pendingExpandedState);
+                }
+                state.put(item.getExpansionKey(), below);
             }
         }
         return state;
     }
 
     /**
-     * Restores expanded state on new child items by matching their values against the saved state.
+     * Restores expanded state on new child items by matching their expansion keys against the saved state.
      * For each match, the nested state is passed down via {@link #pendingExpandedState} so that
      * when the child's service completes, its own children can be expanded in turn.
      */
@@ -335,10 +363,9 @@ public abstract class AbstractItem<T> extends TreeItem<T> implements Comparable<
             return;
         }
         for (TreeItem<T> child : children) {
-            String key = String.valueOf(child.getValue());
-            if (state.containsKey(key) && child instanceof AbstractItem<?> ai) {
-                ai.pendingExpandedState = (Map<String, Object>) state.get(key);
-                child.setExpanded(true);
+            if (child instanceof AbstractItem<?> ai && state.containsKey(ai.getExpansionKey())) {
+                ai.pendingExpandedState = (Map<String, Object>) state.get(ai.getExpansionKey());
+                ai.reopen();
             }
         }
     }
