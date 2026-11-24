@@ -57,6 +57,17 @@ class ExplorerE2ETest {
     }
 
     /**
+     * The values of the user are in the home of the user. Beside the application, where Solr looks
+     * when nobody tells it, the next build or installation would delete them.
+     */
+    @Test
+    void theIndexOfTheEmbeddedRepositoryIsInTheHomeOfTheUser() {
+        Path index = Workbench.HOME.resolve(".ekg/solr/ekgdata/data/index");
+        assertThat(index).as("the index").isDirectoryContaining("glob:**/segments_*");
+        assertThat(System.getProperty("ekg.solr.baseDir")).isEqualTo(Workbench.HOME.resolve(".ekg/solr").toString());
+    }
+
+    /**
      * Going down a list of metrics with the arrow keys shows one after the other. It used to
      * work for one step: the chart that opened took the focus, and the next key went to it.
      */

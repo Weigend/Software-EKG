@@ -5,7 +5,6 @@
 package io.softwareecg.awb;
 
 import io.softwareecg.awb.uitoolkit.events.FinishEvent;
-import io.softwareecg.awb.repository.adapter.solr.embedded.UserSolrHome;
 import io.softwareecg.awb.application.about.VersionInfo;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.lookup.api.Lookup;
@@ -76,8 +75,6 @@ public class EkgAvajeApplication extends Main {
     }
 
     public static void main(String[] args) {
-        // the index of the embedded Solr belongs to the user, not to the build or the installation
-        UserSolrHome.useUnlessConfigured();
         Application.launch(args);
     }
 }

@@ -54,7 +54,7 @@ public final class UserSolrHome {
     /**
      * Makes the application use the Solr directory in the user's home, unless a directory is
      * configured explicitly with the system property {@value DefaultSolrConfig#SOLR_BASE_DIR_PROPERTY}.
-     * To be called by the application before anything asks for Solr - not by tests, which
+     * Called by {@link EmbeddedSolrModule} before anything asks for Solr - not by tests, which
      * must never write into the data of the user.
      */
     public static void useUnlessConfigured() {
