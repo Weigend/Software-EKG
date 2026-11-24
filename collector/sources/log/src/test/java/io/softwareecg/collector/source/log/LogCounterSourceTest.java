@@ -1,7 +1,7 @@
 package io.softwareecg.collector.source.log;
 
 import io.softwareecg.collector.config.TestConfigFactory;
-import io.softwareecg.collector.dt.CollectorJobConfiguration;
+import io.softwareecg.collector.config.CollectorJobConfiguration;
 import io.softwareecg.collector.dt.HostInfo;
 import io.softwareecg.collector.dt.MetricDefinition;
 import io.softwareecg.collector.dt.MetricGroupInfo;

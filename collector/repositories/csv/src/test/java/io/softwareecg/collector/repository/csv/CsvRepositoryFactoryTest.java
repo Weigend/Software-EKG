@@ -13,7 +13,7 @@
 package io.softwareecg.collector.repository.csv;
 
 import io.softwareecg.collector.config.TestConfigFactory;
-import io.softwareecg.collector.dt.CollectorJobConfiguration;
+import io.softwareecg.collector.config.CollectorJobConfiguration;
 import io.softwareecg.collector.repository.StaticTimeSeriesRepository;
 import org.junit.Test;
 

@@ -9,7 +9,7 @@ import io.softwareecg.collector.config.model.Metric;
 import io.softwareecg.collector.config.model.MetricGroup;
 import io.softwareecg.collector.config.model.Platform;
 import io.softwareecg.collector.config.model.ProcessDef;
-import io.softwareecg.collector.dt.ClassicCollectorJobConfiguration;
+import io.softwareecg.collector.config.ClassicCollectorJobConfiguration;
 import io.softwareecg.collector.dt.ContainerInfo;
 import io.softwareecg.collector.dt.HostInfo;
 import io.softwareecg.collector.dt.MetricDefinition;
@@ -18,7 +18,7 @@ import io.softwareecg.collector.dt.NodeInfo;
 import io.softwareecg.collector.dt.PlatformProjectInfo;
 import io.softwareecg.collector.dt.PodInfo;
 import io.softwareecg.collector.dt.ProcessInfo;
-import io.softwareecg.collector.dt.SidecarCollectorJobConfiguration;
+import io.softwareecg.collector.config.SidecarCollectorJobConfiguration;
 
 import java.util.ArrayList;
 import java.util.Comparator;

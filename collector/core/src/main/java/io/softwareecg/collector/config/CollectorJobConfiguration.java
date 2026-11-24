@@ -1,8 +1,12 @@
-package io.softwareecg.collector.dt;
+package io.softwareecg.collector.config;
 
+import io.softwareecg.collector.dt.MetricDefinition;
+import io.softwareecg.collector.dt.MetricGroupInfo;
+import io.softwareecg.collector.dt.NodeInfo;
+import io.softwareecg.collector.dt.PodInfo;
+import io.softwareecg.collector.dt.ProcessInfo;
+import io.softwareecg.collector.dt.TimeSeriesHeader;
 import io.softwareecg.collector.common.LoggerFactory;
-import io.softwareecg.collector.config.CounterDescriptor;
-import io.softwareecg.collector.config.InvalidConfigurationException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 

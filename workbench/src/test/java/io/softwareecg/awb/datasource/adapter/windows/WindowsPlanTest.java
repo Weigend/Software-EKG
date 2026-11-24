@@ -3,7 +3,7 @@ package io.softwareecg.awb.datasource.adapter.windows;
 import io.softwareecg.awb.datasource.model.HostAddress;
 import io.softwareecg.collector.config.CollectorConfiguration;
 import io.softwareecg.collector.config.CollectorConfigurations;
-import io.softwareecg.collector.dt.ClassicCollectorJobConfiguration;
+import io.softwareecg.collector.config.ClassicCollectorJobConfiguration;
 import io.softwareecg.collector.dt.MetricDefinition;
 import org.junit.Test;
 

@@ -4,7 +4,7 @@ import io.softwareecg.collector.common.CollectorProperties;
 import io.softwareecg.collector.common.LoggerFactory;
 import io.softwareecg.collector.common.TextProgress;
 import io.softwareecg.collector.common.TextTable;
-import io.softwareecg.collector.dt.CollectorJobConfiguration;
+import io.softwareecg.collector.config.CollectorJobConfiguration;
 import io.softwareecg.collector.source.CounterSource;
 import io.softwareecg.collector.source.CounterSourceFactory;
 import io.softwareecg.collector.source.Delayed;

@@ -20,7 +20,7 @@ import io.softwareecg.collector.common.Registry;
 import io.softwareecg.collector.common.SleepUtil;
 import io.softwareecg.collector.control.CollectorJobStatus;
 import io.softwareecg.collector.control.CollectorJobValues;
-import io.softwareecg.collector.dt.CollectorJobConfiguration;
+import io.softwareecg.collector.config.CollectorJobConfiguration;
 import io.softwareecg.collector.dt.MetricDefinition;
 import io.softwareecg.collector.memory.CollectorMemory;
 import io.softwareecg.collector.repository.RepositoryFactory;

@@ -1,7 +1,7 @@
 package io.softwareecg.collector.control.jobs;
 
 import io.softwareecg.collector.repository.RepositoryFactory;
-import io.softwareecg.collector.dt.CloudCollectorJobConfiguration;
+import io.softwareecg.collector.config.CloudCollectorJobConfiguration;
 
 /**
  * todo insert comment here

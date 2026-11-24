@@ -12,7 +12,7 @@
 //______________________________________________________________________________
 package io.softwareecg.collector.source.unix;
 
-import io.softwareecg.collector.dt.CollectorJobConfiguration;
+import io.softwareecg.collector.config.CollectorJobConfiguration;
 import io.softwareecg.collector.dt.MetricDefinition;
 import io.softwareecg.collector.dt.ProcessInfo;
 import io.softwareecg.collector.source.unix.executor.CommandExecutor;

@@ -12,6 +12,7 @@
 //______________________________________________________________________________
 package io.softwareecg.collector.source.unix;
 
+import io.softwareecg.collector.config.CollectorJobConfiguration;
 import io.softwareecg.collector.config.TestConfigFactory;
 import io.softwareecg.collector.dt.*;
 import org.apache.commons.io.IOUtils;

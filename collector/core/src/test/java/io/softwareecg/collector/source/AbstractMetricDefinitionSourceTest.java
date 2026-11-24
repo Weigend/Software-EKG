@@ -12,6 +12,7 @@
 //______________________________________________________________________________
 package io.softwareecg.collector.source;
 
+import io.softwareecg.collector.config.CollectorJobConfiguration;
 import io.softwareecg.collector.config.CounterDescriptor;
 import io.softwareecg.collector.config.TestConfigFactory;
 import io.softwareecg.collector.dt.*;

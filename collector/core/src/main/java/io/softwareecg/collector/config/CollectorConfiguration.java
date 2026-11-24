@@ -12,10 +12,6 @@
 //______________________________________________________________________________
 package io.softwareecg.collector.config;
 
-import io.softwareecg.collector.dt.ClassicCollectorJobConfiguration;
-import io.softwareecg.collector.dt.CloudCollectorJobConfiguration;
-import io.softwareecg.collector.dt.SidecarCollectorJobConfiguration;
-
 import java.util.List;
 
 

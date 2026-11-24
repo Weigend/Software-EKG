@@ -12,6 +12,7 @@
 //______________________________________________________________________________
 package io.softwareecg.collector.source.calc;
 
+import io.softwareecg.collector.config.CollectorJobConfiguration;
 import io.softwareecg.collector.config.TestConfigFactory;
 import io.softwareecg.collector.dt.*;
 import io.softwareecg.collector.memory.CollectorMemory;

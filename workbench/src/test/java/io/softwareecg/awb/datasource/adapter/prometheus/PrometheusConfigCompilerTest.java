@@ -4,7 +4,7 @@ import io.softwareecg.awb.datasource.model.CollectionPlan;
 import io.softwareecg.awb.datasource.adapter.collector.CollectorConfigCompiler;
 import io.softwareecg.collector.config.CollectorConfiguration;
 import io.softwareecg.collector.config.CollectorConfigurations;
-import io.softwareecg.collector.dt.ClassicCollectorJobConfiguration;
+import io.softwareecg.collector.config.ClassicCollectorJobConfiguration;
 import org.junit.Test;
 
 import java.time.Duration;

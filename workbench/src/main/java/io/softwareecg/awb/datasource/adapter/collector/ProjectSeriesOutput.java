@@ -11,7 +11,7 @@ import io.softwareecg.collector.dt.TimeSeriesHeader;
 import io.softwareecg.collector.repository.RepositoryFactory;
 import io.softwareecg.collector.repository.StaticTimeSeriesRepository;
 import io.softwareecg.collector.source.prometheus.PrometheusSeriesName;
-import io.softwareecg.collector.dt.CollectorJobConfiguration;
+import io.softwareecg.collector.config.CollectorJobConfiguration;
 
 import java.util.ArrayList;
 import java.util.Arrays;

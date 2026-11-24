@@ -1,5 +1,12 @@
-package io.softwareecg.collector.dt;
+package io.softwareecg.collector.config;
 
+import io.softwareecg.collector.dt.ContainerInfo;
+import io.softwareecg.collector.dt.MetricDefinition;
+import io.softwareecg.collector.dt.MetricGroupInfo;
+import io.softwareecg.collector.dt.PlatformProjectInfo;
+import io.softwareecg.collector.dt.PodInfo;
+import io.softwareecg.collector.dt.ProcessInfo;
+import io.softwareecg.collector.dt.TimeSeriesHeader;
 /**
  * todo insert comment here
  *

@@ -7,9 +7,9 @@ import io.softwareecg.collector.control.jobs.CloudCollectorJob;
 import io.softwareecg.collector.control.jobs.CollectorJob;
 import io.softwareecg.collector.control.jobs.JobManager;
 import io.softwareecg.collector.control.jobs.SidecarCollectorJob;
-import io.softwareecg.collector.dt.ClassicCollectorJobConfiguration;
-import io.softwareecg.collector.dt.CloudCollectorJobConfiguration;
-import io.softwareecg.collector.dt.SidecarCollectorJobConfiguration;
+import io.softwareecg.collector.config.ClassicCollectorJobConfiguration;
+import io.softwareecg.collector.config.CloudCollectorJobConfiguration;
+import io.softwareecg.collector.config.SidecarCollectorJobConfiguration;
 import io.softwareecg.collector.repository.RepositoryFactory;
 import org.slf4j.Logger;
 

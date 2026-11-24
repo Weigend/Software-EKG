@@ -12,6 +12,7 @@
 //______________________________________________________________________________
 package io.softwareecg.collector.source.jmx;
 
+import io.softwareecg.collector.config.CollectorJobConfiguration;
 import io.softwareecg.collector.common.TestSupport;
 import io.softwareecg.collector.config.TestConfigFactory;
 import io.softwareecg.collector.dt.*;

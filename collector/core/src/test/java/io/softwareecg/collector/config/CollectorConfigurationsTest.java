@@ -4,8 +4,6 @@ import io.softwareecg.collector.config.model.CollectorConfig;
 import io.softwareecg.collector.config.model.CollectorDef;
 import io.softwareecg.collector.config.model.Host;
 import io.softwareecg.collector.config.model.Metric;
-import io.softwareecg.collector.dt.ClassicCollectorJobConfiguration;
-import io.softwareecg.collector.dt.SidecarCollectorJobConfiguration;
 import org.junit.Test;
 
 import java.time.Duration;

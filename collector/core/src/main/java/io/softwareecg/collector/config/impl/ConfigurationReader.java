@@ -2,9 +2,9 @@ package io.softwareecg.collector.config.impl;
 
 import io.softwareecg.collector.config.CollectorConfiguration;
 import io.softwareecg.collector.config.model.CollectorConfig;
-import io.softwareecg.collector.dt.ClassicCollectorJobConfiguration;
-import io.softwareecg.collector.dt.CloudCollectorJobConfiguration;
-import io.softwareecg.collector.dt.SidecarCollectorJobConfiguration;
+import io.softwareecg.collector.config.ClassicCollectorJobConfiguration;
+import io.softwareecg.collector.config.CloudCollectorJobConfiguration;
+import io.softwareecg.collector.config.SidecarCollectorJobConfiguration;
 
 import java.util.List;
 
