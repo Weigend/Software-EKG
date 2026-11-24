@@ -76,20 +76,6 @@ public class LayerArchitectureTest {
                     .because("API darf nicht auf BL/UI hoeren - sonst zyklische oder verkehrte Schichtung");
 
     /**
-     * R6 (Application-Bundle frei von Feature-Zugriffen): Features duerfen nur ueber
-     * application.api einklinken; application.base.impl ist kein oeffentlicher Hook-Punkt.
-     */
-    @ArchTest
-    static final ArchRule features_must_not_depend_on_application_internals =
-            noClasses().that().resideOutsideOfPackages("io.softwareecg.awb.application..")
-                    // the generated injection module wires every bean and so knows all of them
-                    .and().areNotAssignableTo(io.avaje.inject.spi.AvajeModule.class)
-                    .should().dependOnClassesThat()
-                    .resideInAnyPackage(
-                            "io.softwareecg.awb.application.about..")
-                    .because("Features muessen via application.api einklinken, nicht via Application-Interna");
-
-    /**
      * R5 (DA-Reinheit): DA-Adapter duerfen kein JavaFX nutzen.
      */
     @ArchTest
@@ -230,6 +216,27 @@ public class LayerArchitectureTest {
             onlyTheApiIsUsedFromOutside("metricview");
 
     /**
+     * Die Aussenkante von metadata ist api. H2 ist ein austauschbarer Adapter.
+     */
+    @ArchTest
+    static final ArchRule only_the_api_of_metadata_is_used_from_outside =
+            onlyTheApiIsUsedFromOutside("metadata");
+
+    /**
+     * Die Aussenkante von projectcontext ist api, und spi fuer Importer und Datenquellen.
+     */
+    @ArchTest
+    static final ArchRule only_the_api_of_projectcontext_is_used_from_outside =
+            onlyTheApiIsUsedFromOutside("projectcontext");
+
+    /**
+     * Wer sich in das Fenster der Anwendung einklinkt, tut es ueber api.
+     */
+    @ArchTest
+    static final ArchRule only_the_api_of_application_is_used_from_outside =
+            onlyTheApiIsUsedFromOutside("application");
+
+    /**
      * Diese Komponenten hat niemand zu benutzen: sie haben eine Oberflaeche und hoeren auf Ereignisse.
      * Was sie an Vertraegen fuer Erweiterungen haben, steht in spi.
      */
@@ -275,6 +282,18 @@ public class LayerArchitectureTest {
     @ArchTest
     static final ArchRule packages_of_aichat_must_be_free_of_cycles = packagesAreFreeOfCycles("aichat");
 
+    @ArchTest
+    static final ArchRule packages_of_metadata_must_be_free_of_cycles = packagesAreFreeOfCycles("metadata");
+
+    @ArchTest
+    static final ArchRule packages_of_projectcontext_must_be_free_of_cycles = packagesAreFreeOfCycles("projectcontext");
+
+    @ArchTest
+    static final ArchRule packages_of_application_must_be_free_of_cycles = packagesAreFreeOfCycles("application");
+
+    @ArchTest
+    static final ArchRule packages_of_datasource_must_be_free_of_cycles = packagesAreFreeOfCycles("datasource");
+
     /**
      * api wird von anderen benutzt, spi von anderen implementiert: beides darf von aussen importiert
      * werden, sonst nichts.
@@ -297,15 +316,6 @@ public class LayerArchitectureTest {
         return slices().matching("io.softwareecg.awb." + component + ".(*)..").should().beFreeOfCycles()
                 .because("Pakete, die sich gegenseitig brauchen, sind in Wahrheit eines");
     }
-
-    @ArchTest
-    static final ArchRule metadata_clients_must_use_ports_instead_of_h2 =
-            noClasses().that().resideOutsideOfPackages(
-                            "io.softwareecg.awb.metadata.adapter.h2..")
-                    .and().areNotAssignableTo(io.avaje.inject.spi.AvajeModule.class)
-                    .should().dependOnClassesThat()
-                    .resideInAPackage("io.softwareecg.awb.metadata.adapter.h2..")
-                    .because("H2 ist ein austauschbarer Adapter; Nutzer muessen metadata.api verwenden");
 
     @ArchTest
     static final ArchRule repository_ui_must_not_know_repository_adapters =
