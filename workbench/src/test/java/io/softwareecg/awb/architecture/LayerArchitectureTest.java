@@ -1,7 +1,9 @@
 package io.softwareecg.awb.architecture;
 
 import com.tngtech.archunit.base.DescribedPredicate;
+import com.tngtech.archunit.core.domain.Dependency;
 import com.tngtech.archunit.core.domain.JavaClass;
+import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
@@ -10,6 +12,14 @@ import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.function.BiPredicate;
 
 import static com.tngtech.archunit.base.DescribedPredicate.alwaysTrue;
@@ -251,46 +261,59 @@ public class LayerArchitectureTest {
     static final ArchRule aichat_is_not_used_from_outside = onlyTheApiIsUsedFromOutside("aichat");
 
     /**
-     * Die Pakete in einer Komponente: api kennt keines der anderen.
+     * In keinem Paket brauchen sich seine Unterpakete und seine Klassen gegenseitig im Kreis. Ein
+     * Kreis aus lauter Klassen eines Pakets ist erlaubt: sie gehoeren zusammen.
      */
     @ArchTest
-    static final ArchRule packages_of_repository_must_be_free_of_cycles = packagesAreFreeOfCycles("repository");
+    static void packages_must_be_free_of_cycles_on_every_level(JavaClasses classes) {
+        Map<String, Map<String, Set<String>>> graphs = new TreeMap<>();
+        for (JavaClass type : classes) {
+            if (belongTo(assignableTo(io.avaje.inject.spi.AvajeModule.class)).test(type)) {
+                continue;
+            }
+            for (Dependency dependency : type.getDirectDependenciesFromSelf()) {
+                addEdge(graphs, topLevel(type), topLevel(dependency.getTargetClass()));
+            }
+        }
+        List<String> cycles = new ArrayList<>();
+        graphs.forEach((parent, graph) -> graph.keySet().forEach(node -> {
+            // a package, not a class: its name begins with a small letter
+            if (Character.isLowerCase(node.charAt(0)) && reaches(graph, node, node, new HashSet<>())) {
+                cycles.add(parent + "." + node);
+            }
+        }));
+        if (!cycles.isEmpty()) {
+            throw new AssertionError("Pakete, die sich im Kreis brauchen, sind in Wahrheit eines: " + cycles);
+        }
+    }
 
-    @ArchTest
-    static final ArchRule packages_of_bookmark_must_be_free_of_cycles = packagesAreFreeOfCycles("bookmark");
+    /** Die Abhaengigkeit gehoert zu dem Paket, in dem sich die Wege zu beiden Klassen trennen. */
+    private static void addEdge(Map<String, Map<String, Set<String>>> graphs, String from, String to) {
+        if (from.equals(to) || !to.startsWith("io.softwareecg.awb.")) {
+            return;
+        }
+        String[] source = from.split("\\.");
+        String[] target = to.split("\\.");
+        int level = 0;
+        while (source[level].equals(target[level])) {
+            level++;
+        }
+        graphs.computeIfAbsent(String.join(".", Arrays.copyOf(source, level)), parent -> new TreeMap<>())
+                .computeIfAbsent(source[level], node -> new TreeSet<>()).add(target[level]);
+    }
 
-    @ArchTest
-    static final ArchRule packages_of_query_must_be_free_of_cycles = packagesAreFreeOfCycles("query");
+    private static boolean reaches(Map<String, Set<String>> graph, String from, String to, Set<String> seen) {
+        for (String next : graph.getOrDefault(from, Set.of())) {
+            if (next.equals(to) || seen.add(next) && reaches(graph, next, to, seen)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-    @ArchTest
-    static final ArchRule packages_of_evidence_must_be_free_of_cycles = packagesAreFreeOfCycles("evidence");
-
-    @ArchTest
-    static final ArchRule packages_of_secrets_must_be_free_of_cycles = packagesAreFreeOfCycles("secrets");
-
-    @ArchTest
-    static final ArchRule packages_of_metricview_must_be_free_of_cycles = packagesAreFreeOfCycles("metricview");
-
-    @ArchTest
-    static final ArchRule packages_of_explorer_must_be_free_of_cycles = packagesAreFreeOfCycles("explorer");
-
-    @ArchTest
-    static final ArchRule packages_of_importer_must_be_free_of_cycles = packagesAreFreeOfCycles("importer");
-
-    @ArchTest
-    static final ArchRule packages_of_aichat_must_be_free_of_cycles = packagesAreFreeOfCycles("aichat");
-
-    @ArchTest
-    static final ArchRule packages_of_metadata_must_be_free_of_cycles = packagesAreFreeOfCycles("metadata");
-
-    @ArchTest
-    static final ArchRule packages_of_projectcontext_must_be_free_of_cycles = packagesAreFreeOfCycles("projectcontext");
-
-    @ArchTest
-    static final ArchRule packages_of_application_must_be_free_of_cycles = packagesAreFreeOfCycles("application");
-
-    @ArchTest
-    static final ArchRule packages_of_datasource_must_be_free_of_cycles = packagesAreFreeOfCycles("datasource");
+    private static String topLevel(JavaClass type) {
+        return type.getBaseComponentType().getName().replaceAll("\\$.*", "");
+    }
 
     /**
      * api wird von anderen benutzt, spi von anderen implementiert: beides darf von aussen importiert
@@ -306,11 +329,6 @@ public class LayerArchitectureTest {
                 .and(not(belongTo(assignableTo(io.avaje.inject.spi.AvajeModule.class))))
                 .should().dependOnClassesThat(inside.as("liegen in " + component + ", aber nicht in seiner api oder spi"))
                 .because("was innen ist, muss sich aendern lassen, ohne die anderen anzufassen");
-    }
-
-    private static ArchRule packagesAreFreeOfCycles(String component) {
-        return slices().matching("io.softwareecg.awb." + component + ".(*)..").should().beFreeOfCycles()
-                .because("Pakete, die sich gegenseitig brauchen, sind in Wahrheit eines");
     }
 
     @ArchTest
