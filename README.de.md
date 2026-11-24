@@ -105,6 +105,8 @@ Dieses Repository ist die konsolidierte Variante von AWB, AWB-SDK und Collector.
 
 Die historische Zuordnung und die bewusst entfernten Teile sind in [docs/architecture/single-repository.de.md](docs/architecture/single-repository.de.md) dokumentiert.
 
+Die Komponenten der Workbench beschreibt, mit Bildern ihres Aufbaus, [docs/architecture/workbench-components.de.md](docs/architecture/workbench-components.de.md).
+
 ## Voraussetzungen
 
 - JDK 25 mit JavaFX 25 (zum Beispiel Liberica Full JDK)
