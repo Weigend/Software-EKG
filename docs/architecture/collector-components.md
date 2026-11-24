@@ -9,7 +9,7 @@ code of the Collector or writes a source or a repository for it. For the Workben
 
 The pictures are from [S202](https://github.com/Weigend/S202) 1.4.0, which reads the dependencies
 from the bytecode. Loaded are the JARs of all modules of the Collector together. State:
-7.5.0-SNAPSHOT, commit `a7c64da`, 2026-11-24.
+7.6.0-SNAPSHOT, commit `9277c83`, 2026-11-24.
 
 - [How to read the pictures](#how-to-read-the-pictures)
 - [Modules and contracts](#modules-and-contracts)
@@ -34,8 +34,7 @@ from the bytecode. Loaded are the JARs of all modules of the Collector together.
 | blue box with a green **I** | an interface |
 | **L:n** | the layer inside the surrounding package, 0 is at the bottom |
 
-A layer only uses what is below it. An exception is named in [What S202 reports](#what-s202-reports).
-The pictures of the single packages have two levels expanded. A click opens a picture in full size.
+A layer only uses what is below it. The pictures of the single packages have two levels expanded. A click opens a picture in full size.
 
 ## Modules and contracts
 
@@ -79,18 +78,17 @@ JavaScript engine `calc` needs. It writes what they collect into the repository 
 
 ## Level 0: all top packages
 
-[![All top packages of the Collector in six layers](../images/collector-components/level0.png)](../images/collector-components/level0.png)
+[![All top packages of the Collector in five layers](../images/collector-components/level0.png)](../images/collector-components/level0.png)
 
 The packages below `io.softwareecg.collector`, over all modules:
 
 | Layer | Packages | What happens there |
 | --- | --- | --- |
-| 5 | [ui](#ui), `StartCollector`, `CollectorService` | the display; the start as a program and as a Windows service |
-| 4 | [control](#control) | runs the jobs |
-| 3 | [source](#source), [repository](#repository) | where values come from and where they go |
-| 2 | [config](#config), [memory](#memory) | the configuration; the values read last |
-| 1 | [dt](#dt), [connector](#connector) | what a job is made of; serving values to others |
-| 0 | [common](#common), [ssh](#ssh), `LicenseChecker` | foundations that need nothing else |
+| 4 | [ui](#ui), `StartCollector`, `CollectorService` | the display; the start as a program and as a Windows service |
+| 3 | [control](#control) | runs the jobs |
+| 2 | [source](#source), [repository](#repository) | where values come from and where they go |
+| 1 | [config](#config), [memory](#memory), [connector](#connector) | the configuration and its jobs; the values read last; serving values to others |
+| 0 | [dt](#dt), [common](#common), [ssh](#ssh), `LicenseChecker` | foundations that need nothing else |
 
 `source` and `repository` hold the contracts of `core` and, in their sub-packages, the plugins of
 the other modules.
@@ -102,8 +100,8 @@ From the bytecode of all modules:
 | Package | Module | needs | is needed by |
 | --- | --- | --- | --- |
 | control | core | source, repository, config, connector, memory, dt, common | ui, the two start classes |
-| config | core | dt | control, dt, repository, ui and all sources and repositories but `rdb.api` |
-| dt | core | config, common | config, control, memory, source, repository, all sources, `csv`, `archive`, `rdb.api` |
+| config | core | dt, common | control, source, repository, ui and all sources and repositories but `rdb.api` |
+| dt | core | – | config, control, memory, source, repository, all sources, `csv`, `archive`, `rdb.api` |
 | source (contracts) | core | config, dt, common | control, all sources |
 | repository (contracts) | core | config, dt | control, all repositories |
 | memory | core | dt | control, calc |
@@ -151,14 +149,14 @@ into jobs.
 
 | Part | Content |
 | --- | --- |
-| (direct) | `CollectorConfigurations` is the entry: from a file, a text or a model; `ConvertConfiguration` makes YAML of XML; `CounterDescriptor` is how a source sees its job |
+| (direct) | `CollectorConfigurations` is the entry: from a file, a text or a model; `ConvertConfiguration` makes YAML of XML; `CounterDescriptor` is how a source sees its job; `CollectorJobConfiguration` and its three kinds are the jobs: for single hosts, for a cloud platform and beside a program (sidecar) |
 | `impl` | the two formats and the factory of the jobs |
 | `model` | the configuration without a format; the Workbench builds it directly |
 
 ## dt
 
 **Core.** The data types: what a job is made of, such as hosts, pods, processes and metrics, and the head of
-a time series. `dt` and `config` need each other, see [What S202 reports](#what-s202-reports).
+a time series.
 
 [![Scope dt](../images/collector-components/dt.png)](../images/collector-components/dt.png)
 
@@ -335,18 +333,16 @@ Report of 2026-11-24 for the state named above:
 | --- | ---: |
 | accesses past an `api` | 0 |
 | `api` that gives the inside away | 0 |
-| package cycles | 1 |
+| package cycles | 0 |
 | class cycles, both inside one package | 2 |
-| dependencies against the layers | 5 |
+| dependencies against the layers, part of a class cycle | 1 |
 
-- **`config` and `dt` need each other.** The jobs in `dt` implement `CounterDescriptor` and
-  `RemoteCounterDescriptor` of `config` and throw its `InvalidConfigurationException`; `config`
-  creates them. Four of the five dependencies against the layers are this cycle.
-- **`JobManager` and `CollectorJob`** in `control.jobs` know each other, which is the fifth.
+- **`JobManager` and `CollectorJob`** in `control.jobs` know each other, which is the dependency
+  against the layers.
 - **`CollectorConfig` and `HostGroup`** in `config.model` know each other.
 
 Differently from the Workbench, no test keeps watch over the packages of the Collector. Between the
-modules the compiler does; inside `core` nothing does, which is where the package cycle is.
+modules the compiler does; inside `core` nothing does.
 
 ## Renewing the pictures
 
