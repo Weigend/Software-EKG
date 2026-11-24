@@ -14,7 +14,7 @@ import javafx.scene.layout.HBox;
  *
  * @since 30.08.2018
  */
-public class LegendBackgroundChartItem extends LegendChartItem {
+class LegendBackgroundChartItem extends LegendChartItem {
 
     /**
      * The decorated (styled) chart that is represented

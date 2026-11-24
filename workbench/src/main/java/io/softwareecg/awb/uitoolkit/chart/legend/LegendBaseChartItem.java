@@ -21,7 +21,7 @@ import java.util.UUID;
  *
  * @since 30.08.2018
  */
-public class LegendBaseChartItem extends LegendChartItem {
+class LegendBaseChartItem extends LegendChartItem {
 
     /**
      * The decorated (styled) chart that is represented

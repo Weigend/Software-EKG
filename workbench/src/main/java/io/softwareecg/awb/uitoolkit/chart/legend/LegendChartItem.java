@@ -19,7 +19,7 @@ import java.util.Map;
  *
  * @since 05.09.2018
  */
-public abstract class LegendChartItem extends BorderPane {
+abstract class LegendChartItem extends BorderPane {
 
     /**
      * Default empty callback for chart actions.

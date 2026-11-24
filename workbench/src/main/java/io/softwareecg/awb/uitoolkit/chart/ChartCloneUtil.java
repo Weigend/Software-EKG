@@ -16,7 +16,7 @@ import java.util.Map;
  *
  * @since 28.08.2018
  */
-public class ChartCloneUtil {
+class ChartCloneUtil {
 
     /**
      * Clone the given sourceChart 1:1 including all series data and it's properties.

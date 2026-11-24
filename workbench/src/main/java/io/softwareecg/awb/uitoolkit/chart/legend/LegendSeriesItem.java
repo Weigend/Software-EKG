@@ -27,7 +27,7 @@ import java.util.function.BiConsumer;
  *
  * @since 30.08.2018
  */
-public class LegendSeriesItem extends GridPane {
+class LegendSeriesItem extends GridPane {
 
     /**
      * The pseudo css class that will used to indicated that this

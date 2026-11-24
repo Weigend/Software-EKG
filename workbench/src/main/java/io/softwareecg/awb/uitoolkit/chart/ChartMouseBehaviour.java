@@ -32,7 +32,7 @@ import static io.softwareecg.awb.uitoolkit.chart.zoom.MouseMode.ZOOM;
  *
  * @since 08.09.2018
  */
-public class ChartMouseBehaviour {
+class ChartMouseBehaviour {
 
     private static final double STROKE_WIDTH = 0.4;
 
