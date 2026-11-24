@@ -1,7 +1,7 @@
-package io.softwareecg.awb.projectcontext.ui.management;
+package io.softwareecg.awb.projectcontext.ui;
 
 import io.softwareecg.awb.application.api.EkgApplicationController;
-import io.softwareecg.awb.projectcontext.ui.ProjectBar;
+import io.softwareecg.awb.projectcontext.ui.management.CreateProjectDialog;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.platform.api.Module;
 import jakarta.annotation.Priority;
