@@ -1,5 +1,6 @@
 package io.softwareecg.awb.e2e;
 
+import io.softwareecg.awb.projectcontext.api.Project;
 import io.softwareecg.awb.runtime.events.AwbErrorEvent;
 import io.softwareecg.awb.runtime.events.CancellableTaskEvent;
 import io.softwareecg.wfx.lookup.api.Lookup;
@@ -36,6 +37,38 @@ public final class ImportDialog {
 
     public String title() {
         return workbench.onFx(stage::getTitle);
+    }
+
+    /** Chooses a project that is there already instead of a new one. */
+    @SuppressWarnings("unchecked")
+    public ImportDialog existingProject(String name) {
+        createNewProject(false);
+        workbench.onFx(() -> {
+            ComboBox<Project> projects = Workbench.control(stage, "cbProject", ComboBox.class);
+            projects.getSelectionModel().select(projects.getItems().stream()
+                    .filter(project -> name.equals(project.getName())).findFirst()
+                    .orElseThrow(() -> new AssertionError("The dialog offers no project '" + name + "'")));
+            return null;
+        });
+        return this;
+    }
+
+    /** Goes back from a project that is there to a new one. */
+    public ImportDialog newProject(String name) {
+        createNewProject(true);
+        return projectName(name);
+    }
+
+    private void createNewProject(boolean create) {
+        workbench.onFx(() -> {
+            Workbench.control(stage, "cbCreateProject", CheckBox.class).setSelected(create);
+            return null;
+        });
+    }
+
+    /** @return the address of the server as it stands in its field */
+    public String serverUrl() {
+        return workbench.onFx(() -> Workbench.control(stage, "txtRepositoryURL", TextField.class).getText());
     }
 
     /** Names the new project the import goes into. */

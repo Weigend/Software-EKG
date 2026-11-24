@@ -172,6 +172,32 @@ class ImporterE2ETest {
         }
     }
 
+    /**
+     * Who looks at a project and then decides for a new one does not get the server of the first:
+     * its address and password stayed in the fields, and the import ended with an error.
+     */
+    @Test
+    void aNewProjectDoesNotGetTheServerOfTheProjectChosenBefore() {
+        long points = (long) PrometheusStub.METRICS.size() * PrometheusStub.INSTANCES.size() * PrometheusStub.POINTS;
+        try (PrometheusStub first = new PrometheusStub(); PrometheusStub second = new PrometheusStub()) {
+            workbench.openImporter("Prometheus Data").projectName("First cluster").serverUrl(first.url()).importRange("1d")
+                    .importData(IMPORT);
+            workbench.project("First cluster").awaitPoints(points, SEARCHABLE);
+
+            ImportDialog dialog = workbench.openImporter("Prometheus Data").existingProject("First cluster");
+            assertThat(dialog.serverUrl()).isEqualTo(first.url());
+            dialog.newProject("Second cluster");
+            assertThat(dialog.serverUrl()).as("the server of the new project").isNullOrEmpty();
+            dialog.serverUrl(second.url()).newProject("Second cluster, renamed");
+            assertThat(dialog.serverUrl()).as("the server after the new project got another name").isEqualTo(second.url());
+            dialog.importRange("1d").importData(IMPORT);
+
+            workbench.project("Second cluster, renamed").awaitPoints(points, SEARCHABLE);
+            assertThat(workbench.project("First cluster").sourceUrl()).isEqualTo(first.url());
+            assertThat(workbench.project("Second cluster, renamed").sourceUrl()).isEqualTo(second.url());
+        }
+    }
+
     @Test
     void prometheusNeedsAServerBeforeItImports() {
         ImportDialog dialog = workbench.openImporter("Prometheus Data");

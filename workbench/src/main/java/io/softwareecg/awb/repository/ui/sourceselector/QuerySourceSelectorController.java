@@ -322,7 +322,9 @@ public class QuerySourceSelectorController implements Initializable {
         txtRepositoryUserName.disableProperty().bind(lbRepositoryUserName.disableProperty());
     }
 
+    /** Nothing is left of the source shown, so that it is not stored for another project. */
     protected void clearView() {
+        viewModel.setSourceRepository(null);
         txtRepositoryURL.setText(null);
         txtRepositoryUserName.setText(null);
         txtRepositoryPassword.setText(null);
@@ -383,6 +385,11 @@ public class QuerySourceSelectorController implements Initializable {
     private void handleProjectUpdate(String newProjectName) {
 
         if (viewModel.isNewProject()) {
+            // what the user entered for a new project stays when the project gets another name,
+            // what was shown of a project that has a source does not
+            if (viewModel.getSourceRepository() != null) {
+                clearView();
+            }
             return;
         }
 

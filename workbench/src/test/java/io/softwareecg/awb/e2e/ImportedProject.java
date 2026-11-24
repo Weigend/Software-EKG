@@ -4,6 +4,7 @@ import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.timeseries.dimension.NamedValueEntity;
 import io.softwareecg.awb.query.api.QuerySpec;
 import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
+import io.softwareecg.awb.repository.api.SourceRepositoryService;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 
 import io.softwareecg.awb.projectcontext.api.ProjectSelectedEvent;
@@ -51,6 +52,12 @@ public final class ImportedProject {
         });
         workbench.awaitTrue("the project bar to show '" + name + "'", Duration.ofSeconds(20), () -> workbench.onFx(() ->
                 workbench.find("lbProjectId").map(Label.class::cast).map(Label::getText).filter(name::equals).isPresent()));
+    }
+
+    /** @return the address of the server the project was imported from */
+    public String sourceUrl() {
+        return ServiceDiscovery.lookup(SourceRepositoryService.class, workbench.embeddedRepository())
+                .queryImportSourceRepository(name).getRepositoryUrl();
     }
 
     /** @return the number of values of all series of the project */
