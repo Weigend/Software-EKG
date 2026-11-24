@@ -11,10 +11,8 @@ import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.TimeSeriesQuery;
 import io.softwareecg.awb.query.model.TimeSeriesQueryResponse;
 import io.softwareecg.awb.repository.api.RepositoryException;
-import io.softwareecg.awb.timeseries.TimeSeries;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import io.softwareecg.awb.timeseries.dimension.Measurement;
 import io.softwareecg.awb.timeseries.dimension.Metric;
@@ -23,37 +21,13 @@ import io.softwareecg.awb.timeseries.dimension.ProcessGroup;
 /**
  * Interface that represents services that provide the access to
  * time series and it metadata.
- * This interface has three groups of methods:
+ * This interface has two groups of methods:
  * - one to query time series data (mass data) with paging/cursor function
  * - a second with some methods query facet data about the time series meta data (filter data/labels)
- * - a third with a couple of methods to write metric data to the repository.
  *
  * @since 18.08.2018
  */
 public interface MetricDataAccessService {
-
-    /**
-     * Deletes all time series from the repository that are assigned to the project
-     * with the specified project name.
-     * All changes will committed immediately and can't reverted.
-     *
-     * @param projectName the project name that will used to find the series that should deleted
-     */
-    void deleteTimeSeriesByProjectName(String projectName);
-
-    /**
-     * Add an time series to the project that is defined in the meta data of the time series
-     * itself. The implementation will use an calculated key based on the series metadata
-     * to identify existing series. Using the 'overrideExistingSeries' flag the caller can
-     * control if already existing series will overwritten or not.
-     *
-     * To persist the series and make them visible for the UI the dedicated commit method has to call.
-     *
-     * @param timeSeriesStream the time series that should persist in the EKG repository.
-     * @throws RepositoryException thrown if the write process fails for example as result of invalid input data.
-     */
-    void addEntities(Stream<TimeSeries> timeSeriesStream, boolean overrideExistingSeries) throws RepositoryException;
-
 
     /**
      * Fetches time series data from persistence storage that matches to the specified filters in
@@ -188,9 +162,4 @@ public interface MetricDataAccessService {
 
 
     List<Metric> getMetricsNames(MetricQuery metricQuery);
-
-    /**
-     *
-     */
-    void commitOrRollback();
 }

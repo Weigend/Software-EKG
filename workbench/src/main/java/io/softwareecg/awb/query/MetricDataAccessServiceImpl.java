@@ -15,7 +15,6 @@ import io.softwareecg.awb.query.model.TimeSeriesQuery;
 import io.softwareecg.awb.query.model.TimeSeriesQueryResponse;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.repository.port.TimeSeriesRepository;
-import io.softwareecg.awb.repository.port.DeleteParams;
 import io.softwareecg.awb.repository.port.search.expr.ExprFactory;
 import io.softwareecg.awb.repository.port.search.expr.Expression;
 import io.softwareecg.awb.repository.port.search.facet.Facet;
@@ -109,21 +108,6 @@ public class MetricDataAccessServiceImpl implements MetricDataAccessService {
     //=================================================================================================================
     // API of the MetricDataAccessService interface and MetricDataAccessServiceImpl class itself
     //=================================================================================================================
-
-    @Override
-    public void deleteTimeSeriesByProjectName(String projectName) {
-
-        try {
-            DeleteParams deleteQuery = new DeleteParams();
-            deleteQuery.addFilter(DOC_TYPE, DocumentType.TIME_SERIES.toString());
-            deleteQuery.addFilter(PROJECT_NAME, projectName);
-            repositoryClient.delete(deleteQuery);
-            repositoryClient.commit();
-        } catch (RepositoryException ex) {
-            LOGGER.error("Exception raised while trying to delete time series data.", ex);
-            throw new IllegalStateException(ex);
-        }
-    }
 
     /**
      * Fetches time series data from persistence storage that matches to the specified filters in
@@ -318,55 +302,6 @@ public class MetricDataAccessServiceImpl implements MetricDataAccessService {
         QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withMetric("*").build();
         return queryFacets(queryClone, TS_METRIC_NAME,
                 new Metric("*"), facetEntry -> new Metric(facetEntry.getName()));
-    }
-
-    @Override
-    public void addEntities(Stream<TimeSeries> timeSeriesStream, boolean addEntities) throws RepositoryException {
-
-        if (timeSeriesStream == null) {
-            return;
-        }
-
-        repositoryClient.add(timeSeriesStream.map(timeSeries -> {
-
-            BinaryTimeSeries binaryTimeSeries = new BinaryTimeSeries();
-
-            // physical metric filter attributes
-            binaryTimeSeries.setHost(timeSeries.getHost());
-            binaryTimeSeries.setHostGroup(timeSeries.getHostGroup());
-
-            // logical metric filter attributes
-            binaryTimeSeries.setNamespace(timeSeries.getNamespace());
-            binaryTimeSeries.setService(timeSeries.getService());
-            binaryTimeSeries.setPod(timeSeries.getPod());
-            binaryTimeSeries.setContainer(timeSeries.getContainer());
-
-            // common metric filter attributes
-            binaryTimeSeries.setMeasurement(timeSeries.getMeasurement());
-            binaryTimeSeries.setProcess(timeSeries.getProcess());
-            binaryTimeSeries.setProcessGroup(timeSeries.getProcessGroup());
-            binaryTimeSeries.setMetric(timeSeries.getMetricName());
-            binaryTimeSeries.setMetricGroup(timeSeries.getMetricGroup());
-            binaryTimeSeries.setStart(timeSeries.getStartDate());
-            binaryTimeSeries.setEnd(timeSeries.getEndDate());
-            binaryTimeSeries.setProjectName(timeSeries.getProject());
-
-            // other
-            binaryTimeSeries.setRemoteSeriesKey(timeSeries.getRemoteSeriesKey());
-            binaryTimeSeries.setData(DateValuePairCodec.compressAndEncodeDataPlainBytes(timeSeries.getValues()));
-
-            return binaryTimeSeries;
-
-        }).iterator());
-    }
-
-    @Override
-    public void commitOrRollback() {
-        try {
-            repositoryClient.commit();
-        } catch (RepositoryException e) {
-            throw new IllegalStateException(e);
-        }
     }
 
     /* ======================================== private helper ============================================= */
