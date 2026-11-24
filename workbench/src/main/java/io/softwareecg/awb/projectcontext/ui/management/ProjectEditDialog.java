@@ -1,7 +1,7 @@
 package io.softwareecg.awb.projectcontext.ui.management;
 
 import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.model.TimeSeriesImportSource;
 import io.softwareecg.awb.runtime.resources.CachingSvgLoader;
 import io.softwareecg.awb.runtime.resources.CdiFxmlLoader;
@@ -29,7 +29,7 @@ public class ProjectEditDialog extends Dialog<Project> {
      * @param repository the EKG repository that stores the project that should be edit in the current dialog scope
      * @param project the project that should be edit in the current dialog scope
      */
-    public ProjectEditDialog(EkgRepository repository, Project project) {
+    public ProjectEditDialog(Repository repository, Project project) {
 
         setTitle("EKG Projekt verwalten");
 

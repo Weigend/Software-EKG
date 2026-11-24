@@ -135,7 +135,7 @@ public abstract class ImportTask extends Task<Void> {
         // check that the target repositorySelector is selected
         if (importService == null) {
             eventBus.publish(new ProgressEvent("Error during import in project '" + projectConfig.getProjectName()
-                    + "'. No EkgRepository selected!", 1.0, this));
+                    + "'. No Repository selected!", 1.0, this));
             cancel();
             return null;
         }

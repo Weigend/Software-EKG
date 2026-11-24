@@ -14,7 +14,7 @@ package io.softwareecg.awb.explorer.metric.items.series.physical;
 
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 
 /**
  * The explorerView item that groups single hosts within the current branch.
@@ -29,7 +29,7 @@ public class HostGroupItem extends ContextAwareItem {
      * @param context    the filter context.
      * @param repository the containing types.
      */
-    public HostGroupItem(String label, FilterContext context, EkgRepository repository) {
+    public HostGroupItem(String label, FilterContext context, Repository repository) {
         super(label, context, repository);
         super.setGraphic(getIconProvider().getHostGroupItemIcon(this));
     }

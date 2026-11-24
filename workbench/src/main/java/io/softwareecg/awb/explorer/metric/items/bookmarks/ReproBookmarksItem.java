@@ -6,7 +6,7 @@ import io.softwareecg.awb.bookmark.MetricsBookmarkService;
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.bookmark.ui.CreateBookmarkGroupDialog;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.lookup.api.Lookup;
@@ -37,7 +37,7 @@ public class ReproBookmarksItem extends ContextAwareItem {
      * @param context    bean that define filters that relating to series data or the view flavor and control the item rendering
      * @param repository the EKG repository the bookmark section item belongs to.
      */
-    public ReproBookmarksItem(String label, FilterContext context, EkgRepository repository) {
+    public ReproBookmarksItem(String label, FilterContext context, Repository repository) {
         super(label, context, repository);
         super.setGraphic(getIconProvider().getReproBookmarksItemIcon(this));
         BeanProvider.injectFields(this);

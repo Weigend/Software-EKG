@@ -15,7 +15,7 @@ package io.softwareecg.awb.explorer.items;
 
 import io.avaje.inject.External;
 import io.softwareecg.awb.uitoolkit.tree.api.AbstractItem;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.RepositoryService;
 import io.softwareecg.awb.repository.api.Embedded;
 import jakarta.inject.Inject;
@@ -32,10 +32,10 @@ import java.util.stream.Collectors;
 @Singleton
 public class RepositoryItemsTask {
 
-    private final EkgRepository embeddedRepo;
+    private final Repository embeddedRepo;
 
     @Inject
-    public RepositoryItemsTask(@External @Embedded EkgRepository embeddedRepo) {
+    public RepositoryItemsTask(@External @Embedded Repository embeddedRepo) {
         this.embeddedRepo = embeddedRepo;
     }
 
@@ -47,8 +47,7 @@ public class RepositoryItemsTask {
     public List<AbstractItem> getRepositoryItems() {
 
         RepositoryService service = embeddedRepo.getBoundedService(RepositoryService.class);
-        List<EkgRepository> repositories = service.listEkgRepositories();
- 
+        List<? extends Repository> repositories = service.listEkgRepositories();
         return repositories
                 .stream()
                 .map(repository -> new RepositoryItem(repository.getRepositoryName(), true, repository))

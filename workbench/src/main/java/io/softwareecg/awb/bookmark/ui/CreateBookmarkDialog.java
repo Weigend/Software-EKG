@@ -17,7 +17,7 @@ import io.softwareecg.awb.runtime.di.BeanProvider;
 import io.softwareecg.awb.bookmark.MetricsBookmarkService;
 import io.softwareecg.awb.bookmark.model.Bookmark;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -53,7 +53,7 @@ public class CreateBookmarkDialog<T extends Bookmark> extends Dialog<BookmarkCre
 
     private final Bookmark.Builder<T> bookmarkBuilder;
 
-    private final EkgRepository targetRepository;
+    private final Repository targetRepository;
 
     @FXML
     private TextField bookmarkName;
@@ -68,7 +68,7 @@ public class CreateBookmarkDialog<T extends Bookmark> extends Dialog<BookmarkCre
      * @param repository the repository used to store the bookmark
      * @param projectName the current project name (used to filter bookmark groups), may be null for global context
      */
-    public CreateBookmarkDialog(Bookmark.Builder<T> bookmarkBuilder, EkgRepository repository, String projectName) {
+    public CreateBookmarkDialog(Bookmark.Builder<T> bookmarkBuilder, Repository repository, String projectName) {
 
         this.bookmarkBuilder = bookmarkBuilder;
 
@@ -153,7 +153,7 @@ public class CreateBookmarkDialog<T extends Bookmark> extends Dialog<BookmarkCre
      *
      * @return the target types.
      */
-    public EkgRepository getTargetRepository() {
+    public Repository getTargetRepository() {
         return targetRepository;
     }
 

@@ -29,7 +29,7 @@ import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
 import io.softwareecg.awb.query.model.ComputationSpec;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.timeseries.dimension.FilterDimension;
 import io.softwareecg.awb.repository.model.TimeSeriesImportSource;
 import javafx.beans.property.*;
@@ -68,7 +68,7 @@ public class QueryDraft {
     }
 
 
-    private final ObjectProperty<EkgRepository> repository = new SimpleObjectProperty<>();
+    private final ObjectProperty<Repository> repository = new SimpleObjectProperty<>();
 
     /* ---------------------------- generic filter properties (I) -------------------------------- */
 
@@ -263,7 +263,7 @@ public class QueryDraft {
      *
      * @return the working types.
      */
-    public EkgRepository getRepository() {
+    public Repository getRepository() {
         return repository.get();
     }
 
@@ -272,7 +272,7 @@ public class QueryDraft {
      *
      * @param repository the working types.
      */
-    public void setRepository(EkgRepository repository) {
+    public void setRepository(Repository repository) {
         this.repository.set(repository);
     }
 
@@ -281,7 +281,7 @@ public class QueryDraft {
      *
      * @return the working types property.
      */
-    public Property<EkgRepository> repositoryProperty() {
+    public Property<Repository> repositoryProperty() {
         return repository;
     }
 

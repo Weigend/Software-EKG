@@ -69,7 +69,7 @@ public interface RepositoryService extends RepositoryClientAware {
      *
      * @param repository the repository to remove; must not be the embedded one
      */
-    void removeRepositoryWithProjects(EkgRepository repository);
+    void removeRepositoryWithProjects(Repository repository);
 
     /**
      * Add a new {@link EkgRepository} that will persisted in the embedded data store.

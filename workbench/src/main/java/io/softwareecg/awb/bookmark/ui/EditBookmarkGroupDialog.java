@@ -2,7 +2,7 @@ package io.softwareecg.awb.bookmark.ui;
 
 import io.softwareecg.awb.runtime.di.BeanProvider;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,7 +25,7 @@ import java.io.IOException;
  */
 public class EditBookmarkGroupDialog extends Dialog<BookmarkGroup> {
 
-    private final EkgRepository targetRepository;
+    private final Repository targetRepository;
 
     private final BookmarkGroup bookmarkGroup;
 
@@ -39,7 +39,7 @@ public class EditBookmarkGroupDialog extends Dialog<BookmarkGroup> {
      * @param bookmarkGroup a {@link BookmarkGroup} instance that should renamed
      * @param repository the repository used to store the bookmark
      */
-    public EditBookmarkGroupDialog(BookmarkGroup bookmarkGroup, EkgRepository repository) {
+    public EditBookmarkGroupDialog(BookmarkGroup bookmarkGroup, Repository repository) {
 
         this.bookmarkGroup = bookmarkGroup;
 
@@ -100,7 +100,7 @@ public class EditBookmarkGroupDialog extends Dialog<BookmarkGroup> {
      *
      * @return the target types.
      */
-    public EkgRepository getTargetRepository() {
+    public Repository getTargetRepository() {
         return targetRepository;
     }
 

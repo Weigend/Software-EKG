@@ -54,7 +54,7 @@ public class RepositorySelectorPane extends GridPane implements Initializable, R
 
     private final StringProperty label = new SimpleStringProperty( "Repository:");
 
-    private final ObjectProperty<Predicate<EkgRepository>> filter = new SimpleObjectProperty<>();
+    private final ObjectProperty<Predicate<Repository>> filter = new SimpleObjectProperty<>();
 
     private final ObjectProperty<Repository> selectedRepository = new SimpleObjectProperty<>();
 
@@ -127,7 +127,7 @@ public class RepositorySelectorPane extends GridPane implements Initializable, R
             return;
         }
 
-        Predicate<EkgRepository> predicate = getFilter();
+        Predicate<Repository> predicate = getFilter();
         List<EkgRepository> repositoryList = service.listEkgRepositories();
 
         repositoryList.stream().filter(predicate).forEach(repositories::add);
@@ -155,7 +155,7 @@ public class RepositorySelectorPane extends GridPane implements Initializable, R
      *
      * @return The currently used filter predicate.
      */
-    public Predicate<EkgRepository> getFilter() {
+    public Predicate<Repository> getFilter() {
         return filter.get() != null ? filter.get() : r -> true;
     }
 
@@ -164,7 +164,7 @@ public class RepositorySelectorPane extends GridPane implements Initializable, R
      *
      * @param filter the new filter predicate.
      */
-    public void setFilter(Predicate<EkgRepository> filter) {
+    public void setFilter(Predicate<Repository> filter) {
         this.filter.set(filter);
     }
 
@@ -173,7 +173,7 @@ public class RepositorySelectorPane extends GridPane implements Initializable, R
      *
      * @return The filter property.
      */
-    public ObjectProperty<Predicate<EkgRepository>> filterProperty() {
+    public ObjectProperty<Predicate<Repository>> filterProperty() {
         return filter;
     }
 

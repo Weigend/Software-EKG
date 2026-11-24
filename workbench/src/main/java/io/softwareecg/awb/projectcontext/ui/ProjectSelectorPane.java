@@ -79,7 +79,7 @@ public class ProjectSelectorPane extends GridPane implements ProjectSelector {
     }
 
     /**
-     * Returns an ObjectProperty used to hold a EkgRepository instance
+     * Returns an ObjectProperty used to hold a Repository instance
      * used to read and store projects.
      *
      * @return an ObjectProperty used to hold a types

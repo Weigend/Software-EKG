@@ -6,7 +6,7 @@ import io.softwareecg.awb.datasource.model.SeriesDimensions;
 import io.softwareecg.awb.query.api.OpenInvestigationCommand;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.events.SeriesDataWrittenEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.EventBusListener;
@@ -33,7 +33,7 @@ final class FirstChartOpener {
 
     private final EventBus<EventObject> eventBus;
 
-    private final EkgRepository repository;
+    private final Repository repository;
 
     private final String projectName;
 
@@ -49,7 +49,7 @@ final class FirstChartOpener {
 
     private boolean done;
 
-    private FirstChartOpener(EventBus<EventObject> eventBus, EkgRepository repository, CollectionPlan plan) {
+    private FirstChartOpener(EventBus<EventObject> eventBus, Repository repository, CollectionPlan plan) {
         this.eventBus = eventBus;
         this.repository = repository;
         this.projectName = plan.projectName();
@@ -61,7 +61,7 @@ final class FirstChartOpener {
      * Starts waiting for the first values of the analysis. Call before the analysis is started,
      * so that fast first values are not missed.
      */
-    static FirstChartOpener waitFor(EventBus<EventObject> eventBus, EkgRepository repository, CollectionPlan plan) {
+    static FirstChartOpener waitFor(EventBus<EventObject> eventBus, Repository repository, CollectionPlan plan) {
         FirstChartOpener opener = new FirstChartOpener(eventBus, repository, plan);
         eventBus.subscribe(SeriesDataWrittenEvent.class, opener.listener);
         return opener;

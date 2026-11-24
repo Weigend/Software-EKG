@@ -17,7 +17,7 @@ import io.softwareecg.awb.query.api.OpenInvestigationCommand;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import io.softwareecg.wfx.lookup.api.Lookup;
@@ -48,7 +48,7 @@ public class MetricItem extends ContextAwareItem {
      * @param queryParams an MetricQueryParams instance with all filter params need to get the data this item represents
      * @param repository the containing types.
      */
-    public MetricItem(Counter counter, FilterContext filterContext, QuerySpec queryParams, EkgRepository repository) {
+    public MetricItem(Counter counter, FilterContext filterContext, QuerySpec queryParams, Repository repository) {
         super(counter.getCounterName(), filterContext, repository);
         super.setGraphic(getIconProvider().getMetricItemIcon(this));
         this.queryParams = queryParams;

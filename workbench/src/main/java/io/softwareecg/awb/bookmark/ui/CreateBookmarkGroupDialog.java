@@ -2,7 +2,7 @@ package io.softwareecg.awb.bookmark.ui;
 
 import io.softwareecg.awb.runtime.di.BeanProvider;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,7 +26,7 @@ import java.io.IOException;
  */
 public class CreateBookmarkGroupDialog extends Dialog<BookmarkGroup> {
 
-    private final EkgRepository targetRepository;
+    private final Repository targetRepository;
 
     @FXML
     private TextField bookmarkGroupName;
@@ -36,7 +36,7 @@ public class CreateBookmarkGroupDialog extends Dialog<BookmarkGroup> {
      *
      * @param repository the repository used to store the bookmark
      */
-    public CreateBookmarkGroupDialog(EkgRepository repository) {
+    public CreateBookmarkGroupDialog(Repository repository) {
 
         try {
             BeanProvider.injectFields(this);
@@ -94,7 +94,7 @@ public class CreateBookmarkGroupDialog extends Dialog<BookmarkGroup> {
      *
      * @return the target types.
      */
-    public EkgRepository getTargetRepository() {
+    public Repository getTargetRepository() {
         return targetRepository;
     }
 

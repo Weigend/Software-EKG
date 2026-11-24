@@ -2,7 +2,7 @@ package io.softwareecg.awb.metricview;
 
 import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.events.SeriesDataWrittenEvent;
 import io.softwareecg.wfx.platform.api.EventSubscriber;
 import javafx.scene.chart.ValueAxis;
@@ -246,7 +246,7 @@ public class MetricViewController implements Initializable {
      * It updates the search fields of the current chart panel with the data from the event
      * and load the according metric data to the chart panel.
      *
-     * @param event the event with filters, EkgRepository to use and more info need to setup the analytics panel
+     * @param event the event with filters, Repository to use and more info need to setup the analytics panel
      */
     public void updateByContextEvent(OpenInvestigationCommand event) {
 
@@ -308,7 +308,7 @@ public class MetricViewController implements Initializable {
     /**
      * @return what identifies a project across repositories, {@code null} if it has no name
      */
-    public static String projectKey(EkgRepository repository, String projectName) {
+    public static String projectKey(Repository repository, String projectName) {
         if (projectName == null || projectName.isBlank()) {
             return null;
         }
@@ -317,7 +317,7 @@ public class MetricViewController implements Initializable {
 
     private boolean concernsShownProject(SeriesDataWrittenEvent event) {
         QuerySpec shown = viewModel.getBaseChartFilterParams();
-        EkgRepository repository = viewModel.getEkgRepository();
+        Repository repository = viewModel.getEkgRepository();
         return shown != null && repository != null
                 && Objects.equals(repository.getId(), event.getRepositoryId())
                 && Objects.equals(shown.getProjectName(), event.getProjectName());
@@ -463,7 +463,7 @@ public class MetricViewController implements Initializable {
     private void followBackgroundCharts(long start, long end) {
         List<ColoredChart> charts = new ArrayList<>(zoomableStackedChart.getBackgroundCharts());
         investigationStore.retainOnly(charts.stream().map(ColoredChart::getId).collect(Collectors.toSet()));
-        EkgRepository repository = viewModel.getEkgRepository();
+        Repository repository = viewModel.getEkgRepository();
 
         for (ColoredChart chart : charts) {
             InvestigationStore.Entry query = investigationStore.get(chart.getId());

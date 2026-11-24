@@ -1,9 +1,11 @@
 package io.softwareecg.awb.repository.api;
 
+import io.softwareecg.awb.repository.spi.RepositoryClientAware;
+
 /**
- * Base API of each EKG repository and the only interface
- * that is visible for Importer that normally should not have
- * a need to interact with repositories directly.
+ * A repository as the other components see it: who it is, what it answers, and the services that
+ * work on its data. How it is connected - address, credentials, client - is in
+ * {@link EkgRepository} and stays inside the component.
  *
  * @since 30.01.2020
  */
@@ -25,4 +27,34 @@ public interface Repository {
      */
     String getRepositoryName();
 
+    /**
+     * @return whether this is the repository inside the workbench
+     */
+    boolean isEmbedded();
+
+    /**
+     * Returns a service that works on the data of this repository.
+     *
+     * @param serviceInterface the service
+     * @return the service, or {@code null} if the repository cannot be reached
+     */
+    <T extends RepositoryClientAware> T getBoundedService(Class<T> serviceInterface);
+
+    /**
+     * Asks the repository whether it answers.
+     */
+    boolean isReachable();
+
+    /**
+     * @return the number of values stored in the repository
+     * @throws RepositoryException if the repository cannot tell
+     */
+    long countValues() throws RepositoryException;
+
+    /**
+     * Deletes the time series of a project. The project itself stays.
+     *
+     * @throws RepositoryException if the repository could not delete them
+     */
+    void deleteTimeSeriesOf(String projectName) throws RepositoryException;
 }

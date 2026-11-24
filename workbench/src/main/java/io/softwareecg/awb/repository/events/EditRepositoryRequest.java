@@ -1,6 +1,6 @@
 package io.softwareecg.awb.repository.events;
 
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 
 import java.util.EventObject;
 
@@ -27,11 +27,11 @@ public class EditRepositoryRequest extends EventObject {
      * @param repository the types a modification is requested for
      * @param ownerWindow the owner window that will be the parent of an modification dialog/modal
      */
-    public EditRepositoryRequest(EkgRepository repository, Object ownerWindow) {
+    public EditRepositoryRequest(Repository repository, Object ownerWindow) {
         this(repository, true, ownerWindow);
     }
 
-    public EditRepositoryRequest(EkgRepository repository, boolean modificationRequested, Object ownerWindow) {
+    public EditRepositoryRequest(Repository repository, boolean modificationRequested, Object ownerWindow) {
         super(repository);
         this.modificationRequested = modificationRequested;
         this.ownerWindow = ownerWindow;
@@ -45,7 +45,7 @@ public class EditRepositoryRequest extends EventObject {
         return modificationRequested;
     }
 
-    public EkgRepository getRepository() {
-        return (EkgRepository) getSource();
+    public Repository getRepository() {
+        return (Repository) getSource();
     }
 }

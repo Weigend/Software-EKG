@@ -12,7 +12,6 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.repository.api;
 
-import io.softwareecg.awb.repository.spi.RepositoryClientAware;
 
 
 import io.softwareecg.awb.repository.port.TimeSeriesRepository;
@@ -24,14 +23,6 @@ import io.softwareecg.awb.secrets.model.ResourceAuthType;
  *
  */
 public interface EkgRepository extends Repository {
-
-    /**
-     * Returns a boolean flag if the repository is an
-     * embedded one or not.
-     *
-     * @return true if the repository is an embedded repository of the workbench, false if not
-     */
-    boolean isEmbedded();
 
     /**
      * Returns the uri to access this types.
@@ -83,8 +74,6 @@ public interface EkgRepository extends Repository {
      */
     TimeSeriesRepository getRepositoryClient();
 
-
-    <T extends RepositoryClientAware> T getBoundedService(Class<T> serviceInterface);
 
     /**
      * Shutdown the repository to stop it gracefully if

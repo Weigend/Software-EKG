@@ -1,5 +1,10 @@
 package io.softwareecg.awb.repository.adapter;
 
+import java.util.List;
+import io.softwareecg.awb.repository.schema.EkgSchemaField;
+import io.softwareecg.awb.repository.schema.DocumentType;
+import io.softwareecg.awb.repository.port.DeleteParams;
+import io.softwareecg.awb.repository.api.RepositoryException;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.port.TimeSeriesRepository;
 import io.softwareecg.awb.repository.spi.RepositoryClientAware;
@@ -186,4 +191,23 @@ public abstract class RepositoryAdapterBase implements EkgRepository {
         return cachedClient;
     }
 
+    @Override
+    public boolean isReachable() {
+        return getRepositoryClient().ping();
+    }
+
+    @Override
+    public long countValues() throws RepositoryException {
+        return getRepositoryClient().sumFieldValue(EkgSchemaField.TS_DATA_AMOUNT_VALUES, List.of());
+    }
+
+    @Override
+    public void deleteTimeSeriesOf(String projectName) throws RepositoryException {
+        DeleteParams timeSeries = new DeleteParams();
+        timeSeries.addFilter(EkgSchemaField.DOC_TYPE, DocumentType.TIME_SERIES.toString());
+        timeSeries.addFilter(EkgSchemaField.PROJECT_NAME, projectName);
+        TimeSeriesRepository client = getRepositoryClient();
+        client.delete(timeSeries);
+        client.commit();
+    }
 }

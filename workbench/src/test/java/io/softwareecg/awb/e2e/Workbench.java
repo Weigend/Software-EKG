@@ -5,7 +5,7 @@ import io.softwareecg.awb.uitoolkit.events.OpeningMode;
 import io.softwareecg.awb.datasource.NewAnalysisService;
 import io.softwareecg.awb.query.api.OpenInvestigationCommand;
 import io.softwareecg.awb.query.model.QuerySpec;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.platform.api.EventBus;
 import javafx.application.Platform;
@@ -275,7 +275,7 @@ public final class Workbench {
     /**
      * @return the repository the Workbench has on board
      */
-    public EkgRepository embeddedRepository() {
+    public Repository embeddedRepository() {
         return Lookup.lookup(NewAnalysisService.class).getRepository();
     }
 

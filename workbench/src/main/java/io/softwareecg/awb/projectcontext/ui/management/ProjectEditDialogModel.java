@@ -1,7 +1,7 @@
 package io.softwareecg.awb.projectcontext.ui.management;
 
 import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -25,7 +25,7 @@ public class ProjectEditDialogModel extends ProjectDialogModel {
     //=================================================================================================================
 
     @Override
-    public void setSelectedRepository(EkgRepository repository) {
+    public void setSelectedRepository(Repository repository) {
         super.setSelectedRepository(repository);
     }
 

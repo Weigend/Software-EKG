@@ -229,7 +229,7 @@ public class EkgRepositoryAdminController implements Initializable {
         viewModel.setIsEditingMode(true);
         repositoryAdminDialog.setTitle("Update EkgRepository");
         repositoryAdminDialog.initOwner((javafx.stage.Window) event.getOwnerWindow());
-        setOldRepository(event.getRepository());
+        setOldRepository((EkgRepository) event.getRepository());
 
         repositoryAdminDialog.show();
 

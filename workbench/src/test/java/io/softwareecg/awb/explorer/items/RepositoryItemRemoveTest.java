@@ -3,7 +3,9 @@ package io.softwareecg.awb.explorer.items;
 import io.avaje.inject.BeanScope;
 import io.softwareecg.awb.repository.port.TimeSeriesRepository;
 import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.RepositoryException;
 import io.softwareecg.awb.repository.api.RepositoryService;
+import io.softwareecg.awb.repository.schema.EkgSchemaField;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.lookup.api.LookupStrategy;
@@ -195,7 +197,12 @@ public class RepositoryItemRemoveTest {
         when(repository.getId()).thenReturn(id);
         when(repository.getRepositoryName()).thenReturn(id);
         when(repository.isEmbedded()).thenReturn(false);
-        when(repository.getRepositoryClient()).thenReturn(client);
+        when(repository.isReachable()).thenAnswer(call -> client.ping());
+        try {
+            when(repository.countValues()).thenAnswer(call -> client.sumFieldValue(EkgSchemaField.TS_DATA_AMOUNT_VALUES, List.of()));
+        } catch (RepositoryException neverThrownByAMock) {
+            throw new IllegalStateException(neverThrownByAMock);
+        }
         return repository;
     }
 

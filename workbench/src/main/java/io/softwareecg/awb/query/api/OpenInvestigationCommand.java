@@ -16,7 +16,7 @@ import io.softwareecg.awb.query.model.QuerySpec;
 
 import io.softwareecg.awb.uitoolkit.events.OpeningMode;
 import io.softwareecg.awb.uitoolkit.events.WindowOpenEvent;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 
 import java.util.EventObject;
 
@@ -29,7 +29,7 @@ public class OpenInvestigationCommand extends EventObject implements WindowOpenE
 
     private final QuerySpec filterParams;
 
-    private final EkgRepository repository;
+    private final Repository repository;
 
     private final OpeningMode openingMode;
 
@@ -42,10 +42,10 @@ public class OpenInvestigationCommand extends EventObject implements WindowOpenE
      *
      * @param source The object on which the Event initially occurred.
      * @param filterParams a container with all filter parameters that should used to define the query
-     * @param repository the {@link EkgRepository} instance that should used to fetch the data
+     * @param repository the {@link Repository} instance that should used to fetch the data
      * @throws IllegalArgumentException if source is null.
      */
-    public OpenInvestigationCommand(Object source, QuerySpec filterParams, EkgRepository repository) {
+    public OpenInvestigationCommand(Object source, QuerySpec filterParams, Repository repository) {
         this(source, filterParams, repository, OpeningMode.CLEAR_VIEW);
     }
 
@@ -54,12 +54,12 @@ public class OpenInvestigationCommand extends EventObject implements WindowOpenE
      *
      * @param source The object on which the Event initially occurred.
      * @param filterParams a container with all filter parameters that should used to define the query
-     * @param repository the {@link EkgRepository} instance that should used to fetch the data
+     * @param repository the {@link Repository} instance that should used to fetch the data
      * @param openingMode an enum that control which view should use to display the data and how to deal with existing data
      *
      * @throws IllegalArgumentException if source is null.
      */
-    public OpenInvestigationCommand(Object source, QuerySpec filterParams, EkgRepository repository, OpeningMode openingMode) {
+    public OpenInvestigationCommand(Object source, QuerySpec filterParams, Repository repository, OpeningMode openingMode) {
         super(source);
         this.filterParams = filterParams;
         this.repository = repository;
@@ -85,7 +85,7 @@ public class OpenInvestigationCommand extends EventObject implements WindowOpenE
      *
      * @return the types.
      */
-    public EkgRepository getRepository() {
+    public Repository getRepository() {
         return repository;
     }
 

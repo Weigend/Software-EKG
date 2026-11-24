@@ -2,7 +2,7 @@ package io.softwareecg.awb.explorer.metric.items.series.logical;
 
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 
 /**
  * todo insert comment here
@@ -18,7 +18,7 @@ public class ServiceGroupItem extends ContextAwareItem {
      * @param context    bean that define filters that relating to series data or the view flavor and control the item rendering
      * @param repository the containing types.
      */
-    public ServiceGroupItem(String label, FilterContext context, EkgRepository repository) {
+    public ServiceGroupItem(String label, FilterContext context, Repository repository) {
         super(label, context, repository);
         super.setGraphic(getIconProvider().getServiceGroupItemIcon(this));
     }

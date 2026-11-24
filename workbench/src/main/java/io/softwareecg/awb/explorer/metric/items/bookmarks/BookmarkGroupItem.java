@@ -20,7 +20,7 @@ import io.softwareecg.awb.bookmark.model.BookmarkGroup;
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.bookmark.ui.EditBookmarkGroupDialog;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import jakarta.inject.Inject;
@@ -60,7 +60,7 @@ public class BookmarkGroupItem extends ContextAwareItem {
      * @param queryParams - the query context.
      * @param repository   the containing types.
      */
-    public BookmarkGroupItem(BookmarkGroup bookmarkGroup, FilterContext queryParams, EkgRepository repository) {
+    public BookmarkGroupItem(BookmarkGroup bookmarkGroup, FilterContext queryParams, Repository repository) {
         super(bookmarkGroup.getName(), queryParams, repository);
         super.setGraphic(getIconProvider().getBookmarkGroupItemIcon(this));
         this.bookmarkGroup = bookmarkGroup;

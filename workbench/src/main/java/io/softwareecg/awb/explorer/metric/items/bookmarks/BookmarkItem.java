@@ -20,7 +20,7 @@ import io.softwareecg.awb.bookmark.model.Bookmark;
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.bookmark.ui.BookmarkEvent;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.platform.api.EventBus;
 import javafx.application.Platform;
@@ -57,7 +57,7 @@ public class BookmarkItem extends ContextAwareItem {
      * @param context    the context
      * @param repository the containing types.
      */
-    public BookmarkItem(Bookmark bookmark, FilterContext context, EkgRepository repository) {
+    public BookmarkItem(Bookmark bookmark, FilterContext context, Repository repository) {
         super(bookmark.getName(), context, repository);
         super.setValue(bookmark.getName());
         super.setGraphic(getIconProvider().getBookmarkItemIcon(this));

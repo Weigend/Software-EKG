@@ -14,7 +14,7 @@ package io.softwareecg.awb.explorer.metric.items.series;
 
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -30,7 +30,7 @@ public class MeasurementGroupItem extends ContextAwareItem {
      * @param context    - the query context
      * @param repository the containing types.
      */
-    public MeasurementGroupItem(FilterContext context, EkgRepository repository) {
+    public MeasurementGroupItem(FilterContext context, Repository repository) {
         super(isNotBlank(getProject(context).getDimensionAliasMeasurement()) ?
                 getProject(context).getDimensionAliasMeasurement() : "Measurements", context, repository);
 

@@ -80,7 +80,7 @@ public abstract class LocalProjectImportStrategy {
 
     /**
      * Creates a new LocalProjectImportTask that uses this strategy to proceed and import time series
-     * data to EKG EkgRepository
+     * data to EKG Repository
      *
      * @param importService service that provides the functionality to import time series data
      * @param projectConfiguration the project configuration that tell which project the data belong to

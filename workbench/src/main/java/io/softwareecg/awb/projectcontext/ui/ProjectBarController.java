@@ -11,7 +11,7 @@ import io.softwareecg.awb.projectcontext.api.ProjectViewFlavorChangedEvent;
 import io.softwareecg.awb.projectcontext.events.ProjectSelectedEvent;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.projectcontext.ui.management.ProjectEditDialog;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.projectcontext.model.CloudPlatformType;
 import io.softwareecg.awb.projectcontext.model.ProjectFlavor;
 import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
@@ -112,7 +112,7 @@ public class ProjectBarController implements Initializable {
      * the EKG repository that stores the active (chosen) project
      * viewed in the ProjectBar
      */
-    private EkgRepository activeEkgRepository = null;
+    private Repository activeEkgRepository = null;
 
     private final Map<ProjectViewFlavor, BooleanProperty> disablePropertyMap = new HashMap<>();
 

@@ -15,7 +15,7 @@ package io.softwareecg.awb.bookmark.ui;
 import io.softwareecg.awb.uitoolkit.events.OpeningMode;
 import io.softwareecg.awb.uitoolkit.events.WindowOpenEvent;
 import io.softwareecg.awb.bookmark.model.Bookmark;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -30,7 +30,7 @@ import java.util.EventObject;
 public class BookmarkEvent extends EventObject implements WindowOpenEvent {
 
     private final Bookmark bookmark;
-    private final EkgRepository sourceRepository;
+    private final Repository sourceRepository;
     private final OpeningMode openingMode;
 
     /**
@@ -50,7 +50,7 @@ public class BookmarkEvent extends EventObject implements WindowOpenEvent {
      * @param bookmark         The bookmark.
      * @param sourceRepository The types where this bookmark is stored.
      */
-    public BookmarkEvent(Object source, Bookmark bookmark, EkgRepository sourceRepository) {
+    public BookmarkEvent(Object source, Bookmark bookmark, Repository sourceRepository) {
         this(source, bookmark, sourceRepository, OpeningMode.CLEAR_VIEW);
     }
 
@@ -73,7 +73,7 @@ public class BookmarkEvent extends EventObject implements WindowOpenEvent {
      * @param sourceRepository The types where this bookmark is stored.
      * @param openingMode      Should the event result in a new view?
      */
-    public BookmarkEvent(Object source, Bookmark bookmark, EkgRepository sourceRepository, OpeningMode openingMode) {
+    public BookmarkEvent(Object source, Bookmark bookmark, Repository sourceRepository, OpeningMode openingMode) {
         super(source);
         this.bookmark = bookmark;
         this.sourceRepository = sourceRepository;
@@ -84,7 +84,7 @@ public class BookmarkEvent extends EventObject implements WindowOpenEvent {
         return bookmark;
     }
 
-    public EkgRepository getSourceRepository() {
+    public Repository getSourceRepository() {
         return sourceRepository;
     }
 

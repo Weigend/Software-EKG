@@ -1,7 +1,7 @@
 package io.softwareecg.awb.projectcontext.events;
 
 import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
 
 /**
@@ -13,7 +13,7 @@ public class ProjectSelectedEvent extends ProjectPropertyChangeEvent {
 
     private final ProjectViewFlavor activeViewFlavor;
 
-    private final EkgRepository repository;
+    private final Repository repository;
 
     /**
      * Constructs a new ProjectSelectedEvent instance that will
@@ -26,7 +26,7 @@ public class ProjectSelectedEvent extends ProjectPropertyChangeEvent {
      * @param repository the EKG repository which stores the selected project
      */
     public ProjectSelectedEvent(Object source, Project previousProject, Project newProject,
-                                ProjectViewFlavor activeViewFlavor, EkgRepository repository) {
+                                ProjectViewFlavor activeViewFlavor, Repository repository) {
         super(source, newProject,"Project", previousProject, newProject);
         this.activeViewFlavor = activeViewFlavor;
         this.repository = repository;
@@ -44,7 +44,7 @@ public class ProjectSelectedEvent extends ProjectPropertyChangeEvent {
         return activeViewFlavor;
     }
 
-    public EkgRepository getRepository() {
+    public Repository getRepository() {
         return repository;
     }
 }

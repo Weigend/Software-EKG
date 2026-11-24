@@ -6,7 +6,7 @@ import io.softwareecg.awb.uitoolkit.view.ViewMapper;
 import io.softwareecg.awb.bookmark.model.MetricQueryBookmark;
 import io.softwareecg.awb.query.api.OpenInvestigationCommand;
 import io.softwareecg.awb.bookmark.ui.BookmarkEvent;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.metricview.ChartAnalyticsPanel;
 import io.softwareecg.awb.metricview.MetricViewController;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
@@ -155,7 +155,7 @@ public class ChartPanelAdapter extends MetricViewController {
          * @param newView     whether the request asks for a view of its own
          * @return the view, which is the last active one from now on
          */
-        private FXMLView<MetricViewController> viewFor(EkgRepository repository, String projectName, boolean newView) {
+        private FXMLView<MetricViewController> viewFor(Repository repository, String projectName, boolean newView) {
             forgetClosedViews();
             String project = MetricViewController.projectKey(repository, projectName);
 

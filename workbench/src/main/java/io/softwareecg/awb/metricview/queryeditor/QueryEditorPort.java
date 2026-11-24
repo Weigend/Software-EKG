@@ -5,7 +5,7 @@ import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.query.model.SeriesCombineMode;
 import io.softwareecg.awb.query.model.SeriesSmoothingGranularity;
 import io.softwareecg.awb.query.model.SeriesSmoothingType;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.uitoolkit.events.OpeningMode;
 import javafx.stage.Window;
 
@@ -15,7 +15,7 @@ public interface QueryEditorPort {
     ComputationSpec getDefinedComputedParameters();
     Window getOwnerWindow();
     void setQueryContext(QuerySpec queryContext, OpeningMode openingMode);
-    void setRepository(EkgRepository repository);
+    void setRepository(Repository repository);
     void setComputeParameters(ComputationSpec parameters);
     void initButtonHandler(Actions actions);
 

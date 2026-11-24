@@ -1,9 +1,8 @@
 package io.softwareecg.awb.projectcontext.ui.management;
 
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.projectcontext.model.CloudPlatformType;
 import io.softwareecg.awb.projectcontext.model.ProjectFlavor;
-import io.softwareecg.awb.repository.api.Repository;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -95,7 +94,7 @@ public class ProjectDialogModel {
         return selectedRepository.get();
     }
 
-    public void setSelectedRepository(EkgRepository repository) {
+    public void setSelectedRepository(Repository repository) {
         selectedRepository.set(repository);
     }
 

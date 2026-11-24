@@ -25,7 +25,7 @@ import io.softwareecg.awb.timeseries.dimension.physical.Host;
 import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
 import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.QuerySpec;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.port.search.facet.FacetParams;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
@@ -61,7 +61,7 @@ public class ChartHeaderBusinessProcess extends QueryDraft {
     private Service<Collection<Metric>> metricNamesService;
 
 
-    public void setRepository(EkgRepository repository) {
+    public void setRepository(Repository repository) {
 
         if (getRepository() == repository) {
             return;

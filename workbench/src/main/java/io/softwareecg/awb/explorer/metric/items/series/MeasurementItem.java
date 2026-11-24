@@ -15,7 +15,7 @@ package io.softwareecg.awb.explorer.metric.items.series;
 import io.softwareecg.awb.timeseries.dimension.Measurement;
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 
 /**
  * The explorerView tree item for a single series.
@@ -36,7 +36,7 @@ public class MeasurementItem extends ContextAwareItem {
      * @param context     - the query context
      *                    @param repository the containing types.
      */
-    public MeasurementItem(Measurement measurement, FilterContext context, EkgRepository repository) {
+    public MeasurementItem(Measurement measurement, FilterContext context, Repository repository) {
         super(measurement.getName(), context, repository);
         super.setGraphic(getIconProvider().getMeasurementItemIcon(this));
     }

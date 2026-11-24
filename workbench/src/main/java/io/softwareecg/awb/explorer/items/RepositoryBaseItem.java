@@ -14,7 +14,7 @@ package io.softwareecg.awb.explorer.items;
 
 import afester.javafx.svg.SvgLoader;
 import io.softwareecg.awb.uitoolkit.tree.api.AbstractItem;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -22,12 +22,12 @@ import javafx.scene.image.ImageView;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Abstract base for explorerView items that required to contains a {@link EkgRepository}.
+ * Abstract base for explorerView items that required to contains a {@link Repository}.
  *
  */
 public abstract class RepositoryBaseItem extends AbstractItem<String> {
 
-    private final EkgRepository repository;
+    private final Repository repository;
 
     /**
      * Initialize the item with a label, a context and a types.
@@ -35,7 +35,7 @@ public abstract class RepositoryBaseItem extends AbstractItem<String> {
      * @param value      The visible label.
      * @param repository The types.
      */
-    public RepositoryBaseItem(String value, EkgRepository repository) {
+    public RepositoryBaseItem(String value, Repository repository) {
         super(value);
         this.repository = repository;
     }
@@ -72,7 +72,7 @@ public abstract class RepositoryBaseItem extends AbstractItem<String> {
         return null;
     }
 
-    public EkgRepository getRepository() {
+    public Repository getRepository() {
         return repository;
     }
 

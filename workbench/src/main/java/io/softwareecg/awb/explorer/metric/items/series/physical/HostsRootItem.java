@@ -2,7 +2,7 @@ package io.softwareecg.awb.explorer.metric.items.series.physical;
 
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -27,7 +27,7 @@ public class HostsRootItem extends ContextAwareItem {
      * @param context      the filter context.
      * @param repository   the containing types.
      */
-    public HostsRootItem(String aliasLabel, String defaultLabel, FilterContext context, EkgRepository repository) {
+    public HostsRootItem(String aliasLabel, String defaultLabel, FilterContext context, Repository repository) {
         super(StringUtils.isNotBlank(aliasLabel) ? aliasLabel: defaultLabel, context, repository);
         super.setGraphic(getIconProvider().getHostGroupItemIcon(this));
     }

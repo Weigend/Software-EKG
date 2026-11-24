@@ -38,7 +38,7 @@ import io.softwareecg.awb.runtime.NamedEnum;
 import io.softwareecg.awb.metricview.queryeditor.model.ChartHeaderBusinessProcess;
 import io.softwareecg.awb.projectcontext.api.ProjectViewFlavorChangedEvent;
 import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.projectcontext.model.ProjectFlavor;
 import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
 import io.softwareecg.awb.timeseries.dimension.FilterDimension;
@@ -379,7 +379,7 @@ public class ChartHeaderController implements Initializable, QueryEditorPort {
      *
      * @return the current types.
      */
-    public EkgRepository getRepository() {
+    public Repository getRepository() {
         return viewModel.getRepository();
     }
 
@@ -389,7 +389,7 @@ public class ChartHeaderController implements Initializable, QueryEditorPort {
      *
      * @param repository the repository the stores the project which is the context for all settings in the panel
      */
-    public void setRepository(EkgRepository repository) {
+    public void setRepository(Repository repository) {
         viewModel.setRepository(repository);
     }
 

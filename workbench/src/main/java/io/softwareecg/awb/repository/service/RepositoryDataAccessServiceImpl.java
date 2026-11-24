@@ -226,7 +226,7 @@ public class RepositoryDataAccessServiceImpl implements RepositoryService, Sourc
 
     @Override
     @SuppressWarnings("unchecked")
-    public void removeRepositoryWithProjects(EkgRepository repository) {
+    public void removeRepositoryWithProjects(Repository repository) {
         if (repository.isEmbedded()) {
             // not a stored configuration; removing it would only wipe the local projects
             throw new IllegalArgumentException("The embedded repository cannot be removed.");

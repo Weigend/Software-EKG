@@ -14,11 +14,10 @@ package io.softwareecg.awb.explorer.items;
 
 
 import io.softwareecg.awb.runtime.di.BeanProvider;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.RepositoryNotAvailableException;
 import io.softwareecg.awb.repository.api.RepositoryService;
 import io.softwareecg.awb.repository.events.EditRepositoryRequest;
-import io.softwareecg.awb.repository.schema.EkgSchemaField;
 import io.softwareecg.awb.repository.api.Embedded;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.awb.repository.api.RepositoryException;
@@ -37,7 +36,6 @@ import javafx.scene.effect.ColorAdjust;
 
 import java.text.NumberFormat;
 import java.util.EventObject;
-import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -91,7 +89,7 @@ public class RepositoryItem extends RepositoryBaseItem {
      * @param canBeRemoved - flag to indicate if the types could be removed
      * @param repository   the containing types.
      */
-    public RepositoryItem(String name, boolean canBeRemoved, EkgRepository repository) {
+    public RepositoryItem(String name, boolean canBeRemoved, Repository repository) {
         super(name, repository);
 
         this.icon = createIcon(NODE_ICON);
@@ -120,7 +118,7 @@ public class RepositoryItem extends RepositoryBaseItem {
         if (!repository.isEmbedded()) {
             addContextMenuEntry("Connect", event ->
                 TaskUtils.runAsTask("ping-" + repositoryName,
-                    () -> getRepository().getRepositoryClient().ping(),
+                    () -> getRepository().isReachable(),
                     (reachable, e) -> {
                         if (reachable) {
                             setConnected(true);
@@ -176,7 +174,7 @@ public class RepositoryItem extends RepositoryBaseItem {
                 }
                 boolean reachable = false;
                 try {
-                    reachable = getRepository().getRepositoryClient().ping();
+                    reachable = getRepository().isReachable();
                 } catch (Exception e) {
                     // Im offline-Stadium liefert ping() bereits false; eine Exception
                     // hier ist eine "echte" Anomalie (z.B. CDI-Lookup-Fehler) und wird
@@ -229,7 +227,7 @@ public class RepositoryItem extends RepositoryBaseItem {
             return;
         }
         try {
-            long amountValues = getRepository().getRepositoryClient().sumFieldValue(EkgSchemaField.TS_DATA_AMOUNT_VALUES, List.of());
+            long amountValues = getRepository().countValues();
             LOGGER.info("Repository '{}' sumFieldValue succeeded with {}", repositoryName, amountValues);
 
             setConnected(true);
@@ -247,7 +245,7 @@ public class RepositoryItem extends RepositoryBaseItem {
         } catch (Exception e) {
             LOGGER.warn("Repository '{}' sumFieldValue failed, retrying with ping fallback.", repositoryName, e);
             // Query failed but server may still be reachable.
-            if (getRepository().getRepositoryClient().ping()) {
+            if (getRepository().isReachable()) {
                 updateReachableWithoutData();
             } else {
                 setConnected(false);
@@ -340,10 +338,10 @@ public class RepositoryItem extends RepositoryBaseItem {
     @Singleton
     public static class RemoveRepositoryHandler {
 
-        private final EkgRepository embeddedEkgRepository;
+        private final Repository embeddedEkgRepository;
 
         @Inject
-        public RemoveRepositoryHandler(@External @Embedded EkgRepository embeddedEkgRepository) {
+        public RemoveRepositoryHandler(@External @Embedded Repository embeddedEkgRepository) {
             this.embeddedEkgRepository = embeddedEkgRepository;
         }
 

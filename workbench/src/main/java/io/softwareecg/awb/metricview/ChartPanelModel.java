@@ -3,7 +3,7 @@ package io.softwareecg.awb.metricview;
 import io.softwareecg.awb.query.model.ComputationSpec;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.metricview.command.ChartDataFetchParameters;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class ChartPanelModel {
 
-    private EkgRepository ekgRepository;
+    private Repository ekgRepository;
 
     private final Map<String, ChartDataFetchParameters> queryParamsMap = new HashMap<>();
 
@@ -78,11 +78,11 @@ public class ChartPanelModel {
         return queryParamsMap.get(chartId).getQueryFilterParams();
     }
 
-    public EkgRepository getEkgRepository() {
+    public Repository getEkgRepository() {
         return ekgRepository;
     }
 
-    public void setEkgRepository(EkgRepository ekgRepository) {
+    public void setEkgRepository(Repository ekgRepository) {
         this.ekgRepository = ekgRepository;
     }
 

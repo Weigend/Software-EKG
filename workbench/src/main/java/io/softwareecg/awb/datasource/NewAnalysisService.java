@@ -1,5 +1,6 @@
 package io.softwareecg.awb.datasource;
 
+import io.softwareecg.awb.repository.api.Repository;
 import io.avaje.inject.External;
 import io.softwareecg.awb.metadata.model.CollectionSourceEvent;
 import io.softwareecg.awb.metadata.model.CollectionSourceRow;
@@ -449,7 +450,7 @@ public class NewAnalysisService implements ProjectDataCollection {
     /**
      * @return the repository the analyses started here are stored in
      */
-    public EkgRepository getRepository() {
+    public Repository getRepository() {
         return repository;
     }
 

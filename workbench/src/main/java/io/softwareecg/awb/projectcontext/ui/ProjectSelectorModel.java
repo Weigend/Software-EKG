@@ -5,13 +5,12 @@ import io.softwareecg.awb.projectcontext.api.ProjectConfiguration;
 import io.softwareecg.awb.projectcontext.model.AliasMappingType;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.projectcontext.model.ProjectType;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.projectcontext.model.CloudPlatformType;
 import io.softwareecg.awb.projectcontext.model.ProjectFlavor;
 import io.softwareecg.awb.metadata.model.AliasMappingDefinition;
 import io.softwareecg.awb.projectcontext.spi.AliasMappingProvider;
 import io.softwareecg.awb.timeseries.dimension.FilterDimension;
-import io.softwareecg.awb.repository.api.Repository;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.binding.BooleanBinding;
@@ -342,7 +341,7 @@ public class ProjectSelectorModel {
         return selectedRepository;
     }
 
-    public void setSelectedRepository(EkgRepository selectedRepository) {
+    public void setSelectedRepository(Repository selectedRepository) {
         this.selectedRepository.set(selectedRepository);
     }
 

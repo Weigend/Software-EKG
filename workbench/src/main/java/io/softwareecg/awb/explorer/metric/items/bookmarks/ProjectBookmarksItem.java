@@ -6,7 +6,7 @@ import io.softwareecg.awb.bookmark.MetricsBookmarkService;
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.bookmark.ui.CreateBookmarkGroupDialog;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.lookup.api.Lookup;
@@ -39,7 +39,7 @@ public class ProjectBookmarksItem extends ContextAwareItem {
      * @param repository  the EKG repository
      * @param projectName the name of the project this bookmark section belongs to
      */
-    public ProjectBookmarksItem(String label, FilterContext context, EkgRepository repository, String projectName) {
+    public ProjectBookmarksItem(String label, FilterContext context, Repository repository, String projectName) {
         super(label, context, repository);
         super.setGraphic(getIconProvider().getReproBookmarksItemIcon(this));
         BeanProvider.injectFields(this);

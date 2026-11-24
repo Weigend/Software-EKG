@@ -2,7 +2,7 @@ package io.softwareecg.awb.projectcontext.ui.management;
 
 import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
 import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
@@ -105,7 +105,7 @@ public class ProjectEditDialogController extends ProjectDialogController {
         return updatedProject;
     }
 
-    public void setRepository(EkgRepository repository) {
+    public void setRepository(Repository repository) {
         viewModel.setSelectedRepository(repository);
         querySourceSelector.getRepositoryProperty().set(viewModel.getSelectedRepository());
     }

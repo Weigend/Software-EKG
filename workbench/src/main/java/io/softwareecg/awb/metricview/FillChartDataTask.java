@@ -5,7 +5,7 @@ import io.softwareecg.awb.query.model.ComputationSpec;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.query.ComputedTimeSeriesResponse;
 import io.softwareecg.awb.query.MetricQueryService;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.runtime.events.AwbErrorEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
@@ -76,7 +76,7 @@ public class FillChartDataTask extends Task<List<XYChart.Series<Long, Double>>> 
     /**
      * the EKG repository that stores the data to fetch
      */
-    private final EkgRepository repository;
+    private final Repository repository;
 
     /**
      * the target of all fetched and computed data
@@ -95,7 +95,7 @@ public class FillChartDataTask extends Task<List<XYChart.Series<Long, Double>>> 
      * @param zoomableStackedChart the target chart of the data
      */
     public FillChartDataTask(QuerySpec filterParams, ComputationSpec computeParams, boolean resetChartAxis,
-                             EkgRepository repository, ZoomableStackedChart zoomableStackedChart) {
+                             Repository repository, ZoomableStackedChart zoomableStackedChart) {
 
         this.filterParams = filterParams;
         this.computeParams = computeParams;

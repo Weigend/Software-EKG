@@ -20,10 +20,7 @@ import io.softwareecg.awb.projectcontext.events.ProjectDataCollectionChangedEven
 import io.softwareecg.awb.projectcontext.events.ShowProjectDataSourcesEvent;
 import io.softwareecg.awb.projectcontext.api.ProjectViewFlavorChangedEvent;
 import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.repository.port.TimeSeriesRepository;
-import io.softwareecg.awb.repository.port.DeleteParams;
-import io.softwareecg.awb.repository.schema.DocumentType;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
 import io.softwareecg.wfx.platform.api.EventBus;
@@ -43,8 +40,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import org.slf4j.LoggerFactory;
 
-import static io.softwareecg.awb.repository.schema.EkgSchemaField.DOC_TYPE;
-import static io.softwareecg.awb.repository.schema.EkgSchemaField.PROJECT_NAME;
 import static io.softwareecg.awb.runtime.TaskUtils.runAsTask;
 
 /**
@@ -91,7 +86,7 @@ public class ProjectItem extends RepositoryBaseItem {
      * @param project     - the project
      * @param repository the containing types.
      */
-    public ProjectItem(Project project, EkgRepository repository) {
+    public ProjectItem(Project project, Repository repository) {
         super(project.getName(), repository);
 
         ExplorerTreeIconsProvider provider = (ExplorerTreeIconsProvider) iconsProviderRegistry
@@ -242,17 +237,12 @@ public class ProjectItem extends RepositoryBaseItem {
     }
 
     /**
-     * Deletes all time series documents for the given project from the search index (Solr).
+     * Deletes all time series documents for the given project from the repository.
      * This must be called before removing the project metadata from H2 to avoid orphaned data.
      */
-    private void deleteTimeSeriesData(EkgRepository repository, String projectName) {
+    private void deleteTimeSeriesData(Repository repository, String projectName) {
         try {
-            TimeSeriesRepository client = repository.getRepositoryClient();
-            DeleteParams deleteQuery = new DeleteParams();
-            deleteQuery.addFilter(DOC_TYPE, DocumentType.TIME_SERIES.toString());
-            deleteQuery.addFilter(PROJECT_NAME, projectName);
-            client.delete(deleteQuery);
-            client.commit();
+            repository.deleteTimeSeriesOf(projectName);
         } catch (Exception e) {
             LOGGER.error("Failed to delete time series data for project '{}' from search index.", projectName, e);
         }
