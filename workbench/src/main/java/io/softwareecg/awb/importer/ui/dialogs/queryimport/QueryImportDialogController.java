@@ -63,15 +63,23 @@ public class QueryImportDialogController implements Initializable {
      * Component used to select the types used as persistence layer for
      * the whole project and according time-series data
      */
-    @FXML
+    @Inject
     protected RepositorySelector repositorySelector;
+
+    /** The place of the repository selector in the dialog. */
+    @FXML
+    protected BorderPane bpRepositorySelector;
 
     /**
      * The project selector we will use to define the project
      * the series will imported to
      */
-    @FXML
+    @Inject
     protected ProjectSelector projectSelector;
+
+    /** The place of the project selector in the dialog. */
+    @FXML
+    protected BorderPane bpProjectSelector;
 
     /**
      * The query source selector that will use to define
@@ -149,6 +157,9 @@ public class QueryImportDialogController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        repositorySelector.setLabelWidth(240);
+        bpRepositorySelector.setCenter(repositorySelector.asJfxComponent());
+        bpProjectSelector.setCenter(projectSelector.asJfxComponent());
         bpQuerySourceSelector.setCenter(querySourceSelector.asJfxComponent());
         headerLabel.textProperty().bind(importDialog.getHeaderDescriptionProperty());
 

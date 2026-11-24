@@ -5,8 +5,6 @@
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 <?import io.softwareecg.awb.importer.ui.controls.fileselector.LabeledFileSelector?>
-<?import io.softwareecg.awb.importer.ui.controls.ProjectSelectorProxy?>
-<?import io.softwareecg.awb.importer.ui.controls.RepositorySelectorProxy?>
 <fx:root type="FileImportDialog" prefHeight="540.0" prefWidth="740.0"
          xmlns="http://javafx.com/javafx" id="outerBorderPane" fx:id="importDialog" xmlns:fx="http://javafx.com/fxml" >
 
@@ -31,11 +29,11 @@
                 -->
                 <Label styleClass="lblHeadlines"  text="Select Repository and Target Project:" VBox.vgrow="ALWAYS" />
 
-                <RepositorySelectorProxy fx:id="repositorySelector" labelWidth="240" GridPane.rowIndex="0" GridPane.columnSpan="2" />
+                <BorderPane fx:id="bpRepositorySelector" minHeight="34"/>
 
                 <Separator />
 
-                <ProjectSelectorProxy fx:id="projectSelector" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+                <BorderPane fx:id="bpProjectSelector"/>
 
                 <!--
                 ==============================================================================================

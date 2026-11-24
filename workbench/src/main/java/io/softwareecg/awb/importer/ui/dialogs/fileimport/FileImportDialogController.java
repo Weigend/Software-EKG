@@ -8,12 +8,14 @@ import io.softwareecg.awb.importer.framework.LocalProjectImportStrategy;
 import io.softwareecg.awb.importer.framework.LocalProjectImportTask;
 import io.softwareecg.awb.importer.framework.SplitSourceProjectImportStrategy;
 import io.softwareecg.awb.importer.ui.controls.fileselector.LabeledFileSelector;
+import io.softwareecg.wfx.lookup.api.Lookup;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -50,15 +52,21 @@ public class FileImportDialogController implements Initializable {
      * Component used to select the types used as persistence layer for
      * the whole project and according time-series data
      */
+    protected final RepositorySelector repositorySelector = Lookup.lookup(RepositorySelector.class);
+
+    /** The place of the repository selector in the dialog. */
     @FXML
-    protected RepositorySelector repositorySelector;
+    protected BorderPane bpRepositorySelector;
 
     /**
      * The project selector we will use to define the project
      * the series will imported to
      */
+    protected final ProjectSelector projectSelector = Lookup.lookup(ProjectSelector.class);
+
+    /** The place of the project selector in the dialog. */
     @FXML
-    protected ProjectSelector projectSelector;
+    protected BorderPane bpProjectSelector;
 
     /**
      * The default file selector that can select single files or
@@ -103,6 +111,10 @@ public class FileImportDialogController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        repositorySelector.setLabelWidth(240);
+        bpRepositorySelector.setCenter(repositorySelector.asJfxComponent());
+        bpProjectSelector.setCenter(projectSelector.asJfxComponent());
 
         // bind header description text to data from outside
         headerLabel.textProperty().bind(importDialog.getHeaderDescriptionProperty());

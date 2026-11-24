@@ -4,8 +4,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
-<?import io.softwareecg.awb.importer.ui.controls.RepositorySelectorProxy?>
-<?import io.softwareecg.awb.importer.ui.controls.ProjectSelectorProxy?>
 <fx:root type="QueryImportDialog" prefHeight="670.0" prefWidth="740.0"
          xmlns="http://javafx.com/javafx" id="outerBorderPane" fx:id="importDialog" xmlns:fx="http://javafx.com/fxml"
          fx:controller="io.softwareecg.awb.importer.ui.dialogs.queryimport.QueryImportDialogController">
@@ -31,11 +29,11 @@
                 -->
                 <Label styleClass="lblHeadlines"  text="Select Repository and Target Project:" />
 
-                <RepositorySelectorProxy fx:id="repositorySelector" labelWidth="240" GridPane.rowIndex="0" GridPane.columnSpan="2"/>
+                <BorderPane fx:id="bpRepositorySelector" minHeight="34"/>
 
                 <Separator />
 
-                <ProjectSelectorProxy fx:id="projectSelector" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+                <BorderPane fx:id="bpProjectSelector"/>
 
                 <!-- Import options: delta import checkbox + time range selection -->
                 <GridPane fx:id="importOptionsGrid" styleClass="projectCtrlPane" vgap="4">

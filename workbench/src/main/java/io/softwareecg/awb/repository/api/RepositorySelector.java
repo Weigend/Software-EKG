@@ -24,8 +24,6 @@ public interface RepositorySelector {
 
     void setLabelWidth(double labelWidth);
 
-    double getLabelWidth();
-
     /**
      * Returns the EKG target repository that
      * is selected by the user (or default)

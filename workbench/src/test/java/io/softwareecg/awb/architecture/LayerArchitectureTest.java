@@ -129,15 +129,13 @@ public class LayerArchitectureTest {
                     .because("eine Technologie muss sich hinzufuegen und entfernen lassen, ohne eine andere anzufassen");
 
     /**
-     * api: von anderen aufgerufen, von der eigenen Komponente implementiert. Ein Proxy reicht nur
-     * weiter und implementiert die Schnittstelle deshalb nicht im eigentlichen Sinn.
+     * api: von anderen aufgerufen, von der eigenen Komponente implementiert.
      */
     @ArchTest
     static final ArchRule an_api_is_implemented_by_its_own_component =
             classes().that().areInterfaces().and().resideInAPackage("io.softwareecg.awb.*.api..")
                     .should(beImplementedOnlyIn("der eigenen Komponente", (type, implementation) ->
-                            componentOf(implementation).equals(componentOf(type))
-                                    || implementation.getSimpleName().endsWith("Proxy")))
+                            componentOf(implementation).equals(componentOf(type))))
                     .because("was andere Komponenten implementieren, gehoert in spi");
 
     /**
