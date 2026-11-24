@@ -2,6 +2,7 @@ package io.softwareecg.awb.importer.ui.dialogs.queryimport;
 
 import io.softwareecg.awb.projectcontext.api.ProjectSelector;
 import io.softwareecg.awb.projectcontext.api.TargetProjectConfig;
+import io.softwareecg.awb.repository.api.QuerySourceSelector;
 import io.softwareecg.awb.repository.api.RepositorySelector;
 import io.softwareecg.awb.repository.api.ResourceAuthType;
 import io.softwareecg.awb.repository.api.TimeSeriesWriteService;
@@ -11,7 +12,7 @@ import io.softwareecg.awb.importer.framework.LocalProjectImportStrategy;
 import io.softwareecg.awb.importer.framework.LocalProjectImportTask;
 import io.softwareecg.awb.importer.framework.RemoteProjectImportTask;
 import io.softwareecg.awb.importer.framework.SplitSourceProjectImportStrategy;
-import io.softwareecg.awb.repository.ui.sourceselector.QuerySourceSelector;
+import jakarta.inject.Inject;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,6 +22,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.apache.commons.lang3.StringUtils;
@@ -75,8 +77,12 @@ public class QueryImportDialogController implements Initializable {
      * The query source selector that will use to define
      * the access properties for the remote database
      */
-    @FXML
+    @Inject
     protected QuerySourceSelector querySourceSelector;
+
+    /** The place of the source selector in the dialog. */
+    @FXML
+    protected BorderPane bpQuerySourceSelector;
 
     /**
      * The ok button that will submit/save the settings
@@ -143,6 +149,7 @@ public class QueryImportDialogController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        bpQuerySourceSelector.setCenter(querySourceSelector.asJfxComponent());
         headerLabel.textProperty().bind(importDialog.getHeaderDescriptionProperty());
 
         // init pseudo classes and other view styles that

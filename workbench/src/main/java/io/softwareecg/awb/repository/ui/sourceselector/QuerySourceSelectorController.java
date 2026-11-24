@@ -214,11 +214,6 @@ public class QuerySourceSelectorController implements Initializable {
     }
 
 
-    public void disableViewReset(boolean isDisable) {
-        //viewResetEnabled = !isDisable;
-    }
-
-
     //================================================================================================================
     // internal logic to initialize and control the view
     //================================================================================================================
@@ -286,13 +281,6 @@ public class QuerySourceSelectorController implements Initializable {
      * based on the underlying view data.
      */
     private void initViewBehavior() {
-
-        // delete state every time the model dialog will open/reopen
-//        querySourceSelector.layoutBoundsProperty().addListener(observable -> {
-//            if (viewResetEnabled) {
-//                clearView();
-//            }
-//        });
 
         // set disable an specific prompt text behaviour based on project specification
         txtRepositoryURL.setPromptText(NO_VALID_PROJECT_TEXT);

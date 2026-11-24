@@ -7,6 +7,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 
+import java.util.function.Predicate;
+
 /**
  * This is a JavaFX proxy component/placeholder that wraps the real RepositorySelector
  * provided by the ABW implementation.
@@ -44,6 +46,11 @@ public class RepositorySelectorProxy extends BorderPane implements RepositorySel
         }
 
         return repositorySelector;
+    }
+
+    @Override
+    public void setFilter(Predicate<Repository> filter) {
+        repositorySelector.setFilter(filter);
     }
 
     @Override

@@ -2,7 +2,7 @@ package io.softwareecg.awb.projectcontext.ui.management;
 
 import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
 import io.softwareecg.awb.projectcontext.api.Project;
-import io.softwareecg.awb.repository.ui.RepositorySelectorPane;
+import io.softwareecg.awb.repository.api.RepositorySelector;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
@@ -10,6 +10,7 @@ import jakarta.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.layout.BorderPane;
 import java.util.EventObject;
 
 /**
@@ -24,10 +25,14 @@ public class CreateProjectDialogController extends ProjectDialogController {
     //-----------------------------------------------------------------------------------------------------------------
     // FXML view components
 
+    /** The place of the repository selector in the dialog. */
     @FXML
-    private RepositorySelectorPane repositorySelector;
+    private BorderPane bpRepositorySelector;
 
     //-----------------------------------------------------------------------------------------------------------------
+
+    @Inject
+    private RepositorySelector repositorySelector;
 
     /**
      * EKG event bus used to notify other about new
@@ -102,6 +107,8 @@ public class CreateProjectDialogController extends ProjectDialogController {
     @Override
     protected void initializeViewState() {
         super.initializeViewState();
+        repositorySelector.setLabelWidth(140);
+        bpRepositorySelector.setCenter(repositorySelector.asJfxComponent());
         updateProjectNames(repositorySelector.getSelectedRepository(), null);
     }
 

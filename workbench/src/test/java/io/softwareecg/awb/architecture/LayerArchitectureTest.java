@@ -15,7 +15,6 @@ import java.util.function.BiPredicate;
 import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAnyPackage;
-import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.name;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
@@ -169,14 +168,12 @@ public class LayerArchitectureTest {
 
     /**
      * Die Aussenkante von repository ist api. Alles andere - Verbindung, Speicher, Suche, Techniken -
-     * bleibt in der Komponente. Ausgenommen sind die zwei Bedienelemente, die andere in ihre Dialoge
-     * setzen: FXML braucht dafuer die Klasse.
+     * bleibt in der Komponente. Die zwei Bedienelemente, die andere in ihre Dialoge setzen, kennen
+     * sie als Schnittstelle.
      */
     @ArchTest
     static final ArchRule only_the_api_of_repository_is_used_from_outside =
-            onlyTheApiIsUsedFromOutside("repository",
-                    "io.softwareecg.awb.repository.ui.RepositorySelectorPane",
-                    "io.softwareecg.awb.repository.ui.sourceselector.QuerySourceSelector");
+            onlyTheApiIsUsedFromOutside("repository");
 
     /**
      * Die Aussenkante von bookmark ist api. Wie ein Bookmark gespeichert ist und die Dialoge bleiben
@@ -298,13 +295,10 @@ public class LayerArchitectureTest {
      * api wird von anderen benutzt, spi von anderen implementiert: beides darf von aussen importiert
      * werden, sonst nichts.
      */
-    private static ArchRule onlyTheApiIsUsedFromOutside(String component, String... exceptions) {
+    private static ArchRule onlyTheApiIsUsedFromOutside(String component) {
         String root = "io.softwareecg.awb." + component;
         DescribedPredicate<JavaClass> inside = resideInAPackage(root + "..")
                 .and(not(resideInAnyPackage(root + ".api..", root + ".spi..")));
-        for (String exception : exceptions) {
-            inside = inside.and(not(name(exception)));
-        }
         return noClasses().that().resideOutsideOfPackage(root + "..")
                 // the generated injection module wires every bean and so knows all of them
                 .and().areNotAssignableTo(io.avaje.inject.spi.AvajeModule.class)

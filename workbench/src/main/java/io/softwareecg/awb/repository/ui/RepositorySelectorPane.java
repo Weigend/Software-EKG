@@ -14,11 +14,8 @@ package io.softwareecg.awb.repository.ui;
 
 import io.softwareecg.awb.repository.connection.EkgRepository;
 import io.softwareecg.awb.repository.connection.RepositoryConfiguration;
-import io.softwareecg.awb.repository.connection.RepositoryConfigChangedEvent;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.RepositorySelector;
-import io.softwareecg.wfx.lookup.api.Lookup;
-import io.softwareecg.wfx.platform.api.EventSubscriber;
 import io.softwareecg.awb.runtime.resources.CdiFxmlLoader;
 import io.avaje.inject.Prototype;
 import jakarta.annotation.Priority;
@@ -68,22 +65,14 @@ public class RepositorySelectorPane extends GridPane implements Initializable, R
     private RepositorySelectorPane repositorySelector;
 
     /**
-     * Initialize a new EkgRepository selector. This is the constructor Avaje uses.
+     * Initialize a new EkgRepository selector. The service has to be there before the view is
+     * loaded, since loading the view calls {@link #initialize(URL, ResourceBundle)}, which lists
+     * the repositories.
      */
     @Inject
     public RepositorySelectorPane(RepositoryConfiguration configuration) {
         this.configuration = configuration;
         CdiFxmlLoader.loadView("RepositorySelector.fxml", this, this);
-    }
-
-    /**
-     * Constructor for FXML documents that use the selector as an element: the
-     * FXML loader creates such elements itself, without Avaje. The service
-     * has to be there before the view is loaded, since loading the view calls
-     * {@link #initialize(URL, ResourceBundle)}, which lists the repositories.
-     */
-    public RepositorySelectorPane() {
-        this(Lookup.lookup(RepositoryConfiguration.class));
     }
 
     @Override
@@ -108,11 +97,7 @@ public class RepositorySelectorPane extends GridPane implements Initializable, R
         return this;
     }
 
-    /**
-     * Refresh the types list when event is triggered.
-     */
-    @EventSubscriber(eventClass = RepositoryConfigChangedEvent.class)
-    public void repositoriesChanged() {
+    private void repositoriesChanged() {
         repositories.clear();
 
         Predicate<Repository> predicate = getFilter();
@@ -131,8 +116,10 @@ public class RepositorySelectorPane extends GridPane implements Initializable, R
     }
 
     /**
-     * reload repositories every time the dialog will display
+     * Lists the repositories again: a dialog that is shown anew calls it. The control does not
+     * listen to changes of the repositories, so that nothing keeps it when its dialog is gone.
      */
+    @Override
     public void updateState() {
         repositoriesChanged();
     }
@@ -147,11 +134,7 @@ public class RepositorySelectorPane extends GridPane implements Initializable, R
         return filter.get() != null ? filter.get() : r -> true;
     }
 
-    /**
-     * Set the filter predicate.
-     *
-     * @param filter the new filter predicate.
-     */
+    @Override
     public void setFilter(Predicate<Repository> filter) {
         this.filter.set(filter);
     }
@@ -172,15 +155,6 @@ public class RepositorySelectorPane extends GridPane implements Initializable, R
      */
     public Repository getSelectedRepository() {
         return selectedRepository.get();
-    }
-
-    /**
-     * Set the selected types.
-     *
-     * @param selectedRepository the selected types.
-     */
-    public void setSelectedRepository(EkgRepository selectedRepository) {
-        this.selectedRepository.set(selectedRepository);
     }
 
     /**

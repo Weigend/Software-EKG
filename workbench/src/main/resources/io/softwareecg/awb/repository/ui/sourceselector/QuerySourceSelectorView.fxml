@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.softwareecg.awb.repository.ui.sourceselector.QuerySourceSelector?>
+<?import io.softwareecg.awb.repository.ui.sourceselector.QuerySourceSelectorPane?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
-<fx:root type="QuerySourceSelector" vgap="5"
+<fx:root type="QuerySourceSelectorPane" vgap="5"
          xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx" fx:id="querySourceSelector"
          fx:controller="io.softwareecg.awb.repository.ui.sourceselector.QuerySourceSelectorController" >
 

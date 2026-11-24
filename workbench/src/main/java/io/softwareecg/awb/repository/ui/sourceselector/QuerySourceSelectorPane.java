@@ -1,95 +1,77 @@
 package io.softwareecg.awb.repository.ui.sourceselector;
 
-import io.softwareecg.awb.repository.api.TimeSeriesImportSource;
+import io.avaje.inject.Prototype;
+import io.softwareecg.awb.repository.api.QuerySourceSelector;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.ResourceAuthType;
+import io.softwareecg.awb.repository.api.TimeSeriesImportSource;
 import io.softwareecg.awb.runtime.resources.CdiFxmlLoader;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
+import jakarta.annotation.Priority;
+import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 
-/**
- * An UI component that provides an configuration area
- * with multiple layers that can used to specify an new remote
- * types for data import or selecting an existing one.
- *
- * @since 28.07.2018
- */
-public class QuerySourceSelector extends GridPane {
+@Priority(100)
+@Prototype
+public class QuerySourceSelectorPane extends GridPane implements QuerySourceSelector {
 
     private final QuerySourceSelectorController controller;
 
-    public QuerySourceSelector() {
+    public QuerySourceSelectorPane() {
         controller = CdiFxmlLoader.loadView("QuerySourceSelectorView.fxml", this).getController();
     }
 
-    /**
-     * Returns an ObjectProperty used to hold a EkgRepository instance
-     * used to read and store projects.
-     *
-     * @return an ObjectProperty used to hold a types
-     */
-    public ObjectProperty<Repository> getRepositoryProperty() {
+    @Override
+    public Property<Repository> getRepositoryProperty() {
         return controller.getViewModel().selectedRepositoryProperty();
     }
 
+    @Override
     public ReadOnlyProperty<TimeSeriesImportSource> getImportSourceRepositoryProperty() {
         return controller.getViewModel().getImportSourceRepositoryProperty();
     }
 
-    /**
-     * @return the address of the server as it stands in its field
-     */
+    @Override
     public ReadOnlyStringProperty repositoryUrlProperty() {
         return controller.getViewModel().repositoryUrlProperty();
     }
 
-    public void disableViewReset(boolean isDisabled) {
-        controller.disableViewReset(isDisabled);
-    }
-
-
+    @Override
     public void updateState() {
         controller.clearView();
     }
 
+    @Override
     public void submitChanges() {
         controller.submitChanges();
     }
 
+    @Override
     public void setSupportedAuthTypes(ResourceAuthType... supportedAuthTypes) {
         controller.setSupportedAuthTypes(supportedAuthTypes);
     }
 
+    @Override
     public void setProjectName(String projectName, boolean isNewProject) {
         // order is important because setProjectName will result in an update of an property-change-listener
         controller.getViewModel().isNewProject(isNewProject);
         controller.getViewModel().setProjectName(projectName);
     }
 
-    public double getLabelWidth() {
-        return controller.labelWidthProperty().get();
-    }
-
-    public DoubleProperty labelWidthProperty() {
-        return controller.labelWidthProperty();
-    }
-
+    @Override
     public void setLabelWidth(double labelWidth) {
-        this.controller.labelWidthProperty().set(labelWidth);
+        controller.setLabelWidth(labelWidth);
     }
 
-    public double getRowHeight() {
-        return controller.getRowHeight();
-    }
-
-    public DoubleProperty rowHeightProperty() {
-        return controller.rowHeightProperty();
-    }
-
+    @Override
     public void setRowHeight(double rowHeight) {
-        this.controller.setRowHeight(rowHeight);
+        controller.setRowHeight(rowHeight);
+    }
+
+    @Override
+    public Node asJfxComponent() {
+        return this;
     }
 }

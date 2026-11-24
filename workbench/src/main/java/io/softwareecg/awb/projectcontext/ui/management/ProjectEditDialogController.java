@@ -2,12 +2,12 @@ package io.softwareecg.awb.projectcontext.ui.management;
 
 import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
 import io.softwareecg.awb.projectcontext.api.Project;
+import io.softwareecg.awb.repository.api.QuerySourceSelector;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import jakarta.inject.Inject;
-import io.softwareecg.awb.repository.ui.sourceselector.QuerySourceSelector;
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -26,8 +26,9 @@ public class ProjectEditDialogController extends ProjectDialogController {
     // FXML view components
     //-----------------------------------------------------------------------------------------------------------------
 
+    /** The place of the source selector in the dialog. */
     @FXML
-    private QuerySourceSelector querySourceSelector;
+    private BorderPane bpQuerySourceSelector;
 
     @FXML
     private BorderPane bpSourceSelectorDisableOverlay;
@@ -43,6 +44,9 @@ public class ProjectEditDialogController extends ProjectDialogController {
      */
     @Inject
     private EventBus<EventObject> eventBus;
+
+    @Inject
+    private QuerySourceSelector querySourceSelector;
 
     private final ProjectEditDialogModel viewModel;
 
@@ -107,7 +111,7 @@ public class ProjectEditDialogController extends ProjectDialogController {
 
     public void setRepository(Repository repository) {
         viewModel.setSelectedRepository(repository);
-        querySourceSelector.getRepositoryProperty().set(viewModel.getSelectedRepository());
+        querySourceSelector.getRepositoryProperty().setValue(viewModel.getSelectedRepository());
     }
 
     public void setProject(Project project) {
@@ -132,7 +136,9 @@ public class ProjectEditDialogController extends ProjectDialogController {
     @Override
     protected void initializeViewState() {
         super.initializeViewState();
-        querySourceSelector.disableViewReset(true);
+        querySourceSelector.setLabelWidth(150);
+        querySourceSelector.setRowHeight(32);
+        bpQuerySourceSelector.setCenter(querySourceSelector.asJfxComponent());
     }
 
     @Override
@@ -143,7 +149,7 @@ public class ProjectEditDialogController extends ProjectDialogController {
         txtProjectName.setStyle("-fx-text-fill: #a4a4a4");
         txtProjectName.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
-                querySourceSelector.requestFocus();
+                querySourceSelector.asJfxComponent().requestFocus();
             }
         });
     }

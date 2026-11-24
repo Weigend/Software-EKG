@@ -3,6 +3,8 @@ package io.softwareecg.awb.repository.api;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
 
+import java.util.function.Predicate;
+
 /**
  * This interface is the minimum API of an JavaFX UI component that allows users
  * to select on the existing EKG repositories as target for the import process.
@@ -12,6 +14,13 @@ import javafx.scene.Node;
  * @since 30.01.2020
  */
 public interface RepositorySelector {
+
+    /**
+     * Offers only some of the repositories.
+     *
+     * @param filter accepts a repository the user may choose
+     */
+    void setFilter(Predicate<Repository> filter);
 
     void setLabelWidth(double labelWidth);
 

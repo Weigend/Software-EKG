@@ -11,7 +11,6 @@
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.control.ButtonType?>
 <?import java.net.URL?>
-<?import io.softwareecg.awb.repository.ui.sourceselector.QuerySourceSelector?>
 <?import javafx.scene.layout.BorderPane?>
 <DialogPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
@@ -83,8 +82,7 @@
 
             <Label styleClass="lblHeadlines" text="Edit External System Connection Details:" GridPane.rowIndex="4" GridPane.columnSpan="3" />
 
-            <QuerySourceSelector fx:id="querySourceSelector" labelWidth="150" rowHeight="32"
-                                 GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.columnSpan="3" />
+            <BorderPane fx:id="bpQuerySourceSelector" GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.columnSpan="3" />
 
             <BorderPane fx:id="bpSourceSelectorDisableOverlay" GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.columnSpan="3" >
                 <center>
