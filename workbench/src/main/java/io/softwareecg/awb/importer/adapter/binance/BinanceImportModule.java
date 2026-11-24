@@ -6,7 +6,7 @@ import io.softwareecg.awb.projectcontext.spi.AliasMappingProvider;
 import io.softwareecg.awb.timeseries.dimension.FilterDimension;
 import io.softwareecg.awb.importer.ImportModule;
 import jakarta.inject.Singleton;
-import io.softwareecg.awb.importer.spi.LocalProjectSupport;
+import io.softwareecg.awb.importer.LocalProjectSupport;
 import io.softwareecg.awb.importer.framework.LocalProjectImportStrategy;
 import io.softwareecg.awb.importer.ui.dialogs.ImportDialog;
 

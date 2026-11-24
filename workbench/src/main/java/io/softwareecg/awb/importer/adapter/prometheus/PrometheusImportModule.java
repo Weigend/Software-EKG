@@ -13,10 +13,10 @@ import javafx.scene.image.Image;
 
 import static io.softwareecg.awb.repository.api.ResourceAuthType.*;
 
-import io.softwareecg.awb.importer.spi.ClassicViewFlavorSupport;
-import io.softwareecg.awb.importer.spi.CloudViewFlavorSupport;
-import io.softwareecg.awb.importer.spi.LocalProjectSupport;
-import io.softwareecg.awb.importer.spi.SplitSourceProjectSupport;
+import io.softwareecg.awb.importer.ClassicViewFlavorSupport;
+import io.softwareecg.awb.importer.CloudViewFlavorSupport;
+import io.softwareecg.awb.importer.LocalProjectSupport;
+import io.softwareecg.awb.importer.SplitSourceProjectSupport;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

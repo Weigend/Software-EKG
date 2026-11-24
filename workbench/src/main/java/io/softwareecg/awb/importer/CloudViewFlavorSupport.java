@@ -1,4 +1,4 @@
-package io.softwareecg.awb.importer.spi;
+package io.softwareecg.awb.importer;
 
 
 import io.softwareecg.awb.timeseries.dimension.FilterDimension;
