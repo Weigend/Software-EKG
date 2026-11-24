@@ -312,7 +312,7 @@ public final class ClickHouseRepositoryClient implements TimeSeriesRepository {
         // Schritt 1: leichtgewichtiger TCP-Pre-Check. Wenn der Port nicht erreichbar ist,
         // wird kein JDBC-Aufruf gemacht - dadurch sehen Driver und Hikari im Offline-Fall
         // keinen Connect-Versuch und produzieren keine Stacktraces.
-        if (jdbcUrl != null && !ClickHouseRepositoryClientProvider.isHostReachable(jdbcUrl)) {
+        if (jdbcUrl != null && !ClickHouseHost.isReachable(jdbcUrl)) {
             logReachabilityChange(false, "host not reachable (TCP probe)");
             return false;
         }
