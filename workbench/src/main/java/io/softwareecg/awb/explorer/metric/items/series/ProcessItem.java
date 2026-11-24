@@ -15,7 +15,6 @@ package io.softwareecg.awb.explorer.metric.items.series;
 import io.softwareecg.awb.timeseries.dimension.Process;
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
-import io.softwareecg.awb.repository.api.Repository;
 
 /**
  * The explorerView item to show a single process.
@@ -30,10 +29,9 @@ public class ProcessItem extends ContextAwareItem {
      *
      * @param process    process
      * @param context    the query context
-     * @param repository the containing types.
      */
-    public ProcessItem(Process process, FilterContext context, Repository repository) {
-        super(process.getName(), context, repository);
+    public ProcessItem(Process process, FilterContext context) {
+        super(process.getName(), context);
         super.setGraphic(getIconProvider().getProcessItemIcon(this));
     }
 }

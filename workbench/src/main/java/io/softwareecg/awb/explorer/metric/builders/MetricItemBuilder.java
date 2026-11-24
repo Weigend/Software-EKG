@@ -38,7 +38,7 @@ public class MetricItemBuilder<T extends RepositoryBaseItem> extends AbstractCon
     @Override
     protected List<MetricItem> getChildItemsFor(T item, FilterContext context, ProgressNotifier notifier) {
 
-        MetricDataAccessService metricDataAccess = item.getRepository().getBoundedService(MetricDataAccessService.class);
+        MetricDataAccessService metricDataAccess = context.metrics();
 
         List<Metric> metrics = metricDataAccess.getMetricsNames(new MetricQuery(context.getQueryParameter()));
 
@@ -72,7 +72,7 @@ public class MetricItemBuilder<T extends RepositoryBaseItem> extends AbstractCon
             this.parentItem = parentItem;
             this.queryParams = filterContext.getQueryParameter();
 
-            SourceRepositoryService service = ServiceDiscovery.lookup(SourceRepositoryService.class, parentItem.getRepository());
+            SourceRepositoryService service = ServiceDiscovery.lookup(SourceRepositoryService.class, filterContext.getRepository());
             importerSourceRepository = service.queryImportSourceRepository(queryParams.getProjectName());
         }
 
@@ -87,8 +87,7 @@ public class MetricItemBuilder<T extends RepositoryBaseItem> extends AbstractCon
             return new MetricItem(
                     new Counter(metric.getName()),
                     parentFilterContext.cloneWith(query),
-                    query,
-                    parentItem.getRepository()
+                    query
             );
         }
     }

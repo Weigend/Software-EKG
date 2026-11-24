@@ -30,7 +30,7 @@ public class ProcessGroupItemBuilder<T extends RepositoryBaseItem> extends Abstr
     @Override
     protected List<ProcessGroupItem> getChildItemsFor(T item, FilterContext context, ProgressNotifier notifier) {
 
-        MetricDataAccessService metricDataAccess = item.getRepository().getBoundedService(MetricDataAccessService.class);
+        MetricDataAccessService metricDataAccess = context.metrics();
         List<ProcessGroup> processGroups = metricDataAccess.getProcessGroups(new MetricQuery(context.getQueryParameter()));
 
         if (processGroups.isEmpty() || (processGroups.size() == 1 && "*".equals(processGroups.get(0).getValueName()))) {
@@ -41,7 +41,7 @@ public class ProcessGroupItemBuilder<T extends RepositoryBaseItem> extends Abstr
         for (ProcessGroup processGroup : processGroups) {
             QuerySpec parentQueryParams = context.getQueryParameter();
             QuerySpec childQueryParams = new QuerySpec.Builder(parentQueryParams).withProcessGroup(processGroup.getValueName()).build();
-            result.add(new ProcessGroupItem(processGroup.getValueName(), context.cloneWith(childQueryParams), item.getRepository()));
+            result.add(new ProcessGroupItem(processGroup.getValueName(), context.cloneWith(childQueryParams)));
         }
 
         return result;

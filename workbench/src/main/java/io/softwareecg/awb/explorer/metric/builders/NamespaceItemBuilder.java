@@ -23,7 +23,7 @@ public class NamespaceItemBuilder<T extends RepositoryBaseItem>  extends Abstrac
     @Override
     protected List<NamespaceItem> getChildItemsFor(T item, FilterContext parentContext, ProgressNotifier notifier) {
 
-        MetricDataAccessService metricDataAccess = item.getRepository().getBoundedService(MetricDataAccessService.class);
+        MetricDataAccessService metricDataAccess = parentContext.metrics();
 
         List<Namespace> namespaces = metricDataAccess.getNamespaces(new MetricQuery(parentContext.getQueryParameter()));
 
@@ -34,7 +34,7 @@ public class NamespaceItemBuilder<T extends RepositoryBaseItem>  extends Abstrac
                 namespace -> {
                     QuerySpec parentQueryParams = parentContext.getQueryParameter();
                     QuerySpec childQueryParams = new QuerySpec.Builder(parentQueryParams).withNamespace(namespace).build();
-                    return new NamespaceItem(namespace, parentContext.cloneWith(childQueryParams), item.getRepository());
+                    return new NamespaceItem(namespace, parentContext.cloneWith(childQueryParams));
                 },
                 notifier,
                 namespaces.size(),

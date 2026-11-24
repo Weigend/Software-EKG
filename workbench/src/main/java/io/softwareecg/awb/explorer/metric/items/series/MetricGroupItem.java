@@ -15,7 +15,6 @@ package io.softwareecg.awb.explorer.metric.items.series;
 import io.softwareecg.awb.timeseries.dimension.MetricGroup;
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
-import io.softwareecg.awb.repository.api.Repository;
 
 /**
  * Explorer menu item to group metric counters.
@@ -28,10 +27,9 @@ public class MetricGroupItem extends ContextAwareItem {
      *
      * @param metricGroup   the metricGroup to use as name
      * @param context the context
-     *                @param repository the containing types.
      */
-    public MetricGroupItem(MetricGroup metricGroup, FilterContext context, Repository repository) {
-        super(metricGroup.getName(), context, repository);
+    public MetricGroupItem(MetricGroup metricGroup, FilterContext context) {
+        super(metricGroup.getName(), context);
         super.setGraphic(getIconProvider().getMetricGroupItemIcon(this));
     }
 }

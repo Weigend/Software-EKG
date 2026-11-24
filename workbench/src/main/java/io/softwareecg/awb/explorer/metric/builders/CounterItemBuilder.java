@@ -16,6 +16,6 @@ public class CounterItemBuilder<T extends RepositoryBaseItem>  extends AbstractI
 
     @Override
     protected List<CounterItem> getChildItemsFor(T item, FilterContext context, ProgressNotifier notifier) {
-        return List.of(new CounterItem(context, item.getRepository()));
+        return List.of(new CounterItem(context));
     }
 }

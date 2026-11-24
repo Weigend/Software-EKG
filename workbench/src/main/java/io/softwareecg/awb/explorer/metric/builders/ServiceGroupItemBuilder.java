@@ -24,6 +24,6 @@ public class ServiceGroupItemBuilder<T extends RepositoryBaseItem> extends Abstr
 
     @Override
     protected List<ServiceGroupItem> getChildItemsFor(T item, FilterContext context, ProgressNotifier notifier) {
-        return List.of(new ServiceGroupItem("Services", context, item.getRepository()));
+        return List.of(new ServiceGroupItem("Services", context));
     }
 }

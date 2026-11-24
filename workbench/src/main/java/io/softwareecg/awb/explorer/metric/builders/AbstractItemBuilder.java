@@ -95,7 +95,8 @@ public abstract class AbstractItemBuilder<T extends RepositoryBaseItem> implemen
 
             filterContext = new FilterContext(
                 new QuerySpec.Builder().withProject(project).build(),
-                ((ProjectItem) parentItem).getActiveViewFlavor()
+                ((ProjectItem) parentItem).getActiveViewFlavor(),
+                parentItem.getRepository()
             );
 
         } else if (parentItem instanceof ContextAwareItem) {
@@ -105,7 +106,8 @@ public abstract class AbstractItemBuilder<T extends RepositoryBaseItem> implemen
 
             filterContext= new FilterContext(
                     new QuerySpec.Builder().build(),
-                    ProjectViewFlavor.PHYSICAL_VIEW
+                    ProjectViewFlavor.PHYSICAL_VIEW,
+                    parentItem.getRepository()
             );
 
         } else {

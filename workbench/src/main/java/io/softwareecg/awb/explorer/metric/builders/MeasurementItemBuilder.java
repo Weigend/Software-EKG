@@ -22,7 +22,7 @@ public class MeasurementItemBuilder<T extends RepositoryBaseItem>  extends Abstr
     @Override
     protected List<MeasurementItem> getChildItemsFor(T item, FilterContext context, ProgressNotifier notifier) {
 
-        MetricDataAccessService metricDataAccess = item.getRepository().getBoundedService(MetricDataAccessService.class);
+        MetricDataAccessService metricDataAccess = context.metrics();
 
         List<Measurement> measurements = metricDataAccess.getMeasurements(new MetricQuery(context.getQueryParameter()));
 
@@ -30,7 +30,7 @@ public class MeasurementItemBuilder<T extends RepositoryBaseItem>  extends Abstr
                 measurement -> {
                     QuerySpec parentParams = context.getQueryParameter();
                     QuerySpec childQueryParams = new QuerySpec.Builder(parentParams).withMeasurement(measurement).build();
-                    return new MeasurementItem(measurement, context.cloneWith(childQueryParams), item.getRepository());
+                    return new MeasurementItem(measurement, context.cloneWith(childQueryParams));
                 },
                 notifier,
                 measurements.size(),

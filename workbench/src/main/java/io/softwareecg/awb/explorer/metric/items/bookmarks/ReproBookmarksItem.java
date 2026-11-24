@@ -6,7 +6,6 @@ import io.softwareecg.awb.bookmark.MetricsBookmarkService;
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.bookmark.ui.CreateBookmarkGroupDialog;
-import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.lookup.api.Lookup;
@@ -35,10 +34,9 @@ public class ReproBookmarksItem extends ContextAwareItem {
      *
      * @param label      the name of the tree item that will used as displayed label in the view
      * @param context    bean that define filters that relating to series data or the view flavor and control the item rendering
-     * @param repository the EKG repository the bookmark section item belongs to.
      */
-    public ReproBookmarksItem(String label, FilterContext context, Repository repository) {
-        super(label, context, repository);
+    public ReproBookmarksItem(String label, FilterContext context) {
+        super(label, context);
         super.setGraphic(getIconProvider().getReproBookmarksItemIcon(this));
         BeanProvider.injectFields(this);
         eventBus = Lookup.lookup(EventBus.class);
@@ -57,7 +55,7 @@ public class ReproBookmarksItem extends ContextAwareItem {
         dialog.initOwner(ownerWindowProvider.getAppWindow());
 
         dialog.showAndWait().ifPresent(bookmarkGroup -> {
-            MetricsBookmarkService service = getRepository().getBoundedService(MetricsBookmarkService.class);
+            MetricsBookmarkService service = getFilterContext().bookmarks();
             bookmarkGroup.setId(UUID.randomUUID().toString());
             service.persistNewBookmarkGroup(bookmarkGroup);
 

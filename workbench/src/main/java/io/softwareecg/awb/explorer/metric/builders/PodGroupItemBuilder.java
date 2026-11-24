@@ -24,6 +24,6 @@ public class PodGroupItemBuilder<T extends RepositoryBaseItem> extends AbstractC
 
     @Override
     protected List<PodGroupItem> getChildItemsFor(T item, FilterContext context, ProgressNotifier notifier) {
-        return List.of(new PodGroupItem("Pods", context, item.getRepository()));
+        return List.of(new PodGroupItem("Pods", context));
     }
 }

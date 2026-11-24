@@ -14,7 +14,6 @@ package io.softwareecg.awb.explorer.metric.items.series;
 
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
-import io.softwareecg.awb.repository.api.Repository;
 
 /**
  * The explorerView item that groups single processes within the current branch.
@@ -28,10 +27,9 @@ public class ProcessGroupItem extends ContextAwareItem {
      *
      * @param label      the process group name that will be displayed in the tree view
      * @param context    the filter context.
-     * @param repository the containing repository.
      */
-    public ProcessGroupItem(String label, FilterContext context, Repository repository) {
-        super(label, context, repository);
+    public ProcessGroupItem(String label, FilterContext context) {
+        super(label, context);
         super.setGraphic(getIconProvider().getProcessGroupItemIcon(this));
     }
 

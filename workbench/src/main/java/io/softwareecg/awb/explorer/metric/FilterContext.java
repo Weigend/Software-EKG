@@ -1,5 +1,8 @@
 package io.softwareecg.awb.explorer.metric;
 
+import io.softwareecg.awb.bookmark.MetricsBookmarkService;
+import io.softwareecg.awb.query.MetricDataAccessService;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
 
@@ -29,14 +32,21 @@ public class FilterContext {
     private final ProjectViewFlavor activeViewFlavor;
 
     /**
+     * The repository the data of this branch of the tree comes from.
+     */
+    private final Repository repository;
+
+    /**
      * Constructs a new instance of FilterContext
      *
      * @param queryParams the filter parameters that are active the for tree item
      * @param activeViewFlavor the active view flavor of the node
+     * @param repository the repository the data comes from
      */
-    public FilterContext(QuerySpec queryParams, ProjectViewFlavor activeViewFlavor) {
+    public FilterContext(QuerySpec queryParams, ProjectViewFlavor activeViewFlavor, Repository repository) {
         this.queryParams = queryParams;
         this.activeViewFlavor = activeViewFlavor;
+        this.repository = repository;
     }
 
     /**
@@ -66,9 +76,30 @@ public class FilterContext {
      * @return the cloned context
      */
     public FilterContext cloneWith(QuerySpec newQueryParams) {
-        return new FilterContext(newQueryParams, activeViewFlavor);
+        return new FilterContext(newQueryParams, activeViewFlavor, repository);
     }
 
+
+    /**
+     * @return the repository the data of this branch of the tree comes from
+     */
+    public Repository getRepository() {
+        return repository;
+    }
+
+    /**
+     * @return what the repository holds: hosts, processes, metrics; {@code null} if it cannot be reached
+     */
+    public MetricDataAccessService metrics() {
+        return repository.getBoundedService(MetricDataAccessService.class);
+    }
+
+    /**
+     * @return the bookmarks of the repository; {@code null} if it cannot be reached
+     */
+    public MetricsBookmarkService bookmarks() {
+        return repository.getBoundedService(MetricsBookmarkService.class);
+    }
 
     @Override
     public boolean equals(Object o) {

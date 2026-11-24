@@ -14,7 +14,6 @@ package io.softwareecg.awb.explorer.metric.items.series;
 
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
-import io.softwareecg.awb.repository.api.Repository;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -28,11 +27,10 @@ public class CounterItem extends ContextAwareItem {
      * The Constructor to create a CounterItem.
      *
      * @param context    the context to use for creating
-     * @param repository the containing types.
      */
-    public CounterItem(FilterContext context, Repository repository) {
+    public CounterItem(FilterContext context) {
         super(isNotBlank(getProject(context).getDimensionAliasMetricGroup()) ?
-                getProject(context).getDimensionAliasMetricGroup() : "Metrics", context, repository);
+                getProject(context).getDimensionAliasMetricGroup() : "Metrics", context);
         super.setGraphic(getIconProvider().getCounterItemIcon(this));
     }
 

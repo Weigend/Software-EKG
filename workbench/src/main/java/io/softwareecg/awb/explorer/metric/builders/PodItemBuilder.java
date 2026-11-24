@@ -22,7 +22,7 @@ public class PodItemBuilder<T extends RepositoryBaseItem>  extends AbstractItemB
     @Override
     protected List<PodItem> getChildItemsFor(T item, FilterContext context, ProgressNotifier notifier) {
 
-        MetricDataAccessService metricDataAccess = item.getRepository().getBoundedService(MetricDataAccessService.class);
+        MetricDataAccessService metricDataAccess = context.metrics();
 
         List<Pod> pods = metricDataAccess.getPods(new MetricQuery(context.getQueryParameter()));
 
@@ -30,7 +30,7 @@ public class PodItemBuilder<T extends RepositoryBaseItem>  extends AbstractItemB
                 pod -> {
                     QuerySpec parentParams = context.getQueryParameter();
                     QuerySpec childQueryParams = new QuerySpec.Builder(parentParams).withPod(pod).build();
-                    return new PodItem(pod.getValueName(), context.cloneWith(childQueryParams), item.getRepository());
+                    return new PodItem(pod.getValueName(), context.cloneWith(childQueryParams));
                 },
                 notifier,
                 pods.size(),

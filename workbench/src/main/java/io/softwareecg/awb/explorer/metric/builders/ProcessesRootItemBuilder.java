@@ -28,7 +28,7 @@ public class ProcessesRootItemBuilder<T extends RepositoryBaseItem> extends Abst
     @Override
     protected List<ProcessesRootItem> getChildItemsFor(T item, FilterContext context, ProgressNotifier notifier) {
 
-        MetricDataAccessService metricDataAccess = item.getRepository().getBoundedService(MetricDataAccessService.class);
+        MetricDataAccessService metricDataAccess = context.metrics();
         MetricQuery query = new MetricQuery(context.getQueryParameter());
 
         List<Process> processes = metricDataAccess.getProcesses(query);
@@ -37,6 +37,6 @@ public class ProcessesRootItemBuilder<T extends RepositoryBaseItem> extends Abst
         }
 
         String aliasLabel = context.getQueryParameter().getProject().getDimensionAliasProcess();
-        return List.of(new ProcessesRootItem(aliasLabel, "Processes", context, item.getRepository()));
+        return List.of(new ProcessesRootItem(aliasLabel, "Processes", context));
     }
 }

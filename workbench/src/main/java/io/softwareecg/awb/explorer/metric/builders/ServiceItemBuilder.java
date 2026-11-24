@@ -22,14 +22,14 @@ public class ServiceItemBuilder<T extends RepositoryBaseItem>  extends AbstractI
     @Override
     protected List<ServiceItem> getChildItemsFor(T item, FilterContext parentContext, ProgressNotifier notifier) {
 
-        MetricDataAccessService metricDataAccess = item.getRepository().getBoundedService(MetricDataAccessService.class);
+        MetricDataAccessService metricDataAccess = parentContext.metrics();
         List<Service> services = metricDataAccess.getServices(new MetricQuery(parentContext.getQueryParameter()));
 
         return ItemBuilder.getItems(services.stream(),
                 service -> {
                     QuerySpec parentQueryParams = parentContext.getQueryParameter();
                     QuerySpec childQueryParams = new QuerySpec.Builder(parentQueryParams).withService(service).build();
-                    return new ServiceItem(service.getValueName(), parentContext.cloneWith(childQueryParams), item.getRepository());
+                    return new ServiceItem(service.getValueName(), parentContext.cloneWith(childQueryParams));
                 },
                 notifier,
                 services.size(),

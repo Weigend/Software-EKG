@@ -20,7 +20,6 @@ import io.softwareecg.awb.bookmark.model.Bookmark;
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.bookmark.ui.BookmarkEvent;
-import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.platform.api.EventBus;
 import javafx.application.Platform;
@@ -55,17 +54,16 @@ public class BookmarkItem extends ContextAwareItem {
      *
      * @param bookmark   the bookmark to show
      * @param context    the context
-     * @param repository the containing types.
      */
-    public BookmarkItem(Bookmark bookmark, FilterContext context, Repository repository) {
-        super(bookmark.getName(), context, repository);
+    public BookmarkItem(Bookmark bookmark, FilterContext context) {
+        super(bookmark.getName(), context);
         super.setValue(bookmark.getName());
         super.setGraphic(getIconProvider().getBookmarkItemIcon(this));
         BeanProvider.injectFields(this);
         this.bookmark = bookmark;
 
         addContextMenuEntry("Load in Chart View",
-                e -> bookmarkEvent.publish(new BookmarkEvent(this, this.bookmark, repository, OpeningMode.CLEAR_VIEW)));
+                e -> bookmarkEvent.publish(new BookmarkEvent(this, this.bookmark, getRepository(), OpeningMode.CLEAR_VIEW)));
 
         addContextMenuEntry("Delete Bookmark", e -> runAsTask("delete-bookmark", this::deleteBookmark));
     }
@@ -90,7 +88,7 @@ public class BookmarkItem extends ContextAwareItem {
     }
 
     private void deleteBookmark() {
-        getRepository().getBoundedService(MetricsBookmarkService.class).deleteBookmark(bookmark);
+        getFilterContext().bookmarks().deleteBookmark(bookmark);
         Platform.runLater(() -> ((AbstractItem) getParent()).getService().restart());
     }
 }

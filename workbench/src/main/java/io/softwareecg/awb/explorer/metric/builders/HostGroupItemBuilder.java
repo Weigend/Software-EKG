@@ -30,7 +30,7 @@ public class HostGroupItemBuilder<T extends RepositoryBaseItem> extends Abstract
     @Override
     protected List<HostGroupItem> getChildItemsFor(T item, FilterContext context, ProgressNotifier notifier) {
 
-        MetricDataAccessService metricDataAccess = item.getRepository().getBoundedService(MetricDataAccessService.class);
+        MetricDataAccessService metricDataAccess = context.metrics();
         List<HostGroup> hostGroups = metricDataAccess.getHostGroups(new MetricQuery(context.getQueryParameter()));
 
         if (hostGroups.isEmpty() || (hostGroups.size() == 1 && "*".equals(hostGroups.get(0).getValueName()))) {
@@ -41,7 +41,7 @@ public class HostGroupItemBuilder<T extends RepositoryBaseItem> extends Abstract
         for (HostGroup hostGroup : hostGroups) {
             QuerySpec parentQueryParams = context.getQueryParameter();
             QuerySpec childQueryParams = new QuerySpec.Builder(parentQueryParams).withHostGroup(hostGroup.getValueName()).build();
-            result.add(new HostGroupItem(hostGroup.getValueName(), context.cloneWith(childQueryParams), item.getRepository()));
+            result.add(new HostGroupItem(hostGroup.getValueName(), context.cloneWith(childQueryParams)));
         }
 
         return result;

@@ -20,6 +20,6 @@ public class ProjectBookmarksItemBuilder<T extends RepositoryBaseItem> extends A
     @Override
     protected List<ProjectBookmarksItem> getChildItemsFor(T item, FilterContext context, ProgressNotifier notifier) {
         String projectName = context.getQueryParameter().getProjectName();
-        return List.of(new ProjectBookmarksItem(ITEM_DESC, context, item.getRepository(), projectName));
+        return List.of(new ProjectBookmarksItem(ITEM_DESC, context, projectName));
     }
 }

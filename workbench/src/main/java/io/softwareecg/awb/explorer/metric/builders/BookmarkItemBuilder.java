@@ -36,7 +36,7 @@ public class BookmarkItemBuilder <T extends RepositoryBaseItem>  extends Abstrac
 
         notifier.updateProgress(LOADING_MESSAGE, -1, 100);
 
-        MetricsBookmarkService service = parent.getRepository().getBoundedService(MetricsBookmarkService.class);
+        MetricsBookmarkService service = context.bookmarks();
 
         String groupId;
         if (parent instanceof ReproBookmarksItem) {
@@ -69,7 +69,7 @@ public class BookmarkItemBuilder <T extends RepositoryBaseItem>  extends Abstrac
 
         ObservableList<BookmarkItem> collect = bookmarks.stream()
                 .sorted(Comparator.comparing(Bookmark::getName))
-                .map(b -> new BookmarkItem(b, context, parent.getRepository()))
+                .map(b -> new BookmarkItem(b, context))
                 .peek(b -> notifier.updateProgress(LOADING_MESSAGE, i.getAndIncrement(), bookmarks.size()))
                 .collect(Collectors.toCollection(FXCollections::observableArrayList));
 

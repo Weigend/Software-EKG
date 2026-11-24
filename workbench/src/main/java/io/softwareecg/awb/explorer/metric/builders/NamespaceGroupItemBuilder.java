@@ -29,6 +29,6 @@ public class NamespaceGroupItemBuilder<T extends RepositoryBaseItem> extends Abs
         CloudPlatformType platformType = context.getQueryParameter().getProject().getCloudPlatformType();
         final String itemName = platformType == CloudPlatformType.OPEN_SHIFT ? "Projekte (Namespaces)" : "Namespaces";
 
-        return List.of(new NamespaceGroupItem(itemName, context, item.getRepository()));
+        return List.of(new NamespaceGroupItem(itemName, context));
     }
 }

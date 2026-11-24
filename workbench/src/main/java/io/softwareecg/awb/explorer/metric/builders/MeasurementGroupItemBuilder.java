@@ -29,12 +29,12 @@ public class MeasurementGroupItemBuilder<T extends RepositoryBaseItem> extends A
     @Override
     protected List<MeasurementGroupItem> getChildItemsFor(T item, FilterContext context, ProgressNotifier notifier) {
 
-        MetricDataAccessService metricDataAccess = item.getRepository().getBoundedService(MetricDataAccessService.class);
+        MetricDataAccessService metricDataAccess = context.metrics();
         List<Measurement> measurements = metricDataAccess.getMeasurements(new MetricQuery(context.getQueryParameter()));
         if (hasOnlyPlaceholderValues(measurements)) {
             return List.of();
         }
 
-        return List.of(new MeasurementGroupItem(context, item.getRepository()));
+        return List.of(new MeasurementGroupItem(context));
     }
 }

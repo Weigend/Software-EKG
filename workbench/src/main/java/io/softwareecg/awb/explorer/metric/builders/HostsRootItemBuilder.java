@@ -29,7 +29,7 @@ public class HostsRootItemBuilder<T extends RepositoryBaseItem> extends Abstract
     @Override
     protected List<HostsRootItem> getChildItemsFor(T item, FilterContext context, ProgressNotifier notifier) {
 
-        MetricDataAccessService metricDataAccess = item.getRepository().getBoundedService(MetricDataAccessService.class);
+        MetricDataAccessService metricDataAccess = context.metrics();
         MetricQuery query = new MetricQuery(context.getQueryParameter());
 
         List<Host> hosts = metricDataAccess.getHosts(query);
@@ -41,10 +41,10 @@ public class HostsRootItemBuilder<T extends RepositoryBaseItem> extends Abstract
 
         if (hostGroups.isEmpty() || (hostGroups.size() == 1 && "*".equals(hostGroups.get(0).getValueName()))) {
             String aliasLabel = context.getQueryParameter().getProject().getDimensionAliasHost();
-            return List.of(new HostsRootItem(aliasLabel, "Hosts", context, item.getRepository()));
+            return List.of(new HostsRootItem(aliasLabel, "Hosts", context));
         } else {
             String aliasLabel = context.getQueryParameter().getProject().getDimensionAliasHostGroup();
-            return List.of(new HostsRootItem(aliasLabel,"Clusters/Devices", context, item.getRepository()));
+            return List.of(new HostsRootItem(aliasLabel,"Clusters/Devices", context));
         }
     }
 }

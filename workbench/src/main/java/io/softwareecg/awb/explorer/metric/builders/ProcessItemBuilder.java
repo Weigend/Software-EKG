@@ -26,7 +26,7 @@ public class ProcessItemBuilder<T extends RepositoryBaseItem>  extends AbstractI
     @Override
     protected List<ProcessItem> getChildItemsFor(T item, FilterContext context, ProgressNotifier notifier) {
 
-        MetricDataAccessService metricDataAccess = item.getRepository().getBoundedService(MetricDataAccessService.class);
+        MetricDataAccessService metricDataAccess = context.metrics();
 
         // Check if process groups exist - if so, processes should only appear under ProcessGroupItem
         List<ProcessGroup> processGroups = metricDataAccess.getProcessGroups(new MetricQuery(context.getQueryParameter()));
@@ -41,7 +41,7 @@ public class ProcessItemBuilder<T extends RepositoryBaseItem>  extends AbstractI
                 process -> {
                     QuerySpec parentParams = context.getQueryParameter();
                     QuerySpec childQueryParams = new QuerySpec.Builder(parentParams).withProcess(process).build();
-                    return new ProcessItem(process, context.cloneWith(childQueryParams), item.getRepository());
+                    return new ProcessItem(process, context.cloneWith(childQueryParams));
                 },
                 notifier,
                 metricProcesses.size(),

@@ -22,7 +22,7 @@ public class MetricGroupItemBuilder<T extends RepositoryBaseItem>  extends Abstr
     @Override
     protected List<MetricGroupItem> getChildItemsFor(T item, FilterContext context, ProgressNotifier notifier) {
 
-        MetricDataAccessService metricDataAccess = item.getRepository().getBoundedService(MetricDataAccessService.class);
+        MetricDataAccessService metricDataAccess = context.metrics();
 
         List<MetricGroup> metricGroups = metricDataAccess.getMetricGroups(new MetricQuery(context.getQueryParameter()));
 
@@ -30,7 +30,7 @@ public class MetricGroupItemBuilder<T extends RepositoryBaseItem>  extends Abstr
                 metricGroup -> {
                     QuerySpec parentParams = context.getQueryParameter();
                     QuerySpec childQueryParams = new QuerySpec.Builder(parentParams).withMetricGroup(metricGroup).build();
-                    return new MetricGroupItem(metricGroup, context.cloneWith(childQueryParams), item.getRepository());
+                    return new MetricGroupItem(metricGroup, context.cloneWith(childQueryParams));
                 },
                 notifier,
                 metricGroups.size(),

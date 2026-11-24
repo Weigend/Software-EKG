@@ -20,7 +20,6 @@ import io.softwareecg.awb.bookmark.model.BookmarkGroup;
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.bookmark.ui.EditBookmarkGroupDialog;
-import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import jakarta.inject.Inject;
@@ -58,10 +57,9 @@ public class BookmarkGroupItem extends ContextAwareItem {
      *
      * @param bookmarkGroup the {@link BookmarkGroup} instance this explorer node represents (and is bind to)
      * @param queryParams - the query context.
-     * @param repository   the containing types.
      */
-    public BookmarkGroupItem(BookmarkGroup bookmarkGroup, FilterContext queryParams, Repository repository) {
-        super(bookmarkGroup.getName(), queryParams, repository);
+    public BookmarkGroupItem(BookmarkGroup bookmarkGroup, FilterContext queryParams) {
+        super(bookmarkGroup.getName(), queryParams);
         super.setGraphic(getIconProvider().getBookmarkGroupItemIcon(this));
         this.bookmarkGroup = bookmarkGroup;
 
@@ -127,14 +125,14 @@ public class BookmarkGroupItem extends ContextAwareItem {
         dialog.initOwner(appWindowProvider.getAppWindow());
 
         dialog.showAndWait().ifPresent(renamedGroup -> {
-            MetricsBookmarkService service = getRepository().getBoundedService(MetricsBookmarkService.class);
+            MetricsBookmarkService service = getFilterContext().bookmarks();
             service.updateBookmark(renamedGroup);
             eventBus.publish(new ExplorerUpdateEvent(this, getRepository()));
         });
     }
 
     private void deleteBookmarkGroup() {
-        getRepository().getBoundedService(MetricsBookmarkService.class).deleteBookmarkGroup(bookmarkGroup.getId());
+        getFilterContext().bookmarks().deleteBookmarkGroup(bookmarkGroup.getId());
         Platform.runLater(() -> ((AbstractItem<String>) getParent()).getService().restart());
     }
 }

@@ -21,6 +21,6 @@ public class ReproBookmarksItemBuilder<T extends RepositoryBaseItem>  extends Ab
 
     @Override
     protected List<ReproBookmarksItem> getChildItemsFor(T item, FilterContext context, ProgressNotifier notifier) {
-        return List.of(new ReproBookmarksItem(ITEM_DESC, context, item.getRepository()));
+        return List.of(new ReproBookmarksItem(ITEM_DESC, context));
     }
 }

@@ -25,7 +25,7 @@ public class BookmarkGroupItemBuilder<T extends RepositoryBaseItem>  extends Abs
     @Override
     protected List<BookmarkGroupItem> getChildItemsFor(T item, FilterContext context, ProgressNotifier notifier) {
 
-        MetricsBookmarkService bookmarkService = item.getRepository().getBoundedService(MetricsBookmarkService.class);
+        MetricsBookmarkService bookmarkService = context.bookmarks();
 
         List<BookmarkGroup> bookmarkGroups;
         if (item instanceof ProjectBookmarksItem projectBookmarksItem) {
@@ -34,10 +34,12 @@ public class BookmarkGroupItemBuilder<T extends RepositoryBaseItem>  extends Abs
             bookmarkGroups = bookmarkService.getGlobalBookmarkGroups();
         }
         int amountOfGroups = bookmarkGroups.size();
+        // a group of bookmarks is not a branch of the series: it has a repository and no filters
+        FilterContext groups = new FilterContext(null, null, context.getRepository());
 
         return ItemBuilder.getItems(
                 bookmarkGroups.stream(),
-                bookmarkGroup -> new BookmarkGroupItem(bookmarkGroup, null, item.getRepository()),
+                bookmarkGroup -> new BookmarkGroupItem(bookmarkGroup, groups),
                 notifier,
                 amountOfGroups,
                 ITEM_DESC

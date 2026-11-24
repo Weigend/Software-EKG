@@ -3,7 +3,6 @@ package io.softwareecg.awb.explorer.metric;
 import io.softwareecg.awb.explorer.TreeIconsProviderRegistry;
 import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
 import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import org.apache.commons.lang3.StringUtils;
 
@@ -25,10 +24,9 @@ public abstract class ContextAwareItem extends RepositoryBaseItem {
      *
      * @param label the name of the tree item that will used as displayed label in the view
      * @param context bean that define filters that relating to series data or the view flavor and control the item rendering
-     * @param repository the containing types.
      */
-    public ContextAwareItem(String label, FilterContext context, Repository repository) {
-        super(label, repository);
+    public ContextAwareItem(String label, FilterContext context) {
+        super(label, context.getRepository());
         this.filterContext = context;
     }
 
