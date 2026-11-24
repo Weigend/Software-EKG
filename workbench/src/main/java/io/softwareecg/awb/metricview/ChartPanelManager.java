@@ -3,6 +3,8 @@ package io.softwareecg.awb.metricview;
 import io.softwareecg.awb.uitoolkit.events.OpeningMode;
 import io.softwareecg.awb.uitoolkit.view.EkgView;
 import io.softwareecg.awb.uitoolkit.view.ViewMapper;
+import io.softwareecg.awb.metricview.api.ChartInUse;
+import io.softwareecg.awb.metricview.api.ShownChart;
 import io.softwareecg.awb.query.api.OpenInvestigationCommand;
 import io.softwareecg.awb.bookmark.api.BookmarkEvent;
 import io.softwareecg.awb.repository.api.Repository;
@@ -20,6 +22,7 @@ import jakarta.inject.Singleton;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The ChartPanelManager controls the set of {@link MetricViewController}.
@@ -31,7 +34,7 @@ import java.util.List;
  * other projects stay as they are, with their filters and their charts.
  */
 @Singleton
-public class ChartPanelManager {
+public class ChartPanelManager implements ChartInUse {
 
     private final WindowManager windowManager;
 
@@ -91,14 +94,10 @@ public class ChartPanelManager {
         }
     }
 
-    /**
-     * Get the last active {@link MetricViewController}.
-     *
-     * @return The last active {@link MetricViewController}.
-     */
-    public MetricViewController getLastActiveController() {
+    @Override
+    public Optional<ShownChart> shownChart() {
         forgetClosedViews();
-        return lastActiveView != null ? lastActiveView.getController() : null;
+        return Optional.ofNullable(lastActiveView).map(FXMLView::getController);
     }
 
     /**

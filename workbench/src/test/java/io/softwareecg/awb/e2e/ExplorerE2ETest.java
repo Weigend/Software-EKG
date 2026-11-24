@@ -1,6 +1,6 @@
 package io.softwareecg.awb.e2e;
 
-import io.softwareecg.awb.metricview.ChartPanelManager;
+import io.softwareecg.awb.metricview.api.ChartInUse;
 import io.softwareecg.awb.uitoolkit.chart.ChartType;
 import io.softwareecg.awb.repository.connection.EkgRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
@@ -240,8 +240,8 @@ class ExplorerE2ETest {
             workbench.openChart(project, "os", "\\Load\\one");
             open(bookmark);
             workbench.awaitTrue("the metric of the bookmark", Duration.ofSeconds(20), () -> "\\Cpu\\us".equals(metricOfTheHeader()));
-            assertThat(workbench.onFx(() -> Lookup.lookup(ChartPanelManager.class).getLastActiveController()
-                    .getCurrentFilterParams().getProjectName())).as("project of the chart").isEqualTo(project);
+            assertThat(workbench.onFx(() -> Lookup.lookup(ChartInUse.class).shownChart().orElseThrow()
+                    .query().getProjectName())).as("project of the chart").isEqualTo(project);
         }
     }
 

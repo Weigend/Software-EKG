@@ -20,8 +20,8 @@ import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.query.api.MetricQueryService;
 import io.softwareecg.awb.query.api.ComputationSpec;
 import io.softwareecg.awb.query.api.QuerySpec;
-import io.softwareecg.awb.metricview.ChartPanelManager;
-import io.softwareecg.awb.metricview.MetricViewController;
+import io.softwareecg.awb.metricview.api.ChartInUse;
+import io.softwareecg.awb.metricview.api.ShownChart;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -85,9 +85,9 @@ public class AiChatController implements Initializable {
         ChartContextProvider contextProvider = this::buildCurrentContextJson;
         List<AiTool> tools = List.of(
                 new GetCurrentContextTool(contextProvider),
-                new ListMetricsTool(this::resolveMetricDataAccessService),
-                new QueryTimeSeriesTool(this::resolveMetricDataAccessService, this::resolveMetricQueryService,
-                        contextProvider, this::chartTimeZone),
+                new ListMetricsTool(AiChatController::metricsOfTheChart),
+                new QueryTimeSeriesTool(AiChatController::metricsOfTheChart, AiChatController::queriesOfTheChart,
+                        contextProvider, AiChatController::chartTimeZone),
                 new SshCommandTool(this::showSshApprovalDialog)
         );
         this.agentLoop = new AgentLoop(client, tools, SystemPrompts.DEFAULT);
@@ -95,36 +95,35 @@ public class AiChatController implements Initializable {
 
     // ---- Chart context (unchanged) ----
 
-    private MetricViewController resolveActiveChartController() {
+    /** The chart the assistant looks at. */
+    private static Optional<ShownChart> shownChart() {
         try {
-            ChartPanelManager manager = Lookup.lookup(ChartPanelManager.class);
-            return manager == null ? null : manager.getLastActiveController();
+            ChartInUse charts = Lookup.lookup(ChartInUse.class);
+            return charts == null ? Optional.empty() : charts.shownChart();
         } catch (Exception e) {
-            LOG.warn("Could not resolve active chart controller: {}", e.getMessage());
-            return null;
+            LOG.warn("Could not resolve the chart in use: {}", e.getMessage());
+            return Optional.empty();
         }
     }
 
-    private MetricDataAccessService resolveMetricDataAccessService() {
-        MetricViewController controller = resolveActiveChartController();
-        return controller != null ? controller.getMetricDataAccessService() : null;
+    private static MetricDataAccessService metricsOfTheChart() {
+        return shownChart().map(ShownChart::metrics).orElse(null);
     }
 
-    private MetricQueryService resolveMetricQueryService() {
-        MetricViewController controller = resolveActiveChartController();
-        return controller != null ? controller.getMetricQueryService() : null;
+    private static MetricQueryService queriesOfTheChart() {
+        return shownChart().map(ShownChart::queries).orElse(null);
     }
 
     private String buildCurrentContextJson() {
         try {
-            MetricViewController controller = resolveActiveChartController();
-            if (controller == null) return null;
-            QuerySpec params = controller.getCurrentFilterParams();
+            ShownChart chart = shownChart().orElse(null);
+            if (chart == null) return null;
+            QuerySpec params = chart.query();
             if (params == null) return null;
 
             ObjectMapper mapper = new ObjectMapper();
             ObjectNode ctx = mapper.createObjectNode();
-            ZoneId zone = controller.getTimeZone();
+            ZoneId zone = chart.timeZone();
             ctx.put("time_zone", zone.getId());
             ctx.put("project", safe(params.getProjectName()));
             ctx.put("host", safe(params.getHostName()));
@@ -147,7 +146,7 @@ public class AiChatController implements Initializable {
             if (params.isExpertMode()) ctx.put("expert_mode", true);
             if (params.isMultiMetricMode()) ctx.put("multi_metric_mode", true);
 
-            ComputationSpec compute = controller.getCurrentComputeParams();
+            ComputationSpec compute = chart.computation();
             if (compute != null) {
                 if (compute.getSeriesCombineMode() != SeriesCombineMode.NONE)
                     ctx.put("combine_mode", compute.getSeriesCombineMode().name());
@@ -170,9 +169,8 @@ public class AiChatController implements Initializable {
     }
 
     /** The time zone of the chart the assistant looks at; that of the computer if there is no chart. */
-    private ZoneId chartTimeZone() {
-        MetricViewController controller = resolveActiveChartController();
-        return controller != null ? controller.getTimeZone() : ZoneId.systemDefault();
+    private static ZoneId chartTimeZone() {
+        return shownChart().map(ShownChart::timeZone).orElseGet(ZoneId::systemDefault);
     }
 
     private static String safe(String value) {

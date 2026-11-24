@@ -6,6 +6,7 @@ import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.SeriesDataWrittenEvent;
 import io.softwareecg.wfx.platform.api.EventSubscriber;
 import javafx.scene.chart.ValueAxis;
+import java.time.ZoneId;
 import java.util.Objects;
 import io.softwareecg.awb.uitoolkit.chart.ChartType;
 import io.softwareecg.awb.uitoolkit.chart.ColoredChart;
@@ -22,6 +23,7 @@ import io.softwareecg.awb.query.api.SeriesSmoothingType;
 import io.softwareecg.awb.bookmark.api.BookmarkContent;
 import io.softwareecg.awb.bookmark.api.BookmarkDialogs;
 import io.softwareecg.awb.bookmark.api.MetricsBookmarkService;
+import io.softwareecg.awb.metricview.api.ShownChart;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.query.api.OpenInvestigationCommand;
 import io.softwareecg.awb.query.api.ComputationSpec;
@@ -83,7 +85,7 @@ import io.softwareecg.awb.metricview.command.ChartDataService;
  * @since 30.08.2018
  */
 @SuppressWarnings("unused")
-public class MetricViewController implements Initializable {
+public class MetricViewController implements Initializable, ShownChart {
 
     private static final String AXIS_STYLESHEET = "/io/softwareecg/awb/metricview/ChartPanelStyle.css";
 
@@ -159,12 +161,8 @@ public class MetricViewController implements Initializable {
      */
     private ChartDataService chartDataService;
 
-    /**
-     * Returns the effective filter parameters for the current chart view.
-     * If data has been loaded (or zoomed), returns the active query parameters from the view model
-     * which include zoom-adjusted start/end bounds. Otherwise falls back to the header UI selections.
-     */
-    public QuerySpec getCurrentFilterParams() {
+    @Override
+    public QuerySpec query() {
         QuerySpec active = viewModel.getBaseChartFilterParams();
         if (active != null) {
             return active;
@@ -172,33 +170,25 @@ public class MetricViewController implements Initializable {
         return chartHeaderController.getDefinedFilterParameters();
     }
 
-    /**
-     * Returns the current live compute parameters as selected in the chart header UI.
-     */
-    public ComputationSpec getCurrentComputeParams() {
+    @Override
+    public ComputationSpec computation() {
         return chartHeaderController.getDefinedComputedParameters();
     }
 
-    /**
-     * @return the time zone the chart shows its times in, chosen at its lower left corner
-     */
-    public java.time.ZoneId getTimeZone() {
+    @Override
+    public ZoneId timeZone() {
         ChartTimeZone chosen = cbTimeZone.getValue();
         return (chosen != null ? chosen : ChartTimeZone.getDefaultTimeZone()).getTimeZone();
     }
 
-    /**
-     * @return what the repository of this view holds; {@code null} if there is none or it cannot be reached
-     */
-    public MetricDataAccessService getMetricDataAccessService() {
+    @Override
+    public MetricDataAccessService metrics() {
         if (viewModel.getEkgRepository() == null) return null;
         return viewModel.getEkgRepository().getBoundedService(MetricDataAccessService.class);
     }
 
-    /**
-     * @return the queries of the repository of this view; {@code null} if there is none or it cannot be reached
-     */
-    public MetricQueryService getMetricQueryService() {
+    @Override
+    public MetricQueryService queries() {
         if (viewModel.getEkgRepository() == null) return null;
         return viewModel.getEkgRepository().getBoundedService(MetricQueryService.class);
     }
@@ -508,7 +498,7 @@ public class MetricViewController implements Initializable {
         viewModel.setEkgRepository(event.getSourceRepository());
 
         // a global bookmark is a template: it opens in the project this view shows
-        QuerySpec current = getCurrentFilterParams();
+        QuerySpec current = query();
         String projectInUse = current == null || current.getProject() == null ? null : current.getProjectName();
         BookmarkContent content = Lookup.lookup(MetricsBookmarkService.class).contentOf(event.getBookmark(), projectInUse);
 
@@ -890,7 +880,7 @@ public class MetricViewController implements Initializable {
 
             boolean created = Lookup.lookup(BookmarkDialogs.class).createBookmark(
                     chartHeaderController.getOwnerWindow(),
-                    getCurrentFilterParams(),
+                    query(),
                     zoomableStackedChart.getBaseChart().getChartType().name());
             if (created) {
                 eventBus.publish(new ExplorerUpdateEvent(this, viewModel.getEkgRepository()));
