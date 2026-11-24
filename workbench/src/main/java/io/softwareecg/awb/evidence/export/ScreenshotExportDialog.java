@@ -1,9 +1,9 @@
 package io.softwareecg.awb.evidence.export;
 
 import afester.javafx.svg.SvgLoader;
-import io.softwareecg.awb.uitoolkit.chart.ZoomableStackedChart;
 import io.softwareecg.awb.runtime.resources.CdiFxmlLoader;
 import io.softwareecg.awb.runtime.resources.ViewLoadResult;
+import javafx.scene.layout.Region;
 import javafx.scene.Group;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
@@ -22,8 +22,9 @@ public class ScreenshotExportDialog extends Dialog<Void> {
      * that will setup and export the given Node to an image file.
      *
      * @param nodeToExport the (chart) node to export
+     * @param axisWidth    the width of the value axis of the chart
      */
-    public ScreenshotExportDialog(ZoomableStackedChart nodeToExport) {
+    public ScreenshotExportDialog(Region nodeToExport, double axisWidth) {
 
         Stage stage = (Stage) getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image(getClass().getResource("png.png").toExternalForm()));
@@ -33,7 +34,7 @@ public class ScreenshotExportDialog extends Dialog<Void> {
         ViewLoadResult viewResult = CdiFxmlLoader.loadView("ScreenshotExportDialogView.fxml");
         setDialogPane(viewResult.getComponent());
         ScreenshotExportController controller = viewResult.getController();
-        controller.setExporter(new ScreenshotExporter(nodeToExport));
+        controller.setExporter(new ScreenshotExporter(nodeToExport, axisWidth));
 
         setResultConverter(controller::exportToPngSheet);
 

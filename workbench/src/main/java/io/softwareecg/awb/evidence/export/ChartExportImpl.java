@@ -1,16 +1,15 @@
 package io.softwareecg.awb.evidence.export;
 
+import io.softwareecg.awb.evidence.api.ExportedSeries;
 import io.softwareecg.awb.evidence.api.ChartExport;
-import io.softwareecg.awb.uitoolkit.chart.ColoredChart;
-import io.softwareecg.awb.uitoolkit.chart.ZoomableStackedChart;
 import jakarta.inject.Singleton;
+import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
 import java.io.File;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 /**
  * Exports as a PNG picture and as an Excel sheet.
@@ -25,18 +24,18 @@ public class ChartExportImpl implements ChartExport {
     Function<Window, File> excelFile = ChartExportImpl::askForExcelFile;
 
     @Override
-    public void exportAsImage(Window owner, ZoomableStackedChart chart) {
-        ScreenshotExportDialog dialog = new ScreenshotExportDialog(chart);
+    public void exportAsImage(Window owner, Region chart, double axisWidth) {
+        ScreenshotExportDialog dialog = new ScreenshotExportDialog(chart, axisWidth);
         dialog.initOwner(owner);
         dialog.showAndWait();
     }
 
     /** The user interface does not respond while the sheet is written. */
     @Override
-    public void exportAsExcel(Window owner, ZoomableStackedChart chart) {
+    public void exportAsExcel(Window owner, List<ExportedSeries> series) {
         File chosenFile = excelFile.apply(owner);
         if (chosenFile != null) {
-            new ExcelExporter(chosenFile).createExcelSheetFromSeriesData(seriesOf(chart));
+            new ExcelExporter(chosenFile).createExcelSheetFromSeriesData(series);
         }
     }
 
@@ -48,14 +47,5 @@ public class ChartExportImpl implements ChartExport {
                 new FileChooser.ExtensionFilter("All files", "*")
         );
         return chooser.showSaveDialog(owner);
-    }
-
-    /** What the chart in front shows, then what those behind it show. */
-    static List<ExcelExportSeriesData> seriesOf(ZoomableStackedChart chart) {
-        return Stream.concat(Stream.of(chart.getBaseChart()), chart.getBackgroundCharts().stream())
-                .map(ColoredChart::getAllSeries)
-                .flatMap(List::stream)
-                .map(series -> new ExcelExportSeriesData(series.getName(), series.getData()))
-                .toList();
     }
 }

@@ -1,5 +1,6 @@
-package io.softwareecg.awb.evidence.export;
+package io.softwareecg.awb.metricview;
 
+import io.softwareecg.awb.evidence.api.ExportedSeries;
 import io.softwareecg.awb.uitoolkit.chart.ColoredChart;
 import io.softwareecg.awb.uitoolkit.chart.ZoomableStackedChart;
 import javafx.application.Platform;
@@ -16,9 +17,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * An Excel sheet has what the chart shows, with the charts in the background.
+ * An export has what the chart shows, with the charts in the background.
  */
-public class ChartExportImplTest {
+public class ExportedChartTest {
 
     @BeforeClass
     public static void startToolkit() {
@@ -39,12 +40,12 @@ public class ChartExportImplTest {
         when(chart.getBaseChart()).thenReturn(front);
         when(chart.getBackgroundCharts()).thenReturn(FXCollections.observableArrayList(behind, farBehind));
 
-        List<ExcelExportSeriesData> exported = ChartExportImpl.seriesOf(chart);
+        List<ExportedSeries> exported = ExportedChart.seriesOf(chart);
 
         assertEquals(List.of("cpu", "load", "memory", "disk"),
-                exported.stream().map(ExcelExportSeriesData::getSeriesName).toList());
+                exported.stream().map(ExportedSeries::name).toList());
         assertEquals(List.of(1.0, 2.0, 3.0, 4.0),
-                exported.stream().map(series -> series.getDataAt(0).getYValue()).toList());
+                exported.stream().map(series -> series.pointAt(0).getYValue()).toList());
     }
 
     @SafeVarargs

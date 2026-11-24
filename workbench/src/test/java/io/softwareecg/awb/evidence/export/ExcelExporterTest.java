@@ -1,5 +1,6 @@
 package io.softwareecg.awb.evidence.export;
 
+import io.softwareecg.awb.evidence.api.ExportedSeries;
 import javafx.scene.chart.XYChart;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -55,7 +56,7 @@ public class ExcelExporterTest {
     /** As many points as 50 series of a chart have. A style for every cell ended at 64,000. */
     @Test
     public void aFullChartCanBeExported() throws Exception {
-        ExcelExportSeriesData[] chart = new ExcelExportSeriesData[50];
+        ExportedSeries[] chart = new ExportedSeries[50];
         for (int i = 0; i < chart.length; i++) {
             chart[i] = series("metric " + i, 2000, i);
         }
@@ -68,18 +69,18 @@ public class ExcelExporterTest {
         }
     }
 
-    private File export(ExcelExportSeriesData... series) throws Exception {
+    private File export(ExportedSeries... series) throws Exception {
         File file = folder.newFile("export.xlsx");
         new ExcelExporter(file).createExcelSheetFromSeriesData(List.of(series));
         return file;
     }
 
     /** A series with a value every second. */
-    private static ExcelExportSeriesData series(String name, int points, double firstValue) {
+    private static ExportedSeries series(String name, int points, double firstValue) {
         List<XYChart.Data<Long, Double>> data = new ArrayList<>();
         for (int i = 0; i < points; i++) {
             data.add(new XYChart.Data<>(START + i * 1000L, firstValue + i));
         }
-        return new ExcelExportSeriesData(name, data);
+        return new ExportedSeries(name, data);
     }
 }

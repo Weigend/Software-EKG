@@ -1,5 +1,6 @@
 package io.softwareecg.awb.evidence.export;
 
+import io.softwareecg.awb.evidence.api.ExportedSeries;
 import javafx.scene.chart.XYChart;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -25,7 +26,7 @@ public class ExcelExporter {
         this.targetFile = exportFile;
     }
 
-    public void createExcelSheetFromSeriesData(List<ExcelExportSeriesData> seriesData) {
+    public void createExcelSheetFromSeriesData(List<ExportedSeries> seriesData) {
 
         try (XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
              SXSSFWorkbook workbook = new SXSSFWorkbook(xssfWorkbook, 1000);
@@ -50,7 +51,7 @@ public class ExcelExporter {
     }
 
 
-    private void writeHeader(SXSSFWorkbook workbook, Sheet workSheet, List<ExcelExportSeriesData> seriesDataList) {
+    private void writeHeader(SXSSFWorkbook workbook, Sheet workSheet, List<ExportedSeries> seriesDataList) {
 
         Row headerRow = workSheet.createRow(0);
 
@@ -69,7 +70,7 @@ public class ExcelExporter {
 
 
         int columnIndex = 0;
-        for(ExcelExportSeriesData seriesData : seriesDataList){
+        for(ExportedSeries seriesData : seriesDataList){
 
             // styling
             workSheet.setColumnWidth(columnIndex, 8000);
@@ -80,12 +81,12 @@ public class ExcelExporter {
             Cell valueCell = headerRow.createCell(columnIndex++, CellType.STRING);
             valueCell.setCellStyle(cellStyle);
 
-            timestampCell.setCellValue("Date/Time - " + seriesData.getSeriesName());
-            valueCell.setCellValue("Value - " + seriesData.getSeriesName());
+            timestampCell.setCellValue("Date/Time - " + seriesData.name());
+            valueCell.setCellValue("Value - " + seriesData.name());
         }
     }
 
-    private void writeSeriesData(SXSSFWorkbook workbook, Sheet workSheet, List<ExcelExportSeriesData> seriesDataList) {
+    private void writeSeriesData(SXSSFWorkbook workbook, Sheet workSheet, List<ExportedSeries> seriesDataList) {
 
         // one for all cells: a workbook can have 64,000 styles, and a chart has more points than that
         CellStyle dateTimeStyle = createDateTimeStyle(workbook);
@@ -102,9 +103,9 @@ public class ExcelExporter {
             // so we start in the line above
             Row seriesDataRow = workSheet.createRow(rowIndex + 1);
 
-            for(ExcelExportSeriesData seriesData : seriesDataList){
+            for(ExportedSeries seriesData : seriesDataList){
 
-                XYChart.Data<Long, Double> dataPoint = seriesData.getDataAt(rowIndex);
+                XYChart.Data<Long, Double> dataPoint = seriesData.pointAt(rowIndex);
 
                 if (dataPoint != null) {
                     createDateTimeCell(dateTimeStyle, seriesDataRow, columnIndex++, dataPoint.getXValue());

@@ -592,12 +592,13 @@ public class MetricViewController implements Initializable, ShownChart {
         // bind actions
         chartHeaderController.initButtonHandler(new HeaderButtonActions());
         btnExportToExcel.setOnAction(event -> {
-            chartExport().exportAsExcel(windowOfTheChart(), zoomableStackedChart);
+            chartExport().exportAsExcel(windowOfTheChart(), ExportedChart.seriesOf(zoomableStackedChart));
             chartActionsPanel.requestFocus();
         });
 
         btnExportToPNG.setOnAction(event -> {
-            chartExport().exportAsImage(windowOfTheChart(), zoomableStackedChart);
+            chartExport().exportAsImage(windowOfTheChart(), zoomableStackedChart,
+                    ExportedChart.axisWidthOf(zoomableStackedChart));
             chartActionsPanel.requestFocus();
         });
 

@@ -1,7 +1,7 @@
 package io.softwareecg.awb.evidence.export;
 
-import io.softwareecg.awb.uitoolkit.chart.ZoomableStackedChart;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
+import javafx.scene.layout.Region;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
@@ -15,7 +15,7 @@ import java.io.IOException;
 
 /**
  * This exporter encapsulate the whole logic to create a screenshot
- * of the {@link ZoomableStackedChart} instance by taking account the
+ * of a chart by taking account the
  * given settings to the dimension, background and output path.
  *
  * @since 16.11.2018
@@ -30,19 +30,23 @@ public class ScreenshotExporter {
     private static final Logger LOGGER = EkgLogger.get();
 
     /**
-     * The {@link ZoomableStackedChart} instance with the series data that
+     * The chart that
      * will exported as bitmap image.
      */
-    private final ZoomableStackedChart chartComponent;
+    private final Region chartComponent;
+
+    private final double axisWidth;
 
     /**
      * Construct a new instance of ScreenshotExporter that can capture
      * screenshots from the given chart.
      *
-     * @param chart the chart component that acts as source for the screenshot exports
+     * @param chart     the chart component that acts as source for the screenshot exports
+     * @param axisWidth the width of its value axis
      */
-    public ScreenshotExporter(ZoomableStackedChart chart) {
+    public ScreenshotExporter(Region chart, double axisWidth) {
         this.chartComponent = chart;
+        this.axisWidth = axisWidth;
     }
 
     /**
@@ -76,10 +80,6 @@ public class ScreenshotExporter {
         if (!useWhiteBg) {
             snapshotParameters.setFill(Color.TRANSPARENT);
         }
-
-
-        double axisWidth = chartComponent.getBaseChart().getYAxis().castToAxis().getWidth();
-
 
         if (dimension.getScaleFactor() <= 0) {
             double targetWidth = dimension.getDimensionWidth();

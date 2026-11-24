@@ -350,6 +350,12 @@ public class LayerArchitectureTest {
                     .because("eine Art von Datenquelle muss sich hinzufuegen und entfernen lassen, ohne eine andere anzufassen");
 
     @ArchTest
+    static final ArchRule evidence_must_not_know_charts =
+            noClasses().that().resideInAPackage("io.softwareecg.awb.evidence..")
+                    .should().dependOnClassesThat().resideInAPackage("io.softwareecg.awb.uitoolkit.chart..")
+                    .because("ein Export braucht ein Bild und Werte, kein Diagramm");
+
+    @ArchTest
     static final ArchRule datasource_spi_must_not_know_ui_or_adapters =
             noClasses().that().resideInAPackage("io.softwareecg.awb.datasource.spi..")
                     .should().dependOnClassesThat().resideInAnyPackage(

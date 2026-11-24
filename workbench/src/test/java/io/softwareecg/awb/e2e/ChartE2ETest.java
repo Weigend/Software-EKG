@@ -211,19 +211,7 @@ class ChartE2ETest {
     /** The picture is written, in twice the size of the chart, and shows its line. */
     @Test
     void thePictureOfAChartIsSaved() throws IOException {
-        Path file = exportFile("chart.png");
-        Stage dialog = workbench.openDialog("PNG export", () -> ((Button) shown("btnExportToPNG")).fire());
-        workbench.onFx(() -> {
-            Workbench.control(dialog, "txtFilePath", TextField.class).setText(file.toString());
-            Button save = (Button) ((DialogPane) dialog.getScene().getRoot()).lookupButton(ButtonType.APPLY);
-            assertThat(save.isDisabled()).as("'Save' is disabled").isFalse();
-            Platform.runLater(save::fire);
-            return null;
-        });
-        workbench.awaitTrue("the dialog to close", Duration.ofSeconds(20), () -> workbench.onFx(() -> !dialog.isShowing()));
-
-        BufferedImage image = ImageIO.read(file.toFile());
-        assertThat(image).as("the picture").isNotNull();
+        BufferedImage image = saveAsPicture("chart.png", null);
         // the label at the end of the time axis sticks out of the chart, the picture has all of it
         int width = (int) (2 * workbench.onFx(() -> stackedChart().getWidth()));
         int height = (int) (2 * workbench.onFx(() -> stackedChart().getHeight()));
@@ -231,6 +219,43 @@ class ChartE2ETest {
         assertThat(image.getHeight()).as("height").isBetween(height - 4, height + 4);
         Color line = workbench.onFx(() -> stackedChart().getBaseChart().getAllColoredSeries().get(0).getColor());
         assertThat(pixelsLike(image, line)).as("pixels in the colour of the line, " + line).isGreaterThan(100);
+    }
+
+    /** A picture of a chosen size has this size, whatever the size of the chart, which keeps its own. */
+    @Test
+    void aPictureOfAChosenSizeIsSaved() throws IOException {
+        double widthOfTheChart = workbench.onFx(() -> stackedChart().getWidth());
+        BufferedImage image = saveAsPicture("chart-full-hd.png", "Full-HD");
+        assertThat(image.getWidth()).as("width").isBetween(1920 - 4, 1920 + 150);
+        assertThat(image.getHeight()).as("height").isBetween(1080 - 4, 1080 + 4);
+        Color line = workbench.onFx(() -> stackedChart().getBaseChart().getAllColoredSeries().get(0).getColor());
+        assertThat(pixelsLike(image, line)).as("pixels in the colour of the line, " + line).isGreaterThan(100);
+        assertThat(workbench.onFx(() -> stackedChart().getWidth())).as("the chart on the screen").isEqualTo(widthOfTheChart);
+    }
+
+    /** @param size what the name of the size begins with, {@code null} for the one that is chosen */
+    private static BufferedImage saveAsPicture(String name, String size) throws IOException {
+        Path file = exportFile(name);
+        Stage dialog = workbench.openDialog("PNG export", () -> ((Button) shown("btnExportToPNG")).fire());
+        workbench.onFx(() -> {
+            if (size != null) {
+                chooseSize(Workbench.control(dialog, "cbExportDimension", ComboBox.class), size);
+            }
+            Workbench.control(dialog, "txtFilePath", TextField.class).setText(file.toString());
+            Button save = (Button) ((DialogPane) dialog.getScene().getRoot()).lookupButton(ButtonType.APPLY);
+            assertThat(save.isDisabled()).as("'Save' is disabled").isFalse();
+            Platform.runLater(save::fire);
+            return null;
+        });
+        workbench.awaitTrue("the dialog to close", Duration.ofSeconds(20), () -> workbench.onFx(() -> !dialog.isShowing()));
+        BufferedImage image = ImageIO.read(file.toFile());
+        assertThat(image).as("the picture").isNotNull();
+        return image;
+    }
+
+    private static <T> void chooseSize(ComboBox<T> sizes, String name) {
+        sizes.setValue(sizes.getItems().stream()
+                .filter(size -> sizes.getConverter().toString(size).startsWith(name)).findFirst().orElseThrow());
     }
 
     /** The sheet has what the chart shows, with the chart in the background. Since 7.1.1 it was empty. */
