@@ -205,4 +205,4 @@ exec "$JAVA" ${EKG_JAVA_OPTS:-} \
     --enable-native-access=ALL-UNNAMED,javafx.graphics \
     -Dekg.solr.template="$HERE/solr" \
     -cp "$HERE/lib/*" \
-    io.softwareecg.awb.EkgAvajeApplication "$@"
+    io.softwareecg.awb.application.EkgAvajeApplication "$@"

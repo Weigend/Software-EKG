@@ -77,8 +77,6 @@ public class LayerArchitectureTest {
             noClasses().that().resideOutsideOfPackages("io.softwareecg.awb.application..")
                     // the generated injection module wires every bean and so knows all of them
                     .and().areNotAssignableTo(io.avaje.inject.spi.AvajeModule.class)
-                    // so does the entry point beside it
-                    .and().resideOutsideOfPackage("io.softwareecg.awb")
                     .should().dependOnClassesThat()
                     .resideInAnyPackage(
                             "io.softwareecg.awb.application.about..",

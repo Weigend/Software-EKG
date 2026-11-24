@@ -2,7 +2,7 @@
 //
 //          ProjectConfiguration:    Software EKG
 //______________________________________________________________________________
-package io.softwareecg.awb;
+package io.softwareecg.awb.application;
 
 import io.softwareecg.awb.uitoolkit.events.FinishEvent;
 import io.softwareecg.awb.application.about.VersionInfo;

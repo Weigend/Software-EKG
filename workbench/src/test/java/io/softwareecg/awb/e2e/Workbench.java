@@ -1,6 +1,6 @@
 package io.softwareecg.awb.e2e;
 
-import io.softwareecg.awb.EkgAvajeApplication;
+import io.softwareecg.awb.application.EkgAvajeApplication;
 import io.softwareecg.awb.uitoolkit.events.OpeningMode;
 import io.softwareecg.awb.datasource.NewAnalysisService;
 import io.softwareecg.awb.query.api.OpenInvestigationCommand;
