@@ -365,20 +365,26 @@ class ExplorerE2ETest {
         return (TreeView<Object>) workbench.find("explorerTree").orElseThrow();
     }
 
-    /** The node at the end of a way through the tree, which is opened level by level. */
+    /**
+     * The node at the end of a way through the tree, which is opened level by level. The way is gone
+     * from the root every time: what loads the tree anew gives it new nodes, and the old ones get no
+     * children any more.
+     */
     private static TreeItem<Object> node(String... way) {
-        TreeItem<Object> item = workbench.onFx(() -> tree().getRoot());
-        for (String name : way) {
-            TreeItem<Object> parent = item;
-            workbench.onFx(() -> {
-                parent.setExpanded(true);
-                return null;
-            });
-            item = Workbench.await("the node '" + name + "' below '" + parent.getValue() + "'", Duration.ofSeconds(30),
-                    () -> workbench.onFx(() -> parent.getChildren().stream()
-                            .filter(child -> isNamed(child, name)).findFirst()));
-        }
-        return item;
+        return Workbench.await("the node " + String.join(" > ", way), Duration.ofSeconds(60),
+                () -> workbench.onFx(() -> {
+                    TreeItem<Object> item = tree().getRoot();
+                    for (String name : way) {
+                        item.setExpanded(true);
+                        Optional<TreeItem<Object>> child = item.getChildren().stream()
+                                .filter(candidate -> isNamed(candidate, name)).findFirst();
+                        if (child.isEmpty()) {
+                            return Optional.<TreeItem<Object>>empty();
+                        }
+                        item = child.get();
+                    }
+                    return Optional.of(item);
+                }));
     }
 
     /**
