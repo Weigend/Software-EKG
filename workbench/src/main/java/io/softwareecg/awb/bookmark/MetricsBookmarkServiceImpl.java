@@ -70,14 +70,6 @@ public class MetricsBookmarkServiceImpl implements MetricsBookmarkService {
     }
 
     @Override
-    public void updateBookmark(Bookmark bookmark) {
-        if (bookmark.getId() != null) {
-            deleteBookmark(bookmark);
-        }
-        persistNewBookmark(bookmark);
-    }
-
-    @Override
     public void deleteBookmark(Bookmark bookmark) {
         if (bookmark instanceof MetricQueryBookmark) {
             bookmarkStore.deleteQueryBookmark(bookmark.getId());
@@ -89,13 +81,6 @@ public class MetricsBookmarkServiceImpl implements MetricsBookmarkService {
     // =========================================================================
     // BookmarkGroup actions
     // =========================================================================
-
-    @Override
-    public List<BookmarkGroup> getBookmarkGroups() {
-        return bookmarkStore.listGroups().stream()
-                .map(MetricsBookmarkServiceImpl::toBookmarkGroup)
-                .collect(Collectors.toList());
-    }
 
     @Override
     public List<BookmarkGroup> getGlobalBookmarkGroups() {
@@ -116,11 +101,6 @@ public class MetricsBookmarkServiceImpl implements MetricsBookmarkService {
     @Override
     public void persistNewBookmarkGroup(BookmarkGroup bookmarkGroup) {
         bookmarkStore.insertGroup(toGroupRow(bookmarkGroup));
-    }
-
-    @Override
-    public void updateBookmark(BookmarkGroup bookmarkGroup) {
-        bookmarkStore.updateGroup(toGroupRow(bookmarkGroup));
     }
 
     @Override

@@ -13,13 +13,10 @@
 package io.softwareecg.awb.explorer.metric.items.bookmarks;
 
 import io.softwareecg.awb.uitoolkit.tree.api.AbstractItem;
-import io.softwareecg.awb.uitoolkit.view.AppWindowProvider;
 import io.softwareecg.awb.runtime.di.BeanProvider;
-import io.softwareecg.awb.bookmark.api.MetricsBookmarkService;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
-import io.softwareecg.awb.bookmark.ui.EditBookmarkGroupDialog;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import jakarta.inject.Inject;
@@ -45,9 +42,6 @@ import static io.softwareecg.awb.explorer.items.TaskUtils.runAsTask;
 public class BookmarkGroupItem extends ContextAwareItem {
 
     private final BookmarkGroup bookmarkGroup;
-
-    @Inject
-    private AppWindowProvider appWindowProvider;
 
     @Inject
     private EventBus<EventObject> eventBus;
@@ -99,14 +93,6 @@ public class BookmarkGroupItem extends ContextAwareItem {
 
                 }
         );
-
-        addContextMenuEntry("Rename Group",
-                event -> runAsTask(
-                        "rename-bookmarkGroup-" + bookmarkGroup.getName() + "-task",
-                        this::renameBookmarkGroup,
-                        finishedEvent -> eventBus.publish(new ExplorerUpdateEvent(getParent()))
-                )
-        );
     }
 
     /**
@@ -117,18 +103,6 @@ public class BookmarkGroupItem extends ContextAwareItem {
      */
     public String getBookmarkGroupId() {
         return bookmarkGroup.getId();
-    }
-
-    private void renameBookmarkGroup() {
-
-        EditBookmarkGroupDialog dialog = new EditBookmarkGroupDialog(bookmarkGroup, getRepository());
-        dialog.initOwner(appWindowProvider.getAppWindow());
-
-        dialog.showAndWait().ifPresent(renamedGroup -> {
-            MetricsBookmarkService service = getFilterContext().bookmarks();
-            service.updateBookmark(renamedGroup);
-            eventBus.publish(new ExplorerUpdateEvent(this, getRepository()));
-        });
     }
 
     private void deleteBookmarkGroup() {

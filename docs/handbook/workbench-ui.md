@@ -88,7 +88,7 @@ The other nodes have menus of their own, opened with the right mouse button:
 | Repository | **Reload Contents**; for a remote one also **Edit Repository**, **Connect** and **Remove from Explorer** |
 | Project | the [importers](workbench-importers.md); **Data Sources...** for a project of an analysis started with **New Analysis**; **Delete project and its data** |
 | Bookmarks, Global Bookmarks | **Create Bookmark Group** |
-| Bookmark group | **Rename Group**, **Delete Group** |
+| Bookmark group | **Delete Group** |
 | Bookmark | **Load in Chart View** - a double-click does the same - and **Delete Bookmark** |
 
 Selecting anything below a project makes it the selected project of the project bar.

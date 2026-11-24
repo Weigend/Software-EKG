@@ -1,5 +1,6 @@
 package io.softwareecg.awb.e2e;
 
+import io.softwareecg.awb.uitoolkit.chart.ChartType;
 import io.softwareecg.awb.repository.connection.EkgRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
 import io.softwareecg.awb.repository.connection.RepositoryConfiguration;
@@ -182,7 +183,90 @@ class ExplorerE2ETest {
         awaitGone("Local Repository", "Explorer", "Bookmarks", "Findings");
     }
 
+    /** A bookmark brings back the query and the type of the chart it was made of. */
+    @Test
+    void aBookmarkOfAProjectIsCreatedOpenedAndDeleted() {
+        workbench.openChart("Explorer", "os", "\\Cpu\\us");
+        chooseChartType(ChartType.AREA);
+        bookmark("Cpu of the user", null);
+        TreeItem<Object> bookmark = node("Local Repository", "Explorer", "Bookmarks", "Cpu of the user");
+
+        workbench.openChart("Explorer", "os", "\\Load\\one");
+        chooseChartType(ChartType.LINE);
+        assertThat(metricOfTheHeader()).isEqualTo("\\Load\\one");
+
+        open(bookmark);
+        workbench.awaitTrue("the metric of the bookmark", Duration.ofSeconds(20), () -> "\\Cpu\\us".equals(metricOfTheHeader()));
+        workbench.awaitTrue("the chart type of the bookmark", Duration.ofSeconds(20),
+                () -> workbench.onFx(() -> chartTypes().getValue() == ChartType.AREA));
+
+        chooseChartType(ChartType.LINE);
+        workbench.onFx(() -> {
+            choose(bookmark, "Delete Bookmark");
+            return null;
+        });
+        awaitGone("Local Repository", "Explorer", "Bookmarks", "Cpu of the user");
+    }
+
+    /** A bookmark in a group that is not there yet creates the group, which is not of one project. */
+    @Test
+    void aBookmarkInANewGroupIsGlobal() {
+        workbench.openChart("Explorer", "os", "\\Cpu\\us");
+        bookmark("Cpu anywhere", "Shared");
+        TreeItem<Object> bookmark = node("Local Repository", "Global Bookmarks", "Shared", "Cpu anywhere");
+
+        workbench.openChart("Explorer", "os", "\\Load\\one");
+        open(bookmark);
+        workbench.awaitTrue("the metric of the bookmark", Duration.ofSeconds(20), () -> "\\Cpu\\us".equals(metricOfTheHeader()));
+
+        TreeItem<Object> group = node("Local Repository", "Global Bookmarks", "Shared");
+        Stage warning = workbench.openDialog("Delete Group", () -> choose(group, "Delete Group"));
+        confirm(warning, ButtonType.YES);
+        awaitGone("Local Repository", "Global Bookmarks", "Shared");
+    }
+
     // ---------------------------------------------------------------------------------------------
+
+    /** Makes a bookmark of what the chart shows, in the group of this name if there is one. */
+    private static void bookmark(String name, String group) {
+        Stage dialog = workbench.openDialog("Bookmark it!", () -> ((Button) workbench.find("btBookmark").orElseThrow()).fire());
+        fill(dialog, "bookmarkName", name);
+        if (group != null) {
+            workbench.onFx(() -> {
+                Workbench.control(dialog, "fcbBookmarkGroup", ComboBox.class).getEditor().setText(group);
+                return null;
+            });
+        }
+        confirm(dialog, ButtonType.APPLY);
+    }
+
+    private static void open(TreeItem<Object> bookmark) {
+        workbench.onFx(() -> {
+            choose(bookmark, "Load in Chart View");
+            return null;
+        });
+    }
+
+    private static String metricOfTheHeader() {
+        return workbench.onFx(() -> ((ComboBox<?>) workbench.find("cbxMetric").orElseThrow()).getEditor().getText());
+    }
+
+    private static void chooseChartType(ChartType type) {
+        workbench.onFx(() -> {
+            chartTypes().setValue(type);
+            return null;
+        });
+        Workbench.pause(Duration.ofMillis(500));
+    }
+
+    /** The list of chart types in the legend, of the chart in front. */
+    @SuppressWarnings("unchecked")
+    private static ComboBox<ChartType> chartTypes() {
+        return workbench.find("chartLegend").orElseThrow().lookupAll(".combo-box").stream()
+                .filter(ComboBox.class::isInstance).map(ComboBox.class::cast)
+                .filter(list -> list.getItems().contains(ChartType.SUM))
+                .findFirst().orElseThrow(() -> new AssertionError("The legend has no list of chart types"));
+    }
 
     /** Chooses an entry of the menu of a node. To be called on the JavaFX thread. */
     private static void choose(TreeItem<Object> item, String entry) {

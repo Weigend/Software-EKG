@@ -17,10 +17,8 @@ public interface BookmarkStore {
     void insertQueryBookmark(MetricQueryBookmarkRow row);
     void deleteQueryBookmark(String id);
 
-    List<BookmarkGroupRow> listGroups();
     List<BookmarkGroupRow> listGlobalGroups();
     List<BookmarkGroupRow> listGroups(String projectName);
     void insertGroup(BookmarkGroupRow row);
-    void updateGroup(BookmarkGroupRow row);
     void deleteGroup(String groupId);
 }

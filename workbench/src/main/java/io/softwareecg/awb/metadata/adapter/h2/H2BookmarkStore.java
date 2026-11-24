@@ -239,15 +239,6 @@ public class H2BookmarkStore implements BookmarkStore {
     // =========================================================================
 
     /**
-     * Lists all bookmark groups ordered by name.
-     *
-     * @return list of BookmarkGroupRow instances
-     */
-    public List<BookmarkGroupRow> listGroups() {
-        return listGroups(null);
-    }
-
-    /**
      * Lists bookmark groups where project_name is NULL (global groups).
      *
      * @return list of global BookmarkGroupRow instances
@@ -330,29 +321,6 @@ public class H2BookmarkStore implements BookmarkStore {
 
         } catch (SQLException e) {
             throw new IllegalStateException("Failed to insert bookmark group into H2", e);
-        }
-    }
-
-    /**
-     * Updates an existing bookmark group (delete + insert).
-     *
-     * @param row the group to update
-     */
-    public void updateGroup(BookmarkGroupRow row) {
-        try (Connection conn = dataSource.getConnection()) {
-            try (PreparedStatement del = conn.prepareStatement("DELETE FROM bookmark_groups WHERE id = ?")) {
-                del.setString(1, row.id);
-                del.executeUpdate();
-            }
-            try (PreparedStatement ins = conn.prepareStatement(
-                    "INSERT INTO bookmark_groups (id, name, project_name) VALUES (?, ?, ?)")) {
-                ins.setString(1, row.id);
-                ins.setString(2, row.name);
-                ins.setString(3, row.projectName);
-                ins.executeUpdate();
-            }
-        } catch (SQLException e) {
-            throw new IllegalStateException("Failed to update bookmark group in H2", e);
         }
     }
 

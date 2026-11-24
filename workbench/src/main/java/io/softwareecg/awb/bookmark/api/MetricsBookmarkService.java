@@ -64,17 +64,6 @@ public interface MetricsBookmarkService {
     void persistNewBookmark(Bookmark bookmark);
 
     /**
-     * Updates a bookmark.
-     * <p>
-     * The old and new object must have the same id. In some cases the backend do not support
-     * a real update than it deletes the stored object with the same id and create a new backend
-     * object. In this case the id of the updated element may changed by the backend.
-     *
-     * @param bookmark the bookmark.
-     */
-    void updateBookmark(Bookmark bookmark);
-
-    /**
      * Deletes a bookmark.
      *
      * @param bookmark the bookmark.
@@ -84,15 +73,6 @@ public interface MetricsBookmarkService {
     // ------------------------------------------------------------------------------------------------------
     // BookmarkGroup actions
     // ------------------------------------------------------------------------------------------------------
-
-    /**
-     * Returns a list of all BookmarkGroup's that currently exists in the repository.
-     * The result items in the list are sorted alphabetical in ascending order.
-     * The implicit existing bookmark "GLOBAL" isn't part of the result.
-     *
-     * @return a sorted list of BookmarkGroup items
-     */
-    List<BookmarkGroup> getBookmarkGroups();
 
     /**
      * Returns bookmark groups where projectName is NULL (global groups).
@@ -119,14 +99,6 @@ public interface MetricsBookmarkService {
      * @param bookmarkGroup the bookmark group item to persist
      */
     void persistNewBookmarkGroup(BookmarkGroup bookmarkGroup);
-
-    /**
-     * Update mutable attributes of an existing bookmark group in the repository.
-     * This method couldn't use to persist a new BookmarkGroup instance or to change it's id.
-     *
-     * @param bookmarkGroup the bookmark group to update
-     */
-    void updateBookmark(BookmarkGroup bookmarkGroup);
 
     /**
      * Deletes a BookmarkGroup and all corresponding (Metric)Bookmarks.

@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -23,10 +22,6 @@ class ResourceReferencesTest {
 
     private static final Path JAVA = Path.of("src/main/java");
     private static final Path RESOURCES = Path.of("src/main/resources");
-
-    /** Not written yet: the menu entry "Rename Group" of a bookmark group has only an empty view. */
-    private static final Set<String> KNOWN = Set.of(
-            "EditBookmarkGroupDialogView.fxml -> io.softwareecg.awb.bookmark.ui.EditBookmarkGroupDialogViewXml");
 
     private static final Pattern CSS_IMPORT = Pattern.compile("@import\\s+(?:url\\()?[\"']?([^\"');]+)");
     private static final Pattern FXML_FILE = Pattern.compile("(?:<fx:include[^>]*source=\"|value=\"@|stylesheets=\"@)([^\"]+)\"");
@@ -96,10 +91,7 @@ class ResourceReferencesTest {
     }
 
     private static void report(Path from, String reference, List<String> missing) {
-        String entry = from.getFileName() + " -> " + reference;
-        if (!KNOWN.contains(entry)) {
-            missing.add(entry);
-        }
+        missing.add(from.getFileName() + " -> " + reference);
     }
 
     private static List<Path> files(Path root, String suffix) throws IOException {
