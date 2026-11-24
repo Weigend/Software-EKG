@@ -1,5 +1,5 @@
-/* default styles of each ImporterDialog */
-@import "/io/softwareecg/awb/importer/ui/dialogs/ImportDialogStyle.css";
+/* the labels and fields of a dialog */
+@import "/io/softwareecg/awb/uitoolkit/controls/DialogControls.css";
 
 #txtRepositoryURL {
     -fx-max-width: 9999;
