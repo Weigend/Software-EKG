@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.avaje.inject.BeanScope;
 import io.softwareecg.awb.query.MetricDataAccessServiceImpl;
 import io.softwareecg.awb.query.QueryRunner;
-import io.softwareecg.awb.query.SeriesDataFetcherRegistry;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.query.api.MetricQueryService;
 import io.softwareecg.awb.query.pipeline.SeriesTransformPipeline;
@@ -59,14 +58,12 @@ public class QueryTimeSeriesToolTest {
     @SuppressWarnings("unchecked")
     public void startLookup() throws Exception {
         EventBus<java.util.EventObject> eventBus = new SimpleEventBus();
-        SeriesDataFetcherRegistry fetchers = mock(SeriesDataFetcherRegistry.class);
         SeriesTransformPipeline pipeline =
                 new SeriesTransformPipeline(new DouglasPeuckerSimplificationService(), new SmootherFactory());
         beans.put(EventBus.class, eventBus);
         beans.put(BeanScope.class, mock(BeanScope.class));
-        beans.put(SeriesDataFetcherRegistry.class, fetchers);
         beans.put(SeriesTransformPipeline.class, pipeline);
-        beans.put(MetricDataAccessService.class, new MetricDataAccessServiceImpl(fetchers));
+        beans.put(MetricDataAccessService.class, new MetricDataAccessServiceImpl());
         beans.put(MetricQueryService.class, new QueryRunner(eventBus, pipeline));
 
         Lookup.init(new LookupStrategy() {

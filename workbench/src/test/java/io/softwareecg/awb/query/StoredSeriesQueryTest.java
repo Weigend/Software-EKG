@@ -3,7 +3,7 @@ package io.softwareecg.awb.query;
 import io.avaje.inject.BeanScope;
 import io.softwareecg.awb.datasource.model.RepositorySeriesEnds;
 import io.softwareecg.awb.datasource.model.SeriesDimensions;
-import io.softwareecg.awb.importer.spi.RemoteSeriesDataFetcher;
+import io.softwareecg.awb.query.spi.RemoteSeriesSource;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.query.model.QuerySpec;
@@ -68,8 +68,6 @@ public class StoredSeriesQueryTest {
 
     private final Map<Class<?>, Object> beans = new HashMap<>();
 
-    private final SeriesDataFetcherRegistry fetchers = mock(SeriesDataFetcherRegistry.class);
-
     private final TimeSeriesRepository store = mock(TimeSeriesRepository.class);
 
     private final StoreRepository repository = new StoreRepository(store);
@@ -79,8 +77,7 @@ public class StoredSeriesQueryTest {
     @Before
     public void startLookup() throws Exception {
         beans.put(BeanScope.class, mock(BeanScope.class));
-        beans.put(SeriesDataFetcherRegistry.class, fetchers);
-        beans.put(MetricDataAccessService.class, new MetricDataAccessServiceImpl(fetchers));
+        beans.put(MetricDataAccessService.class, new MetricDataAccessServiceImpl());
 
         Lookup.init(new LookupStrategy() {
             @Override
@@ -199,11 +196,13 @@ public class StoredSeriesQueryTest {
     @Test
     public void theValuesOfARemoteProjectComeFromItsSource() throws Exception {
         answerSearch(1, null, series());
-        RemoteSeriesDataFetcher fetcher = mock(RemoteSeriesDataFetcher.class);
-        when(fetchers.retrieveSeriesDataFetcher(any())).thenReturn(fetcher);
-        when(fetcher.fetchSeriesData(eq("key"), anyLong(), anyLong()))
+        RemoteSeriesSource remoteSource = mock(RemoteSeriesSource.class);
+        beans.put(RemoteSeriesSource.class, remoteSource);
+        when(remoteSource.getImporterID()).thenReturn("importer");
+        when(remoteSource.fetchSeries(any(), eq("key"), anyLong(), anyLong()))
                 .thenReturn(new Value[]{new Value(7, 1.5)});
         Project remote = new Project("p").setIsSplitSourceProject(true);
+        remote.setImporterId("importer");
 
         TimeSeries series = service.queryTimeSeriesData(query(new QuerySpec.Builder<>().withProject(remote)
                 .withMetric("*").withImporterSourceRepository(new TimeSeriesImportSource()).build(), "*", 10))

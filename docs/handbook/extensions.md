@@ -139,7 +139,8 @@ public final class ApplianceImportModule extends ImportModule
 }
 ```
 
-Implement `SplitSourceProjectSupport` only when a remote fetcher exists, and
+Implement `SplitSourceProjectSupport` only together with `RemoteSeriesSource` of `query.spi`, which
+reads the values from the remote server when they are shown, and
 `AliasMappingProvider` when the source has meaningful domain names for EKG dimensions. Reuse the
 shared file/query selectors, authentication model, progress tasks and repository write pipeline.
 Add parser unit tests and an import test that queries the stored rows through the normal data layer.

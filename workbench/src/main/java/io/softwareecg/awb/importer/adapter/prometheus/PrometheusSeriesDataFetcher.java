@@ -10,7 +10,6 @@ import io.softwareecg.awb.repository.api.TimeSeriesImportSource;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import io.softwareecg.awb.secrets.security.SecurityContext;
 import io.softwareecg.awb.timeseries.Value;
-import io.softwareecg.awb.importer.spi.RemoteSeriesDataFetcher;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -18,33 +17,39 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class is an implementation of the {@link RemoteSeriesDataFetcher} interface
- * for the Prometheus time series database.
- * It will fetch time series data using the Prometheus 2.x v1 REST API with an
- * EKG own API client.
+ * Reads the values of series from one Prometheus server, using the Prometheus 2.x v1 REST API
+ * with an EKG own API client.
  *
  * @since 01.08.2018
  */
-public class PrometheusSeriesDataFetcher implements RemoteSeriesDataFetcher {
+public class PrometheusSeriesDataFetcher {
 
     private static final Logger LOGGER = EkgLogger.get();
 
     private static final String PROMETHEUS_METRIC_KEY = "METRIC_NAME";
 
-    private PrometheusClient prometheusClient = null;
+    private final PrometheusClient prometheusClient;
 
-    //=================================================================================================================
-    // implementation of the RemoteSeriesDataFetcher interface
-    //=================================================================================================================
+    /**
+     * @param source the server to read from
+     */
+    public PrometheusSeriesDataFetcher(TimeSeriesImportSource source) {
+        prometheusClient = new PrometheusClient();
+        prometheusClient.bindToAddress(source.getRepositoryUrl());
 
-    @Override
+        SecurityContext securityContext = new SecurityContext();
+        securityContext.setUserName(source.getUsername());
+        securityContext.setPassword(source.getPassword());
+        securityContext.setResourceAuthType(source.getAuthType());
+        securityContext.setSsoOAuthServer(source.getOAuthServerUrl());
+
+        prometheusClient.setSecurityContext(securityContext);
+    }
+
+    /**
+     * @return the values of the series; {@code null} if the server cannot be reached
+     */
     public Value[] fetchSeriesData(String remoteSeriesKey, long start, long end) {
-
-        if (prometheusClient == null) {
-            String errorMsg = "No PrometheusClient was initialized before querying metric data.";
-            LOGGER.error(errorMsg);
-            throw new IllegalStateException(errorMsg);
-        }
 
         Map<String, String> metricLabels = convertToMap(remoteSeriesKey);
         RangeQuery rangeQuery = RangeQuery.Builder
@@ -87,25 +92,6 @@ public class PrometheusSeriesDataFetcher implements RemoteSeriesDataFetcher {
         }
 
         return resultValues;
-    }
-
-    @Override
-    public Value[] fetchSeriesData(Map<String, String> searchLabelExp, long start, long end) {
-        return new Value[0];
-    }
-
-    @Override
-    public void setSourceRepositoryDefinition(TimeSeriesImportSource sourceRepository) {
-        prometheusClient = new PrometheusClient();
-        prometheusClient.bindToAddress(sourceRepository.getRepositoryUrl());
-
-        SecurityContext securityContext = new SecurityContext();
-        securityContext.setUserName(sourceRepository.getUsername());
-        securityContext.setPassword(sourceRepository.getPassword());
-        securityContext.setResourceAuthType(sourceRepository.getAuthType());
-        securityContext.setSsoOAuthServer(sourceRepository.getOAuthServerUrl());
-
-        prometheusClient.setSecurityContext(securityContext);
     }
 
 

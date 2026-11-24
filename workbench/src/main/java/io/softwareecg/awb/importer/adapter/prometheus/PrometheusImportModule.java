@@ -1,6 +1,9 @@
 package io.softwareecg.awb.importer.adapter.prometheus;
 
 import io.softwareecg.awb.importer.ImportModule;
+import io.softwareecg.awb.query.spi.RemoteSeriesSource;
+import io.softwareecg.awb.repository.api.TimeSeriesImportSource;
+import io.softwareecg.awb.timeseries.Value;
 import jakarta.inject.Singleton;
 import io.softwareecg.awb.importer.framework.LocalProjectImportStrategy;
 import io.softwareecg.awb.importer.framework.SplitSourceProjectImportStrategy;
@@ -13,8 +16,10 @@ import static io.softwareecg.awb.secrets.model.ResourceAuthType.*;
 import io.softwareecg.awb.importer.spi.ClassicViewFlavorSupport;
 import io.softwareecg.awb.importer.spi.CloudViewFlavorSupport;
 import io.softwareecg.awb.importer.spi.LocalProjectSupport;
-import io.softwareecg.awb.importer.spi.RemoteSeriesDataFetcher;
 import io.softwareecg.awb.importer.spi.SplitSourceProjectSupport;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 /**
  * Import module for time series data collected in a remote Prometheus instance.
  * The import module supports both local project data import and remote project data import
@@ -24,7 +29,8 @@ import io.softwareecg.awb.importer.spi.SplitSourceProjectSupport;
  */
 @SuppressWarnings("unused") // resolved and instantiated via CDI classpath scan
 @Singleton
-public class PrometheusImportModule extends ImportModule implements SplitSourceProjectSupport, LocalProjectSupport, CloudViewFlavorSupport, ClassicViewFlavorSupport {
+public class PrometheusImportModule extends ImportModule implements SplitSourceProjectSupport, RemoteSeriesSource,
+        LocalProjectSupport, CloudViewFlavorSupport, ClassicViewFlavorSupport {
 
     public static final String IMPORT_MODULE_ID = "PrometheusImporter";
 
@@ -32,6 +38,11 @@ public class PrometheusImportModule extends ImportModule implements SplitSourceP
      * The import dialog instance - stored to access source repository property for local imports
      */
     private QueryImportDialog importDialog;
+
+    /**
+     * One for every server: several projects can be shown side by side, each from a server of its own.
+     */
+    private final Map<TimeSeriesImportSource, PrometheusSeriesDataFetcher> fetchers = new ConcurrentHashMap<>();
 
     //------------------------------------------------------------------------------------------------------------------
     // implementation of ImportModule API (implement abstract methods)
@@ -73,9 +84,13 @@ public class PrometheusImportModule extends ImportModule implements SplitSourceP
         return new PrometheusRemoteImportStrategy();
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    // implementation of RemoteSeriesSource interface
+    //------------------------------------------------------------------------------------------------------------------
+
     @Override
-    public RemoteSeriesDataFetcher getSeriesDataFetcher() {
-        return new PrometheusSeriesDataFetcher();
+    public Value[] fetchSeries(TimeSeriesImportSource source, String seriesKey, long start, long end) {
+        return fetchers.computeIfAbsent(source, PrometheusSeriesDataFetcher::new).fetchSeriesData(seriesKey, start, end);
     }
 
     //------------------------------------------------------------------------------------------------------------------

@@ -13,7 +13,6 @@ import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.query.model.TimeSeriesQuery;
 import io.softwareecg.awb.query.model.TimeSeriesQueryResponse;
 import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.repository.api.TimeSeriesImportSource;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.RepositoryException;
 import io.softwareecg.awb.repository.api.SeriesFilter;
@@ -22,7 +21,7 @@ import io.softwareecg.awb.runtime.logging.EkgLogger;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.awb.timeseries.TimeSeries;
 import io.softwareecg.awb.timeseries.Value;
-import io.softwareecg.awb.importer.spi.RemoteSeriesDataFetcher;
+import io.softwareecg.awb.query.spi.RemoteSeriesSource;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.apache.commons.lang3.StringUtils;
@@ -32,8 +31,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -55,29 +52,18 @@ public class MetricDataAccessServiceImpl implements MetricDataAccessService {
 
     private static final Logger LOGGER = EkgLogger.get();
 
-    private final SeriesDataFetcherRegistry fetcherRegistry;
-
     private Repository repository;
-
-    private static final Map<TimeSeriesImportSource, RemoteSeriesDataFetcher> FETCHER_CACHE = new ConcurrentHashMap<>();
 
     //=================================================================================================================
     //  various constructors
     //=================================================================================================================
 
-    @Inject
-    public MetricDataAccessServiceImpl(@io.avaje.inject.External SeriesDataFetcherRegistry fetcherRegistry) {
-        this.fetcherRegistry = fetcherRegistry;
-    }
-
     /**
-     * Default constructor that is need than instantiating this class
-     * outside DI. Field will be lazily resolved on first use; under the
-     * Avaje runtime Lookup is initialised before any user code reaches it.
+     * The bean of the injection. It stands for the class only; the one that works on a repository
+     * has the repository, see {@link io.softwareecg.awb.runtime.discovery.ServiceDiscovery}.
      */
-    @Deprecated
+    @Inject
     public MetricDataAccessServiceImpl() {
-        this.fetcherRegistry = Lookup.lookup(SeriesDataFetcherRegistry.class);
         // no op
     }
 
@@ -88,7 +74,6 @@ public class MetricDataAccessServiceImpl implements MetricDataAccessService {
      * @param repository the repository to read
      */
     public MetricDataAccessServiceImpl(Repository repository) {
-        this.fetcherRegistry = Lookup.lookup(SeriesDataFetcherRegistry.class);
         this.repository = repository;
     }
 
@@ -119,17 +104,17 @@ public class MetricDataAccessServiceImpl implements MetricDataAccessService {
             }
 
             // populate TimeSeriesQueryResponse instance with time series data (in case of remote projects) fetch
-            // payload from remote data sources using a RemoteSeriesDataFetcher
+            // payload from the remote source
             TimeSeriesQueryResponse response = new TimeSeriesQueryResponse(page.nextCursor(), page.totalHits(), false);
-            final RemoteSeriesDataFetcher fetcher = retrieveFetcher(queryParams, project);
+            RemoteSeriesSource remote = project.useSplitSource() ? sourceOf(project) : null;
 
             for (TimeSeries timeSeries : page.series()) {
 
                 // fetch data from remote data source if required
-                if (project.useSplitSource() && fetcher != null) {
+                if (remote != null) {
 
-                    Value[] data = fetcher.fetchSeriesData(timeSeries.getRemoteSeriesKey(),
-                            queryParams.getStart(), queryParams.getEnd());
+                    Value[] data = remote.fetchSeries(queryParams.getImporterSourceRepository(),
+                            timeSeries.getRemoteSeriesKey(), queryParams.getStart(), queryParams.getEnd());
 
                     if (data == null) {
                         // this occurs in error cases for example if remote repository isn't available
@@ -321,31 +306,12 @@ public class MetricDataAccessServiceImpl implements MetricDataAccessService {
         }
     }
 
-    private RemoteSeriesDataFetcher retrieveFetcher(QuerySpec queryParams, Project project) {
-
-        RemoteSeriesDataFetcher fetcher;
-        if (project.useSplitSource()) {
-
-            fetcher = FETCHER_CACHE.get(queryParams.getImporterSourceRepository());
-
-            if (fetcher != null) {
-                return fetcher;
-            }
-
-            fetcher = fetcherRegistry.retrieveSeriesDataFetcher(project.getImporterId());
-            if (fetcher == null) {
-                throw new IllegalStateException("Unable to retrieve fetcher for importerId '"
-                        + project.getImporterId() + "'");
-            }
-
-            fetcher.setSourceRepositoryDefinition(queryParams.getImporterSourceRepository());
-
-            FETCHER_CACHE.put(queryParams.getImporterSourceRepository(), fetcher);
-
-        } else {
-            fetcher = null;
-        }
-        return fetcher;
+    private static RemoteSeriesSource sourceOf(Project project) {
+        return Lookup.lookupAll(RemoteSeriesSource.class).stream()
+                .filter(source -> source.getImporterID().equals(project.getImporterId()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("There is no source of remote series for the importer '"
+                        + project.getImporterId() + "'"));
     }
 
     /**
