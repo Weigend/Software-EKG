@@ -6,6 +6,7 @@ import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.EventBusListener;
 import io.softwareecg.awb.timeseries.TimeSeries;
 import io.softwareecg.awb.importer.framework.LocalProjectImportStrategy;
+import io.softwareecg.awb.importer.framework.LocalProjectImportTask;
 import io.softwareecg.awb.importer.testsupport.mocks.*;
 
 import java.util.EventObject;
@@ -104,7 +105,7 @@ public class LocalImportStrategyRunner {
         }
 
         // execute the strategy
-        strategyToTest.createImportTask(importService, new RunnerProjectConfig(projectName)).doImport();
+        new LocalProjectImportTask(importService, new RunnerProjectConfig(projectName), strategyToTest).doImport();
 
         return importService.getCollectedSeriesData();
     }

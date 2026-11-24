@@ -38,17 +38,15 @@ public class RemoteProjectImportTask extends ImportTask {
     /**
      * Constructs a new instance of ImportTask with with properties given as parameters.
      *
-     * @param importService service that provides the functionality to import time series data
      * @param repository the target repository for the series meta data chosen by the EKG user
      * @param projectConfiguration the project configuration with project and additional metadata
      * @param importStrategy import strategy that provides the steps used at import procedure
      */
-    public RemoteProjectImportTask(TimeSeriesWriteService importService,
-                                   Repository repository,
+    public RemoteProjectImportTask(Repository repository,
                                    TargetProjectConfig projectConfiguration,
                                    SplitSourceProjectImportStrategy importStrategy) {
 
-        super(importService, projectConfiguration);
+        super(ServiceDiscovery.lookup(TimeSeriesWriteService.class, repository), projectConfiguration);
         this.importStrategy = importStrategy;
         SourceRepositoryService service = ServiceDiscovery.lookup(SourceRepositoryService.class, repository);
         importerSourceRepository = service.queryImportSourceRepository(projectConfiguration.getProjectName());
@@ -77,7 +75,7 @@ public class RemoteProjectImportTask extends ImportTask {
 
         // (delta/full) write series metadata to local types (remote type) and return the amount of written records
         // (delta/full) optional filter series that don't need to update and return the amount of written records
-        SeriesMetaWriter<SeriesData, SeriesData> writer = importStrategy.getMetaDataWriter();
+        SeriesMetaWriter<SeriesData, SeriesData> writer = importStrategy.getMetaDataWriter(getImportService());
         writer.setProjectConfiguration(getTargetProject());
         long amountImportedSeries =  dataStream.map(writer).count();
         if (!isCancelledByUser()) {

@@ -138,6 +138,26 @@ public final class ImportDialog {
         workbench.awaitTrue("the dialog to close", SHORT, () -> workbench.onFx(() -> !stage.isShowing()));
     }
 
+    /** Has the values of the new project stay on the server they come from. */
+    @SuppressWarnings("unchecked")
+    public ImportDialog remoteProject() {
+        workbench.onFx(() -> {
+            ComboBox<Enum<?>> types = Workbench.control(stage, "cbProjectType", ComboBox.class);
+            types.setValue(types.getItems().stream().filter(type -> "SPLIT_SOURCE_PROJECT".equals(type.name())).findFirst().orElseThrow());
+            return null;
+        });
+        return this;
+    }
+
+    /** Presses <b>Import Data</b> and does not wait for the import. */
+    public void startImport() {
+        workbench.awaitTrue("'Import Data' to be enabled in '" + title() + "'", SHORT, this::canImport);
+        workbench.onFx(() -> {
+            importButton().fire();
+            return null;
+        });
+    }
+
     /**
      * Presses <b>Import Data</b> and waits until the import has ended.
      *

@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Supplier;
 
 /**
  * The default controller implementation for FileImportDialogs.
@@ -96,10 +97,10 @@ public class FileImportDialogController implements Initializable {
     protected VBox vbExtendedChilds;
 
     /**
-     * The import strategy that will invoked/started if the user
+     * Gives the strategy of an import that is started when the user
      * clicks "ok" and has specified all necessary setting.
      */
-    protected LocalProjectImportStrategy localProjectImportStrategy = null;
+    protected Supplier<LocalProjectImportStrategy> localProjectImportStrategy = null;
 
 
     //================================================================================================================
@@ -140,11 +141,11 @@ public class FileImportDialogController implements Initializable {
         return repositorySelector;
     }
 
-    public void setLocalImportStrategy(LocalProjectImportStrategy localProjectImportStrategy) {
+    public void setLocalImportStrategy(Supplier<LocalProjectImportStrategy> localProjectImportStrategy) {
        this.localProjectImportStrategy = localProjectImportStrategy;
     }
 
-    public void setRemoteImportStrategy(SplitSourceProjectImportStrategy splitSourceProjectImportStrategy) {
+    public void setRemoteImportStrategy(Supplier<SplitSourceProjectImportStrategy> splitSourceProjectImportStrategy) {
        throw new IllegalStateException("Remote Project support isn't supported by FileImport for performance reasons.");
     }
 
@@ -198,9 +199,9 @@ public class FileImportDialogController implements Initializable {
         projectSelector.submitChanges();
 
         if (localProjectImportStrategy != null) {
-            LocalProjectImportTask task = localProjectImportStrategy.createImportTask(
+            LocalProjectImportTask task = new LocalProjectImportTask(
                     ServiceDiscovery.lookup(TimeSeriesWriteService.class, repositorySelector.getSelectedRepository()),
-                    projectSelector.getTargetProjectConfiguration());
+                    projectSelector.getTargetProjectConfiguration(), localProjectImportStrategy.get());
 
             task.start();
         }

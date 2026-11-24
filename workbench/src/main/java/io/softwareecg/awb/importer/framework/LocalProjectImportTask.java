@@ -61,7 +61,7 @@ public class LocalProjectImportTask extends ImportTask {
     public long doImport() {
 
         // map to series filter dimensions generic
-        Stream<RawSeriesData> rawDataStream = untilCancelled(importStrategy.readRawSeriesData());
+        Stream<RawSeriesData> rawDataStream = untilCancelled(importStrategy.readRawSeriesData(projectConfiguration, getImportService()));
 
         // filter series
         rawDataStream = rawDataStream.filter(importStrategy.getSeriesFilter());

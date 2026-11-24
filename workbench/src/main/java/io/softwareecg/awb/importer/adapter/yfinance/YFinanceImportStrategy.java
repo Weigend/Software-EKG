@@ -1,5 +1,7 @@
 package io.softwareecg.awb.importer.adapter.yfinance;
 
+import io.softwareecg.awb.projectcontext.api.TargetProjectConfig;
+import io.softwareecg.awb.repository.api.TimeSeriesWriteService;
 import io.softwareecg.wfx.platform.api.events.ProgressEvent;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import io.softwareecg.awb.importer.model.RawSeriesData;
@@ -32,7 +34,7 @@ public class YFinanceImportStrategy extends LocalProjectImportStrategy {
     }
 
     @Override
-    public Stream<RawSeriesData> readRawSeriesData() {
+    public Stream<RawSeriesData> readRawSeriesData(TargetProjectConfig project, TimeSeriesWriteService importService) {
         String startMessage = "Importing Yahoo Finance market data from '" + paths + "'";
         notifyImportStarted(startMessage);
         LOGGER.info(startMessage);

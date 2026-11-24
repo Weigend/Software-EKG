@@ -101,12 +101,12 @@ public abstract class ImportModule implements Module, ProjectImporter {
         projectSelector.enableSplitSourceProjectSupport(this instanceof SplitSourceProjectSupport);
 
         if (this instanceof SplitSourceProjectSupport) {
-            importDialog.setRemoteImportStrategy(((SplitSourceProjectSupport)this).getSplitSourceProjectImportStrategy());
+            importDialog.setRemoteImportStrategy(((SplitSourceProjectSupport) this)::getSplitSourceProjectImportStrategy);
         }
 
         projectSelector.enableLocalProjectSupport(this instanceof LocalProjectSupport);
         if (this instanceof LocalProjectSupport) {
-            importDialog.setLocalImportStrategy(((LocalProjectSupport)this).getLocalProjectImportStrategy());
+            importDialog.setLocalImportStrategy(((LocalProjectSupport) this)::getLocalProjectImportStrategy);
         }
     }
 

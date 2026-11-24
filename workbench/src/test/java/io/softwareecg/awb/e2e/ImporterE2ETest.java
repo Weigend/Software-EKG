@@ -4,10 +4,14 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -196,6 +200,43 @@ class ImporterE2ETest {
             assertThat(workbench.project("First cluster").sourceUrl()).isEqualTo(first.url());
             assertThat(workbench.project("Second cluster, renamed").sourceUrl()).isEqualTo(second.url());
         }
+    }
+
+    /**
+     * An import that runs while another one is started goes on reading from its own server. Both
+     * shared one connection: the first went on with the server of the second.
+     */
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    void twoImportsAtATimeReadEachFromItsOwnServer(boolean remote) {
+        String slow = remote ? "Slow server, remote" : "Slow server";
+        String quick = remote ? "Quick server, remote" : "Quick server";
+        try (PrometheusStub slowServer = new PrometheusStub(List.of("slow-01", "slow-02"));
+             PrometheusStub quickServer = new PrometheusStub(List.of("quick-01", "quick-02"))) {
+            slowServer.hold();
+            prometheusImport(slow, slowServer, remote).startImport();
+            workbench.awaitTrue("the first import to ask for its series", IMPORT,
+                    () -> slowServer.requests().stream().anyMatch(request -> request.contains("__name__")));
+            prometheusImport(quick, quickServer, remote).importData(IMPORT);
+            slowServer.release();
+
+            assertThat(hostsOf(quick)).containsExactly("quick-01", "quick-02");
+            assertThat(hostsOf(slow)).containsExactly("slow-01", "slow-02");
+            workbench.awaitTrue("the first import to read all its metrics", SEARCHABLE, () -> PrometheusStub.METRICS.stream()
+                    .allMatch(metric -> workbench.project(slow).metricNames().stream().anyMatch(metric::contains)));
+            assertThat(workbench.project(slow).hosts()).containsExactly("slow-01", "slow-02");
+        }
+    }
+
+    private static ImportDialog prometheusImport(String project, PrometheusStub server, boolean remote) {
+        ImportDialog dialog = workbench.openImporter("Prometheus Data").projectName(project).serverUrl(server.url()).importRange("1d");
+        return remote ? dialog.remoteProject() : dialog;
+    }
+
+    /** The hosts of a project as soon as it has some. */
+    private static Set<String> hostsOf(String project) {
+        workbench.awaitTrue("the hosts of '" + project + "'", SEARCHABLE, () -> !workbench.project(project).hosts().isEmpty());
+        return workbench.project(project).hosts();
     }
 
     @Test

@@ -14,6 +14,7 @@ import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.function.Supplier;
 
 /**
  * Generic ImportDialog ui component that will/should be the base class of all
@@ -72,20 +73,20 @@ public abstract class ImportDialog extends BorderPane {
     public abstract ProjectSelector getProjectSelector();
 
     /**
-     * Sets the LocalProjectImportStrategy import strategy that will called by the ImportDialog
-     * than the user submits a new import procedure for local project data
+     * Sets where the strategy of an import of local project data comes from. Each import asks for
+     * one of its own, since imports can run at the same time.
      *
-     * @param localProjectImportStrategy the LocalProjectImportStrategy that will provide the according import task
+     * @param localProjectImportStrategy gives a new strategy
      */
-    public abstract void setLocalImportStrategy(LocalProjectImportStrategy localProjectImportStrategy);
+    public abstract void setLocalImportStrategy(Supplier<LocalProjectImportStrategy> localProjectImportStrategy);
 
     /**
-     * Sets the LocalProjectImportStrategy import strategy that will called by the ImportDialog
-     * than the user submits a new import procedure for local project data
+     * Sets where the strategy of an import comes from that leaves the values on their server.
+     * Each import asks for one of its own, since imports can run at the same time.
      *
-     * @param splitSourceProjectImportStrategy the SplitSourceProjectImportStrategy that will provide the according import task
+     * @param splitSourceProjectImportStrategy gives a new strategy
      */
-    public abstract void setRemoteImportStrategy(SplitSourceProjectImportStrategy splitSourceProjectImportStrategy);
+    public abstract void setRemoteImportStrategy(Supplier<SplitSourceProjectImportStrategy> splitSourceProjectImportStrategy);
 
     /**
      * Returns the window title of the dialog window and can changed

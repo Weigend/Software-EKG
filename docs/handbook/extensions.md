@@ -139,6 +139,9 @@ public final class ApplianceImportModule extends ImportModule
 }
 ```
 
+The strategy is asked for once per import. Imports can run at the same time, so return a new one each
+time and keep the state of an import in it.
+
 Implement `SplitSourceProjectSupport` only together with `RemoteSeriesSource` of `query.spi`, which
 reads the values from the remote server when they are shown, and
 `AliasMappingProvider` when the source has meaningful domain names for EKG dimensions. Reuse the

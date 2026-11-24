@@ -71,8 +71,6 @@ public class YFinanceImportModule extends ImportModule
 
     @Override
     public LocalProjectImportStrategy getLocalProjectImportStrategy() {
-        // The strategy is created once, with the dialog. What is chosen in the dialog is
-        // therefore asked for when an import runs: asked here, it would be the defaults for ever.
         return new YFinanceImportStrategy(importDialog.getSelectedFilesPaths(), () -> new YFinanceImportOptions(
                 importDialog.isImportPriceHistoryEnabled(),
                 importDialog.isImportCorporateActionsEnabled(),

@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Supplier;
 
 /**
  * Controller that manages the view of the QueryImportDialog.
@@ -136,16 +137,16 @@ public class QueryImportDialogController implements Initializable {
     protected ComboBox<String> cmbImportRange;
 
     /**
-     * The import strategy that will invoked/started if the user
+     * Gives the strategy of an import that is started when the user
      * clicks "ok" and has specified all necessary setting.
      */
-    protected LocalProjectImportStrategy localProjectImportStrategy = null;
+    protected Supplier<LocalProjectImportStrategy> localProjectImportStrategy = null;
 
     /**
-     * The import strategy that will invoked/started if the user
+     * Gives the strategy of an import that is started when the user
      * clicks "ok" and has specified all necessary setting.
      */
-    protected SplitSourceProjectImportStrategy splitSourceProjectImportStrategy = null;
+    protected Supplier<SplitSourceProjectImportStrategy> splitSourceProjectImportStrategy = null;
 
 
     //================================================================================================================
@@ -199,11 +200,11 @@ public class QueryImportDialogController implements Initializable {
         return querySourceSelector;
     }
 
-    public void setLocalImportStrategy(LocalProjectImportStrategy localProjectImportStrategy) {
+    public void setLocalImportStrategy(Supplier<LocalProjectImportStrategy> localProjectImportStrategy) {
         this.localProjectImportStrategy = localProjectImportStrategy;
     }
 
-    public void setRemoteImportStrategy(SplitSourceProjectImportStrategy splitSourceProjectImportStrategy) {
+    public void setRemoteImportStrategy(Supplier<SplitSourceProjectImportStrategy> splitSourceProjectImportStrategy) {
         this.splitSourceProjectImportStrategy = splitSourceProjectImportStrategy;
     }
 
@@ -312,7 +313,7 @@ public class QueryImportDialogController implements Initializable {
         querySourceSelector.submitChanges();
 
         // Capture config in a local variable to ensure the delta flag is set
-        // on the SAME instance that gets passed to createImportTask().
+        // on the SAME instance that gets passed to the import task.
         // getTargetProjectConfiguration() may return a new instance on each call.
         TargetProjectConfig config = projectSelector.getTargetProjectConfiguration();
 
@@ -339,9 +340,9 @@ public class QueryImportDialogController implements Initializable {
                 return;
             }
 
-            LocalProjectImportTask task = localProjectImportStrategy.createImportTask(
+            LocalProjectImportTask task = new LocalProjectImportTask(
                     ServiceDiscovery.lookup(TimeSeriesWriteService.class, repositorySelector.getSelectedRepository()),
-                    config);
+                    config, localProjectImportStrategy.get());
 
             task.start();
         }
@@ -352,9 +353,8 @@ public class QueryImportDialogController implements Initializable {
                 return;
             }
 
-            RemoteProjectImportTask task = splitSourceProjectImportStrategy.createImportTask(
-                    repositorySelector.getSelectedRepository(),
-                    config);
+            RemoteProjectImportTask task = new RemoteProjectImportTask(
+                    repositorySelector.getSelectedRepository(), config, splitSourceProjectImportStrategy.get());
 
             task.start();
         }

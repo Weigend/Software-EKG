@@ -40,9 +40,11 @@ public abstract class LocalProjectImportStrategy {
      * from the different kind of data sources and transform it to a stream of RawSeriesData that
      * will given to the further import steps.
      *
+     * @param project       the project the data is imported into
+     * @param importService what the project has already can be asked here
      * @return a stream of RawSeriesData that represents the source data the importer is used for
      */
-    public abstract Stream<RawSeriesData> readRawSeriesData();
+    public abstract Stream<RawSeriesData> readRawSeriesData(TargetProjectConfig project, TimeSeriesWriteService importService);
 
     /**
      * Default implementation of a factory method that provides a mapper
@@ -76,18 +78,6 @@ public abstract class LocalProjectImportStrategy {
                     rawSeriesData.getValues()
             );
         };
-    }
-
-    /**
-     * Creates a new LocalProjectImportTask that uses this strategy to proceed and import time series
-     * data to EKG Repository
-     *
-     * @param importService service that provides the functionality to import time series data
-     * @param projectConfiguration the project configuration that tell which project the data belong to
-     * @return a new instance of LocalProjectImportTask
-     */
-    public LocalProjectImportTask createImportTask(TimeSeriesWriteService importService, TargetProjectConfig projectConfiguration) {
-        return new LocalProjectImportTask(importService, projectConfiguration, this);
     }
 
     /**

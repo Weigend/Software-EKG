@@ -7,7 +7,6 @@ import io.softwareecg.awb.repository.api.TimeSeriesWriteService;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.events.ProgressEvent;
 import io.softwareecg.wfx.lookup.api.Lookup;
-import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import io.softwareecg.awb.importer.model.RawSeriesData;
 import io.softwareecg.awb.importer.model.SeriesData;
 import io.softwareecg.awb.importer.framework.steps.filter.MetadataDeltaFilter;
@@ -19,7 +18,6 @@ import io.softwareecg.awb.importer.framework.steps.writer.SeriesMetaWriter;
 import java.util.EventObject;
 import java.util.stream.Stream;
 
-import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.RepositoryException;
 /**
  * todo enter comment here
@@ -35,29 +33,6 @@ public abstract class SplitSourceProjectImportStrategy {
 
     /**
      *
-     */
-    private TargetProjectConfig projectConfiguration;
-
-    /**
-     *
-     */
-    private TimeSeriesWriteService importService;
-
-    /**
-     *
-     *
-     * @param selectedRepository
-     * @param currentProjectConfig
-     * @return
-     */
-    public RemoteProjectImportTask createImportTask(Repository selectedRepository, TargetProjectConfig currentProjectConfig) {
-        this.projectConfiguration = currentProjectConfig;
-        this.importService = ServiceDiscovery.lookup(TimeSeriesWriteService.class, selectedRepository);
-        return new RemoteProjectImportTask(importService, selectedRepository, projectConfiguration, this);
-    }
-
-    /**
-     *
      *
      * @param projectName
      * @return
@@ -67,7 +42,7 @@ public abstract class SplitSourceProjectImportStrategy {
 
             // return a generic mapper
             return new SeriesData(
-                    projectConfiguration.getProjectName(),
+                    projectName,
                     rawSeriesData.getSeriesLabels().get(FilterDimension.HOST_GROUP.name()),
                     rawSeriesData.getSeriesLabels().get(FilterDimension.HOST.name()),
                     rawSeriesData.getSeriesLabels().get(FilterDimension.NAMESPACE.name()),
@@ -100,7 +75,7 @@ public abstract class SplitSourceProjectImportStrategy {
         return seriesMetaData -> seriesMetaData;
     }
 
-    public SeriesMetaWriter<SeriesData, SeriesData> getMetaDataWriter() {
+    public SeriesMetaWriter<SeriesData, SeriesData> getMetaDataWriter(TimeSeriesWriteService importService) {
         return new SeriesMetaWriter<>() {
 
             private boolean overwriteExistingData;

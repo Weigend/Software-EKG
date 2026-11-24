@@ -9,6 +9,8 @@ import io.softwareecg.awb.importer.framework.SplitSourceProjectImportStrategy;
 import io.softwareecg.awb.importer.ui.dialogs.ImportDialog;
 import javafx.beans.property.ReadOnlyProperty;
 
+import java.util.function.Supplier;
+
 /**
  * todo enter comment here
  *
@@ -39,12 +41,12 @@ public class QueryImportDialog extends ImportDialog {
     }
 
     @Override
-    public void setLocalImportStrategy(LocalProjectImportStrategy localProjectImportStrategy) {
+    public void setLocalImportStrategy(Supplier<LocalProjectImportStrategy> localProjectImportStrategy) {
         controller.setLocalImportStrategy(localProjectImportStrategy);
     }
 
     @Override
-    public void setRemoteImportStrategy(SplitSourceProjectImportStrategy splitSourceProjectImportStrategy) {
+    public void setRemoteImportStrategy(Supplier<SplitSourceProjectImportStrategy> splitSourceProjectImportStrategy) {
         controller.setRemoteImportStrategy(splitSourceProjectImportStrategy);
     }
 

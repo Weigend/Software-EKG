@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
  * API the importer sends - the names of the metrics, the series of a metric, and a query for
  * the values of one series over a range - with series a test can count.
  * <p>
- * It has {@link #METRICS} for each of {@link #INSTANCES}, and {@link #POINTS} values of every
+ * It has {@link #METRICS} for each of its machines, and {@link #POINTS} values of every
  * series: one a minute, the last one now.
  */
 public final class PrometheusStub implements AutoCloseable {
@@ -32,10 +33,18 @@ public final class PrometheusStub implements AutoCloseable {
 
     private static final Pattern INSTANCE = Pattern.compile("instance=\"([^\"]+)\"");
 
+    private final List<String> instances;
     private final HttpServer server;
+    private volatile CountDownLatch held = new CountDownLatch(0);
     private final List<String> requests = new CopyOnWriteArrayList<>();
 
     public PrometheusStub() {
+        this(INSTANCES);
+    }
+
+    /** @param instances the names of the machines the server has series of */
+    public PrometheusStub(List<String> instances) {
+        this.instances = instances;
         try {
             server = HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);
         } catch (IOException e) {
@@ -53,6 +62,23 @@ public final class PrometheusStub implements AutoCloseable {
         server.start();
     }
 
+    /** Lets the server wait with its answers about series until {@link #release()}. */
+    public void hold() {
+        held = new CountDownLatch(1);
+    }
+
+    public void release() {
+        held.countDown();
+    }
+
+    private void awaitRelease() {
+        try {
+            held.await();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
     /** @return the address to enter in the dialog of the importer */
     public String url() {
         return "http://127.0.0.1:" + server.getAddress().getPort();
@@ -65,16 +91,18 @@ public final class PrometheusStub implements AutoCloseable {
 
     @Override
     public void close() {
+        release();
         server.stop(0);
     }
 
     private String series(String metric) {
+        awaitRelease();
         String name = metric == null ? "" : metric.replaceAll("\\{.*", "");
         if (!METRICS.contains(name)) {
             return "{\"status\":\"success\",\"data\":[]}";
         }
         return "{\"status\":\"success\",\"data\":["
-                + INSTANCES.stream().map(instance -> labels(name, instance)).collect(Collectors.joining(","))
+                + instances.stream().map(instance -> labels(name, instance)).collect(Collectors.joining(","))
                 + "]}";
     }
 

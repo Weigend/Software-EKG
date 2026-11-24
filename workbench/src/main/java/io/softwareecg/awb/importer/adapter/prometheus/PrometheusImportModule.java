@@ -103,6 +103,6 @@ public class PrometheusImportModule extends ImportModule implements SplitSourceP
         if (importDialog == null) {
             getImportDialog();
         }
-        return new PrometheusLocalImportStrategy(importDialog.getImportSourceRepositoryProperty()::getValue);
+        return new PrometheusLocalImportStrategy(importDialog.getImportSourceRepositoryProperty().getValue());
     }
 }

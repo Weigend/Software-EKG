@@ -7,6 +7,7 @@ import io.softwareecg.awb.importer.framework.SplitSourceProjectImportStrategy;
 import io.softwareecg.awb.importer.ui.dialogs.ImportDialog;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 
 /**
@@ -68,12 +69,12 @@ public class FileImportDialog extends ImportDialog {
     }
 
     @Override
-    public void setLocalImportStrategy(LocalProjectImportStrategy localProjectImportStrategy) {
+    public void setLocalImportStrategy(Supplier<LocalProjectImportStrategy> localProjectImportStrategy) {
         controller.setLocalImportStrategy(localProjectImportStrategy);
     }
 
     @Override
-    public void setRemoteImportStrategy(SplitSourceProjectImportStrategy splitSourceProjectImportStrategy) {
+    public void setRemoteImportStrategy(Supplier<SplitSourceProjectImportStrategy> splitSourceProjectImportStrategy) {
         controller.setRemoteImportStrategy(splitSourceProjectImportStrategy);
     }
 

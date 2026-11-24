@@ -14,7 +14,6 @@ import io.softwareecg.awb.importer.model.RawSeriesData;
 import io.softwareecg.awb.importer.model.SeriesData;
 import io.softwareecg.awb.timeseries.Value;
 import io.softwareecg.awb.importer.framework.LocalProjectImportStrategy;
-import io.softwareecg.awb.importer.framework.LocalProjectImportTask;
 import io.softwareecg.awb.importer.framework.steps.mapper.RawToSeriesDataMapper;
 import org.slf4j.Logger;
 
@@ -22,7 +21,6 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.function.Supplier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -65,7 +63,7 @@ public class PrometheusLocalImportStrategy extends LocalProjectImportStrategy {
     private static final DateTimeFormatter MEASUREMENT_FORMATTER = 
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").withZone(ZoneId.systemDefault());
 
-    private final Supplier<TimeSeriesImportSource> sourceRepository;
+    private final TimeSeriesImportSource sourceRepository;
 
     private PrometheusClient prometheusClient;
 
@@ -83,43 +81,31 @@ public class PrometheusLocalImportStrategy extends LocalProjectImportStrategy {
 
     /**
      * The TimeSeriesWriteService used for delta import to query the last import timestamp.
-     * Set in {@link #createImportTask(TimeSeriesWriteService, TargetProjectConfig)}.
+     * Set in {@link #readRawSeriesData(TargetProjectConfig, TimeSeriesWriteService)}.
      */
     private TimeSeriesWriteService importService;
 
     /**
      * The project configuration containing delta import settings.
-     * Set in {@link #createImportTask(TimeSeriesWriteService, TargetProjectConfig)}.
+     * Set in {@link #readRawSeriesData(TargetProjectConfig, TimeSeriesWriteService)}.
      */
     private TargetProjectConfig projectConfig;
 
     /**
      * Constructs a new PrometheusLocalImportStrategy.
      *
-     * @param sourceRepository provides the source repository configuration (URL, auth
-     *                         credentials) that is set in the import dialog when the import
-     *                         runs. A supplier, not a JavaFX property: this is business
-     *                         logic and knows nothing of the user interface.
+     * @param sourceRepository the source repository configuration (URL, auth credentials) as it
+     *                         was in the import dialog when the import was started
      */
-    public PrometheusLocalImportStrategy(Supplier<TimeSeriesImportSource> sourceRepository) {
+    public PrometheusLocalImportStrategy(TimeSeriesImportSource sourceRepository) {
         this.sourceRepository = sourceRepository;
     }
 
-    /**
-     * Overrides the default factory method to store the import service and project configuration
-     * for delta import support. These references are needed in {@link #calculateImportTimeRange()}
-     * to query Solr for the last imported timestamp.
-     */
     @Override
-    public LocalProjectImportTask createImportTask(TimeSeriesWriteService importService, TargetProjectConfig projectConfiguration) {
+    public Stream<RawSeriesData> readRawSeriesData(TargetProjectConfig project, TimeSeriesWriteService importService) {
+        // needed in calculateImportTimeRange() to ask for the last imported timestamp
+        this.projectConfig = project;
         this.importService = importService;
-        this.projectConfig = projectConfiguration;
-        return super.createImportTask(importService, projectConfiguration);
-    }
-
-    @Override
-    public Stream<RawSeriesData> readRawSeriesData() {
-        TimeSeriesImportSource sourceRepository = this.sourceRepository.get();
 
         if (sourceRepository == null) {
             LOGGER.error("No source repository configuration available for Prometheus import");
