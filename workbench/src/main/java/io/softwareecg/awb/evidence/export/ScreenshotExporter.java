@@ -3,6 +3,8 @@ package io.softwareecg.awb.evidence.export;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import javafx.scene.layout.Region;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.geometry.Bounds;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
@@ -23,6 +25,8 @@ import java.io.IOException;
 public class ScreenshotExporter {
 
     private static final double PREFERED_AXIS_CHART_WITH_RATIO = 28.0;
+
+    private static final int MAX_ATTEMPTS_TO_FIT = 5;
 
     /**
      * Logger used by this instance to persist errors
@@ -85,40 +89,28 @@ public class ScreenshotExporter {
             double targetWidth = dimension.getDimensionWidth();
             double targetHeight = dimension.getDimensionHeight();
 
-            double currentWidth = chartComponent.getWidth();
-            double currentHeight = chartComponent.getHeight();
-
-            double currentMaxWidth = chartComponent.getMaxWidth();
-            double currentMaxHeight = chartComponent.getMaxHeight();
-
-            double currentMinWidth = chartComponent.getMinWidth();
-            double currentMinHeight = chartComponent.getMinHeight();
-
             double axisChartWidthRatio = targetWidth / axisWidth;
 
             double scaleFactor = axisChartWidthRatio / PREFERED_AXIS_CHART_WITH_RATIO;
             scaleFactor = Math.round(scaleFactor * 100.0) / 100.0;
 
-            targetHeight /= scaleFactor;
-            targetWidth /= scaleFactor;
-
-            chartComponent.setMaxHeight(targetHeight);
-            chartComponent.setMinHeight(targetHeight);
-            chartComponent.setMaxWidth(targetWidth);
-            chartComponent.setMinWidth(targetWidth);
-
             snapshotParameters.setTransform(Transform.scale(scaleFactor, scaleFactor));
 
-            image = chartComponent.snapshot(snapshotParameters, null);
+            double currentWidth = chartComponent.getWidth();
+            double currentHeight = chartComponent.getHeight();
+            // out of the layout of the window, which would give it its size back or make room for it
+            chartComponent.setManaged(false);
+            try {
+                fitInto(targetWidth / scaleFactor, targetHeight / scaleFactor, 1 / scaleFactor);
 
-            chartComponent.setPrefWidth(currentWidth);
-            chartComponent.setPrefHeight(currentHeight);
-
-            chartComponent.setMinWidth(currentMinWidth);
-            chartComponent.setMinHeight(currentMinHeight);
-
-            chartComponent.setMaxWidth(currentMaxWidth);
-            chartComponent.setMaxHeight(currentMaxHeight);
+                Bounds bounds = chartComponent.getBoundsInParent();
+                snapshotParameters.setViewport(new Rectangle2D(Math.floor(bounds.getMinX() * scaleFactor),
+                        Math.floor(bounds.getMinY() * scaleFactor), targetWidth, targetHeight));
+                image = chartComponent.snapshot(snapshotParameters, new WritableImage((int) targetWidth, (int) targetHeight));
+            } finally {
+                chartComponent.resize(currentWidth, currentHeight);
+                chartComponent.setManaged(true);
+            }
 
         } else {
             image = chartComponent.snapshot(snapshotParameters, null);
@@ -132,6 +124,32 @@ public class ScreenshotExporter {
             ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", exportFile);
         } catch (IOException e) {
             LOGGER.error("Error occurred during save the screenshot", e);
+        }
+    }
+
+    /**
+     * Gives the chart a size in which all of it fits into the size of the picture. The chart is
+     * larger than its own size says: the label at the end of the time axis sticks out of it. By how
+     * much is known when it is laid out, and may change when the chart gets smaller.
+     *
+     * @param pixel the size of a pixel of the picture, which the picture may be shifted by
+     */
+    private void fitInto(double width, double height, double pixel) {
+        double chartWidth = width;
+        double chartHeight = height;
+        for (int attempt = 0; attempt < MAX_ATTEMPTS_TO_FIT; attempt++) {
+            chartComponent.resize(chartWidth, chartHeight);
+            chartComponent.applyCss();
+            chartComponent.layout();
+
+            Bounds bounds = chartComponent.getBoundsInParent();
+            double tooWide = bounds.getWidth() + pixel - width;
+            double tooHigh = bounds.getHeight() + pixel - height;
+            if (tooWide <= 0 && tooHigh <= 0) {
+                return;
+            }
+            chartWidth -= Math.max(0, tooWide);
+            chartHeight -= Math.max(0, tooHigh);
         }
     }
 }

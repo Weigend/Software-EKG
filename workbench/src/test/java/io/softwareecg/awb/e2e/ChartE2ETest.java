@@ -30,6 +30,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -43,6 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -221,16 +224,36 @@ class ChartE2ETest {
         assertThat(pixelsLike(image, line)).as("pixels in the colour of the line, " + line).isGreaterThan(100);
     }
 
-    /** A picture of a chosen size has this size, whatever the size of the chart, which keeps its own. */
-    @Test
-    void aPictureOfAChosenSizeIsSaved() throws IOException {
+    /**
+     * A picture of a chosen size has exactly this size, whatever the size of the chart, which keeps
+     * its own. All of the chart is in it: the label at the end of the time axis, which sticks out of
+     * the chart, is there and not cut off.
+     */
+    @ParameterizedTest
+    @CsvSource({"Full-HD, 1920, 1080", "UXGA, 1600, 1200", "WUXGA, 1920, 1200", "WQHD, 2560, 1440", "QHD+, 3440, 1440",
+            "UHD 4K, 3840, 2160", "Wide 1, 2000, 625", "Wide 2, 4000, 1250"})
+    void aPictureOfAChosenSizeIsSaved(String size, int width, int height) throws IOException {
         double widthOfTheChart = workbench.onFx(() -> stackedChart().getWidth());
-        BufferedImage image = saveAsPicture("chart-full-hd.png", "Full-HD");
-        assertThat(image.getWidth()).as("width").isBetween(1920 - 4, 1920 + 150);
-        assertThat(image.getHeight()).as("height").isBetween(1080 - 4, 1080 + 4);
+        BufferedImage image = saveAsPicture("chart " + size + ".png", size);
+        assertThat(image.getWidth()).as("width").isEqualTo(width);
+        assertThat(image.getHeight()).as("height").isEqualTo(height);
         Color line = workbench.onFx(() -> stackedChart().getBaseChart().getAllColoredSeries().get(0).getColor());
         assertThat(pixelsLike(image, line)).as("pixels in the colour of the line, " + line).isGreaterThan(100);
+        assertThat(darkestOfColumn(image, width - 1)).as("what is at the edge on the right").isGreaterThan(240);
+        assertThat(IntStream.range(width - 12, width).map(column -> darkestOfColumn(image, column)).min().orElseThrow())
+                .as("the label at the end of the time axis, beside the edge").isLessThan(225);
+        assertThat(darkestOfColumn(image, 0)).as("what is at the edge on the left").isGreaterThan(240);
         assertThat(workbench.onFx(() -> stackedChart().getWidth())).as("the chart on the screen").isEqualTo(widthOfTheChart);
+    }
+
+    /** How bright the darkest pixel of a column is: 255 is white. */
+    private static int darkestOfColumn(BufferedImage image, int column) {
+        int darkest = 255;
+        for (int y = 0; y < image.getHeight(); y++) {
+            java.awt.Color pixel = new java.awt.Color(image.getRGB(column, y));
+            darkest = Math.min(darkest, Math.min(pixel.getRed(), Math.min(pixel.getGreen(), pixel.getBlue())));
+        }
+        return darkest;
     }
 
     /** @param size what the name of the size begins with, {@code null} for the one that is chosen */
