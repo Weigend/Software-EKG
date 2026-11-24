@@ -19,7 +19,7 @@
 
     <!-- global properties for the whole project  -->
     <properties>
-        <revision>7.5.0-SNAPSHOT</revision>
+        <revision>7.5.0</revision>
         <!-- what a build is made from, shown next to the version; a build server passes
              -Dbuild.revision=<commit> -->
         <build.revision>local</build.revision>
