@@ -9,13 +9,11 @@ import io.softwareecg.awb.bookmark.model.Bookmark;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
 import io.softwareecg.awb.bookmark.model.MetricQueryBookmark;
 import io.avaje.inject.External;
-import io.softwareecg.awb.runtime.logging.EkgLogger;
-import io.softwareecg.wfx.lookup.api.Lookup;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import org.slf4j.Logger;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -26,8 +24,6 @@ import java.util.stream.Collectors;
  */
 @Singleton
 public class MetricsBookmarkServiceImpl implements MetricsBookmarkService {
-
-    private final Logger LOGGER = EkgLogger.get();
 
     private final BookmarkStore bookmarkStore;
 
@@ -47,13 +43,27 @@ public class MetricsBookmarkServiceImpl implements MetricsBookmarkService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public void persistNewBookmark(Bookmark bookmark) {
-        if (bookmark instanceof MetricQueryBookmark queryBookmark) {
-            bookmarkStore.insertQueryBookmark(toQueryBookmarkRow(queryBookmark));
-            return;
+    /**
+     * Stores a new bookmark, and its group if that is new as well.
+     *
+     * @param bookmark the bookmark
+     * @param group    the group the user chose for it
+     */
+    public void persistNewBookmark(MetricQueryBookmark bookmark, BookmarkGroup group) {
+
+        if (group.isNew() && !group.isEmptyGroup()) {
+            group.setId(UUID.randomUUID().toString());
+            persistNewBookmarkGroup(group);
+            bookmark.setBookmarkGroupId(group.getId());
         }
-        LOGGER.warn("Unsupported bookmark type for H2 persistence: {}", bookmark.getClass().getName());
+
+        // a group says which project its bookmarks belong to: none, if it is a global one.
+        // Without a group the bookmark stays with the project it was made in.
+        if (!group.isEmptyGroup()) {
+            bookmark.setProject(group.getProjectName());
+        }
+
+        bookmarkStore.insertQueryBookmark(toQueryBookmarkRow(bookmark));
     }
 
     @Override
@@ -81,12 +91,10 @@ public class MetricsBookmarkServiceImpl implements MetricsBookmarkService {
                 .collect(Collectors.toList());
     }
 
-    @Override
     public void persistNewBookmarkGroup(BookmarkGroup bookmarkGroup) {
         bookmarkStore.insertGroup(toGroupRow(bookmarkGroup));
     }
 
-    @Override
     public void deleteBookmarkGroup(String groupId) {
         bookmarkStore.deleteGroup(groupId);
     }

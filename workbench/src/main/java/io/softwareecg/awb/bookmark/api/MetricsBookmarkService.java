@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * An interface that represents a bookmark service that provides
- * various methods to create, update, delete und query bookmarks.
+ * various methods to query and delete bookmarks. They are made in the {@link BookmarkDialogs}.
  *
  */
 public interface MetricsBookmarkService {
@@ -30,8 +30,7 @@ public interface MetricsBookmarkService {
     // ------------------------------------------------------------------------------------------------------
 
     /**
-     * Returns a sorted list of query-based bookmarks that are related to the specified bookmark group.
-     * Semantics are the same as {@link #getMetricBookmarks(String)}.
+     * Returns a sorted list of the bookmarks that are related to the specified bookmark group.
      *
      * @param bookmarkGroupId the unique id of the bookmark group
      * @return a list of MetricQueryBookmark instances
@@ -41,13 +40,6 @@ public interface MetricsBookmarkService {
     // ------------------------------------------------------------------------------------------------------
     // generic bookmark actions
     // ------------------------------------------------------------------------------------------------------
-
-    /**
-     * Stores a bookmark for the query context.
-     *
-     * @param bookmark the new bookmark to store.
-     */
-    void persistNewBookmark(Bookmark bookmark);
 
     /**
      * Deletes a bookmark.
@@ -76,23 +68,5 @@ public interface MetricsBookmarkService {
      * @return a sorted list of BookmarkGroup items for the given project
      */
     List<BookmarkGroup> getBookmarkGroupsByProject(String projectName);
-
-    /**
-     * Creates a new BookmarkGroup record in the repository.
-     * The id of the given instance will used for consistency checks.
-     * If not available the procedure will fail. The same if already an bookmark exists with that id.
-     *
-     * @param bookmarkGroup the bookmark group item to persist
-     */
-    void persistNewBookmarkGroup(BookmarkGroup bookmarkGroup);
-
-    /**
-     * Deletes a BookmarkGroup and all corresponding (Metric)Bookmarks.
-     * The method will return true if all objects deleted successfully.
-     * False if no bookmark group with the specified id exists.
-     *
-     * @param bookmarkId the unique id of the bookmark group to delete
-     */
-    void deleteBookmarkGroup(String bookmarkId);
 
 }

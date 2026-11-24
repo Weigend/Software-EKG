@@ -17,7 +17,6 @@ import io.softwareecg.awb.runtime.di.BeanProvider;
 import io.softwareecg.awb.bookmark.api.MetricsBookmarkService;
 import io.softwareecg.awb.bookmark.model.Bookmark;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
-import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -53,8 +52,6 @@ public class CreateBookmarkDialog<T extends Bookmark> extends Dialog<BookmarkCre
 
     private final Bookmark.Builder<T> bookmarkBuilder;
 
-    private final Repository targetRepository;
-
     @FXML
     private TextField bookmarkName;
 
@@ -65,10 +62,9 @@ public class CreateBookmarkDialog<T extends Bookmark> extends Dialog<BookmarkCre
      * Initialize a new create bookmark dialog.
      *
      * @param bookmarkBuilder The builder instance to create the concrete bookmark instance.
-     * @param repository the repository used to store the bookmark
      * @param projectName the current project name (used to filter bookmark groups), may be null for global context
      */
-    public CreateBookmarkDialog(Bookmark.Builder<T> bookmarkBuilder, Repository repository, String projectName) {
+    public CreateBookmarkDialog(Bookmark.Builder<T> bookmarkBuilder, String projectName) {
 
         this.bookmarkBuilder = bookmarkBuilder;
 
@@ -125,7 +121,6 @@ public class CreateBookmarkDialog<T extends Bookmark> extends Dialog<BookmarkCre
             bookmarkName.textProperty().addListener(observable -> applyButton.setDisable(!isValid()));
 
             bookmarkName.requestFocus();
-            targetRepository = repository;
         } catch (IOException e) {
             throw new IllegalStateException("Can not load fxml file for CreateBookmarkDialog", e);
         }
@@ -149,27 +144,18 @@ public class CreateBookmarkDialog<T extends Bookmark> extends Dialog<BookmarkCre
     }
 
     /**
-     * Get the target types.
-     *
-     * @return the target types.
-     */
-    public Repository getTargetRepository() {
-        return targetRepository;
-    }
-
-    /**
      * Check if the current dialog state is valid.
      *
      * @return true if the dialog is valid. false otherwise.
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean isValid() {
-        return StringUtils.isNotBlank(bookmarkName.getText()) && targetRepository != null;
+        return StringUtils.isNotBlank(bookmarkName.getText());
     }
 
     private BookmarkCreationResult<T> createBookmark(ButtonType buttonType) {
 
-        if (buttonType != ButtonType.APPLY || getTargetRepository() == null || StringUtils.isBlank(bookmarkName.getText())) {
+        if (buttonType != ButtonType.APPLY || StringUtils.isBlank(bookmarkName.getText())) {
             return null;
         }
 

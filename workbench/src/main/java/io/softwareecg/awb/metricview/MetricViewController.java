@@ -19,6 +19,7 @@ import io.softwareecg.awb.uitoolkit.events.OpeningMode;
 import io.softwareecg.awb.query.model.SeriesCombineMode;
 import io.softwareecg.awb.query.model.SeriesSmoothingGranularity;
 import io.softwareecg.awb.query.model.SeriesSmoothingType;
+import io.softwareecg.awb.bookmark.api.BookmarkDialogs;
 import io.softwareecg.awb.bookmark.api.MetricsBookmarkService;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
 import io.softwareecg.awb.bookmark.model.MetricQueryBookmark;
@@ -27,7 +28,6 @@ import io.softwareecg.awb.query.api.OpenInvestigationCommand;
 import io.softwareecg.awb.query.model.ComputationSpec;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.bookmark.ui.BookmarkEvent;
-import io.softwareecg.awb.bookmark.ui.CreateBookmarkDialog;
 import io.softwareecg.awb.evidence.export.ExcelExportSeriesData;
 import io.softwareecg.awb.evidence.export.ExcelExporter;
 import io.softwareecg.awb.evidence.export.ScreenshotExportDialog;
@@ -939,36 +939,18 @@ public class MetricViewController implements Initializable {
         @Override
         public void createBookmark() {
 
-            QuerySpec currentParams = getCurrentFilterParams();
-            MetricQueryBookmark.Builder bookmarkBuilder = new MetricQueryBookmark.Builder(currentParams);
-            bookmarkBuilder.withChartType(zoomableStackedChart.getBaseChart().getChartType().name());
+            // a bookmark is opened in the repository it was made in
+            if (viewModel.getEkgRepository() == null) {
+                return;
+            }
 
-            CreateBookmarkDialog<MetricQueryBookmark> dialog = new CreateBookmarkDialog<>(bookmarkBuilder, viewModel.getEkgRepository(), currentParams.getProjectName());
-            dialog.initOwner(chartHeaderController.getOwnerWindow());
-
-            dialog.showAndWait().ifPresent(bookmarkResultContainer -> {
-                MetricsBookmarkService service = Lookup.lookup(MetricsBookmarkService.class);
-
-                BookmarkGroup bookmarkGroup = bookmarkResultContainer.getBookmarkGroup();
-
-                // special case: user creates a new BookmarkGroup. In this case we need to persist it
-                // in addition to the bookmark itself
-                if (bookmarkGroup.isNew() && !bookmarkGroup.isEmptyGroup()) {
-                    bookmarkGroup.setId(UUID.randomUUID().toString());
-                    service.persistNewBookmarkGroup(bookmarkGroup);
-                    bookmarkResultContainer.getBookmark().setBookmarkGroupId(bookmarkGroup.getId());
-                }
-
-                // Project association: for explicit group selections use the group's project
-                // (null for global groups, projectName for project groups).
-                // Without a group (isEmptyGroup) the project from currentParams is kept (project bookmark).
-                if (!bookmarkGroup.isEmptyGroup()) {
-                    bookmarkResultContainer.getBookmark().setProject(bookmarkGroup.getProjectName());
-                }
-
-                service.persistNewBookmark(bookmarkResultContainer.getBookmark());
+            boolean created = Lookup.lookup(BookmarkDialogs.class).createBookmark(
+                    chartHeaderController.getOwnerWindow(),
+                    getCurrentFilterParams(),
+                    zoomableStackedChart.getBaseChart().getChartType().name());
+            if (created) {
                 eventBus.publish(new ExplorerUpdateEvent(this, viewModel.getEkgRepository()));
-            });
+            }
         }
 
         @Override

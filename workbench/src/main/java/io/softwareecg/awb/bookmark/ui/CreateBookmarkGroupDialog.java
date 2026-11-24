@@ -2,7 +2,6 @@ package io.softwareecg.awb.bookmark.ui;
 
 import io.softwareecg.awb.runtime.di.BeanProvider;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
-import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,8 +25,6 @@ import java.io.IOException;
  */
 public class CreateBookmarkGroupDialog extends Dialog<BookmarkGroup> {
 
-    private final Repository targetRepository;
-
     @FXML
     private TextField bookmarkGroupName;
 
@@ -36,7 +33,7 @@ public class CreateBookmarkGroupDialog extends Dialog<BookmarkGroup> {
      *
      * @param repository the repository used to store the bookmark
      */
-    public CreateBookmarkGroupDialog(Repository repository) {
+    public CreateBookmarkGroupDialog() {
 
         try {
             BeanProvider.injectFields(this);
@@ -74,7 +71,6 @@ public class CreateBookmarkGroupDialog extends Dialog<BookmarkGroup> {
 
             bookmarkGroupName.textProperty().addListener(observable -> applyButton.setDisable(!isValid()));
             bookmarkGroupName.requestFocus();
-            targetRepository = repository;
         } catch (IOException e) {
             throw new IllegalStateException("Can not load fxml file for CreateBookmarkDialog", e);
         }
@@ -90,27 +86,18 @@ public class CreateBookmarkGroupDialog extends Dialog<BookmarkGroup> {
     }
 
     /**
-     * Get the target types.
-     *
-     * @return the target types.
-     */
-    public Repository getTargetRepository() {
-        return targetRepository;
-    }
-
-    /**
      * Check if the current dialog state is valid.
      *
      * @return true if the dialog is valid. false otherwise.
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean isValid() {
-        return StringUtils.isNotBlank(bookmarkGroupName.getText()) && targetRepository != null;
+        return StringUtils.isNotBlank(bookmarkGroupName.getText());
     }
 
     private BookmarkGroup createBookmarkGroup(ButtonType buttonType) {
 
-        if (buttonType != ButtonType.APPLY || getTargetRepository() == null || StringUtils.isBlank(bookmarkGroupName.getText())) {
+        if (buttonType != ButtonType.APPLY || StringUtils.isBlank(bookmarkGroupName.getText())) {
             return null;
         }
 

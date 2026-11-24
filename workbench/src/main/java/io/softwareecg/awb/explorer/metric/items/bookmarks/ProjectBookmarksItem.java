@@ -2,17 +2,15 @@ package io.softwareecg.awb.explorer.metric.items.bookmarks;
 
 import io.softwareecg.awb.uitoolkit.view.AppWindowProvider;
 import io.softwareecg.awb.runtime.di.BeanProvider;
-import io.softwareecg.awb.bookmark.api.MetricsBookmarkService;
+import io.softwareecg.awb.bookmark.api.BookmarkDialogs;
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
-import io.softwareecg.awb.bookmark.ui.CreateBookmarkGroupDialog;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import jakarta.inject.Inject;
 
 import java.util.EventObject;
-import java.util.UUID;
 
 /**
  * Root item for bookmark groups and bookmarks that belong to a specific project.
@@ -25,6 +23,9 @@ public class ProjectBookmarksItem extends ContextAwareItem {
 
     @Inject
     private AppWindowProvider ownerWindowProvider;
+
+    @Inject
+    private BookmarkDialogs dialogs;
 
     private final EventBus<EventObject> eventBus;
 
@@ -57,16 +58,8 @@ public class ProjectBookmarksItem extends ContextAwareItem {
     }
 
     private void createBookmarkGroup() {
-        CreateBookmarkGroupDialog dialog = new CreateBookmarkGroupDialog(getRepository());
-        dialog.initOwner(ownerWindowProvider.getAppWindow());
-
-        dialog.showAndWait().ifPresent(bookmarkGroup -> {
-            MetricsBookmarkService service = getFilterContext().bookmarks();
-            bookmarkGroup.setId(UUID.randomUUID().toString());
-            bookmarkGroup.setProjectName(projectName);
-            service.persistNewBookmarkGroup(bookmarkGroup);
-
+        if (dialogs.createGroup(ownerWindowProvider.getAppWindow(), projectName)) {
             eventBus.publish(new ExplorerUpdateEvent(this, getRepository()));
-        });
+        }
     }
 }
