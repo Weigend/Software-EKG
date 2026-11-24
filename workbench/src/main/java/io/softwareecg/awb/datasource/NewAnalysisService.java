@@ -50,6 +50,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.softwareecg.awb.datasource.adapter.collector.CollectorConfigCompiler;
+import io.softwareecg.awb.datasource.adapter.prometheus.PrometheusConfigCompiler;
 import io.softwareecg.awb.datasource.adapter.collector.ProjectSeriesOutput;
 import io.softwareecg.awb.datasource.model.CollectionPlan;
 import io.softwareecg.awb.datasource.model.DataSourceInfo;
@@ -373,7 +374,7 @@ public class NewAnalysisService implements ProjectDataCollection {
             }
         }
 
-        source.config = CollectorConfigCompiler.withConnection(source.config, url.trim(), username, secretRef != null);
+        source.config = PrometheusConfigCompiler.withConnection(source.config, url.trim(), username, secretRef != null);
         source.endpoint = url.trim();
         source.secretRef = secretRef;
         parse(source, secretRef == null ? null : secretStore.read(secretRef));

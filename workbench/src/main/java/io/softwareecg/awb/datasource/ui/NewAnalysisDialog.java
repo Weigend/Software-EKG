@@ -1,6 +1,6 @@
 package io.softwareecg.awb.datasource.ui;
 
-import io.softwareecg.awb.datasource.model.AnalysisPlan;
+import io.softwareecg.awb.datasource.adapter.prometheus.PrometheusPlan;
 import io.softwareecg.awb.datasource.spi.AnalysisSourceDefinition;
 import io.softwareecg.awb.datasource.spi.AnalysisSourceOption;
 import io.softwareecg.awb.datasource.AnalysisSourceRegistry;
@@ -846,16 +846,16 @@ public class NewAnalysisDialog extends Dialog<Void> {
             return !chosen.isEmpty() || !furtherMetrics(chosen).isEmpty();
         }
 
-        AnalysisPlan.GroupSelection selection(Duration interval) {
+        PrometheusPlan.GroupSelection selection(Duration interval) {
             if (everything.isSelected()) {
-                return new AnalysisPlan.GroupSelection(group.name(), MetricProfile.everything(group, hostPattern()));
+                return new PrometheusPlan.GroupSelection(group.name(), MetricProfile.everything(group, hostPattern()));
             }
             List<MetricExpression> expressions = new ArrayList<>(chosenEssentials(interval));
             List<String> more = furtherMetrics(expressions);
             if (!more.isEmpty()) {
                 expressions.add(MetricProfile.metrics(group, hostPattern(), more));
             }
-            return new AnalysisPlan.GroupSelection(group.name(), expressions);
+            return new PrometheusPlan.GroupSelection(group.name(), expressions);
         }
     }
 
@@ -1007,13 +1007,13 @@ public class NewAnalysisDialog extends Dialog<Void> {
     /**
      * The plan for the Prometheus server, from what is selected on its page.
      */
-    private AnalysisPlan prometheusPlan(String projectName) {
+    private PrometheusPlan prometheusPlan(String projectName) {
         Duration interval = intervalBox.getValue();
-        List<AnalysisPlan.GroupSelection> selections = groupRows.stream()
+        List<PrometheusPlan.GroupSelection> selections = groupRows.stream()
                 .filter(row -> row.selected.isSelected())
                 .map(row -> row.selection(interval))
                 .collect(Collectors.toList());
-        return new AnalysisPlan(projectName, environment.url(),
+        return new PrometheusPlan(projectName, environment.url(),
                 blankToNull(usernameField.getText()), blankToNull(passwordField.getText()),
                 selections, lookbackBox.getValue(), interval);
     }

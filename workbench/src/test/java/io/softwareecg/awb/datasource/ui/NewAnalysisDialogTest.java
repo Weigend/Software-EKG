@@ -1,6 +1,6 @@
 package io.softwareecg.awb.datasource.ui;
 
-import io.softwareecg.awb.datasource.model.AnalysisPlan;
+import io.softwareecg.awb.datasource.adapter.prometheus.PrometheusPlan;
 import io.softwareecg.awb.datasource.spi.AnalysisSourceDefinition;
 import io.softwareecg.awb.datasource.spi.AnalysisSourceOption;
 import io.softwareecg.awb.datasource.spi.AnalysisSourceProvider;
@@ -180,7 +180,7 @@ public class NewAnalysisDialogTest {
         });
         await(() -> !service.started.isEmpty(), "the analysis to be started");
         assertEquals(List.of("node", "shop"), service.started.get(0).groups().stream()
-                .map(AnalysisPlan.GroupSelection::group).collect(Collectors.toList()));
+                .map(PrometheusPlan.GroupSelection::group).collect(Collectors.toList()));
     }
 
     @Test
@@ -454,7 +454,7 @@ public class NewAnalysisDialogTest {
         await(() -> !service.addedAny.isEmpty(), "the second source to be added");
 
         assertEquals(1, service.startedAny.size());
-        assertEquals("shop", ((AnalysisPlan) service.startedAny.get(0)).groups().get(0).group());
+        assertEquals("shop", ((PrometheusPlan) service.startedAny.get(0)).groups().get(0).group());
         SshPlan hosts = (SshPlan) service.addedAny.get(0);
         assertEquals("Zoo", hosts.projectName());
         assertEquals(2, hosts.hosts().size());
@@ -597,7 +597,7 @@ public class NewAnalysisDialogTest {
         });
         await(() -> !service.started.isEmpty(), "the analysis to be started");
 
-        AnalysisPlan plan = service.started.get(0);
+        PrometheusPlan plan = service.started.get(0);
         assertEquals("Shop", plan.projectName());
         assertEquals("http://prometheus.example:9090", plan.url());
         assertEquals(Duration.ofHours(24), plan.lookback());
@@ -889,8 +889,8 @@ public class NewAnalysisDialogTest {
     /** Stands in for the service: answers the discovery and records what the dialog asks for. */
     private static final class FakeService extends NewAnalysisService {
 
-        final List<AnalysisPlan> started = new CopyOnWriteArrayList<>();
-        final List<AnalysisPlan> added = new CopyOnWriteArrayList<>();
+        final List<PrometheusPlan> started = new CopyOnWriteArrayList<>();
+        final List<PrometheusPlan> added = new CopyOnWriteArrayList<>();
         /** Every plan started or added, of whatever source. */
         final List<CollectionPlan> startedAny = new CopyOnWriteArrayList<>();
         final List<CollectionPlan> addedAny = new CopyOnWriteArrayList<>();
@@ -921,7 +921,7 @@ public class NewAnalysisDialogTest {
         @Override
         public Project startAnalysis(CollectionPlan plan) {
             startedAny.add(plan);
-            if (plan instanceof AnalysisPlan prometheus) {
+            if (plan instanceof PrometheusPlan prometheus) {
                 started.add(prometheus);
             }
             return new Project(plan.projectName());
@@ -933,7 +933,7 @@ public class NewAnalysisDialogTest {
                 throw addFailure;
             }
             addedAny.add(plan);
-            if (plan instanceof AnalysisPlan prometheus) {
+            if (plan instanceof PrometheusPlan prometheus) {
                 added.add(prometheus);
             }
             return "source-id";

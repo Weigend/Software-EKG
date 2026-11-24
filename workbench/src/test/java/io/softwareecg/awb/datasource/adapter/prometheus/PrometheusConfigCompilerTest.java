@@ -1,6 +1,6 @@
-package io.softwareecg.awb.datasource.adapter.collector;
+package io.softwareecg.awb.datasource.adapter.prometheus;
 
-import io.softwareecg.awb.datasource.adapter.prometheus.MetricExpression;
+import io.softwareecg.awb.datasource.adapter.collector.CollectorConfigCompiler;
 import io.softwareecg.collector.config.CollectorConfiguration;
 import io.softwareecg.collector.config.CollectorConfigurations;
 import io.softwareecg.collector.dt.ClassicCollectorJobConfiguration;
@@ -14,25 +14,24 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import io.softwareecg.awb.datasource.model.AnalysisPlan;
 /**
  * The compiled configuration must be one the collector accepts and understands as intended.
  */
-public class CollectorConfigCompilerTest {
+public class PrometheusConfigCompilerTest {
 
     @Test
     public void planBecomesOneCollectorJobPerSelectedGroup() throws Exception {
-        AnalysisPlan plan = new AnalysisPlan("Shop <Prod> & \"Test\"", "http://prometheus.example:9090", "analyst", "s3cr&t",
+        PrometheusPlan plan = new PrometheusPlan("Shop <Prod> & \"Test\"", "http://prometheus.example:9090", "analyst", "s3cr&t",
                 List.of(
-                        new AnalysisPlan.GroupSelection("node", List.of(
+                        new PrometheusPlan.GroupSelection("node", List.of(
                                 new MetricExpression("cpu_usage_percent",
                                         "100 * (1 - avg by (job, instance) (rate(node_cpu_seconds_total{job=\"node\",mode=\"idle\"}[120s])))"),
                                 new MetricExpression(null, "node_load1{job=\"node\"}"))),
-                        new AnalysisPlan.GroupSelection("orderservice", List.of(
+                        new PrometheusPlan.GroupSelection("orderservice", List.of(
                                 new MetricExpression(null, "process_cpu_usage{job=\"orderservice\"}")))),
                 Duration.ofHours(24), Duration.ofSeconds(60));
 
-        String yaml = CollectorConfigCompiler.toYaml(plan);
+        String yaml = PrometheusConfigCompiler.toYaml(plan);
         assertFalse("the password never goes into the configuration", yaml.contains("s3cr"));
         assertTrue(yaml.contains(CollectorConfigCompiler.SECRET_PLACEHOLDER));
 
@@ -61,11 +60,11 @@ public class CollectorConfigCompilerTest {
 
     @Test
     public void planWithoutPasswordHasNoPlaceholder() {
-        AnalysisPlan plan = new AnalysisPlan("Open", "http://prometheus.example:9090", null, null,
-                List.of(new AnalysisPlan.GroupSelection("node", List.of(new MetricExpression(null, "up{job=\"node\"}")))),
+        PrometheusPlan plan = new PrometheusPlan("Open", "http://prometheus.example:9090", null, null,
+                List.of(new PrometheusPlan.GroupSelection("node", List.of(new MetricExpression(null, "up{job=\"node\"}")))),
                 Duration.ofHours(1), Duration.ofSeconds(60));
 
-        String yaml = CollectorConfigCompiler.toYaml(plan);
+        String yaml = PrometheusConfigCompiler.toYaml(plan);
 
         assertFalse(yaml.contains("password"));
         assertNull(CollectorConfigurations.fromString(yaml).getClassicCollectorJobConfiguration().get(0).getPassword());
@@ -73,12 +72,12 @@ public class CollectorConfigCompilerTest {
 
     @Test
     public void connectionCanBeChangedWithoutTouchingWhatIsCollected() {
-        AnalysisPlan plan = new AnalysisPlan("Shop", "http://old.example:9090", "olduser", "oldsecret",
-                List.of(new AnalysisPlan.GroupSelection("node", List.of(new MetricExpression(null, "up{job=\"node\"}")))),
+        PrometheusPlan plan = new PrometheusPlan("Shop", "http://old.example:9090", "olduser", "oldsecret",
+                List.of(new PrometheusPlan.GroupSelection("node", List.of(new MetricExpression(null, "up{job=\"node\"}")))),
                 Duration.ofHours(1), Duration.ofSeconds(60));
-        String yaml = CollectorConfigCompiler.toYaml(plan);
+        String yaml = PrometheusConfigCompiler.toYaml(plan);
 
-        String moved = CollectorConfigCompiler.withConnection(yaml, "https://new.example/prom?a=1&b=2", "ana \"lyst\"", true);
+        String moved = PrometheusConfigCompiler.withConnection(yaml, "https://new.example/prom?a=1&b=2", "ana \"lyst\"", true);
         ClassicCollectorJobConfiguration job = CollectorConfigurations.fromString(CollectorConfigCompiler.withSecret(moved, "new"))
                 .getClassicCollectorJobConfiguration().get(0);
         assertEquals("https://new.example/prom?a=1&b=2", job.getNodeAddress());
@@ -86,7 +85,7 @@ public class CollectorConfigCompilerTest {
         assertEquals("new", job.getPassword());
         assertEquals("up{job=\"node\"}", job.getMetricDefinitions()[0].getDefinition());
 
-        String open = CollectorConfigCompiler.withConnection(yaml, "http://new.example:9090", null, false);
+        String open = PrometheusConfigCompiler.withConnection(yaml, "http://new.example:9090", null, false);
         assertFalse(open.contains("password"));
         assertFalse(open.contains("username"));
     }
@@ -135,7 +134,7 @@ public class CollectorConfigCompilerTest {
         assertTrue(exported.contains(CollectorConfigCompiler.SECRET_PLACEHOLDER));
         assertEquals(CollectorConfigurations.read(stored), CollectorConfigurations.read(exported));
 
-        String moved = CollectorConfigCompiler.withConnection(stored, "http://new.example:9090", null, false);
+        String moved = PrometheusConfigCompiler.withConnection(stored, "http://new.example:9090", null, false);
         assertFalse(CollectorConfigurations.isLegacyXml(moved));
         assertEquals("http://new.example:9090",
                 CollectorConfigurations.fromString(moved).getClassicCollectorJobConfiguration().get(0).getNodeAddress());
@@ -143,8 +142,8 @@ public class CollectorConfigCompilerTest {
 
     @Test
     public void theConfigurationIsWrittenAsOneWouldWriteItByHand() {
-        AnalysisPlan plan = new AnalysisPlan("Shop", "http://prometheus.example:9090", "analyst", "s3cret",
-                List.of(new AnalysisPlan.GroupSelection("node", List.of(new MetricExpression("load_1m", "node_load1{job=\"node\"}")))),
+        PrometheusPlan plan = new PrometheusPlan("Shop", "http://prometheus.example:9090", "analyst", "s3cret",
+                List.of(new PrometheusPlan.GroupSelection("node", List.of(new MetricExpression("load_1m", "node_load1{job=\"node\"}")))),
                 Duration.ofHours(1), Duration.ofSeconds(15));
 
         assertEquals("""
@@ -177,6 +176,6 @@ public class CollectorConfigCompilerTest {
                     hostGroup: prometheus
                     interval: 15s
                     expandInterval: 150s
-                """, CollectorConfigCompiler.toYaml(plan));
+                """, PrometheusConfigCompiler.toYaml(plan));
     }
 }

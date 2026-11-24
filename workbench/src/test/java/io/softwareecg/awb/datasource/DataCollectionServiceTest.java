@@ -38,7 +38,7 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import io.softwareecg.awb.datasource.model.AnalysisPlan;
+import io.softwareecg.awb.datasource.adapter.prometheus.PrometheusPlan;
 import io.softwareecg.awb.datasource.model.DataSourceInfo;
 import io.softwareecg.awb.datasource.model.SeriesEnds;
 /**
@@ -171,7 +171,7 @@ public class DataCollectionServiceTest {
     @Test
     public void anAnalysisCanHaveSeveralSources() {
         service.startAnalysis(plan("Shop", null));
-        String second = service.addSource(new AnalysisPlan("Shop", "http://other.example:9090", null, "token",
+        String second = service.addSource(new PrometheusPlan("Shop", "http://other.example:9090", null, "token",
                 plan("Shop", null).groups(), Duration.ofHours(1), Duration.ofSeconds(60)));
 
         assertEquals(2, sources.listByProject("Shop").size());
@@ -190,9 +190,9 @@ public class DataCollectionServiceTest {
     @Test
     public void everySourceOfAnAnalysisStoresItsSeriesUnderANameOfItsOwn() {
         service.startAnalysis(plan("Shop", null));
-        String second = service.addSource(new AnalysisPlan("Shop", "http://other.example:9090", null, null,
+        String second = service.addSource(new PrometheusPlan("Shop", "http://other.example:9090", null, null,
                 plan("Shop", null).groups(), Duration.ofHours(1), Duration.ofSeconds(60)));
-        String third = service.addSource(new AnalysisPlan("Shop", "https://other.example/prometheus", null, null,
+        String third = service.addSource(new PrometheusPlan("Shop", "https://other.example/prometheus", null, null,
                 plan("Shop", null).groups(), Duration.ofHours(1), Duration.ofSeconds(60)));
 
         assertEquals("the first source keeps the plain name", "live", sources.listByProject("Shop").get(0).seriesNamespace);
@@ -283,7 +283,7 @@ public class DataCollectionServiceTest {
                 ProjectDataCollection.State.NONE, service.statusOf("Shop").state());
 
         service.startAnalysis(plan("Shop", "s3cret"));
-        service.addSource(new AnalysisPlan("Shop", "http://other.example:9090", null, null,
+        service.addSource(new PrometheusPlan("Shop", "http://other.example:9090", null, null,
                 plan("Shop", null).groups(), Duration.ofHours(1), Duration.ofSeconds(60)));
         assertEquals(2, service.statusOf("Shop").sourceCount());
         assertEquals("other projects are not affected", ProjectDataCollection.State.NONE, service.statusOf("Billing").state());
@@ -305,9 +305,9 @@ public class DataCollectionServiceTest {
         assertEquals(ProjectDataCollection.Status.NONE, service.statusOf("Shop"));
     }
 
-    private static AnalysisPlan plan(String name, String password) {
-        return new AnalysisPlan(name, "http://prometheus.example:9090", password == null ? null : "analyst", password,
-                List.of(new AnalysisPlan.GroupSelection("node", List.of(new MetricExpression(null, "up{job=\"node\"}")))),
+    private static PrometheusPlan plan(String name, String password) {
+        return new PrometheusPlan(name, "http://prometheus.example:9090", password == null ? null : "analyst", password,
+                List.of(new PrometheusPlan.GroupSelection("node", List.of(new MetricExpression(null, "up{job=\"node\"}")))),
                 Duration.ofHours(24), Duration.ofSeconds(60));
     }
 

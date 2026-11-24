@@ -1,13 +1,12 @@
-package io.softwareecg.awb.datasource.model;
+package io.softwareecg.awb.datasource.adapter.prometheus;
 
-import io.softwareecg.awb.datasource.adapter.prometheus.MetricExpression;
+import io.softwareecg.awb.datasource.model.CollectionPlan;
 import io.softwareecg.collector.source.prometheus.PrometheusCounterSource;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import io.softwareecg.awb.datasource.adapter.collector.CollectorConfigCompiler;
 /**
  * What the user decided when starting an analysis on a Prometheus environment: where the data
  * comes from, which groups of systems are of interest, what to collect for each, how far back
@@ -21,7 +20,7 @@ import io.softwareecg.awb.datasource.adapter.collector.CollectorConfigCompiler;
  * @param lookback    how much existing history the first fill brings in
  * @param interval    the time between two values of a series, and between two updates
  */
-public record AnalysisPlan(String projectName, String url, String username, String password,
+public record PrometheusPlan(String projectName, String url, String username, String password,
                            List<GroupSelection> groups, Duration lookback, Duration interval) implements CollectionPlan {
 
     /**
@@ -48,7 +47,7 @@ public record AnalysisPlan(String projectName, String url, String username, Stri
 
     @Override
     public String toCollectorConfig(String storedProjectName) {
-        return CollectorConfigCompiler.toYaml(new AnalysisPlan(storedProjectName, url, username, password,
+        return PrometheusConfigCompiler.toYaml(new PrometheusPlan(storedProjectName, url, username, password,
                 groups, lookback, interval));
     }
 
