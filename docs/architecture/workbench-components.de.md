@@ -7,7 +7,7 @@ sie nach außen gibt und wie sie innen aufgebaut ist. Es richtet sich an alle, d
 Workbench arbeiten. Für den Collector gibt es [ein eigenes Dokument](collector-components.de.md).
 
 Die Bilder stammen aus [S202](https://github.com/Weigend/S202) 1.4.0, das die Abhängigkeiten aus
-dem Bytecode liest. Stand: Workbench 7.5.0-SNAPSHOT, Commit `9cc6fd5`, 24.11.2026.
+dem Bytecode liest. Stand: Workbench 7.6.0-SNAPSHOT, Commit `78d0c96`, 24.11.2026.
 
 - [So sind die Bilder zu lesen](#so-sind-die-bilder-zu-lesen)
 - [Die Regeln](#die-regeln)
@@ -46,7 +46,8 @@ Die Pakete direkt unter `io.softwareecg.awb` sind die Teile der Workbench.
    - `api`: wird von anderen aufgerufen und von der eigenen Komponente implementiert,
    - `spi`: wird von anderen implementiert und deshalb auch von außen importiert.
 
-   Alles andere ist innen. Die inneren Pakete heißen nach dem, was sie tun.
+   Alles andere ist innen. Die inneren Pakete heißen nach dem, was sie tun. `api` und `spi` kennen
+   das Innere nicht, auch nicht als Typ eines Parameters oder Rückgabewerts.
 2. **Bibliotheken** (`uitoolkit`, `timeseries`, `runtime`, `infrastructure`) haben keine
    Außenkante: Alle ihre öffentlichen Klassen dürfen benutzt werden. Sie kennen keine Komponente.
 3. **Zyklen** gibt es nicht, weder zwischen den Top-Paketen noch zwischen den Teilen irgendeines
@@ -56,7 +57,7 @@ Das prüft jeder Build:
 
 | Test | Was er prüft |
 | --- | --- |
-| `LayerArchitectureTest` | Außenkanten, Schichten und Zyklen im Code, mit ArchUnit |
+| `LayerArchitectureTest` | Außenkanten, Schichten und Zyklen im Code, mit ArchUnit; auch, dass `api` und `spi` nichts Inneres nach außen geben |
 | `ViewArchitectureTest` | dieselben Außenkanten in FXML und CSS; dort stehen Klassen und Dateien als Text, weder S202 noch ArchUnit sehen sie |
 
 ## Level 0: alle Top-Pakete
@@ -213,9 +214,8 @@ darüber sehen andere, ob für ein Projekt gesammelt wird.
 **Aufgabe:** Das Menü **Import**: liest fremde Daten in das Repository eines Projekts, oder nur ihre
 Beschreibung, wenn die Werte auf ihrem Server bleiben.
 
-**Außenkante:** `spi` mit den Verträgen für eigene Importer (`LocalProjectSupport`,
-`SplitSourceProjectSupport` und die Merkmale für die Sichten). Die Komponente implementiert
-außerdem `projectcontext.spi.ProjectImporter` und `AliasMappingProvider`, und für entfernte
+**Außenkante:** keine eigene. Ein neuer Importer ist ein Paket in `adapter`. Die Komponente
+implementiert `projectcontext.spi.ProjectImporter` und `AliasMappingProvider`, und für entfernte
 Projekte `query.spi.RemoteSeriesSource`.
 
 [![Scope importer](../images/components/importer.png)](../images/components/importer.png)
@@ -223,11 +223,10 @@ Projekte `query.spi.RemoteSeriesSource`.
 | Paket | Inhalt |
 | --- | --- |
 | `adapter` | die Importer: Collector-Logs (`csv`), Prometheus, OWID, Binance, Yahoo Finance |
-| (direkt) | `ImportModule`, die Basis jedes Importers |
+| (direkt) | `ImportModule`, die Basis jedes Importers, und die Interfaces, die sagen, was ein Importer unterstützt: `LocalProjectSupport`, `SplitSourceProjectSupport` und die Merkmale für die Sichten |
 | `ui` | die Dialoge für Dateien und für Server |
 | `framework` | der Ablauf eines Imports: Strategie, Task und die Schritte lesen, filtern, abbilden, schreiben; jeder Import hat eine eigene Strategie |
 | `model` | eine Serie vor und nach der Abbildung auf die Dimensionen |
-| `spi` | siehe Außenkante |
 
 ## query
 
@@ -451,6 +450,11 @@ Bericht vom 24.11.2026 für den oben genannten Stand:
 | Klassenzyklen, alle innerhalb eines Pakets | 4 |
 | Abhängigkeiten gegen die Schichten, alle aus diesen Klassenzyklen | 5 |
 
+S202 1.4.0 zählt Aufrufe, Instanziierung und Vererbung. Eine Klasse, die nur der Typ eines Feldes,
+Parameters oder Rückgabewerts ist, zählt nicht, und Code in verschachtelten Klassen wird nicht
+gelesen. Für Außenkanten und Zyklen ist deshalb `LayerArchitectureTest` die strengere Prüfung: Er
+zählt beides.
+
 Die vier Klassenzyklen sind bekannt und bleiben:
 
 - **`Plan` und `ConfigCompiler`** in `datasource.adapter`, je einmal für Prometheus, SSH und Windows:
@@ -467,7 +471,7 @@ Die vier Klassenzyklen sind bekannt und bleiben:
    mvn -o -pl workbench -am clean package -DskipTests
    ```
 
-2. In S202 `workbench/target/workbench-7.5.0-SNAPSHOT.jar` öffnen. Die generierten Klassen der
+2. In S202 `workbench/target/workbench-7.6.0-SNAPSHOT.jar` öffnen. Die generierten Klassen der
    Dependency Injection (`*.AwbModule`, `*$DI`) müssen in `excluded-prefixes.txt` von S202
    ausgeschlossen sein.
 3. **Depth** auf 0 setzen, **Refresh**, dann **File → Export Image…** (Strg+E): `level0.png`.

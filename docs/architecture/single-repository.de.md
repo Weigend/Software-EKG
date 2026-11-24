@@ -117,7 +117,7 @@ Eine Source implementiert die bestehenden Collector-Verträge und registriert ih
 
 ### Workbench-Importer
 
-Importer sind Teil der Workbench. Neue Importer werden in einem eigenen Paket unter `io.softwareecg.awb.importer.adapter` ergänzt, implementieren die Verträge in `importer.spi` und werden im selben Reactor getestet. Damit entfallen SDK-Versionierung, Archetype, separates Deployment und binäre Kompatibilitätsversprechen zwischen eng gekoppelten Komponenten.
+Importer sind Teil der Workbench. Neue Importer werden in einem eigenen Paket unter `io.softwareecg.awb.importer.adapter` ergänzt, erweitern `ImportModule`, implementieren, was sie unterstützen (`LocalProjectSupport`, `SplitSourceProjectSupport`), und werden im selben Reactor getestet. Damit entfallen SDK-Versionierung, Archetype, separates Deployment und binäre Kompatibilitätsversprechen zwischen eng gekoppelten Komponenten.
 
 ## Verifikation der Migration
 

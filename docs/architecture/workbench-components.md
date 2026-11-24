@@ -7,7 +7,7 @@ offers to the others and how it is built inside. It is meant for everybody who w
 of the Workbench. For the Collector there is [a document of its own](collector-components.md).
 
 The pictures are from [S202](https://github.com/Weigend/S202) 1.4.0, which reads the dependencies
-from the bytecode. State: Workbench 7.5.0-SNAPSHOT, commit `9cc6fd5`, 2026-11-24.
+from the bytecode. State: Workbench 7.6.0-SNAPSHOT, commit `78d0c96`, 2026-11-24.
 
 - [How to read the pictures](#how-to-read-the-pictures)
 - [The rules](#the-rules)
@@ -46,7 +46,8 @@ The packages directly below `io.softwareecg.awb` are the parts of the Workbench.
    - `api`: called by others and implemented by the component itself,
    - `spi`: implemented by others, and therefore imported from outside as well.
 
-   Everything else is inside. The inner packages are named by what they do.
+   Everything else is inside. The inner packages are named by what they do. `api` and `spi` do not
+   know the inside, not even as the type of a parameter or of a returned value.
 2. **Libraries** (`uitoolkit`, `timeseries`, `runtime`, `infrastructure`) have no outer edge: all
    their public classes may be used. They do not know any component.
 3. **Cycles** do not exist, neither between the top packages nor between the parts of any package.
@@ -56,7 +57,7 @@ Every build checks this:
 
 | Test | What it checks |
 | --- | --- |
-| `LayerArchitectureTest` | outer edges, layers and cycles in the code, with ArchUnit |
+| `LayerArchitectureTest` | outer edges, layers and cycles in the code, with ArchUnit; also that `api` and `spi` do not expose the inside |
 | `ViewArchitectureTest` | the same outer edges in FXML and CSS; classes and files stand there as text, which neither S202 nor ArchUnit sees |
 
 ## Level 0: all top packages
@@ -212,8 +213,7 @@ whether data is being collected for a project.
 **Task:** The menu **Import**: reads foreign data into the repository of a project, or only their
 description if the values stay on their server.
 
-**Outer edge:** `spi` with the contracts for importers of one's own (`LocalProjectSupport`,
-`SplitSourceProjectSupport` and the markers for the views). The component also implements
+**Outer edge:** none of its own. A new importer is a package in `adapter`. The component implements
 `projectcontext.spi.ProjectImporter` and `AliasMappingProvider`, and for remote projects
 `query.spi.RemoteSeriesSource`.
 
@@ -222,11 +222,10 @@ description if the values stay on their server.
 | Package | Content |
 | --- | --- |
 | `adapter` | the importers: Collector logs (`csv`), Prometheus, OWID, Binance, Yahoo Finance |
-| (direct) | `ImportModule`, the base of every importer |
+| (direct) | `ImportModule`, the base of every importer, and the interfaces that say what an importer supports: `LocalProjectSupport`, `SplitSourceProjectSupport` and the markers for the views |
 | `ui` | the dialogs for files and for servers |
 | `framework` | how an import runs: strategy, task and the steps read, filter, map, write; every import has a strategy of its own |
 | `model` | a series before and after it was mapped to the dimensions |
-| `spi` | see outer edge |
 
 ## query
 
@@ -448,6 +447,10 @@ Report of 2026-11-24 for the state named above:
 | class cycles, all inside one package | 4 |
 | dependencies against the layers, all of them part of these class cycles | 5 |
 
+S202 1.4.0 counts calls, instantiation and inheritance. A class that is only the type of a field, a
+parameter or a returned value is not counted, and code in nested classes is not read. For outer
+edges and cycles `LayerArchitectureTest` is therefore the stricter check: it counts both.
+
 The four class cycles are known and stay:
 
 - **`Plan` and `ConfigCompiler`** in `datasource.adapter`, once each for Prometheus, SSH and
@@ -464,7 +467,7 @@ The four class cycles are known and stay:
    mvn -o -pl workbench -am clean package -DskipTests
    ```
 
-2. Open `workbench/target/workbench-7.5.0-SNAPSHOT.jar` in S202. The generated classes of the
+2. Open `workbench/target/workbench-7.6.0-SNAPSHOT.jar` in S202. The generated classes of the
    dependency injection (`*.AwbModule`, `*$DI`) have to be excluded in `excluded-prefixes.txt` of
    S202.
 3. Set **Depth** to 0, **Refresh**, then **File → Export Image…** (Ctrl+E): `level0.png`.
