@@ -257,7 +257,7 @@ public class MetricDataAccessServiceImpl implements MetricDataAccessService {
     @Override
     public List<Namespace> getNamespaces(MetricQuery query) {
         QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withNamespace("*").build();
-        return queryFacets(query.getQueryParams(), TS_NAMESPACE_NAME,
+        return queryFacets(queryClone, TS_NAMESPACE_NAME,
                 new Namespace("*"), facetEntry -> new Namespace(facetEntry.getName()));
 
     }
@@ -265,7 +265,7 @@ public class MetricDataAccessServiceImpl implements MetricDataAccessService {
     @Override
     public List<Service> getServices(MetricQuery query) {
         QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withService("*").build();
-        return queryFacets(query.getQueryParams(), TS_SERVICE_NAME,
+        return queryFacets(queryClone, TS_SERVICE_NAME,
                 new Service("*"), facetEntry -> new Service(facetEntry.getName()));
     }
 
