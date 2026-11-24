@@ -1,6 +1,6 @@
 package io.softwareecg.awb.explorer.metric.builders;
 
-import io.softwareecg.awb.uitoolkit.tree.api.ProgressNotifier;
+import io.softwareecg.awb.explorer.tree.ProgressNotifier;
 import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.series.CounterItem;

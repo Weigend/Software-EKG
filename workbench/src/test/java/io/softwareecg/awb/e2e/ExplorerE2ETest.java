@@ -5,7 +5,7 @@ import io.softwareecg.awb.uitoolkit.chart.ChartType;
 import io.softwareecg.awb.repository.connection.EkgRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
 import io.softwareecg.awb.repository.connection.RepositoryConfiguration;
-import io.softwareecg.awb.uitoolkit.tree.api.AbstractItem;
+import io.softwareecg.awb.explorer.tree.AbstractItem;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;

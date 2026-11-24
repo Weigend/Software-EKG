@@ -1,6 +1,5 @@
-package io.softwareecg.awb.uitoolkit.tree;
+package io.softwareecg.awb.explorer.tree;
 
-import io.softwareecg.awb.uitoolkit.tree.api.AbstractItem;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.scene.control.TreeCell;

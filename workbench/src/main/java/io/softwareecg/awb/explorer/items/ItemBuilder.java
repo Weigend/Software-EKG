@@ -1,6 +1,6 @@
 package io.softwareecg.awb.explorer.items;
 
-import io.softwareecg.awb.uitoolkit.tree.api.ProgressNotifier;
+import io.softwareecg.awb.explorer.tree.ProgressNotifier;
 import javafx.scene.control.TreeItem;
 
 import java.util.Comparator;

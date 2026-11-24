@@ -12,10 +12,10 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.explorer;
 
-import io.softwareecg.awb.uitoolkit.tree.ExplorerController;
-import io.softwareecg.awb.uitoolkit.tree.RootItem;
-import io.softwareecg.awb.uitoolkit.tree.api.AbstractItem;
-import io.softwareecg.awb.uitoolkit.tree.api.ItemBuilderRegistry;
+import io.softwareecg.awb.explorer.tree.ExplorerController;
+import io.softwareecg.awb.explorer.tree.RootItem;
+import io.softwareecg.awb.explorer.tree.AbstractItem;
+import io.softwareecg.awb.explorer.tree.ItemBuilderRegistry;
 import io.softwareecg.awb.uitoolkit.view.EkgView;
 import io.softwareecg.awb.runtime.module.EkgModule;
 import io.softwareecg.awb.runtime.module.ModuleException;

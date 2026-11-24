@@ -1,8 +1,8 @@
 package io.softwareecg.awb.explorer;
 
 import io.softwareecg.awb.repository.api.AddRepositoryRequest;
-import io.softwareecg.awb.uitoolkit.tree.ExplorerController;
-import io.softwareecg.awb.uitoolkit.tree.RootItem;
+import io.softwareecg.awb.explorer.tree.ExplorerController;
+import io.softwareecg.awb.explorer.tree.RootItem;
 import io.softwareecg.awb.uitoolkit.view.ViewMapper;
 import io.softwareecg.awb.runtime.module.ModuleException;
 import io.softwareecg.awb.runtime.logging.EkgLogger;

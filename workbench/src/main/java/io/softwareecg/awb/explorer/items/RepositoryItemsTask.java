@@ -13,7 +13,7 @@
 package io.softwareecg.awb.explorer.items;
 
 
-import io.softwareecg.awb.uitoolkit.tree.api.AbstractItem;
+import io.softwareecg.awb.explorer.tree.AbstractItem;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.RepositoryService;
 import jakarta.inject.Inject;

@@ -1,7 +1,7 @@
 package io.softwareecg.awb.explorer.metric.builders;
 
-import io.softwareecg.awb.uitoolkit.tree.api.AbstractItem;
-import io.softwareecg.awb.uitoolkit.tree.api.ProgressNotifier;
+import io.softwareecg.awb.explorer.tree.AbstractItem;
+import io.softwareecg.awb.explorer.tree.ProgressNotifier;
 import io.softwareecg.awb.explorer.items.ProjectItem;
 import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
 import io.softwareecg.awb.explorer.items.RepositoryItem;
@@ -34,7 +34,7 @@ public abstract class AbstractItemBuilder<T extends RepositoryBaseItem> implemen
 
     /* (non-Javadoc)
      * @see java.util.function.BiFunction#apply(T, U)
-     * @see io.softwareecg.awb.uitoolkit.tree.api.ItemBuilderRegistry
+     * @see io.softwareecg.awb.explorer.tree.ItemBuilderRegistry
      */
     @Override
     public List<? extends ContextAwareItem> apply(T parentItem, ProgressNotifier progressNotifier) {

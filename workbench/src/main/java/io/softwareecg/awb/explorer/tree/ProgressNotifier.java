@@ -1,4 +1,4 @@
-package io.softwareecg.awb.uitoolkit.tree.api;
+package io.softwareecg.awb.explorer.tree;
 
 /**
  * Handler to update the progress for an {@code ItemBuilder}.

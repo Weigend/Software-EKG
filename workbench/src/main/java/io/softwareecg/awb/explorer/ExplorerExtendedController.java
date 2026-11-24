@@ -1,8 +1,8 @@
 package io.softwareecg.awb.explorer;
 
-import io.softwareecg.awb.uitoolkit.tree.ExplorerController;
-import io.softwareecg.awb.uitoolkit.tree.RootItem;
-import io.softwareecg.awb.uitoolkit.tree.api.AbstractItem;
+import io.softwareecg.awb.explorer.tree.ExplorerController;
+import io.softwareecg.awb.explorer.tree.RootItem;
+import io.softwareecg.awb.explorer.tree.AbstractItem;
 import io.softwareecg.awb.explorer.items.ProjectItem;
 import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
 import io.softwareecg.awb.projectcontext.api.ProjectViewFlavorChangedEvent;

@@ -13,6 +13,8 @@ import com.tngtech.archunit.lang.SimpleConditionEvent;
 import java.util.function.BiPredicate;
 
 import static com.tngtech.archunit.base.DescribedPredicate.not;
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.assignableTo;
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.belongTo;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAnyPackage;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
@@ -300,8 +302,9 @@ public class LayerArchitectureTest {
         DescribedPredicate<JavaClass> inside = resideInAPackage(root + "..")
                 .and(not(resideInAnyPackage(root + ".api..", root + ".spi..")));
         return noClasses().that().resideOutsideOfPackage(root + "..")
-                // the generated injection module wires every bean and so knows all of them
-                .and().areNotAssignableTo(io.avaje.inject.spi.AvajeModule.class)
+                // the generated injection module wires every bean and so knows all of them, as do the
+                // classes in it
+                .and(not(belongTo(assignableTo(io.avaje.inject.spi.AvajeModule.class))))
                 .should().dependOnClassesThat(inside.as("liegen in " + component + ", aber nicht in seiner api oder spi"))
                 .because("was innen ist, muss sich aendern lassen, ohne die anderen anzufassen");
     }

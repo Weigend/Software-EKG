@@ -13,7 +13,7 @@
 package io.softwareecg.awb.explorer.items;
 
 import afester.javafx.svg.SvgLoader;
-import io.softwareecg.awb.uitoolkit.tree.api.AbstractItem;
+import io.softwareecg.awb.explorer.tree.AbstractItem;
 import io.softwareecg.awb.repository.api.Repository;
 import javafx.scene.Group;
 import javafx.scene.Node;

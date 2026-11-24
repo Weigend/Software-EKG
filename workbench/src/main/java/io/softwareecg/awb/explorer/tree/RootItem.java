@@ -10,10 +10,9 @@
 // experienced craftsmen and innovators in Munich, Germany.
 // Changes should be done with respect to the original design.
 //______________________________________________________________________________
-package io.softwareecg.awb.uitoolkit.tree;
+package io.softwareecg.awb.explorer.tree;
 
 
-import io.softwareecg.awb.uitoolkit.tree.api.AbstractItem;
 import jakarta.inject.Singleton;
 
 /**

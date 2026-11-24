@@ -10,7 +10,7 @@
 // experienced craftsmen and innovators in Munich, Germany.
 // Changes should be done with respect to the original design.
 //______________________________________________________________________________
-package io.softwareecg.awb.uitoolkit.tree.api;
+package io.softwareecg.awb.explorer.tree;
 
 import javafx.concurrent.Service;
 

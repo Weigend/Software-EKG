@@ -1,6 +1,6 @@
 package io.softwareecg.awb.explorer.items;
 
-import io.softwareecg.awb.uitoolkit.tree.api.ProgressNotifier;
+import io.softwareecg.awb.explorer.tree.ProgressNotifier;
 import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
 import io.softwareecg.awb.projectcontext.api.Project;
 import io.softwareecg.awb.projectcontext.api.ProjectFlavor;

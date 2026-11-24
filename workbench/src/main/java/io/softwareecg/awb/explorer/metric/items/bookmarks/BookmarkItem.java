@@ -13,7 +13,7 @@
 package io.softwareecg.awb.explorer.metric.items.bookmarks;
 
 import io.softwareecg.awb.uitoolkit.events.OpeningMode;
-import io.softwareecg.awb.uitoolkit.tree.api.AbstractItem;
+import io.softwareecg.awb.explorer.tree.AbstractItem;
 import io.softwareecg.awb.runtime.di.BeanProvider;
 import io.softwareecg.awb.bookmark.api.MetricsBookmarkService;
 import io.softwareecg.awb.bookmark.api.Bookmark;

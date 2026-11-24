@@ -1,6 +1,6 @@
 package io.softwareecg.awb.explorer.metric;
 
-import io.softwareecg.awb.uitoolkit.tree.api.ItemBuilderRegistry;
+import io.softwareecg.awb.explorer.tree.ItemBuilderRegistry;
 import io.softwareecg.awb.explorer.items.ProjectItem;
 import io.softwareecg.awb.explorer.items.RepositoryItem;
 import io.softwareecg.awb.explorer.metric.items.bookmarks.BookmarkGroupItem;

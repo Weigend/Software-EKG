@@ -10,10 +10,9 @@
 // experienced craftsmen and innovators in Munich, Germany.
 // Changes should be done with respect to the original design.
 //______________________________________________________________________________
-package io.softwareecg.awb.uitoolkit.tree;
+package io.softwareecg.awb.explorer.tree;
 
 
-import io.softwareecg.awb.uitoolkit.tree.api.AbstractItem;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.wfx.platform.api.EventSubscriber;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
