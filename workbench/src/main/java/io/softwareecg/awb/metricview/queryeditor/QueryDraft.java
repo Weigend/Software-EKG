@@ -12,9 +12,9 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.metricview.queryeditor;
 
-import io.softwareecg.awb.query.model.SeriesCombineMode;
-import io.softwareecg.awb.query.model.SeriesSmoothingGranularity;
-import io.softwareecg.awb.query.model.SeriesSmoothingType;
+import io.softwareecg.awb.query.api.SeriesCombineMode;
+import io.softwareecg.awb.query.api.SeriesSmoothingGranularity;
+import io.softwareecg.awb.query.api.SeriesSmoothingType;
 import io.softwareecg.awb.timeseries.dimension.Measurement;
 import io.softwareecg.awb.timeseries.dimension.Metric;
 import io.softwareecg.awb.timeseries.dimension.MetricGroup;
@@ -26,8 +26,8 @@ import io.softwareecg.awb.timeseries.dimension.logical.Pod;
 import io.softwareecg.awb.timeseries.dimension.logical.Service;
 import io.softwareecg.awb.timeseries.dimension.physical.Host;
 import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
-import io.softwareecg.awb.query.model.ComputationSpec;
-import io.softwareecg.awb.query.model.QuerySpec;
+import io.softwareecg.awb.query.api.ComputationSpec;
+import io.softwareecg.awb.query.api.QuerySpec;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.timeseries.dimension.FilterDimension;

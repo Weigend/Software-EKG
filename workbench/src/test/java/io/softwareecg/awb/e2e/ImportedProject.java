@@ -2,7 +2,7 @@ package io.softwareecg.awb.e2e;
 
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.timeseries.dimension.NamedValueEntity;
-import io.softwareecg.awb.query.model.QuerySpec;
+import io.softwareecg.awb.query.api.QuerySpec;
 import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 

@@ -1,6 +1,6 @@
 package io.softwareecg.awb.query.pipeline.combine;
 
-import io.softwareecg.awb.query.model.SeriesCombineMode;
+import io.softwareecg.awb.query.api.SeriesCombineMode;
 
 import java.util.Set;
 

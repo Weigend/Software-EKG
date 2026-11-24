@@ -4,7 +4,7 @@ import io.softwareecg.awb.bookmark.store.MetricsBookmarkServiceImpl;
 import io.softwareecg.awb.bookmark.api.BookmarkDialogs;
 import io.softwareecg.awb.bookmark.api.BookmarkGroup;
 import io.softwareecg.awb.bookmark.store.MetricQueryBookmark;
-import io.softwareecg.awb.query.model.QuerySpec;
+import io.softwareecg.awb.query.api.QuerySpec;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import javafx.scene.control.Alert;

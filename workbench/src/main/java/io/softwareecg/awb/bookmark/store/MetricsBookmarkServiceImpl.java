@@ -8,7 +8,7 @@ import io.softwareecg.awb.metadata.model.BookmarkGroupRow;
 import io.softwareecg.awb.metadata.model.MetricQueryBookmarkRow;
 import io.softwareecg.awb.metadata.port.BookmarkStore;
 import io.softwareecg.awb.bookmark.api.BookmarkGroup;
-import io.softwareecg.awb.query.model.QuerySpec;
+import io.softwareecg.awb.query.api.QuerySpec;
 import io.avaje.inject.External;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;

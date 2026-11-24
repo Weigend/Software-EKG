@@ -12,7 +12,6 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.query.api;
 
-import io.softwareecg.awb.query.model.QuerySpec;
 
 import io.softwareecg.awb.uitoolkit.events.OpeningMode;
 import io.softwareecg.awb.uitoolkit.events.WindowOpenEvent;

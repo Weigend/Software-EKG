@@ -11,7 +11,7 @@ import io.softwareecg.awb.timeseries.dimension.logical.Pod;
 import io.softwareecg.awb.timeseries.dimension.logical.Service;
 import io.softwareecg.awb.timeseries.dimension.physical.Host;
 import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
-import io.softwareecg.awb.query.model.QuerySpec;
+import io.softwareecg.awb.query.api.QuerySpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

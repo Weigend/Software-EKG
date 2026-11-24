@@ -1,7 +1,7 @@
 package io.softwareecg.awb.metricview;
 
-import io.softwareecg.awb.query.model.ComputationSpec;
-import io.softwareecg.awb.query.model.QuerySpec;
+import io.softwareecg.awb.query.api.ComputationSpec;
+import io.softwareecg.awb.query.api.QuerySpec;
 import io.softwareecg.awb.metricview.command.ChartDataFetchParameters;
 import io.softwareecg.awb.repository.api.Repository;
 

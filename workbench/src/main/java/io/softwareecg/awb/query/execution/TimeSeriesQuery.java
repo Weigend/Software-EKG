@@ -1,4 +1,6 @@
-package io.softwareecg.awb.query.model;
+package io.softwareecg.awb.query.execution;
+
+import io.softwareecg.awb.query.api.QuerySpec;
 
 /**
  * Asks for a page of the parts of the series that are stored.

@@ -13,7 +13,7 @@
 package io.softwareecg.awb.bookmark.store;
 
 import io.softwareecg.awb.timeseries.dimension.Metric;
-import io.softwareecg.awb.query.model.QuerySpec;
+import io.softwareecg.awb.query.api.QuerySpec;
 import org.junit.Test;
 
 import java.time.Instant;

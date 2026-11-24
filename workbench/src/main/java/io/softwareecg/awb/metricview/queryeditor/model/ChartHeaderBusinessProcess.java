@@ -23,7 +23,7 @@ import io.softwareecg.awb.timeseries.dimension.logical.Namespace;
 import io.softwareecg.awb.timeseries.dimension.logical.Pod;
 import io.softwareecg.awb.timeseries.dimension.physical.Host;
 import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
-import io.softwareecg.awb.query.model.QuerySpec;
+import io.softwareecg.awb.query.api.QuerySpec;
 import io.softwareecg.awb.repository.api.Repository;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;

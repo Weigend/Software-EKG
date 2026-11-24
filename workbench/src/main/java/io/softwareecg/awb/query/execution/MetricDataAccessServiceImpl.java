@@ -1,4 +1,4 @@
-package io.softwareecg.awb.query;
+package io.softwareecg.awb.query.execution;
 
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 
@@ -9,9 +9,7 @@ import io.softwareecg.awb.timeseries.dimension.logical.Pod;
 import io.softwareecg.awb.timeseries.dimension.logical.Service;
 import io.softwareecg.awb.timeseries.dimension.physical.Host;
 import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
-import io.softwareecg.awb.query.model.QuerySpec;
-import io.softwareecg.awb.query.model.TimeSeriesQuery;
-import io.softwareecg.awb.query.model.TimeSeriesQueryResponse;
+import io.softwareecg.awb.query.api.QuerySpec;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.RepositoryException;

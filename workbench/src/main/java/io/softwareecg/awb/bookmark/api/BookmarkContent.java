@@ -1,6 +1,6 @@
 package io.softwareecg.awb.bookmark.api;
 
-import io.softwareecg.awb.query.model.QuerySpec;
+import io.softwareecg.awb.query.api.QuerySpec;
 
 /**
  * What a bookmark brings back.

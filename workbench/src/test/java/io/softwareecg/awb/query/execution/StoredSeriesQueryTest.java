@@ -1,4 +1,4 @@
-package io.softwareecg.awb.query;
+package io.softwareecg.awb.query.execution;
 
 import io.avaje.inject.BeanScope;
 import io.softwareecg.awb.datasource.model.RepositorySeriesEnds;
@@ -6,9 +6,7 @@ import io.softwareecg.awb.datasource.model.SeriesDimensions;
 import io.softwareecg.awb.query.spi.RemoteSeriesSource;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
-import io.softwareecg.awb.query.model.QuerySpec;
-import io.softwareecg.awb.query.model.TimeSeriesQuery;
-import io.softwareecg.awb.query.model.TimeSeriesQueryResponse;
+import io.softwareecg.awb.query.api.QuerySpec;
 import io.softwareecg.awb.repository.adapter.RepositoryAdapterBase;
 import io.softwareecg.awb.repository.adapter.solr.expression.SolrExpressionRenderer;
 import io.softwareecg.awb.repository.api.RepositoryException;

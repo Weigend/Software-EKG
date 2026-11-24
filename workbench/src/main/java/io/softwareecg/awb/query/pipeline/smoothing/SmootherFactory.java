@@ -1,7 +1,7 @@
 package io.softwareecg.awb.query.pipeline.smoothing;
 
-import io.softwareecg.awb.query.model.SeriesSmoothingGranularity;
-import io.softwareecg.awb.query.model.SeriesSmoothingType;
+import io.softwareecg.awb.query.api.SeriesSmoothingGranularity;
+import io.softwareecg.awb.query.api.SeriesSmoothingType;
 import jakarta.inject.Singleton;
 
 /**

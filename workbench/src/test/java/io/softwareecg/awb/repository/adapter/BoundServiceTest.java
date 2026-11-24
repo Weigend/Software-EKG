@@ -2,12 +2,12 @@ package io.softwareecg.awb.repository.adapter;
 
 import io.avaje.inject.BeanScope;
 import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.query.MetricDataAccessServiceImpl;
-import io.softwareecg.awb.query.QueryRunner;
+import io.softwareecg.awb.query.execution.MetricDataAccessServiceImpl;
+import io.softwareecg.awb.query.execution.QueryRunner;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.query.api.MetricQueryService;
-import io.softwareecg.awb.query.model.ComputationSpec;
-import io.softwareecg.awb.query.model.QuerySpec;
+import io.softwareecg.awb.query.api.ComputationSpec;
+import io.softwareecg.awb.query.api.QuerySpec;
 import io.softwareecg.awb.query.pipeline.SeriesTransformPipeline;
 import io.softwareecg.awb.repository.api.RepositoryException;
 import io.softwareecg.awb.repository.persistence.TimeSeriesRepository;

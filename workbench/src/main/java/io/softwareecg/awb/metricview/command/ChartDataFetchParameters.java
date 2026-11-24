@@ -1,7 +1,7 @@
 package io.softwareecg.awb.metricview.command;
 
-import io.softwareecg.awb.query.model.ComputationSpec;
-import io.softwareecg.awb.query.model.QuerySpec;
+import io.softwareecg.awb.query.api.ComputationSpec;
+import io.softwareecg.awb.query.api.QuerySpec;
 
 /**
  * A container that will used to transport some beans with filters,

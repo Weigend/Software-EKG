@@ -1,4 +1,4 @@
-package io.softwareecg.awb.query.model;
+package io.softwareecg.awb.query.api;
 
 import io.softwareecg.awb.runtime.NamedEnum;
 

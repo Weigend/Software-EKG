@@ -12,7 +12,7 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.bookmark.store;
 
-import io.softwareecg.awb.query.model.QuerySpec;
+import io.softwareecg.awb.query.api.QuerySpec;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 

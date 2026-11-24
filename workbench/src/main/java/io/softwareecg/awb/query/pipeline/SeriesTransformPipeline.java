@@ -1,8 +1,8 @@
 package io.softwareecg.awb.query.pipeline;
 
-import io.softwareecg.awb.query.model.SeriesCombineMode;
-import io.softwareecg.awb.query.model.SeriesSmoothingGranularity;
-import io.softwareecg.awb.query.model.SeriesSmoothingType;
+import io.softwareecg.awb.query.api.SeriesCombineMode;
+import io.softwareecg.awb.query.api.SeriesSmoothingGranularity;
+import io.softwareecg.awb.query.api.SeriesSmoothingType;
 import io.softwareecg.awb.query.pipeline.combine.CombinerFactory;
 import io.softwareecg.awb.query.pipeline.combine.TimeSeriesCombiner;
 import io.softwareecg.awb.query.pipeline.simplification.SimplificationService;
@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import java.util.Collections;
 import java.util.List;
 
-import static io.softwareecg.awb.query.model.SeriesCombineMode.CONCAT;
+import static io.softwareecg.awb.query.api.SeriesCombineMode.CONCAT;
 
 /** Applies the ordered, repository-independent transformations to queried time series. */
 @Singleton

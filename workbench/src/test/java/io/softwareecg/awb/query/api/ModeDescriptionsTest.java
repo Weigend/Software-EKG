@@ -1,4 +1,4 @@
-package io.softwareecg.awb.query.model;
+package io.softwareecg.awb.query.api;
 
 import org.junit.Test;
 

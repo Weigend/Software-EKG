@@ -1,7 +1,7 @@
 package io.softwareecg.awb.metricview;
 
-import io.softwareecg.awb.query.model.ComputationSpec;
-import io.softwareecg.awb.query.model.QuerySpec;
+import io.softwareecg.awb.query.api.ComputationSpec;
+import io.softwareecg.awb.query.api.QuerySpec;
 
 import java.util.Collection;
 import java.util.HashMap;

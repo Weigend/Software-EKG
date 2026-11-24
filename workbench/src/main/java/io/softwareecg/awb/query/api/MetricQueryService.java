@@ -1,7 +1,5 @@
 package io.softwareecg.awb.query.api;
 
-import io.softwareecg.awb.query.model.ComputationSpec;
-import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.timeseries.TimeSeries;
 
 import java.util.List;

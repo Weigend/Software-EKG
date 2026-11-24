@@ -14,7 +14,7 @@ package io.softwareecg.awb.explorer.metric.items.series;
 
 import io.softwareecg.awb.uitoolkit.events.OpeningMode;
 import io.softwareecg.awb.query.api.OpenInvestigationCommand;
-import io.softwareecg.awb.query.model.QuerySpec;
+import io.softwareecg.awb.query.api.QuerySpec;
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.wfx.platform.api.EventBus;

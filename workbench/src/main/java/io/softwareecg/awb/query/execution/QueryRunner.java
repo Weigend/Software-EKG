@@ -1,16 +1,14 @@
-package io.softwareecg.awb.query;
+package io.softwareecg.awb.query.execution;
 
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.awb.query.api.ComputedTimeSeriesResponse;
 import io.softwareecg.awb.query.api.MetricQueryService;
 
-import io.softwareecg.awb.query.model.SeriesCombineMode;
-import io.softwareecg.awb.query.model.SeriesSmoothingGranularity;
-import io.softwareecg.awb.query.model.SeriesSmoothingType;
-import io.softwareecg.awb.query.model.ComputationSpec;
-import io.softwareecg.awb.query.model.QuerySpec;
-import io.softwareecg.awb.query.model.TimeSeriesQuery;
-import io.softwareecg.awb.query.model.TimeSeriesQueryResponse;
+import io.softwareecg.awb.query.api.SeriesCombineMode;
+import io.softwareecg.awb.query.api.SeriesSmoothingGranularity;
+import io.softwareecg.awb.query.api.SeriesSmoothingType;
+import io.softwareecg.awb.query.api.ComputationSpec;
+import io.softwareecg.awb.query.api.QuerySpec;
 import io.softwareecg.awb.query.pipeline.SeriesTransformPipeline;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.RepositoryException;
@@ -27,7 +25,7 @@ import org.slf4j.Logger;
 import java.text.NumberFormat;
 import java.util.*;
 
-import static io.softwareecg.awb.query.model.SeriesCombineMode.CONCAT;
+import static io.softwareecg.awb.query.api.SeriesCombineMode.CONCAT;
 
 /**
  * The default implementation of MetricsQueryService that will fetch the time series

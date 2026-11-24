@@ -4,7 +4,7 @@ import io.softwareecg.awb.uitoolkit.events.OpeningMode;
 import io.softwareecg.awb.datasource.model.CollectionPlan;
 import io.softwareecg.awb.datasource.model.SeriesDimensions;
 import io.softwareecg.awb.query.api.OpenInvestigationCommand;
-import io.softwareecg.awb.query.model.QuerySpec;
+import io.softwareecg.awb.query.api.QuerySpec;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.SeriesDataWrittenEvent;
