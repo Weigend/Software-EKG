@@ -4,7 +4,7 @@
 
 This document shows which components the Workbench consists of, what each of them does, what it
 offers to the others and how it is built inside. It is meant for everybody who works on the code
-of the Workbench.
+of the Workbench. For the Collector there is [a document of its own](collector-components.md).
 
 The pictures are from [S202](https://github.com/Weigend/S202) 1.4.0, which reads the dependencies
 from the bytecode. State: Workbench 7.5.0-SNAPSHOT, commit `9cc6fd5`, 2026-11-24.

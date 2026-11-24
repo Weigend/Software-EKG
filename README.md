@@ -105,7 +105,7 @@ This repository is the consolidated variant of AWB, AWB-SDK and Collector. There
 
 The historical mapping and the parts that were deliberately removed are documented in [docs/architecture/single-repository.md](docs/architecture/single-repository.md).
 
-The components of the Workbench, with pictures of their structure, are described in [docs/architecture/workbench-components.md](docs/architecture/workbench-components.md).
+The components and their structure are described, with pictures, for the [Workbench](docs/architecture/workbench-components.md) and for the [Collector](docs/architecture/collector-components.md).
 
 ## Prerequisites
 

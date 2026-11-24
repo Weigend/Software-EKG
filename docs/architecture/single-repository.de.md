@@ -6,7 +6,7 @@
 
 Der 7x-Aufbau optimiert auf den tatsächlichen Einsatz von Software-EKG: Für einen konkreten Diagnosefall wird eine Datenquelle angebunden, der Collector sammelt die benötigten Messwerte und die Workbench stellt sie als Zeitreihen dar. Eine Erweiterung soll mit wenig Kontext und ohne koordinierte Releases mehrerer EKG-Repositories möglich sein.
 
-Das ist keine fachliche Neuentwicklung. Paketnamen, Persistenzformate, ServiceLoader-Verträge und Anwendungs-Einstiegspunkte bleiben soweit möglich erhalten. Geändert wurde die Build- und Besitzstruktur. Die Collector-Konfiguration ist seit der Konsolidierung YAML statt XML (siehe unten); vorhandene XML-Dateien werden weiter gelesen.
+Die Konsolidierung war keine fachliche Neuentwicklung. Persistenzformate und die ServiceLoader-Verträge des Collectors blieben erhalten. Geändert wurde zuerst die Build- und Besitzstruktur; danach wurde die Workbench neu aus [Komponenten](workbench-components.de.md) aufgebaut, mit Paketnamen, die sagen, was sie tun. Die Collector-Konfiguration ist seit der Konsolidierung YAML statt XML (siehe unten); vorhandene XML-Dateien werden weiter gelesen.
 
 ## Architekturentscheidung
 
@@ -16,7 +16,7 @@ Eine Modulgrenze bleibt nur bestehen, wenn mindestens einer dieser Gründe vorli
 2. Code wird zur Laufzeit als Collector-Plugin gefunden.
 3. Ein optionaler Adapter bringt einen deutlich eigenen Dependency-Stack mit.
 
-UI-, Business- und API-Layer innerhalb der Workbench erfüllen diese Kriterien nicht. Sie werden durch Pakete getrennt und gemeinsam kompiliert. Beim Collector sind Source- und Repository-Adapter dagegen echte Erweiterungsgrenzen und bleiben eigene JARs.
+Die Teile der Workbench erfüllen diese Kriterien nicht. Sie sind Komponenten in Paketen und werden gemeinsam kompiliert; [Regeln](#was-die-struktur-heute-sicherstellt) halten sie auseinander. Beim [Collector](collector-components.de.md) sind Source- und Repository-Adapter dagegen echte Erweiterungsgrenzen und bleiben eigene JARs.
 
 ## Zuordnung alt zu neu
 
@@ -29,16 +29,16 @@ UI-, Business- und API-Layer innerhalb der Workbench erfüllen diese Kriterien n
 | CSV, JSON, RDB, Solr und Elasticsearch | `collector/repositories/*` | optionale Speicheradapter mit unterschiedlichen Abhängigkeiten |
 | Collector Delivery | `collector/apps/cli` | eigenständig startbares Produkt |
 | Collector UI und Jolokia WAR | `collector/apps/ui`, `collector/apps/jolokia-agent` | eigenständige Deployments |
-| AWB API, BL, UI, Chart, Importer, Application und Distribution | `workbench` | eine Desktop-Anwendung; Schichten sind Pakete, keine Releases |
+| AWB API, BL, UI, Chart, Importer, Application und Distribution | `workbench` | eine Desktop-Anwendung; Komponenten sind Pakete, keine Releases |
 | Laufzeitklassen des AWB-SDK | `workbench` | interne Verträge der einzigen Anwendung |
 | SDK-Testsupport | `workbench/src/test` | Testfixture statt ausgeliefertem Produktartefakt |
 
-Der Reactor umfasst damit 19 Produktmodule beziehungsweise 20 Maven-Projekte einschließlich des Root-Projekts, statt zuvor 83 Projekten.
+Der Reactor umfasst damit 17 Module beziehungsweise 18 Maven-Projekte einschließlich des Root-Projekts, statt zuvor 83 Projekten.
 
 ## Bewusst nicht übernommen
 
 - Das SDK-Archetype wurde entfernt. Es erzeugte externe Importer-Projekte für eine Erweiterungsform, die nicht mehr angeboten wird.
-- Das leere PostgreSQL-Source-Modul wurde entfernt.
+- Das leere PostgreSQL-Source-Modul wurde entfernt, später auch das JSON-Repository des Collectors und der WebSocket-Connector, die nichts benutzte.
 - Die nicht in die Anwendung eingebundenen AWB-Sandbox-Programme (einmalige
   Konverter, Repository-Analyse und experimentelle Prometheus-Clients) wurden
   nicht als Produktcode übernommen.
@@ -52,14 +52,45 @@ Der Reactor umfasst damit 19 Produktmodule beziehungsweise 20 Maven-Projekte ein
 
 WFX bleibt bewusst extern. Es ist ein allgemeines JavaFX-Framework mit eigenem Lebenszyklus und wird als versionierte Maven-Abhängigkeit verwendet. `install-wfx.sh` stellt diese Abhängigkeit auf einer neuen Entwicklungsmaschine bereit.
 
-## Was Module nicht mehr erzwingen
+## Was die Struktur heute sicherstellt
 
-Mit den Maven-Modulen der Workbench entfiel auch, was sie nebenbei sicherstellten. Das ist
-ausdrücklich ersetzt:
+Mit den Maven-Modulen der Workbench entfiel auch, was sie nebenbei sicherstellten. An ihre Stelle
+sind Regeln getreten, und die Regeln stellen mehr sicher als die Module. Ein Modul sagte nur, welches
+andere Modul es benutzen darf. Jede öffentliche Klasse darin war dann benutzbar, und innerhalb eines
+Moduls war alles möglich.
 
-- **Schichten.** `LayerArchitectureTest` (ArchUnit) prüft die Paketgrenzen: Geschäftslogik ohne
-  JavaFX, Oberfläche nicht an der Geschäftslogik vorbei auf die Datenhaltung, Datenhaltung ohne
-  Oberfläche. Generierte Avaje-Module sind ausgenommen, weil sie alle Schichten verdrahten.
+| | 83 Maven-Projekte | Heute |
+| --- | --- | --- |
+| Richtung der Abhängigkeiten | zwischen Modulen | zwischen Komponenten, Bibliotheken und allen Paketen, auf jeder Ebene |
+| Zyklen | zwischen Modulen unmöglich, innerhalb eines Moduls unbemerkt | auf keiner Ebene, weder zwischen Komponenten noch zwischen den Teilen eines Pakets |
+| Außenkante | jede öffentliche Klasse | nur `api` und `spi` einer Komponente; alles andere ist innen |
+| Verträge | nach Absprache | `api` implementiert die eigene Komponente, `spi` enthält nur Verträge für andere |
+| Techniken | getrennt, wenn sie eigene Module hatten | Solr, Elasticsearch und ClickHouse kennen einander nicht, die Arten von Datenquellen auch nicht |
+| Geschäftslogik | frei von JavaFX durch die Wahl der Abhängigkeiten | frei von JavaFX durch eine Regel, wie auch die Datenhaltung |
+| FXML und CSS | nicht geprüft | benutzen andere Komponenten nur über `api` und `spi` und finden ihre Dateien und Controller |
+
+Drei Tests prüfen das bei jedem Build:
+
+- **`LayerArchitectureTest`** (ArchUnit) prüft den Code: Außenkanten, Schichten, Zyklen, Techniken.
+  Die generierten Module der Dependency Injection sind ausgenommen, weil sie alle Komponenten
+  verdrahten.
+- **`ViewArchitectureTest`** prüft FXML und CSS, wo Klassen und Dateien als Text stehen.
+- **`ResourceReferencesTest`** prüft, dass Ansichten, Stylesheets und Icons dort liegen, wo sie gesucht
+  werden.
+
+**S202** zeigt die Struktur und misst sie unabhängig von diesen Tests aus dem Bytecode: Zugriffe an einer
+`api` vorbei, APIs, die Inneres nach außen geben, Zyklen und Abhängigkeiten gegen die Schichten. Die
+Bilder und der aktuelle Bericht stehen in [den Komponenten der Workbench](workbench-components.de.md):
+kein Zugriff an einer `api` vorbei, kein Paketzyklus und vier Klassenzyklen innerhalb je eines Pakets, die
+bekannt sind und bleiben. S202 findet, wofür niemand eine Regel geschrieben hat, zum Beispiel ein Paket
+am falschen Ort; was es findet, wird zur Regel, wenn es nicht wiederkommen darf.
+
+Beim Collector sind weiterhin die Module die Grenzen. Seine Pakete beschreiben
+[die Komponenten des Collectors](collector-components.de.md), mit dem, was S202 dazu meldet; Regeln gibt
+es dafür noch nicht.
+
+Über die Struktur hinaus:
+
 - **Abhängigkeiten.** Die Workbench bindet `collector-core` ohne dessen JavaScript-Engine
   (GraalJS) ein. Sie braucht nur der eigenständige Collector, für berechnete Metriken (Quelle
   `calc`), und auch dort wird die Engine erst gestartet, wenn eine solche Metrik abgefragt wird.
@@ -85,14 +116,15 @@ Eine Source implementiert die bestehenden Collector-Verträge und registriert ih
 
 ### Workbench-Importer
 
-Importer sind Teil der Workbench. Neue Importer werden im passenden `io.softwareecg.awb.importer`-Paket ergänzt und im selben Reactor getestet. Damit entfallen SDK-Versionierung, Archetype, separates Deployment und binäre Kompatibilitätsversprechen zwischen eng gekoppelten Komponenten.
+Importer sind Teil der Workbench. Neue Importer werden in einem eigenen Paket unter `io.softwareecg.awb.importer.adapter` ergänzt, implementieren die Verträge in `importer.spi` und werden im selben Reactor getestet. Damit entfallen SDK-Versionierung, Archetype, separates Deployment und binäre Kompatibilitätsversprechen zwischen eng gekoppelten Komponenten.
 
 ## Verifikation der Migration
 
-Die Migration wird über drei Ebenen abgesichert:
+Die Migration wird über vier Ebenen abgesichert:
 
 - der gesamte Reactor kompiliert und paketiert aus einem Root-POM;
 - die Tests aller Source-, Repository-, Collector- und Workbench-Komponenten laufen in der neuen Struktur;
-- CLI-Integrationstests prüfen die Laufzeitauflösung der Collector-Plugins, Workbench-Tests die eingebettete Prometheus-Erfassung, Speicherung, Importer und JavaFX-Komponenten.
+- CLI-Integrationstests prüfen die Laufzeitauflösung der Collector-Plugins, Workbench-Tests die eingebettete Prometheus-Erfassung, Speicherung, Importer und JavaFX-Komponenten;
+- End-to-End-Tests starten die ganze Workbench und bedienen sie über ihre Oberfläche. Sie laufen mit jedem Build.
 
-Die alten Java-Paketnamen wurden absichtlich nicht flächig umbenannt. Das reduziert das Migrationsrisiko und hält Konfigurationen und Reflection-Zugriffe kompatibel. Eine spätere Paketbereinigung kann unabhängig davon erfolgen und sollte nur fachliche Grenzen verbessern, nicht erneut Maven-Module simulieren.
+Während der Migration blieben die alten Java-Paketnamen absichtlich erhalten, das verringerte ihr Risiko. Die Bereinigung kam danach und ist für die Workbench abgeschlossen: Die Pakete `sdk`, `common`, `da`, `metricanalyzer` und `project` gibt es nicht mehr, und jedes Top-Paket ist eine Komponente oder eine Bibliothek. Die Grenzen sind fachliche; die früheren Maven-Module wurden nicht nachgebaut.
