@@ -1,20 +1,24 @@
 package io.softwareecg.awb.bookmark;
 
+import io.softwareecg.awb.bookmark.api.Bookmark;
+import io.softwareecg.awb.bookmark.api.BookmarkContent;
 import io.softwareecg.awb.bookmark.api.MetricsBookmarkService;
 
 import io.softwareecg.awb.metadata.model.BookmarkGroupRow;
 import io.softwareecg.awb.metadata.model.MetricQueryBookmarkRow;
 import io.softwareecg.awb.metadata.port.BookmarkStore;
-import io.softwareecg.awb.bookmark.model.Bookmark;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
 import io.softwareecg.awb.bookmark.model.MetricQueryBookmark;
+import io.softwareecg.awb.query.model.QuerySpec;
 import io.avaje.inject.External;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Metrics bookmark service implementation that stores bookmarks
@@ -37,10 +41,47 @@ public class MetricsBookmarkServiceImpl implements MetricsBookmarkService {
     // =========================================================================
 
     @Override
-    public List<MetricQueryBookmark> getMetricQueryBookmarks(String bookmarkGroupId) {
-        return bookmarkStore.listQueryBookmarks(bookmarkGroupId).stream()
-                .map(MetricsBookmarkServiceImpl::toMetricQueryBookmark)
-                .collect(Collectors.toList());
+    public List<Bookmark> globalBookmarks() {
+        return withoutGroup(bookmark -> isBlank(bookmark.getProject()));
+    }
+
+    @Override
+    public List<Bookmark> bookmarksOfProject(String projectName) {
+        return withoutGroup(bookmark -> projectName.equals(bookmark.getProject()));
+    }
+
+    @Override
+    public List<Bookmark> bookmarksIn(BookmarkGroup group) {
+        return bookmarksInGroup(group.getId()).collect(Collectors.toList());
+    }
+
+    @Override
+    public BookmarkContent contentOf(Bookmark bookmark, String projectInUse) {
+        MetricQueryBookmark stored = (MetricQueryBookmark) bookmark;
+        QuerySpec query = stored.asQueryContext();
+        if (projectInUse != null && isGlobal(stored)) {
+            query = new QuerySpec.Builder<>(query).withProject(projectInUse).build();
+        }
+        return new BookmarkContent(query, stored.getChartType());
+    }
+
+    private List<Bookmark> withoutGroup(Predicate<Bookmark> condition) {
+        return bookmarksInGroup(BookmarkGroup.DEFAULT_GLOBAL_GROUP_ID).filter(condition).collect(Collectors.toList());
+    }
+
+    private Stream<MetricQueryBookmark> bookmarksInGroup(String groupId) {
+        return bookmarkStore.listQueryBookmarks(groupId).stream().map(MetricsBookmarkServiceImpl::toMetricQueryBookmark);
+    }
+
+    /** A global bookmark is of no project, or in a group of no project - whatever project it was made in. */
+    private boolean isGlobal(MetricQueryBookmark bookmark) {
+        String groupId = bookmark.getBookmarkGroupId();
+        return isBlank(bookmark.getProject())
+                || groupId != null && getGlobalBookmarkGroups().stream().anyMatch(group -> groupId.equals(group.getId()));
+    }
+
+    private static boolean isBlank(String text) {
+        return text == null || text.isBlank();
     }
 
     /**

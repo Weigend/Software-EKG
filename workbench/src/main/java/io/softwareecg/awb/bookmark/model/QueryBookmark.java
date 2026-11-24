@@ -21,7 +21,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  *
  * @param <T> The concrete type of the created query context.
  */
-public abstract class QueryBookmark<T extends QuerySpec> extends Bookmark {
+public abstract class QueryBookmark<T extends QuerySpec> extends StoredBookmark {
 
     private String host;
     private String group;
@@ -99,7 +99,7 @@ public abstract class QueryBookmark<T extends QuerySpec> extends Bookmark {
     public abstract T asQueryContext();
 
     /**
-     * Add the {@link Bookmark Bookmarks} values to the {@link QuerySpec}.
+     * Add the {@link StoredBookmark Bookmarks} values to the {@link QuerySpec}.
      *
      * @param builder The builder for a new {@link QuerySpec}.
      */
@@ -154,7 +154,7 @@ public abstract class QueryBookmark<T extends QuerySpec> extends Bookmark {
      *
      * @param <T> The type of the real builder.
      */
-    public abstract static class Builder<T extends QueryBookmark> extends Bookmark.Builder<T> {
+    public abstract static class Builder<T extends QueryBookmark> extends StoredBookmark.Builder<T> {
         protected String group;
         protected String host;
         protected String measurement;

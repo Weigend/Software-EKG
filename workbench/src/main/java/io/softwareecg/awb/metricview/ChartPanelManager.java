@@ -3,7 +3,6 @@ package io.softwareecg.awb.metricview;
 import io.softwareecg.awb.uitoolkit.events.OpeningMode;
 import io.softwareecg.awb.uitoolkit.view.EkgView;
 import io.softwareecg.awb.uitoolkit.view.ViewMapper;
-import io.softwareecg.awb.bookmark.model.MetricQueryBookmark;
 import io.softwareecg.awb.query.api.OpenInvestigationCommand;
 import io.softwareecg.awb.bookmark.ui.BookmarkEvent;
 import io.softwareecg.awb.repository.api.Repository;
@@ -237,8 +236,7 @@ public class ChartPanelManager {
     public boolean openChartPanelWithBookmark(BookmarkEvent event) {
         // A bookmark of a project opens in a view of that project. A global bookmark is a
         // template for whatever project is looked at, so it goes to the view in use.
-        String projectName = event.getBookmark() instanceof MetricQueryBookmark bookmark ? bookmark.getProject() : null;
-        FXMLView<MetricViewController> view = viewFor(event.getSourceRepository(), projectName,
+        FXMLView<MetricViewController> view = viewFor(event.getSourceRepository(), event.getBookmark().getProject(),
                 event.getOpeningMode() == OpeningMode.NEW_VIEW);
 
         view.getController().updateByBookmarkEvent(event);

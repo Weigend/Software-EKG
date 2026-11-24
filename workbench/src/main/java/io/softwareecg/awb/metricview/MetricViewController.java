@@ -19,10 +19,9 @@ import io.softwareecg.awb.uitoolkit.events.OpeningMode;
 import io.softwareecg.awb.query.model.SeriesCombineMode;
 import io.softwareecg.awb.query.model.SeriesSmoothingGranularity;
 import io.softwareecg.awb.query.model.SeriesSmoothingType;
+import io.softwareecg.awb.bookmark.api.BookmarkContent;
 import io.softwareecg.awb.bookmark.api.BookmarkDialogs;
 import io.softwareecg.awb.bookmark.api.MetricsBookmarkService;
-import io.softwareecg.awb.bookmark.model.BookmarkGroup;
-import io.softwareecg.awb.bookmark.model.MetricQueryBookmark;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.query.api.OpenInvestigationCommand;
 import io.softwareecg.awb.query.model.ComputationSpec;
@@ -500,47 +499,30 @@ public class MetricViewController implements Initializable {
      */
     public void updateByBookmarkEvent(BookmarkEvent event) {
 
-        if (event.getBookmark() instanceof MetricQueryBookmark queryBookmark) {
-            zoomableStackedChart.getController().clearAll();
-            chartHeaderController.setRepository(event.getSourceRepository());
-            viewModel.setEkgRepository(event.getSourceRepository());
+        zoomableStackedChart.getController().clearAll();
+        chartHeaderController.setRepository(event.getSourceRepository());
+        viewModel.setEkgRepository(event.getSourceRepository());
 
-            // Global bookmarks are templates: they must use the currently active project,
-            // not the one stored at creation time. Detect global bookmarks by checking
-            // whether their bookmark group is global (projectName == null on the group).
-            boolean isGlobalBookmark = queryBookmark.getProject() == null || queryBookmark.getProject().isBlank();
-            String groupId = queryBookmark.getBookmarkGroupId();
-            if (!isGlobalBookmark && groupId != null && !BookmarkGroup.DEFAULT_GLOBAL_GROUP_ID.equals(groupId)) {
-                MetricsBookmarkService bookmarkService = Lookup.lookup(MetricsBookmarkService.class);
-                isGlobalBookmark = bookmarkService.getGlobalBookmarkGroups().stream()
-                        .anyMatch(g -> groupId.equals(g.getId()));
-            }
-            if (isGlobalBookmark) {
-                QuerySpec currentParams = getCurrentFilterParams();
-                if (currentParams != null && currentParams.getProjectName() != null) {
-                    queryBookmark.setProject(currentParams.getProjectName());
-                }
-            }
+        // a global bookmark is a template: it opens in the project this view shows
+        QuerySpec current = getCurrentFilterParams();
+        String projectInUse = current == null || current.getProject() == null ? null : current.getProjectName();
+        BookmarkContent content = Lookup.lookup(MetricsBookmarkService.class).contentOf(event.getBookmark(), projectInUse);
 
-            QuerySpec params = queryBookmark.asQueryContext();
+        chartHeaderController.setQueryContext(content.query(), event.getOpeningMode());
+        viewModel.setBaseChartFilterParams(content.query());
+        reloadGraphs(true);
 
-            chartHeaderController.setQueryContext(params, event.getOpeningMode());
-            viewModel.setBaseChartFilterParams(params);
-            reloadGraphs(true);
-
-            // Restore chart type from bookmark via the command mechanism.
-            // This executes on the FX thread before the queued data service restart,
-            // so the chart type is set before data loads into the chart.
-            String storedChartType = queryBookmark.getChartType();
-            if (storedChartType != null && !storedChartType.isBlank()) {
-                ChartType chartType = ChartType.valueOf(storedChartType);
-                if (chartType != ChartType.LINE) {
-                    commandProcessor.executeObjectArgCommand(
-                            ChartCommand.CHANGE_CHART_TYPE,
-                            zoomableStackedChart.getBaseChart().getId(),
-                            chartType
-                    );
-                }
+        // Restore chart type from bookmark via the command mechanism.
+        // This executes on the FX thread before the queued data service restart,
+        // so the chart type is set before data loads into the chart.
+        if (StringUtils.isNotBlank(content.chartType())) {
+            ChartType chartType = ChartType.valueOf(content.chartType());
+            if (chartType != ChartType.LINE) {
+                commandProcessor.executeObjectArgCommand(
+                        ChartCommand.CHANGE_CHART_TYPE,
+                        zoomableStackedChart.getBaseChart().getId(),
+                        chartType
+                );
             }
         }
     }

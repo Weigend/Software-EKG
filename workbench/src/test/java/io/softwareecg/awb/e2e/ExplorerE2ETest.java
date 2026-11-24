@@ -1,5 +1,6 @@
 package io.softwareecg.awb.e2e;
 
+import io.softwareecg.awb.metricview.ChartPanelManager;
 import io.softwareecg.awb.uitoolkit.chart.ChartType;
 import io.softwareecg.awb.repository.connection.EkgRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
@@ -223,6 +224,25 @@ class ExplorerE2ETest {
         Stage warning = workbench.openDialog("Delete Group", () -> choose(group, "Delete Group"));
         confirm(warning, ButtonType.YES);
         awaitGone("Local Repository", "Global Bookmarks", "Shared");
+    }
+
+    /** A global bookmark is a template: it shows the project that is looked at, every time it is opened. */
+    @Test
+    void aGlobalBookmarkOpensInTheProjectInUse() throws URISyntaxException {
+        Path logs = Path.of(ExplorerE2ETest.class.getClassLoader().getResource("e2e/collector").toURI());
+        workbench.openImporter("EKG Collector Logs").projectName("Second").files(logs).importData(Duration.ofMinutes(2));
+        workbench.project("Second").awaitPoints(330, Duration.ofSeconds(30));
+        workbench.openChart("Explorer", "os", "\\Cpu\\us");
+        bookmark("Cpu of any project", "Templates");
+        TreeItem<Object> bookmark = node("Local Repository", "Global Bookmarks", "Templates", "Cpu of any project");
+
+        for (String project : List.of("Explorer", "Second", "Explorer")) {
+            workbench.openChart(project, "os", "\\Load\\one");
+            open(bookmark);
+            workbench.awaitTrue("the metric of the bookmark", Duration.ofSeconds(20), () -> "\\Cpu\\us".equals(metricOfTheHeader()));
+            assertThat(workbench.onFx(() -> Lookup.lookup(ChartPanelManager.class).getLastActiveController()
+                    .getCurrentFilterParams().getProjectName())).as("project of the chart").isEqualTo(project);
+        }
     }
 
     // ---------------------------------------------------------------------------------------------

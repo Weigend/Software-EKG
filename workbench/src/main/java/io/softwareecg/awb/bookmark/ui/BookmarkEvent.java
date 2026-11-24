@@ -14,7 +14,7 @@ package io.softwareecg.awb.bookmark.ui;
 
 import io.softwareecg.awb.uitoolkit.events.OpeningMode;
 import io.softwareecg.awb.uitoolkit.events.WindowOpenEvent;
-import io.softwareecg.awb.bookmark.model.Bookmark;
+import io.softwareecg.awb.bookmark.api.Bookmark;
 import io.softwareecg.awb.repository.api.Repository;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

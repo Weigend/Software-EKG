@@ -61,13 +61,10 @@ public class BookmarkGroupItem extends ContextAwareItem {
     }
 
     /**
-     * Returns the unique id of the underlying bookmark group
-     * that is represented by this tree item.
-     *
-     * @return the unique id of th bookmark group
+     * @return the group this tree item represents
      */
-    public String getBookmarkGroupId() {
-        return bookmarkGroup.getId();
+    public BookmarkGroup getBookmarkGroup() {
+        return bookmarkGroup;
     }
 
     private void deleteBookmarkGroup() {

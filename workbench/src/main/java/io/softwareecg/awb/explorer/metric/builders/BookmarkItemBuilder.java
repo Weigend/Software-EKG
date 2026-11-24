@@ -2,9 +2,8 @@ package io.softwareecg.awb.explorer.metric.builders;
 
 import io.softwareecg.awb.uitoolkit.tree.api.ProgressNotifier;
 import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
+import io.softwareecg.awb.bookmark.api.Bookmark;
 import io.softwareecg.awb.bookmark.api.MetricsBookmarkService;
-import io.softwareecg.awb.bookmark.model.Bookmark;
-import io.softwareecg.awb.bookmark.model.BookmarkGroup;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.bookmarks.BookmarkGroupItem;
 import io.softwareecg.awb.explorer.metric.items.bookmarks.BookmarkItem;
@@ -13,7 +12,6 @@ import io.softwareecg.awb.explorer.metric.items.bookmarks.ReproBookmarksItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -38,30 +36,11 @@ public class BookmarkItemBuilder <T extends RepositoryBaseItem>  extends Abstrac
 
         MetricsBookmarkService service = context.bookmarks();
 
-        String groupId;
-        if (parent instanceof ReproBookmarksItem) {
-            groupId = BookmarkGroup.DEFAULT_GLOBAL_GROUP_ID;
-        } else if (parent instanceof ProjectBookmarksItem) {
-            groupId = BookmarkGroup.DEFAULT_GLOBAL_GROUP_ID;
-        } else if (parent instanceof BookmarkGroupItem bookmarkGroupItem) {
-            groupId = bookmarkGroupItem.getBookmarkGroupId();
-        } else {
-            groupId = null;
-        }
-
-        List<Bookmark> bookmarks = new ArrayList<>(service.getMetricQueryBookmarks(groupId));
-
-        // Filter by project: global node shows only bookmarks without project,
-        // project node shows only bookmarks for that specific project
-        if (parent instanceof ReproBookmarksItem) {
-            bookmarks.removeIf(b -> {
-                String project = b.getProject();
-                return project != null && !project.isBlank();
-            });
-        } else if (parent instanceof ProjectBookmarksItem projectBookmarksItem) {
-            String projectName = projectBookmarksItem.getProjectName();
-            bookmarks.removeIf(b -> !projectName.equals(b.getProject()));
-        }
+        List<Bookmark> bookmarks = switch (parent) {
+            case ProjectBookmarksItem project -> service.bookmarksOfProject(project.getProjectName());
+            case BookmarkGroupItem group -> service.bookmarksIn(group.getBookmarkGroup());
+            default -> service.globalBookmarks();
+        };
 
         AtomicInteger i = new AtomicInteger(0);
 

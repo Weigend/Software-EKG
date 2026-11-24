@@ -12,9 +12,7 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.bookmark.api;
 
-import io.softwareecg.awb.bookmark.model.Bookmark;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
-import io.softwareecg.awb.bookmark.model.MetricQueryBookmark;
 
 import java.util.List;
 
@@ -26,20 +24,34 @@ import java.util.List;
 public interface MetricsBookmarkService {
 
     // ------------------------------------------------------------------------------------------------------
-    // MetricQueryBookmark actions
+    // bookmarks
     // ------------------------------------------------------------------------------------------------------
 
     /**
-     * Returns a sorted list of the bookmarks that are related to the specified bookmark group.
-     *
-     * @param bookmarkGroupId the unique id of the bookmark group
-     * @return a list of MetricQueryBookmark instances
+     * @return the bookmarks that are in no group and belong to no project
      */
-    List<MetricQueryBookmark> getMetricQueryBookmarks(String bookmarkGroupId);
+    List<Bookmark> globalBookmarks();
 
-    // ------------------------------------------------------------------------------------------------------
-    // generic bookmark actions
-    // ------------------------------------------------------------------------------------------------------
+    /**
+     * @param projectName the name of the project
+     * @return the bookmarks of the project that are in no group
+     */
+    List<Bookmark> bookmarksOfProject(String projectName);
+
+    /**
+     * @param group the group
+     * @return the bookmarks in the group
+     */
+    List<Bookmark> bookmarksIn(BookmarkGroup group);
+
+    /**
+     * Says what a bookmark brings back. The bookmark stays as it is.
+     *
+     * @param bookmark     the bookmark
+     * @param projectInUse the project a global bookmark is opened for; {@code null} if there is none
+     * @return its query, for its own project or - if it is global - the project in use, and its chart type
+     */
+    BookmarkContent contentOf(Bookmark bookmark, String projectInUse);
 
     /**
      * Deletes a bookmark.

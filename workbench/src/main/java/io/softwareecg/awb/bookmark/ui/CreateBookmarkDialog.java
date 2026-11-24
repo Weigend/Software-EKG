@@ -15,7 +15,7 @@ package io.softwareecg.awb.bookmark.ui;
 import io.softwareecg.awb.uitoolkit.components.FilterableComboBox;
 import io.softwareecg.awb.runtime.di.BeanProvider;
 import io.softwareecg.awb.bookmark.api.MetricsBookmarkService;
-import io.softwareecg.awb.bookmark.model.Bookmark;
+import io.softwareecg.awb.bookmark.model.StoredBookmark;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import javafx.collections.FXCollections;
@@ -46,11 +46,11 @@ import java.util.List;
  * @param <T> the concrete bookmark type manged by this dialog instance
  */
 @SuppressWarnings("unused") // assigned via JavaFX mechanism
-public class CreateBookmarkDialog<T extends Bookmark> extends Dialog<BookmarkCreationResult<T>> {
+public class CreateBookmarkDialog<T extends StoredBookmark> extends Dialog<BookmarkCreationResult<T>> {
 
     private static final BookmarkGroup NO_GROUP_DEFAULT = new BookmarkGroup("-no group-", BookmarkGroup.DEFAULT_GLOBAL_GROUP_ID);
 
-    private final Bookmark.Builder<T> bookmarkBuilder;
+    private final StoredBookmark.Builder<T> bookmarkBuilder;
 
     @FXML
     private TextField bookmarkName;
@@ -64,7 +64,7 @@ public class CreateBookmarkDialog<T extends Bookmark> extends Dialog<BookmarkCre
      * @param bookmarkBuilder The builder instance to create the concrete bookmark instance.
      * @param projectName the current project name (used to filter bookmark groups), may be null for global context
      */
-    public CreateBookmarkDialog(Bookmark.Builder<T> bookmarkBuilder, String projectName) {
+    public CreateBookmarkDialog(StoredBookmark.Builder<T> bookmarkBuilder, String projectName) {
 
         this.bookmarkBuilder = bookmarkBuilder;
 

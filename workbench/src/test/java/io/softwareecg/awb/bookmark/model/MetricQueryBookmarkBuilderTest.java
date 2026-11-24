@@ -130,7 +130,7 @@ public class MetricQueryBookmarkBuilderTest {
 
     @Test
     public void testBuild() throws Exception {
-        Bookmark.Builder<MetricQueryBookmark> builder = new MetricQueryBookmark.Builder().withName("name");
+        StoredBookmark.Builder<MetricQueryBookmark> builder = new MetricQueryBookmark.Builder().withName("name");
         MetricQueryBookmark bookmark1 = builder.build();
         MetricQueryBookmark bookmark2 = builder.build();
 

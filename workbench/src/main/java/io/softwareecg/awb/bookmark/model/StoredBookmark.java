@@ -12,6 +12,7 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.bookmark.model;
 
+import io.softwareecg.awb.bookmark.api.Bookmark;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -23,7 +24,7 @@ import java.io.Serializable;
  * Bookmark metadata is stored in the H2 metadata database.
  *
  */
-public abstract class Bookmark implements Serializable {
+public abstract class StoredBookmark implements Bookmark, Serializable {
 
     private static final long serialVersionUID = -3504999081713331250L;
 
@@ -53,9 +54,10 @@ public abstract class Bookmark implements Serializable {
     /**
      * Protected constructor.
      */
-    protected Bookmark() {
+    protected StoredBookmark() {
     }
 
+    @Override
     public String getId() {
         return id;
     }
@@ -64,11 +66,7 @@ public abstract class Bookmark implements Serializable {
         this.id = id;
     }
 
-    /**
-     * Gets the name.
-     *
-     * @return the name
-     */
+    @Override
     public String getName() {
         return name;
     }
@@ -85,6 +83,7 @@ public abstract class Bookmark implements Serializable {
         this.bookmarkGroupId = bookmarkGroupId;
     }
 
+    @Override
     public String getProject() {
         return project;
     }
@@ -99,7 +98,7 @@ public abstract class Bookmark implements Serializable {
             return true;
         }
 
-        if (!(o instanceof Bookmark bookmark)) {
+        if (!(o instanceof StoredBookmark bookmark)) {
             return false;
         }
         return new EqualsBuilder()
@@ -130,7 +129,7 @@ public abstract class Bookmark implements Serializable {
      *
      * @param <T> The actual type of the created {@link Bookmark}.
      */
-    public abstract static class Builder<T extends Bookmark> {
+    public abstract static class Builder<T extends StoredBookmark> {
         protected String id;
         protected String name;
         protected String bookmarkGroupId;
@@ -147,7 +146,7 @@ public abstract class Bookmark implements Serializable {
          *
          * @param bookmark the initial values for the builder.
          */
-        protected Builder(Bookmark bookmark) {
+        protected Builder(StoredBookmark bookmark) {
             this.id = bookmark.getId();
             this.name = bookmark.getName();
             this.bookmarkGroupId = bookmark.getBookmarkGroupId();
@@ -212,7 +211,7 @@ public abstract class Bookmark implements Serializable {
          * @param bookmark The new bookmark
          */
         protected void build(final T bookmark) {
-            Bookmark b = bookmark;
+            StoredBookmark b = bookmark;
             b.setId(this.id);
             b.name = this.name;
             b.bookmarkGroupId = this.bookmarkGroupId;

@@ -1,6 +1,6 @@
 package io.softwareecg.awb.bookmark.ui;
 
-import io.softwareecg.awb.bookmark.model.Bookmark;
+import io.softwareecg.awb.bookmark.model.StoredBookmark;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
 
 /**
@@ -10,7 +10,7 @@ import io.softwareecg.awb.bookmark.model.BookmarkGroup;
  * @param <T> the concrete bookmark type
  * @since 04.03.2020
  */
-public class BookmarkCreationResult<T extends Bookmark> {
+public class BookmarkCreationResult<T extends StoredBookmark> {
 
     private T bookmark;
 
