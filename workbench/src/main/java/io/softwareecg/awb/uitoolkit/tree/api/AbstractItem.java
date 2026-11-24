@@ -16,9 +16,6 @@ import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.events.ProgressEvent;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import javafx.application.Platform;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.event.ActionEvent;
@@ -45,12 +42,6 @@ import java.util.Set;
  */
 public abstract class AbstractItem<T> extends TreeItem<T> implements Comparable<AbstractItem<T>> {
 
-    // an ObservableList list of TreeItem elements that will populate the tree view.
-    // This member is redundant to the "children" member of super class that couldn't accessed by clients via API
-    final private ObservableList<TreeItem<T>> sourceList = FXCollections.observableArrayList();
-
-    private final ObjectProperty<TreeItemPredicate<T>> predicate = new SimpleObjectProperty<>();
-
     private ContextMenu contextMenu;
 
     private Service<ObservableList<AbstractItem>> service;
@@ -74,38 +65,6 @@ public abstract class AbstractItem<T> extends TreeItem<T> implements Comparable<
      */
     public AbstractItem(T value) {
         super(value);
-
-//        sourceList
-
-        /*
-        todo SKR tree filter to support a search of the whole tree
-
-        sourceList.predicateProperty().bind(Bindings.createObjectBinding(() -> child -> {
-
-            // Set the predicate of child items to force filtering
-            if (child instanceof AbstractItem) {
-                AbstractItem<T> filterableChild = (AbstractItem<T>) child;
-                filterableChild.setPredicate(predicate.get());
-            }
-
-            // If there is no predicate, keep this tree item
-            if (predicate.get() == null) {
-                return true;
-            }
-
-            // If there are children, keep this tree item
-            if (child.getChildren().size() > 0) {
-                return true;
-            }
-
-            // Otherwise ask the TreeItemPredicate
-            return predicate.get().test(this, child.getValue());
-
-        }, predicate));
-
-        */
-
-        //setHiddenFieldChildren(sourceList);
 
         //Ensure we are the ui thread.
         Platform.runLater(() -> contextMenu = new ContextMenu());
@@ -150,26 +109,6 @@ public abstract class AbstractItem<T> extends TreeItem<T> implements Comparable<
         }
 
         return resultSet;
-    }
-
-    /**
-     * @return the predicate
-     */
-    public final TreeItemPredicate<T> getPredicate() {
-        return this.predicate.get();
-    }
-
-    public ObjectProperty<TreeItemPredicate<T>> predicateProperty() {
-        return predicate;
-    }
-
-    /**
-     * Set the predicate
-     *
-     * @param predicate the predicate
-     */
-    public final void setPredicate(TreeItemPredicate<T> predicate) {
-        this.predicate.set(predicate);
     }
 
     /**
@@ -331,31 +270,6 @@ public abstract class AbstractItem<T> extends TreeItem<T> implements Comparable<
     protected int getOrderPriority() {
         return 100;
     }
-
-    /**
-     * Sets the given TreeItem list to the private field "children" of the super class
-     * and bind the (already in super class instantiated) change listener for the tree item list
-     * to the given one.
-     *
-     * This hack is necessary because of an bad inconsistent implementation of the TreeItem super class.
-     * See https://bugs.openjdk.java.net/browse/JDK-8089158 for more details.
-     *
-     * @ p aram treeItemList an observable list of TreeItem elements
-     */
-//    protected void setHiddenFieldChildren(ObservableList<TreeItem<T>> treeItemList) {
-//        try {
-//            Field childrenField = TreeItem.class.getDeclaredField("children"); //$NON-NLS-1$
-//            childrenField.setAccessible(true);
-//            childrenField.set(this, treeItemList);
-//
-//            Field declaredField = TreeItem.class.getDeclaredField("childrenListener"); //$NON-NLS-1$
-//            declaredField.setAccessible(true);
-//            //noinspection unchecked
-//            treeItemList.addListener((ListChangeListener<? super TreeItem<T>>) declaredField.get(this));
-//        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-//            throw new IllegalStateException("Could not set TreeItem.children", e); //$NON-NLS-1$
-//        }
-//    }
 
     @Override
     public int compareTo(AbstractItem<T> o) {

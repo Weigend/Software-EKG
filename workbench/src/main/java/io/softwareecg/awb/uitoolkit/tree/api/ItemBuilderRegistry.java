@@ -15,7 +15,6 @@ package io.softwareecg.awb.uitoolkit.tree.api;
 import javafx.concurrent.Service;
 
 import java.util.List;
-import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -58,31 +57,6 @@ public interface ItemBuilderRegistry {
      */
     <T extends AbstractItem> void registerItemBuilder(Class<? extends T> parentItem,
                                                       BiFunction<T, ProgressNotifier, List<? extends AbstractItem>> builder);
-
-    /**
-     * Remove an item builder.
-     *
-     * @param parentItem The type of the parent items.
-     * @param builder    The builder to build the child items.
-     * @param <T>        The type of the parent item.
-     */
-    <T extends AbstractItem> void unRegisterItemBuilder(Class<? extends T> parentItem,
-                                                        Function<T, List<? extends AbstractItem>> builder);
-
-    /**
-     * Remove an item builder.
-     *
-     * @param parentItem The type of the parent items.
-     * @param builder    The builder to build the child items.
-     * @param <T>        The type of the parent item.
-     */
-    <T extends AbstractItem> void unRegisterItemBuilder(Class<? extends T> parentItem,
-                                                        BiFunction<T, ProgressNotifier, List<? extends AbstractItem>> builder);
-
-    /**
-     * @return a set with all registered parent item types.
-     */
-    Set<Class<? extends AbstractItem>> getRegisteredParentItems();
 
     /**
      * Get a service instance to build the child items for a specific item.

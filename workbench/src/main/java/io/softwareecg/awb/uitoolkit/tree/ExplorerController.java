@@ -75,19 +75,6 @@ public class ExplorerController implements Initializable {
     @SuppressWarnings("unchecked")
     public void setRootItem(AbstractItem<?> rootItem) {
         this.rootItem = rootItem;
-
-        /*
-        todo SKR create search field in explorerView view
-
-Example:
-
-        rootItem.predicateProperty().bind(Bindings.createObjectBinding(() -> {
-            if (filterField.getText() == null || filterField.getText().isEmpty())
-                return null;
-            return TreeItemPredicate.create(actor -> actor.toString().contains(filterField.getText()));
-        }, filterField.textProperty()));
- */
-
         explorerTree.setRoot(this.rootItem);
     }
 

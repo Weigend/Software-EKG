@@ -74,53 +74,6 @@ public class ItemBuilderRegistryImpl implements ItemBuilderRegistry {
     }
 
     /**
-     * Remove an item builder.
-     *
-     * @param parentItem The type of the parent items.
-     * @param builder    The builder to build the child items.
-     * @param <T>        The type of the parent item.
-     */
-    @Override
-    public <T extends AbstractItem> void unRegisterItemBuilder(Class<? extends T> parentItem,
-                                                               Function<T, List<? extends AbstractItem>> builder) {
-        Objects.requireNonNull(builder, HANDLER_NOT_NULL);
-        unRegisterItemBuilder(parentItem, new NoNotifyBuilder<>(builder));
-    }
-
-    /**
-     * Remove an item builder.
-     *
-     * @param parentItem The type of the parent items.
-     * @param builder    The builder to build the child items.
-     * @param <T>        The type of the parent item.
-     */
-    @Override
-    public <T extends AbstractItem> void unRegisterItemBuilder(Class<? extends T> parentItem,
-                                                               BiFunction<T, ProgressNotifier, List<? extends AbstractItem>> builder) {
-        Objects.requireNonNull(parentItem, "Parent item must not be null!");
-        Objects.requireNonNull(builder, HANDLER_NOT_NULL);
-
-        if (!childItemBuilder.containsKey(parentItem)) {
-            return;
-        }
-        Set<BiFunction<? extends AbstractItem, ProgressNotifier, List<? extends AbstractItem>>> builders = childItemBuilder.get(parentItem);
-        builders.remove(builder);
-        synchronized (childItemBuilder) {
-            if (builders.isEmpty()) {
-                childItemBuilder.remove(parentItem);
-            }
-        }
-    }
-
-    /**
-     * @return a set with all registered parent item types.
-     */
-    @Override
-    public Set<Class<? extends AbstractItem>> getRegisteredParentItems() {
-        return childItemBuilder.keySet();
-    }
-
-    /**
      * Get a service instance to build the child items for a specific item.
      *
      * @param parentItem The item to get the builder service.
