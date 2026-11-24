@@ -2,7 +2,7 @@ package io.softwareecg.awb.repository.ui;
 
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
-import io.softwareecg.awb.repository.events.RepositoryModifyEvent;
+import io.softwareecg.awb.repository.events.EditRepositoryRequest;
 import io.softwareecg.awb.repository.api.Embedded;
 import io.softwareecg.awb.repository.ui.admin.EkgRepositoryAdmin;
 import io.softwareecg.wfx.platform.api.EventBus;
@@ -38,8 +38,8 @@ public class RepositoryManagerModule implements Module {
     public void preload() throws PlatformException {
 
         EventBus<EventObject> eventBus = Lookup.lookup(EventBus.class);
-        eventBus.subscribe(RepositoryModifyEvent.class, event
-                -> new EkgRepositoryAdmin().handleModifyRepositoryEvent((RepositoryModifyEvent) event));
+        eventBus.subscribe(EditRepositoryRequest.class, event
+                -> new EkgRepositoryAdmin().editRepository((EditRepositoryRequest) event));
 
         // Pre-warm the embedded Solr stack and the H2 metadata database while
         // the WFX preloader is visible. Both are now lazy:

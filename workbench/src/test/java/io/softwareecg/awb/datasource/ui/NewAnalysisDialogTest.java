@@ -20,7 +20,7 @@ import io.softwareecg.awb.datasource.adapter.windows.WindowsPlan;
 import io.softwareecg.awb.query.api.OpenInvestigationCommand;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.repository.events.ProjectDataChangedEvent;
+import io.softwareecg.awb.repository.events.SeriesDataWrittenEvent;
 import io.softwareecg.collector.source.prometheus.PrometheusException;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.lookup.api.LookupStrategy;
@@ -301,7 +301,7 @@ public class NewAnalysisDialogTest {
         await(() -> !onFx(dialog::isShowing), "the dialog to close");
 
         // the first chart shows the same metric as for hosts that come through a Prometheus server
-        eventBus.publish(new ProjectDataChangedEvent(this, "local", "Databases", 2L));
+        eventBus.publish(new SeriesDataWrittenEvent(this, "local", "Databases", 2L));
         await(() -> !charts.isEmpty(), "the first chart to open");
         assertEquals("linux", charts.get(0).getFilterParams().getHostGroupName());
         assertEquals("cpu_usage_percent", charts.get(0).getFilterParams().getMetricName());
@@ -406,7 +406,7 @@ public class NewAnalysisDialogTest {
         await(() -> !onFx(dialog::isShowing), "the dialog to close");
 
         // the first chart shows the same metric as for hosts of every other source
-        eventBus.publish(new ProjectDataChangedEvent(this, "local", "Windows Servers", 2L));
+        eventBus.publish(new SeriesDataWrittenEvent(this, "local", "Windows Servers", 2L));
         await(() -> !charts.isEmpty(), "the first chart to open");
         assertEquals("windows", charts.get(0).getFilterParams().getHostGroupName());
         assertEquals("cpu_usage_percent", charts.get(0).getFilterParams().getMetricName());
@@ -608,8 +608,8 @@ public class NewAnalysisDialogTest {
         await(() -> !onFx(dialog::isShowing), "the dialog to close");
 
         assertTrue("no chart before there is data", charts.isEmpty());
-        eventBus.publish(new ProjectDataChangedEvent(this, "local", "Other", 1L));
-        eventBus.publish(new ProjectDataChangedEvent(this, "local", "Shop", 2L));
+        eventBus.publish(new SeriesDataWrittenEvent(this, "local", "Other", 1L));
+        eventBus.publish(new SeriesDataWrittenEvent(this, "local", "Shop", 2L));
         await(() -> !charts.isEmpty(), "the first chart to open");
 
         OpenInvestigationCommand chart = charts.get(0);
@@ -617,7 +617,7 @@ public class NewAnalysisDialogTest {
         assertEquals("node", chart.getFilterParams().getHostGroupName());
         assertEquals("cpu_usage_percent", chart.getFilterParams().getMetricName());
 
-        eventBus.publish(new ProjectDataChangedEvent(this, "local", "Shop", 3L));
+        eventBus.publish(new SeriesDataWrittenEvent(this, "local", "Shop", 3L));
         Thread.sleep(300);
         assertEquals("the chart is opened once, later data only updates it", 1, charts.size());
     }

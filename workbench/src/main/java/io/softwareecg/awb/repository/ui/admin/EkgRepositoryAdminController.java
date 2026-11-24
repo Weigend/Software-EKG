@@ -3,7 +3,7 @@ package io.softwareecg.awb.repository.ui.admin;
 import io.softwareecg.awb.uitoolkit.bindings.StaticBoolProperty;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
-import io.softwareecg.awb.repository.events.RepositoryModifyEvent;
+import io.softwareecg.awb.repository.events.EditRepositoryRequest;
 import io.softwareecg.awb.repository.api.Embedded;
 import io.softwareecg.awb.repository.spi.RepositoryTypeDescriptor;
 import io.softwareecg.awb.repository.service.RepositoryTypeRegistry;
@@ -220,7 +220,7 @@ public class EkgRepositoryAdminController implements Initializable {
      * @param event the event that communicates a types modification and where it happens.
      * @return TRUE if
      */
-    public boolean handleModifyRepositoryEvent(RepositoryModifyEvent event) {
+    public boolean editRepository(EditRepositoryRequest event) {
 
         if (!event.isModificationRequested()) {
             return false;

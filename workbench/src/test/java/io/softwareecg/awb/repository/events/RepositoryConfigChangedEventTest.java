@@ -23,32 +23,32 @@ import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.mock;
 
 /**
- * Unit test for the {@link RepositoryChangeEvent}
+ * Unit test for the {@link RepositoryConfigChangedEvent}
  *
  */
-public class EkgRepositoryChangeEventTest {
+public class RepositoryConfigChangedEventTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testNullAsSource() {
-        new RepositoryChangeEvent(mock(EkgRepository.class), ChangedEvent.Change.UPDATE, null);
+        new RepositoryConfigChangedEvent(mock(EkgRepository.class), ChangedEvent.Change.UPDATE, null);
     }
 
     @Test
     public void testObjectNull() {
-        RepositoryChangeEvent event = new RepositoryChangeEvent(null, ChangedEvent.Change.UPDATE, this);
+        RepositoryConfigChangedEvent event = new RepositoryConfigChangedEvent(null, ChangedEvent.Change.UPDATE, this);
         assertThat(event.getObj(), is(nullValue()));
     }
 
     @Test
     public void testChangeNull() {
-        RepositoryChangeEvent event = new RepositoryChangeEvent(mock(EkgRepository.class), null, this);
+        RepositoryConfigChangedEvent event = new RepositoryConfigChangedEvent(mock(EkgRepository.class), null, this);
         assertThat(event.getChange(), is(nullValue()));
     }
 
     @Test
     public void testGetObj() {
         EkgRepository mock = mock(EkgRepository.class);
-        RepositoryChangeEvent event = new RepositoryChangeEvent(mock, ChangedEvent.Change.UPDATE, this);
+        RepositoryConfigChangedEvent event = new RepositoryConfigChangedEvent(mock, ChangedEvent.Change.UPDATE, this);
         MatcherAssert.assertThat(event.getChange(), Matchers.is(ChangedEvent.Change.UPDATE));
         assertThat(event.getObj(), is(equalTo(mock)));
     }

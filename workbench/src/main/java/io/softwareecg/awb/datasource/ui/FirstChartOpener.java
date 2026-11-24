@@ -7,7 +7,7 @@ import io.softwareecg.awb.query.api.OpenInvestigationCommand;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.repository.events.ProjectDataChangedEvent;
+import io.softwareecg.awb.repository.events.SeriesDataWrittenEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.EventBusListener;
 import javafx.application.Platform;
@@ -41,7 +41,7 @@ final class FirstChartOpener {
 
     private final String metric;
 
-    private final EventBusListener<ProjectDataChangedEvent> listener = this::dataChanged;
+    private final EventBusListener<SeriesDataWrittenEvent> listener = this::dataChanged;
 
     private Project project;
 
@@ -63,7 +63,7 @@ final class FirstChartOpener {
      */
     static FirstChartOpener waitFor(EventBus<EventObject> eventBus, EkgRepository repository, CollectionPlan plan) {
         FirstChartOpener opener = new FirstChartOpener(eventBus, repository, plan);
-        eventBus.subscribe(ProjectDataChangedEvent.class, opener.listener);
+        eventBus.subscribe(SeriesDataWrittenEvent.class, opener.listener);
         return opener;
     }
 
@@ -80,10 +80,10 @@ final class FirstChartOpener {
      */
     synchronized void cancel() {
         done = true;
-        eventBus.unsubscribe(ProjectDataChangedEvent.class, listener);
+        eventBus.unsubscribe(SeriesDataWrittenEvent.class, listener);
     }
 
-    private synchronized boolean dataChanged(ProjectDataChangedEvent event) {
+    private synchronized boolean dataChanged(SeriesDataWrittenEvent event) {
         if (projectName.equals(event.getProjectName())) {
             dataArrived = true;
             openIfReady();
@@ -96,7 +96,7 @@ final class FirstChartOpener {
             return;
         }
         done = true;
-        eventBus.unsubscribe(ProjectDataChangedEvent.class, listener);
+        eventBus.unsubscribe(SeriesDataWrittenEvent.class, listener);
 
         @SuppressWarnings({"unchecked", "rawtypes"})
         QuerySpec query = (QuerySpec) new QuerySpec.Builder()

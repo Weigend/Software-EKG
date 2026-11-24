@@ -17,7 +17,7 @@ import io.softwareecg.awb.runtime.di.BeanProvider;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.api.RepositoryNotAvailableException;
 import io.softwareecg.awb.repository.api.RepositoryService;
-import io.softwareecg.awb.repository.events.RepositoryModifyEvent;
+import io.softwareecg.awb.repository.events.EditRepositoryRequest;
 import io.softwareecg.awb.repository.schema.EkgSchemaField;
 import io.softwareecg.awb.repository.api.Embedded;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
@@ -102,7 +102,7 @@ public class RepositoryItem extends RepositoryBaseItem {
 
         if (canBeRemoved) {
             addContextMenuEntry("Edit Repository", e ->
-                    eventBus.publish(new RepositoryModifyEvent(getRepository(), getGraphic().getScene().getWindow())));
+                    eventBus.publish(new EditRepositoryRequest(getRepository(), getGraphic().getScene().getWindow())));
 
             // The embedded repository is not a stored configuration and cannot be removed.
             if (!repository.isEmbedded()) {

@@ -17,10 +17,9 @@ import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.runtime.events.ChangedEvent;
 
 /**
- * An event that indicates that a types has been changed.
- *
+ * The configuration of a repository was added, changed or removed.
  */
-public class RepositoryChangeEvent extends ChangedEvent<EkgRepository> {
+public class RepositoryConfigChangedEvent extends ChangedEvent<EkgRepository> {
 
     /**
      * Create a new changed event
@@ -29,7 +28,7 @@ public class RepositoryChangeEvent extends ChangedEvent<EkgRepository> {
      * @param change the type of the change
      * @param source the sender object.
      */
-    public RepositoryChangeEvent(EkgRepository obj, Change change, Object source) {
+    public RepositoryConfigChangedEvent(EkgRepository obj, Change change, Object source) {
         super(obj, change, source);
     }
 }

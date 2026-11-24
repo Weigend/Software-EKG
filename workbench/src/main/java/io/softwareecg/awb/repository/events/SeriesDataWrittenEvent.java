@@ -4,9 +4,10 @@ import java.util.EventObject;
 
 /**
  * New values of a project were written to its repository, as happens continuously while the
- * data of an analysis is collected. Views that show the project can follow.
+ * data of an analysis is collected. Views that show the project can follow. Only the collection
+ * reports this; an import does not.
  */
-public class ProjectDataChangedEvent extends EventObject {
+public class SeriesDataWrittenEvent extends EventObject {
 
     private final String repositoryId;
 
@@ -20,7 +21,7 @@ public class ProjectDataChangedEvent extends EventObject {
      * @param projectName     the project that got new values
      * @param newestTimestamp the time of the newest value written, in milliseconds since the epoch
      */
-    public ProjectDataChangedEvent(Object source, String repositoryId, String projectName, long newestTimestamp) {
+    public SeriesDataWrittenEvent(Object source, String repositoryId, String projectName, long newestTimestamp) {
         super(source);
         this.repositoryId = repositoryId;
         this.projectName = projectName;

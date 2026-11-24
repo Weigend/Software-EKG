@@ -16,7 +16,7 @@ import io.softwareecg.awb.projectcontext.spi.ProjectDataCollection;
 import io.softwareecg.awb.projectcontext.events.ProjectDataCollectionChangedEvent;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.repository.events.ProjectDataChangedEvent;
+import io.softwareecg.awb.repository.events.SeriesDataWrittenEvent;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.awb.projectcontext.model.CloudPlatformType;
 import io.softwareecg.awb.projectcontext.model.ProjectFlavor;
@@ -552,7 +552,7 @@ public class NewAnalysisService implements ProjectDataCollection {
                 // the first values bring new systems and metrics into the explorer tree
                 publish(new ExplorerUpdateEvent(repository.getId()));
             }
-            publish(new ProjectDataChangedEvent(this, repository.getId(), projectName, newestTimestamp));
+            publish(new SeriesDataWrittenEvent(this, repository.getId(), projectName, newestTimestamp));
         });
 
         engines.put(sourceId, startEngine(parse(source, secret), output));

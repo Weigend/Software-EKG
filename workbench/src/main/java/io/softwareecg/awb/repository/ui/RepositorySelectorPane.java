@@ -14,7 +14,7 @@ package io.softwareecg.awb.repository.ui;
 
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
-import io.softwareecg.awb.repository.events.RepositoryChangeEvent;
+import io.softwareecg.awb.repository.events.RepositoryConfigChangedEvent;
 import io.softwareecg.awb.repository.api.Embedded;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.RepositorySelector;
@@ -114,14 +114,14 @@ public class RepositorySelectorPane extends GridPane implements Initializable, R
     /**
      * Refresh the types list when event is triggered.
      */
-    @EventSubscriber(eventClass = RepositoryChangeEvent.class)
+    @EventSubscriber(eventClass = RepositoryConfigChangedEvent.class)
     public void repositoriesChanged() {
         RepositoryService service = repository.getBoundedService(RepositoryService.class);
         repositories.clear();
 
         if (service == null) {
             // Service not yet available (e.g. repository client connection pending).
-            // The list will be refreshed on the next RepositoryChangeEvent.
+            // The list will be refreshed on the next RepositoryConfigChangedEvent.
             cbRepositorySelection.setValue(null);
             cbRepositorySelection.setDisable(true);
             return;

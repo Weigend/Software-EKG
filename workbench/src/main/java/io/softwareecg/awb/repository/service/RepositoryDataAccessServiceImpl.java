@@ -18,7 +18,7 @@ import io.softwareecg.awb.metadata.port.RepositoryConfigStore;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.port.TimeSeriesRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
-import io.softwareecg.awb.repository.events.RepositoryChangeEvent;
+import io.softwareecg.awb.repository.events.RepositoryConfigChangedEvent;
 import io.softwareecg.awb.repository.model.EkgRepositoryDbType;
 import io.softwareecg.awb.repository.api.Embedded;
 import io.softwareecg.awb.repository.mapping.RepositoryMapper;
@@ -165,7 +165,7 @@ public class RepositoryDataAccessServiceImpl implements RepositoryService, Sourc
         configStore.insert(row);
 
         EkgRepository repository = RepositoryMapper.buildRepository(toRepositoryEt(row));
-        Lookup.lookup(EventBus.class).publish(new RepositoryChangeEvent(repository, ADD, this));
+        Lookup.lookup(EventBus.class).publish(new RepositoryConfigChangedEvent(repository, ADD, this));
         return repository;
     }
 
@@ -189,7 +189,7 @@ public class RepositoryDataAccessServiceImpl implements RepositoryService, Sourc
         }
 
         EkgRepository repository = RepositoryMapper.buildRepository(toRepositoryEt(row));
-        Lookup.lookup(EventBus.class).publish(new RepositoryChangeEvent(repository, UPDATE, this));
+        Lookup.lookup(EventBus.class).publish(new RepositoryConfigChangedEvent(repository, UPDATE, this));
         return repository;
     }
 
@@ -216,7 +216,7 @@ public class RepositoryDataAccessServiceImpl implements RepositoryService, Sourc
     @SuppressWarnings("unchecked")
     public void deleteRepository(String id) {
         configStore.deleteById(id);
-        Lookup.lookup(EventBus.class).publish(new RepositoryChangeEvent(null, DELETE, this));
+        Lookup.lookup(EventBus.class).publish(new RepositoryConfigChangedEvent(null, DELETE, this));
     }
 
     @Override
@@ -232,7 +232,7 @@ public class RepositoryDataAccessServiceImpl implements RepositoryService, Sourc
             throw new IllegalArgumentException("The embedded repository cannot be removed.");
         }
         configStore.deleteWithProjects(repository.getId());
-        Lookup.lookup(EventBus.class).publish(new RepositoryChangeEvent(null, DELETE, this));
+        Lookup.lookup(EventBus.class).publish(new RepositoryConfigChangedEvent(null, DELETE, this));
     }
 
     //=================================================================================================================

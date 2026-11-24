@@ -3,7 +3,7 @@ package io.softwareecg.awb.metricview;
 import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.repository.events.ProjectDataChangedEvent;
+import io.softwareecg.awb.repository.events.SeriesDataWrittenEvent;
 import io.softwareecg.wfx.platform.api.EventSubscriber;
 import javafx.scene.chart.ValueAxis;
 import java.util.Objects;
@@ -136,7 +136,7 @@ public class MetricViewController implements Initializable {
 
     /**
      * The time of the newest value the chart has followed up to; 0 before the first
-     * {@link ProjectDataChangedEvent} for the shown project.
+     * {@link SeriesDataWrittenEvent} for the shown project.
      */
     private long newestDataTime;
 
@@ -270,8 +270,8 @@ public class MetricViewController implements Initializable {
      * New values of a project were written, as happens continuously while its data is collected.
      * A chart that shows this project follows them; how, is decided by {@link ChartFollow}.
      */
-    @EventSubscriber(eventClass = ProjectDataChangedEvent.class)
-    public void projectDataChanged(ProjectDataChangedEvent event) {
+    @EventSubscriber(eventClass = SeriesDataWrittenEvent.class)
+    public void seriesDataWritten(SeriesDataWrittenEvent event) {
         Platform.runLater(() -> {
             if (!concernsShownProject(event)) {
                 return;
@@ -315,7 +315,7 @@ public class MetricViewController implements Initializable {
         return (repository == null ? "" : repository.getId()) + "/" + projectName;
     }
 
-    private boolean concernsShownProject(ProjectDataChangedEvent event) {
+    private boolean concernsShownProject(SeriesDataWrittenEvent event) {
         QuerySpec shown = viewModel.getBaseChartFilterParams();
         EkgRepository repository = viewModel.getEkgRepository();
         return shown != null && repository != null
