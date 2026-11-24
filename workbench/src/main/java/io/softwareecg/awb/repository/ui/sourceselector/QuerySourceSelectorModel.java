@@ -2,7 +2,7 @@ package io.softwareecg.awb.repository.ui.sourceselector;
 
 import io.softwareecg.awb.repository.api.TimeSeriesImportSource;
 import io.softwareecg.awb.repository.api.Repository;
-import io.softwareecg.awb.secrets.model.ResourceAuthType;
+import io.softwareecg.awb.repository.api.ResourceAuthType;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 

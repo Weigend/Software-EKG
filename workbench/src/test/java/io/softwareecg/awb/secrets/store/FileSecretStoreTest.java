@@ -1,4 +1,4 @@
-package io.softwareecg.awb.secrets.adapter.file;
+package io.softwareecg.awb.secrets.store;
 
 import org.junit.Rule;
 import org.junit.Test;

@@ -1,6 +1,6 @@
-package io.softwareecg.awb.secrets.adapter.file;
+package io.softwareecg.awb.secrets.store;
 
-import io.softwareecg.awb.secrets.port.SecretStore;
+import io.softwareecg.awb.secrets.api.SecretStore;
 import jakarta.inject.Singleton;
 
 import java.io.IOException;

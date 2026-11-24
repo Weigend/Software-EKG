@@ -1,6 +1,6 @@
 package io.softwareecg.awb.repository.connection;
 
-import io.softwareecg.awb.secrets.model.ResourceAuthType;
+import io.softwareecg.awb.repository.api.ResourceAuthType;
 
 import java.util.List;
 

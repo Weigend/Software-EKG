@@ -12,7 +12,7 @@ import io.softwareecg.awb.repository.persistence.search.expr.ExprFactory;
 import io.softwareecg.awb.repository.series.StoredSeriesSearch;
 import io.softwareecg.awb.repository.connection.TimeSeriesRepositoryProvider;
 import io.softwareecg.awb.repository.connection.EkgRepositoryDbType;
-import io.softwareecg.awb.secrets.model.ResourceAuthType;
+import io.softwareecg.awb.repository.api.ResourceAuthType;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import org.apache.commons.lang3.StringUtils;

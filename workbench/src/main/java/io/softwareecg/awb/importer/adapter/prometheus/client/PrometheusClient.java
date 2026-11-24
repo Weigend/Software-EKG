@@ -10,8 +10,6 @@ import io.softwareecg.awb.runtime.events.AwbErrorEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import io.softwareecg.wfx.lookup.api.Lookup;
-import io.softwareecg.awb.secrets.security.RequestSecHeaderEnricher;
-import io.softwareecg.awb.secrets.security.SecurityContext;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;

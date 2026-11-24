@@ -2,7 +2,7 @@ package io.softwareecg.awb.repository.ui.sourceselector;
 
 import io.softwareecg.awb.repository.api.TimeSeriesImportSource;
 import io.softwareecg.awb.repository.api.Repository;
-import io.softwareecg.awb.secrets.model.ResourceAuthType;
+import io.softwareecg.awb.repository.api.ResourceAuthType;
 import io.softwareecg.awb.repository.api.SourceRepositoryService;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import static io.softwareecg.awb.secrets.model.ResourceAuthType.*;
+import static io.softwareecg.awb.repository.api.ResourceAuthType.*;
 import static io.softwareecg.awb.uitoolkit.controls.EkgComboBoxListViewSkin.CellBehaviorResource;
 
 

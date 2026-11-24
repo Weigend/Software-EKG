@@ -1,7 +1,6 @@
-package io.softwareecg.awb.secrets.security;
+package io.softwareecg.awb.importer.adapter.prometheus.client;
 
-import io.softwareecg.awb.secrets.model.ResourceAuthType;
-import io.softwareecg.awb.secrets.security.oauth.OpenIdConnectClientCredentialFlow;
+import io.softwareecg.awb.repository.api.ResourceAuthType;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpMessage;
 import org.apache.http.message.BasicHeader;

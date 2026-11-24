@@ -1,4 +1,4 @@
-package io.softwareecg.awb.secrets.port;
+package io.softwareecg.awb.secrets.api;
 
 /**
  * Keeps secrets - passwords, tokens - apart from everything else the AWB stores. Configuration

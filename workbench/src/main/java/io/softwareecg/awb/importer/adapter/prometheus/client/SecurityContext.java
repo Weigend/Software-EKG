@@ -1,7 +1,6 @@
-package io.softwareecg.awb.secrets.security;
+package io.softwareecg.awb.importer.adapter.prometheus.client;
 
-import io.softwareecg.awb.secrets.model.ResourceAuthType;
-import io.softwareecg.awb.secrets.security.oauth.OAuthToken;
+import io.softwareecg.awb.repository.api.ResourceAuthType;
 
 /**
  * A bean that contains security information for a specific resource

@@ -4,7 +4,7 @@ import io.softwareecg.awb.metadata.model.RepositoryConfigRow;
 import io.softwareecg.awb.metadata.port.RepositoryConfigStore;
 import io.softwareecg.awb.repository.adapter.clickhouse.ClickHouseCloudRepository;
 import io.softwareecg.awb.repository.adapter.solr.SolrClassicRepository;
-import io.softwareecg.awb.secrets.model.ResourceAuthType;
+import io.softwareecg.awb.repository.api.ResourceAuthType;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.lookup.api.LookupStrategy;
 import io.softwareecg.wfx.lookup.api.TypeRef;

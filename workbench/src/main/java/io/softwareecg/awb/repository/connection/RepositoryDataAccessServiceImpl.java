@@ -19,7 +19,7 @@ import io.softwareecg.awb.repository.api.RepositoryService;
 import io.softwareecg.awb.repository.api.Embedded;
 import io.softwareecg.awb.repository.api.TimeSeriesImportSource;
 import io.softwareecg.awb.repository.api.Repository;
-import io.softwareecg.awb.secrets.model.ResourceAuthType;
+import io.softwareecg.awb.repository.api.ResourceAuthType;
 import io.softwareecg.awb.repository.api.SourceRepositoryService;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.lookup.api.Lookup;

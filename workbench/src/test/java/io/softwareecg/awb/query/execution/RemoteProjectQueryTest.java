@@ -8,7 +8,7 @@ import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.SeriesPage;
 import io.softwareecg.awb.repository.api.SeriesSearch;
 import io.softwareecg.awb.repository.api.TimeSeriesImportSource;
-import io.softwareecg.awb.secrets.model.ResourceAuthType;
+import io.softwareecg.awb.repository.api.ResourceAuthType;
 import io.softwareecg.awb.timeseries.TimeSeries;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.lookup.api.LookupStrategy;

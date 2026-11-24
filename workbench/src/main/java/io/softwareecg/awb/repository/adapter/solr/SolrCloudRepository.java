@@ -9,7 +9,7 @@ import io.softwareecg.awb.repository.connection.EkgRepository;
 import io.softwareecg.awb.repository.persistence.TimeSeriesRepository;
 import io.softwareecg.awb.repository.connection.TimeSeriesRepositoryProvider;
 import io.softwareecg.awb.repository.connection.EkgRepositoryDbType;
-import io.softwareecg.awb.secrets.model.ResourceAuthType;
+import io.softwareecg.awb.repository.api.ResourceAuthType;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 

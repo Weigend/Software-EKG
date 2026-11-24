@@ -9,7 +9,7 @@ import io.softwareecg.awb.repository.connection.RepositoryTypeRegistry;
 import io.softwareecg.awb.repository.connection.TimeSeriesRepositoryProvider;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
-import io.softwareecg.awb.secrets.model.ResourceAuthType;
+import io.softwareecg.awb.repository.api.ResourceAuthType;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.awb.uitoolkit.controls.EkgComboBoxListViewSkin;
 import jakarta.inject.Inject;
@@ -23,7 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.net.URL;
 import java.util.*;
 
-import static io.softwareecg.awb.secrets.model.ResourceAuthType.*;
+import static io.softwareecg.awb.repository.api.ResourceAuthType.*;
 import static io.softwareecg.awb.uitoolkit.controls.EkgComboBoxListViewSkin.CellBehaviorResource;
 import static org.apache.commons.lang3.StringUtils.isNoneBlank;
 

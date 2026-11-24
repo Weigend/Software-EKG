@@ -3,7 +3,7 @@ package io.softwareecg.awb.importer.ui.dialogs.queryimport;
 import io.softwareecg.awb.projectcontext.api.ProjectSelector;
 import io.softwareecg.awb.projectcontext.model.TargetProjectConfig;
 import io.softwareecg.awb.repository.api.RepositorySelector;
-import io.softwareecg.awb.secrets.model.ResourceAuthType;
+import io.softwareecg.awb.repository.api.ResourceAuthType;
 import io.softwareecg.awb.repository.api.TimeSeriesWriteService;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;

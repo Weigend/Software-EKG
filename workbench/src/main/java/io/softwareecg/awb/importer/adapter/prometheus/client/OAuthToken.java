@@ -1,4 +1,4 @@
-package io.softwareecg.awb.secrets.security.oauth;
+package io.softwareecg.awb.importer.adapter.prometheus.client;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

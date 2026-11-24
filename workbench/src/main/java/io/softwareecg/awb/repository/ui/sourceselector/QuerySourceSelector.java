@@ -2,7 +2,7 @@ package io.softwareecg.awb.repository.ui.sourceselector;
 
 import io.softwareecg.awb.repository.api.TimeSeriesImportSource;
 import io.softwareecg.awb.repository.api.Repository;
-import io.softwareecg.awb.secrets.model.ResourceAuthType;
+import io.softwareecg.awb.repository.api.ResourceAuthType;
 import io.softwareecg.awb.runtime.resources.CdiFxmlLoader;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;

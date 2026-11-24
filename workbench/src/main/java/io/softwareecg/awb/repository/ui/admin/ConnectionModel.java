@@ -14,7 +14,7 @@ package io.softwareecg.awb.repository.ui.admin;
 
 import io.softwareecg.awb.repository.connection.EkgRepository;
 import io.softwareecg.awb.repository.connection.RepositoryTypeDescriptor;
-import io.softwareecg.awb.secrets.model.ResourceAuthType;
+import io.softwareecg.awb.repository.api.ResourceAuthType;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 

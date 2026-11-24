@@ -2,7 +2,7 @@ package io.softwareecg.awb.importer.ui.dialogs.queryimport;
 
 import io.softwareecg.awb.projectcontext.api.ProjectSelector;
 import io.softwareecg.awb.repository.api.TimeSeriesImportSource;
-import io.softwareecg.awb.secrets.model.ResourceAuthType;
+import io.softwareecg.awb.repository.api.ResourceAuthType;
 import io.softwareecg.awb.runtime.resources.CdiFxmlLoader;
 import io.softwareecg.awb.importer.framework.LocalProjectImportStrategy;
 import io.softwareecg.awb.importer.framework.SplitSourceProjectImportStrategy;

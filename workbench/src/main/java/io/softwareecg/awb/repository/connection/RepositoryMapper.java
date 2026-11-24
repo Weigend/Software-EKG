@@ -1,7 +1,7 @@
 package io.softwareecg.awb.repository.connection;
 
 import io.softwareecg.awb.repository.api.TimeSeriesImportSource;
-import io.softwareecg.awb.secrets.model.ResourceAuthType;
+import io.softwareecg.awb.repository.api.ResourceAuthType;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import org.slf4j.Logger;

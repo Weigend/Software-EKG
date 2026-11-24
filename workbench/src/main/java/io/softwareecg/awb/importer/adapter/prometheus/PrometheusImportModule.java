@@ -11,7 +11,7 @@ import io.softwareecg.awb.importer.ui.dialogs.ImportDialog;
 import io.softwareecg.awb.importer.ui.dialogs.queryimport.QueryImportDialog;
 import javafx.scene.image.Image;
 
-import static io.softwareecg.awb.secrets.model.ResourceAuthType.*;
+import static io.softwareecg.awb.repository.api.ResourceAuthType.*;
 
 import io.softwareecg.awb.importer.spi.ClassicViewFlavorSupport;
 import io.softwareecg.awb.importer.spi.CloudViewFlavorSupport;

@@ -8,7 +8,7 @@ import io.softwareecg.awb.importer.adapter.prometheus.client.model.query.QueryRe
 import io.softwareecg.awb.importer.adapter.prometheus.client.model.query.RangeQuery;
 import io.softwareecg.awb.repository.api.TimeSeriesImportSource;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
-import io.softwareecg.awb.secrets.security.SecurityContext;
+import io.softwareecg.awb.importer.adapter.prometheus.client.SecurityContext;
 import io.softwareecg.awb.timeseries.Value;
 import org.slf4j.Logger;
 
