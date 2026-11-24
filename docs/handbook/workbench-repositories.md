@@ -8,18 +8,18 @@ built this way; Elasticsearch is the smallest one to read. There are five parts:
 
 | Part | Contract |
 | --- | --- |
-| The client that talks to the database | `TimeSeriesRepository` in `repository.port` |
-| The factory for clients, and the description of the type | `TimeSeriesRepositoryProvider` in `repository.spi` |
+| The client that talks to the database | `TimeSeriesRepository` in `repository.persistence` |
+| The factory for clients, and the description of the type | `TimeSeriesRepositoryProvider` in `repository.connection` |
 | A qualifier that names the technology for injection | an annotation like `@ElasticSearch` |
 | The repository the rest of the Workbench works with | `RepositoryAdapterBase` in `repository.adapter` |
-| The factory that turns a stored configuration into that repository | `EkgRepository.Factory` in `repository.api` |
+| The factory that turns a stored configuration into that repository | `EkgRepository.Factory` in `repository.connection` |
 
 The provider alone makes the type appear in repository administration. Only with the repository
 and its factory can a repository of that type be created and opened.
 
 ## Steps
 
-1. **Write the client.** Implement the `TimeSeriesRepository` port: search, export, facets, adding
+1. **Write the client.** Implement `TimeSeriesRepository`: search, export, facets, adding
    and deleting entities, commit and close. It must not use JavaFX or any UI class.
 2. **Add a qualifier.** Copy `ElasticSearch.java` under the name of the technology.
 3. **Write the provider.** A `@Singleton` class with the qualifier that implements
@@ -73,7 +73,9 @@ and its factory can a repository of that type be created and opened.
    ```
 
    `RepositoryMapper` asks every `EkgRepository.Factory` whether it supports the stored type and
-   uses the first that does. A type no factory supports cannot be opened.
+   uses the first that does. A type no factory supports cannot be opened. A factory whose
+   technology needs an index name where the user entered none overrides `storedIndexName`, as
+   the one of ClickHouse does.
 5. **Test it.** Cover that the descriptor is found, the connection validation, and one cycle of
    writing, reading and deleting against the real database. `RepositoryTypeRegistryTest` shows
    the registry part.
@@ -92,18 +94,15 @@ and its factory can a repository of that type be created and opened.
 - **`connectionValidator`** gives immediate feedback in the form. The provider remains
   responsible for the real errors: connection, authentication, timeout and cleanup.
 
-`EkgRepositoryDbType` in `repository.model` is an open identity, not an enum. `descriptor.repositoryType()` defines the
+`EkgRepositoryDbType` in `repository.connection` is an open identity, not an enum. `descriptor.repositoryType()` defines the
 ID, so no central list of types has to be extended. `RepositoryTypeRegistry` rejects two types with
 the same ID.
 
 ## What still lives outside the adapters
 
-Two rules for existing technologies are in shared code. A new technology does not have to touch
-them, but one with the same need has to be added there:
+One rule for existing technologies is in shared code. A new technology does not have to touch it,
+but one with the same need has to be added there: `EkgRepositoryAdminController` keeps a trailing
+slash of the URL for Elasticsearch only, and preselects Solr (Classic) in the form.
 
-- `EkgRepositoryAdminController` keeps a trailing slash of the URL for Elasticsearch only, and
-  preselects Solr (Classic) in the form.
-- `RepositoryDataAccessServiceImpl` derives the table name for ClickHouse.
-
-`LayerArchitectureTest` keeps the repository UI from importing an adapter class, and the
-technologies from depending on each other.
+`LayerArchitectureTest` keeps the repository UI from importing an adapter class, the technologies
+from depending on each other, and the other components from using anything but `repository.api`.

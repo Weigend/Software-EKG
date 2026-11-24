@@ -11,6 +11,9 @@ import com.tngtech.archunit.lang.SimpleConditionEvent;
 
 import java.util.function.BiPredicate;
 
+import static com.tngtech.archunit.base.DescribedPredicate.not;
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
+import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.name;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
@@ -187,22 +190,29 @@ public class LayerArchitectureTest {
     }
 
     /**
-     * Wie ein Repository verbunden ist - Adresse, Zugangsdaten, Client - steht in EkgRepository und
-     * bleibt in der Komponente, ebenso die Felder und die Suche der Speicher. Die anderen benutzen
-     * Repository.
+     * Die Aussenkante von repository ist api. Alles andere - Verbindung, Speicher, Suche, Techniken -
+     * bleibt in der Komponente. Ausgenommen sind die zwei Bedienelemente, die andere in ihre Dialoge
+     * setzen: FXML braucht dafuer die Klasse.
      */
     @ArchTest
-    static final ArchRule only_repository_knows_how_a_repository_is_connected =
-            noClasses().that().resideOutsideOfPackages(
-                            "io.softwareecg.awb.repository..")
+    static final ArchRule only_the_api_of_repository_is_used_from_outside =
+            noClasses().that().resideOutsideOfPackage("io.softwareecg.awb.repository..")
+                    // the generated injection module wires every bean and so knows all of them
                     .and().areNotAssignableTo(io.avaje.inject.spi.AvajeModule.class)
-                    .should().dependOnClassesThat().haveFullyQualifiedName(
-                            "io.softwareecg.awb.repository.connection.EkgRepository")
-                    .orShould().dependOnClassesThat().resideInAnyPackage(
-                            "io.softwareecg.awb.repository.persistence..",
-                            "io.softwareecg.awb.repository.adapter..",
-                            "io.softwareecg.awb.repository.series..")
-                    .because("Ansichten brauchen einen Zugang zum Repository, nicht seine Verbindung");
+                    .should().dependOnClassesThat(resideInAPackage("io.softwareecg.awb.repository..")
+                            .and(not(resideInAPackage("io.softwareecg.awb.repository.api..")))
+                            .and(not(name("io.softwareecg.awb.repository.ui.RepositorySelectorPane")))
+                            .and(not(name("io.softwareecg.awb.repository.ui.sourceselector.QuerySourceSelector")))
+                            .as("liegen in repository, aber nicht in seiner api"))
+                    .because("was innen ist, muss sich aendern lassen, ohne die anderen anzufassen");
+
+    /**
+     * Die Pakete in repository: api kennt keines der anderen.
+     */
+    @ArchTest
+    static final ArchRule packages_of_repository_must_be_free_of_cycles =
+            slices().matching("io.softwareecg.awb.repository.(*)..").should().beFreeOfCycles()
+                    .because("Pakete, die sich gegenseitig brauchen, sind in Wahrheit eines");
 
     @ArchTest
     static final ArchRule metadata_clients_must_use_ports_instead_of_h2 =
