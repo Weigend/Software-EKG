@@ -6,7 +6,10 @@ import io.softwareecg.awb.repository.schema.DocumentType;
 import io.softwareecg.awb.repository.port.DeleteParams;
 import io.softwareecg.awb.repository.api.RepositoryException;
 import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.SeriesSearch;
 import io.softwareecg.awb.repository.port.TimeSeriesRepository;
+import io.softwareecg.awb.repository.port.search.expr.ExprFactory;
+import io.softwareecg.awb.repository.search.StoredSeriesSearch;
 import io.softwareecg.awb.repository.spi.TimeSeriesRepositoryProvider;
 import io.softwareecg.awb.repository.model.EkgRepositoryDbType;
 import io.softwareecg.awb.secrets.model.ResourceAuthType;
@@ -162,8 +165,10 @@ public abstract class RepositoryAdapterBase implements EkgRepository {
         }
 
         try {
+            // fails here, with the reason, if the repository cannot be connected
+            getRepositoryClient();
             // an instance of its own: the bean of the injection is the same for all repositories
-            T service = ServiceDiscovery.lookup(serviceInterface, getRepositoryClient());
+            T service = ServiceDiscovery.lookup(serviceInterface, this);
             serviceCache.put(serviceInterface, service);
             return service;
 
@@ -197,6 +202,17 @@ public abstract class RepositoryAdapterBase implements EkgRepository {
     @Override
     public long countValues() throws RepositoryException {
         return getRepositoryClient().sumFieldValue(EkgSchemaField.TS_DATA_AMOUNT_VALUES, List.of());
+    }
+
+    @Override
+    public long countValuesOf(String projectName) throws RepositoryException {
+        return getRepositoryClient().sumFieldValue(EkgSchemaField.TS_DATA_AMOUNT_VALUES,
+                List.of(ExprFactory.exactFilter(EkgSchemaField.PROJECT_NAME, projectName)));
+    }
+
+    @Override
+    public SeriesSearch series() {
+        return new StoredSeriesSearch(getRepositoryClient());
     }
 
     @Override

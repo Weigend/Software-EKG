@@ -20,7 +20,6 @@ import io.softwareecg.awb.timeseries.dimension.logical.Service;
 import io.softwareecg.awb.timeseries.dimension.physical.Host;
 import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
 import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.repository.port.search.facet.FacetParams;
 import io.softwareecg.awb.repository.model.TimeSeriesImportSource;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.commons.lang3.StringUtils;
@@ -160,11 +159,6 @@ public class QuerySpec {
      * An additional query part appended as it is to the of all field queries.
      */
     private String rawQuery;
-
-    /**
-     * The sort mode in case of facet queries.
-     */
-    private FacetParams.FacetSort facetSort = FacetParams.FacetSort.LEXICOGRAPHIC;
 
 
     //================================================================================================================
@@ -508,10 +502,6 @@ public class QuerySpec {
         return rawQuery;
     }
 
-    public FacetParams.FacetSort getFacetSort() {
-        return facetSort;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -620,8 +610,6 @@ public class QuerySpec {
         private long start = -1;
         private long stop = -1;
         private long importDate;
-
-        private FacetParams.FacetSort facetSort = FacetParams.FacetSort.LEXICOGRAPHIC;
 
 
         /**
@@ -1038,19 +1026,6 @@ public class QuerySpec {
         }
 
         /**
-         * Overwrites the default sort mode of
-         * the facet query.
-         * <p/>
-         *
-         * @param facetSort the sort mode that is either the count of the facet occurrence or the lexicographic order
-         * @return this instance
-         */
-        public Builder<T> withSort(FacetParams.FacetSort facetSort) {
-            this.facetSort = facetSort;
-            return this;
-        }
-
-        /**
          * Build the query context
          *
          * @return the built query context.
@@ -1097,7 +1072,6 @@ public class QuerySpec {
             queryFilterParams.start = this.start;
             queryFilterParams.stop = this.stop;
             queryFilterParams.importDate = this.importDate;
-            queryFilterParams.facetSort = this.facetSort;
 
             queryFilterParams.importerSourceRepository = this.sourceRepositoryDefinition;
 

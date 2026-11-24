@@ -13,7 +13,7 @@ import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.query.model.TimeSeriesQuery;
 import io.softwareecg.awb.query.model.TimeSeriesQueryResponse;
 import io.softwareecg.awb.query.pipeline.SeriesTransformPipeline;
-import io.softwareecg.awb.repository.port.TimeSeriesRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.RepositoryException;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.events.ProgressEvent;
@@ -68,12 +68,12 @@ public class QueryRunner implements MetricQueryService {
      * The one that works on a repository; {@link ServiceDiscovery} creates it. The bean of the
      * injection stands for the class only.
      *
-     * @param client the repository to query
+     * @param repository the repository to query
      */
     @SuppressWarnings("unchecked")
-    public QueryRunner(TimeSeriesRepository client) {
+    public QueryRunner(Repository repository) {
         this(Lookup.lookup(EventBus.class), Lookup.lookup(SeriesTransformPipeline.class));
-        this.metricDataAccess = ServiceDiscovery.lookup(MetricDataAccessService.class, client);
+        this.metricDataAccess = ServiceDiscovery.lookup(MetricDataAccessService.class, repository);
     }
 
 

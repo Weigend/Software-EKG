@@ -51,6 +51,17 @@ public interface Repository {
     long countValues() throws RepositoryException;
 
     /**
+     * @return the number of values of a project that are stored in the repository
+     * @throws RepositoryException if the repository cannot tell
+     */
+    long countValuesOf(String projectName) throws RepositoryException;
+
+    /**
+     * @return the series that are stored in the repository
+     */
+    SeriesSearch series();
+
+    /**
      * Deletes the time series of a project. The project itself stays.
      *
      * @throws RepositoryException if the repository could not delete them

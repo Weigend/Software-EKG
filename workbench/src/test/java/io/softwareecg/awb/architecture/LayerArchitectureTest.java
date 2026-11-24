@@ -188,18 +188,21 @@ public class LayerArchitectureTest {
 
     /**
      * Wie ein Repository verbunden ist - Adresse, Zugangsdaten, Client - steht in EkgRepository und
-     * bleibt in der Komponente. Die anderen benutzen Repository. datasource sucht noch selbst im
-     * eingebetteten Repository, wo eine Serie endet.
+     * bleibt in der Komponente, ebenso die Felder und die Suche der Speicher. Die anderen benutzen
+     * Repository.
      */
     @ArchTest
     static final ArchRule only_repository_knows_how_a_repository_is_connected =
             noClasses().that().resideOutsideOfPackages(
-                            "io.softwareecg.awb.repository..",
-                            "io.softwareecg.awb.datasource")
-                    .and().doNotHaveSimpleName("RepositorySeriesEnds")
+                            "io.softwareecg.awb.repository..")
                     .and().areNotAssignableTo(io.avaje.inject.spi.AvajeModule.class)
                     .should().dependOnClassesThat().haveFullyQualifiedName(
                             "io.softwareecg.awb.repository.api.EkgRepository")
+                    .orShould().dependOnClassesThat().resideInAnyPackage(
+                            "io.softwareecg.awb.repository.port..",
+                            "io.softwareecg.awb.repository.schema..",
+                            "io.softwareecg.awb.repository.adapter..",
+                            "io.softwareecg.awb.repository.search..")
                     .because("Ansichten brauchen einen Zugang zum Repository, nicht seine Verbindung");
 
     @ArchTest

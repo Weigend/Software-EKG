@@ -16,7 +16,6 @@ import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
 import io.softwareecg.awb.projectcontext.spi.ProjectDataCollection;
 import io.softwareecg.awb.projectcontext.events.ProjectDataCollectionChangedEvent;
 import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.events.SeriesDataWrittenEvent;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.awb.projectcontext.model.CloudPlatformType;
@@ -86,7 +85,7 @@ public class NewAnalysisService implements ProjectDataCollection {
 
     private static final long MONITOR_INTERVAL_SECONDS = 5;
 
-    private final EkgRepository repository;
+    private final Repository repository;
 
     private final CollectionSourceStore sourceStore;
 
@@ -113,7 +112,7 @@ public class NewAnalysisService implements ProjectDataCollection {
     private ScheduledExecutorService monitor;
 
     @Inject
-    public NewAnalysisService(@External @Embedded EkgRepository repository,
+    public NewAnalysisService(@External @Embedded Repository repository,
                                  @External CollectionSourceStore sourceStore,
                                  @External SecretStore secretStore) {
         this.repository = repository;

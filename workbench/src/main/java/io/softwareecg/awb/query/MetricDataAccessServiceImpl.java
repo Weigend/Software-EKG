@@ -14,21 +14,11 @@ import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.query.model.TimeSeriesQuery;
 import io.softwareecg.awb.query.model.TimeSeriesQueryResponse;
 import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.repository.port.TimeSeriesRepository;
-import io.softwareecg.awb.repository.port.search.expr.ExprFactory;
-import io.softwareecg.awb.repository.port.search.expr.Expression;
-import io.softwareecg.awb.repository.port.search.facet.Facet;
-import io.softwareecg.awb.repository.port.search.facet.FacetEntry;
-import io.softwareecg.awb.repository.port.search.facet.FacetParams;
-import io.softwareecg.awb.repository.port.search.SearchParams;
-import io.softwareecg.awb.repository.port.search.SearchResult;
-import io.softwareecg.awb.repository.port.search.SortField;
-import io.softwareecg.awb.repository.schema.DocumentType;
-import io.softwareecg.awb.repository.schema.EkgSchemaField;
-import io.softwareecg.awb.repository.model.BinaryTimeSeries;
 import io.softwareecg.awb.repository.model.TimeSeriesImportSource;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.RepositoryException;
-import io.softwareecg.awb.timeseries.codec.DateValuePairCodec;
+import io.softwareecg.awb.repository.api.SeriesFilter;
+import io.softwareecg.awb.repository.api.SeriesPage;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.awb.timeseries.TimeSeries;
@@ -39,8 +29,8 @@ import jakarta.inject.Singleton;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
-import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -48,9 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static io.softwareecg.awb.repository.port.search.expr.ExprFactory.*;
-import static io.softwareecg.awb.repository.schema.EkgSchemaField.*;
-
+import io.softwareecg.awb.timeseries.dimension.FilterDimension;
 import io.softwareecg.awb.timeseries.dimension.Measurement;
 import io.softwareecg.awb.timeseries.dimension.Metric;
 import io.softwareecg.awb.timeseries.dimension.MetricGroup;
@@ -70,7 +58,7 @@ public class MetricDataAccessServiceImpl implements MetricDataAccessService {
 
     private final SeriesDataFetcherRegistry fetcherRegistry;
 
-    private TimeSeriesRepository repositoryClient;
+    private Repository repository;
 
     private static final Map<TimeSeriesImportSource, RemoteSeriesDataFetcher> FETCHER_CACHE = new ConcurrentHashMap<>();
 
@@ -96,13 +84,13 @@ public class MetricDataAccessServiceImpl implements MetricDataAccessService {
 
     /**
      * Parameterized constructor of this services that will use the given
-     * TimeSeriesRepository for it's work.
+     * repository for it's work.
      *
-     * @param client the repository client to use
+     * @param repository the repository to read
      */
-    public MetricDataAccessServiceImpl(TimeSeriesRepository client) {
+    public MetricDataAccessServiceImpl(Repository repository) {
         this.fetcherRegistry = Lookup.lookup(SeriesDataFetcherRegistry.class);
-        this.repositoryClient = client;
+        this.repository = repository;
     }
 
     //=================================================================================================================
@@ -124,48 +112,20 @@ public class MetricDataAccessServiceImpl implements MetricDataAccessService {
             QuerySpec queryParams = query.getQueryParams();
             Project project = queryParams.getProject();
 
-            // prepare time series query
-            SearchParams searchParams = new SearchParams();
-            List<Expression> filterExpressions = new ArrayList<>();
-            populateFilter(filterExpressions, queryParams);
+            // the API of the repository starts without a cursor
+            String cursor = TimeSeriesQuery.INITIAL_CURSOR_ID.equals(query.getCursorId()) ? null : query.getCursorId();
+            SeriesPage page = repository.series().find(filterOf(queryParams), cursor, query.getMaxMetricLimit());
 
-            searchParams.withFilterQueries(filterExpressions.toArray(new Expression[0]));
-            searchParams.withSortFields(List.of(
-                    new SortField(TS_START, SortField.SortMode.ASC),
-                    new SortField(ID, SortField.SortMode.ASC)
-            ));
-
-            searchParams.withCursor(query.getCursorId());
-
-            // fetch time series with filter query as export stream
-            long t0 = System.currentTimeMillis();
-            SearchResult<BinaryTimeSeries> searchResult = repositoryClient.search(BinaryTimeSeries.class, searchParams);
-            long tSearch = System.currentTimeMillis() - t0;
-            long totalHits = searchResult.queryStatus().getNumberOfHits();
-
-            if (totalHits > query.getMaxMetricLimit()) {
-                return new TimeSeriesQueryResponse(query.getCursorId(), totalHits, true);
-            }
-
-            long t1 = System.currentTimeMillis();
-            List<BinaryTimeSeries> timeSeriesList = searchResult.rows();
-            long tRows = System.currentTimeMillis() - t1;
-            String nextCursor = searchResult.queryStatus().getCursor();
-
-            if (query.getCursorId() != null && query.getCursorId().equals(nextCursor)) {
-                nextCursor = null;
+            if (page.totalHits() > query.getMaxMetricLimit()) {
+                return new TimeSeriesQueryResponse(query.getCursorId(), page.totalHits(), true);
             }
 
             // populate TimeSeriesQueryResponse instance with time series data (in case of remote projects) fetch
             // payload from remote data sources using a RemoteSeriesDataFetcher
-            TimeSeriesQueryResponse response = new TimeSeriesQueryResponse(nextCursor, totalHits, false);
+            TimeSeriesQueryResponse response = new TimeSeriesQueryResponse(page.nextCursor(), page.totalHits(), false);
             final RemoteSeriesDataFetcher fetcher = retrieveFetcher(queryParams, project);
 
-            long tDecode = 0;
-            long totalBytes = 0;
-            for (BinaryTimeSeries binaryTimeSeries : timeSeriesList) {
-                // create new TimeSeries based on public API POJO's
-                TimeSeries timeSeries = mapToTimeSeries(binaryTimeSeries);
+            for (TimeSeries timeSeries : page.series()) {
 
                 // fetch data from remote data source if required
                 if (project.useSplitSource() && fetcher != null) {
@@ -180,25 +140,15 @@ public class MetricDataAccessServiceImpl implements MetricDataAccessService {
                         return response;
                     }
 
+                    timeSeries.clear();
                     Stream.of(data).forEach(timeSeries::addValue);
 
                 } else {
-                    long td0 = System.currentTimeMillis();
-                    // decode byte[] directly to primitive arrays — no Value object allocation
-                    byte[] rawData = binaryTimeSeries.getData();
-                    totalBytes += rawData != null ? rawData.length : 0;
-                    Object[] arrays = DateValuePairCodec.decodeToPrimitiveArrays(rawData);
-                    filterAndSetArrays(timeSeries, (long[]) arrays[0], (double[]) arrays[1],
-                            queryParams.getStart(), queryParams.getEnd());
-                    tDecode += System.currentTimeMillis() - td0;
+                    cutToInterval(timeSeries, queryParams.getStart(), queryParams.getEnd());
                 }
 
                 response.addTimeSeries(timeSeries);
             }
-
-            LOGGER.info("Fetch chunk: search={}ms, rows={}ms, decode={}ms, series={}, bytes={}MB",
-                    tSearch, tRows, tDecode, timeSeriesList.size(),
-                    String.format("%.1f", totalBytes / (1024.0 * 1024.0)));
 
             return response;
 
@@ -211,16 +161,9 @@ public class MetricDataAccessServiceImpl implements MetricDataAccessService {
     @Override
     public long getAmountMeasuredPointsInProject(String projectName) {
         try {
-            if (StringUtils.isNotBlank(projectName)) {
-                return repositoryClient.sumFieldValue(TS_DATA_AMOUNT_VALUES,
-                        List.of(ExprFactory.exactFilter(PROJECT_NAME, projectName)));
-            }
-
-            repositoryClient.sumFieldValue(TS_DATA_AMOUNT_VALUES, new ArrayList<>());
-
-            return 0;
+            return StringUtils.isNotBlank(projectName) ? repository.countValuesOf(projectName) : 0;
         } catch (RepositoryException ex) {
-            LOGGER.error("Exception raised while trying to delete time series data.", ex);
+            LOGGER.error("Exception raised while counting the values of a project.", ex);
             throw new IllegalStateException(ex);
         }
     }
@@ -228,113 +171,94 @@ public class MetricDataAccessServiceImpl implements MetricDataAccessService {
     @Override
     public List<Process> getProcesses(MetricQuery query) {
         QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withProcess("*").build();
-        return queryFacets(queryClone, TS_PROCESS_NAME,
-                new Process("*", "all"), facetEntry -> new Process(facetEntry.getName(), facetEntry.getName()));
+        return queryFacets(queryClone, FilterDimension.PROCESS,
+                new Process("*", "all"), name -> new Process(name, name));
     }
 
     @Override
     public List<ProcessGroup> getProcessGroups(MetricQuery query) {
         QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withProcessGroup("*").build();
-        return queryFacets(queryClone, TS_PROCESS_GROUP_NAME,
-                new ProcessGroup("*"), facetEntry -> new ProcessGroup(facetEntry.getName()));
+        return queryFacets(queryClone, FilterDimension.PROCESS_GROUP,
+                new ProcessGroup("*"), ProcessGroup::new);
     }
 
     @Override
     public List<HostGroup> getHostGroups(MetricQuery query) {
         QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withHostGroup("*").build();
         return queryFacets(queryClone,
-                TS_HOST_GROUP_NAME, new HostGroup("*"), facetEntry -> new HostGroup(facetEntry.getName()));
+                FilterDimension.HOST_GROUP, new HostGroup("*"), HostGroup::new);
 
     }
 
     @Override
     public List<Host> getHosts(MetricQuery query) {
         QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withHost("*").build();
-        return queryFacets(queryClone, TS_HOST_NAME,
-                new Host("*"), facetEntry -> new Host(facetEntry.getName()));
+        return queryFacets(queryClone, FilterDimension.HOST,
+                new Host("*"), Host::new);
     }
 
     @Override
     public List<Namespace> getNamespaces(MetricQuery query) {
         QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withNamespace("*").build();
-        return queryFacets(queryClone, TS_NAMESPACE_NAME,
-                new Namespace("*"), facetEntry -> new Namespace(facetEntry.getName()));
+        return queryFacets(queryClone, FilterDimension.NAMESPACE,
+                new Namespace("*"), Namespace::new);
 
     }
 
     @Override
     public List<Service> getServices(MetricQuery query) {
         QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withService("*").build();
-        return queryFacets(queryClone, TS_SERVICE_NAME,
-                new Service("*"), facetEntry -> new Service(facetEntry.getName()));
+        return queryFacets(queryClone, FilterDimension.SERVICE,
+                new Service("*"), Service::new);
     }
 
     @Override
     public List<Pod> getPods(MetricQuery query) {
         QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withPod("*").build();
-        return queryFacets(queryClone, TS_POD_NAME,
-                new Pod("*"), c -> new Pod(c.getName()));
+        return queryFacets(queryClone, FilterDimension.POD,
+                new Pod("*"), Pod::new);
     }
 
     @Override
     public List<Container> getContainers(MetricQuery query) {
         QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withContainer("*").build();
-        return queryFacets(queryClone, TS_CONTAINER_NAME,
-                new Container("*"), facetEntry -> new Container(facetEntry.getName()));
+        return queryFacets(queryClone, FilterDimension.CONTAINER,
+                new Container("*"), Container::new);
     }
 
     @Override
     public List<Measurement> getMeasurements(MetricQuery query) {
         QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withMeasurement("*").build();
-        return queryFacets(queryClone, TS_MEASUREMENT,
-                new Measurement("*"), facetEntry -> new Measurement(facetEntry.getName()));
+        return queryFacets(queryClone, FilterDimension.MEASUREMENT,
+                new Measurement("*"), Measurement::new);
     }
 
     @Override
     public List<MetricGroup> getMetricGroups(MetricQuery query) {
         QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withMetricGroup("*").build();
-        return queryFacets(queryClone, TS_METRIC_GROUP,
-                new MetricGroup("*"), facetEntry -> new MetricGroup(facetEntry.getName()));
+        return queryFacets(queryClone, FilterDimension.METRIC_GROUP,
+                new MetricGroup("*"), MetricGroup::new);
     }
 
     @Override
     public List<Metric> getMetricsNames(MetricQuery query) {
         QuerySpec queryClone = new QuerySpec.Builder(query.getQueryParams()).withMetric("*").build();
-        return queryFacets(queryClone, TS_METRIC_NAME,
-                new Metric("*"), facetEntry -> new Metric(facetEntry.getName()));
+        return queryFacets(queryClone, FilterDimension.METRIC_NAME,
+                new Metric("*"), Metric::new);
     }
 
     /* ======================================== private helper ============================================= */
 
-    private <T> List<T> queryFacets(QuerySpec queryParams, EkgSchemaField facetField,
-                                    T wildCardEntry, Function<FacetEntry, T> converter) {
+    private <T> List<T> queryFacets(QuerySpec queryParams, FilterDimension dimension,
+                                    T wildCardEntry, Function<String, T> converter) {
 
         try {
-            FacetParams facetParams = new FacetParams()
-                    .withLimit(2500)
-                    .withMinCount(1)
-                    .withSort(queryParams.getFacetSort())
-                    .withFacetFields(facetField);
-
-            List<Expression> andExpressions = new ArrayList<>();
-            populateFilter(andExpressions, queryParams);
-            facetParams.withFilterQueries(and(andExpressions.toArray(new Expression[0])));
-
-            List<Facet> facets = repositoryClient.facet(facetParams).getFacets();
-
-            List<T> resultList = new ArrayList<>(facets.size() + 1);
-            if (facets.size() > 0) {
-                resultList.add(0, wildCardEntry);
+            List<T> resultList = new ArrayList<>();
+            resultList.add(wildCardEntry);
+            for (String value : repository.series().valuesOf(dimension, filterOf(queryParams))) {
+                resultList.add(converter.apply(value));
             }
-
-            for (Facet facet : facets) {
-                for (FacetEntry facetEntry : facet.entries()) {
-                    resultList.add(converter.apply(facetEntry));
-                }
-            }
-
             return resultList;
-
 
         } catch (RepositoryException ex) {
             LOGGER.info("Repository is offline: {}", ex.getMessage());
@@ -343,105 +267,58 @@ public class MetricDataAccessServiceImpl implements MetricDataAccessService {
         }
     }
 
-    private TimeSeries mapToTimeSeries(BinaryTimeSeries timeSeriesEntity) {
-        TimeSeries timeSeries = new TimeSeries(
-                timeSeriesEntity.getProjectName(),
-
-                timeSeriesEntity.getHostGroup(),
-                timeSeriesEntity.getHost(),
-
-                timeSeriesEntity.getNamespace(),
-                timeSeriesEntity.getService(),
-                timeSeriesEntity.getPod(),
-                timeSeriesEntity.getContainer(),
-
-                timeSeriesEntity.getMeasurement(),
-                timeSeriesEntity.getProcessGroup(),
-
-                timeSeriesEntity.getProcess(),
-                timeSeriesEntity.getMetricGroup(),
-                timeSeriesEntity.getMetricName());
-
-        timeSeries.setRemoteSeriesKey(timeSeriesEntity.getRemoteSeriesKey());
-
-        return timeSeries;
-    }
-
-    private void populateFilter(List<Expression> andExpressions, QuerySpec queryParams) {
-
-        // static parts that must always match
-        andExpressions.add(exactFilter(DOC_TYPE, DocumentType.TIME_SERIES.toString()));
-        andExpressions.add(exactFilter(PROJECT_NAME, queryParams.getProjectName()));
+    /**
+     * Translates what the user chose; the filter of the repository does not know how it is written.
+     */
+    private static SeriesFilter filterOf(QuerySpec queryParams) {
+        SeriesFilter filter = SeriesFilter.ofProject(queryParams.getProjectName());
 
         // the facet filter for the different dimensions
-        addWildcardExpressionIfNotNull(andExpressions, TS_HOST_GROUP_NAME, queryParams.getHostGroup());
-        addWildcardExpressionIfNotNull(andExpressions, TS_HOST_NAME, queryParams.getHost());
-        addWildcardExpressionIfNotNull(andExpressions, TS_NAMESPACE_NAME, queryParams.getNamespace());
-        addWildcardExpressionIfNotNull(andExpressions, TS_SERVICE_NAME, queryParams.getService());
-        addWildcardExpressionIfNotNull(andExpressions, TS_POD_NAME, queryParams.getPod());
-        addWildcardExpressionIfNotNull(andExpressions, TS_CONTAINER_NAME, queryParams.getContainer());
-        addWildcardExpressionIfNotNull(andExpressions, TS_PROCESS_NAME, queryParams.getProcess());
-        addWildcardExpressionIfNotNull(andExpressions, TS_PROCESS_GROUP_NAME, queryParams.getProcessGroup());
-        addWildcardExpressionIfNotNull(andExpressions, TS_MEASUREMENT, queryParams.getMeasurement());
-        addWildcardExpressionIfNotNull(andExpressions, TS_METRIC_GROUP, queryParams.getMetricGroup());
+        addIfChosen(filter, FilterDimension.HOST_GROUP, queryParams.getHostGroup());
+        addIfChosen(filter, FilterDimension.HOST, queryParams.getHost());
+        addIfChosen(filter, FilterDimension.NAMESPACE, queryParams.getNamespace());
+        addIfChosen(filter, FilterDimension.SERVICE, queryParams.getService());
+        addIfChosen(filter, FilterDimension.POD, queryParams.getPod());
+        addIfChosen(filter, FilterDimension.CONTAINER, queryParams.getContainer());
+        addIfChosen(filter, FilterDimension.PROCESS, queryParams.getProcess());
+        addIfChosen(filter, FilterDimension.PROCESS_GROUP, queryParams.getProcessGroup());
+        addIfChosen(filter, FilterDimension.MEASUREMENT, queryParams.getMeasurement());
+        addIfChosen(filter, FilterDimension.METRIC_GROUP, queryParams.getMetricGroup());
 
         if (StringUtils.isNotBlank(queryParams.getExcludeMetricName())) {
-            andExpressions.add(ExprFactory.not(wildcardFilter(TS_METRIC_NAME, queryParams.getExcludeMetricName())));
+            filter.matchesNot(FilterDimension.METRIC_NAME, queryParams.getExcludeMetricName());
         }
 
         // special treatment for the metric name that supports multi selection
-        List<String> metricNames = queryParams.getMetricNames();
         if (StringUtils.isNotBlank(queryParams.getMetricName())) {
-            addWildcardExpressionIfNotNull(andExpressions, TS_METRIC_NAME, queryParams.getMetric());
+            addIfChosen(filter, FilterDimension.METRIC_NAME, queryParams.getMetric());
 
-        } else if (metricNames.size() > 1) {
-            List<Expression> orExpressions = new ArrayList<>(metricNames.size());
-            metricNames.forEach(name -> orExpressions.add(wildcardFilter(TS_METRIC_NAME, name)));
-            andExpressions.add(or(orExpressions.toArray(new Expression[0])));
-
-        } else if (metricNames.size() == 1) {
-            andExpressions.add(wildcardFilter(TS_METRIC_NAME, metricNames.get(0)));
+        } else if (!queryParams.getMetricNames().isEmpty()) {
+            filter.matches(FilterDimension.METRIC_NAME, queryParams.getMetricNames());
         }
 
-        // Last but not least the filter for the requested time interval: every part of a series
-        // that reaches into it - it ends after the start and begins before the end. The bounds
-        // are taken as they are. They used to be moved inwards by a minute each, which dropped
-        // the parts at the edges and, in a window of about a minute, nearly all of them.
-        if (queryParams.getStart() > 0) {
-            andExpressions.add(dateTimeRangeFilter(TS_STOP, Instant.ofEpochMilli(queryParams.getStart()), null));
-        }
-
-        if (queryParams.getEnd() > 0) {
-            andExpressions.add(dateTimeRangeFilter(TS_START, null, Instant.ofEpochMilli(queryParams.getEnd())));
-        }
+        return filter.reachesInto(queryParams.getStart(), queryParams.getEnd());
     }
 
-    private void addWildcardExpressionIfNotNull(List<Expression> expressions, EkgSchemaField field, NamedValueEntity entity) {
+    /**
+     * A choice is a pattern, or {@code -(pattern)} for all but this, or {@code |(pattern|pattern)}
+     * for one of several.
+     */
+    private static void addIfChosen(SeriesFilter filter, FilterDimension dimension, NamedValueEntity entity) {
 
         if (entity != null && StringUtils.isNotBlank(entity.getValueName()) && !"*".equals(entity.getValueName())) {
             String exp = entity.getValueName();
             if (exp.startsWith("-(") && exp.endsWith(")")) {
-                expressions.add(not(wildcardFilter(field, exp.substring(2, exp.length() - 1))));
+                filter.matchesNot(dimension, exp.substring(2, exp.length() - 1));
 
-            } else if(exp.startsWith("|(") && exp.endsWith(")")) {
-                String[] filterTokens = exp.substring(2, exp.length() - 1).split("\\|");
-
-                if (filterTokens.length > 1) {
-                    List<Expression> orFilterExpressions = new ArrayList<>();
-
-                    for (String token : filterTokens) {
-                        orFilterExpressions.add(wildcardFilter(field, token));
-                    }
-
-                    expressions.add(or(orFilterExpressions.toArray(new Expression[0])));
-
-                } else if (filterTokens.length == 1) {
-                    expressions.add(wildcardFilter(field, filterTokens[0]));
-
+            } else if (exp.startsWith("|(") && exp.endsWith(")")) {
+                List<String> patterns = Arrays.asList(exp.substring(2, exp.length() - 1).split("\\|"));
+                if (!patterns.isEmpty()) {
+                    filter.matches(dimension, patterns);
                 }
 
             } else {
-                expressions.add(wildcardFilter(field, entity.getValueName()));
+                filter.matches(dimension, List.of(exp));
             }
         }
     }
@@ -498,16 +375,16 @@ public class MetricDataAccessServiceImpl implements MetricDataAccessService {
     }
 
     /**
-     * Filters primitive arrays by time interval and sets them directly on the TimeSeries.
+     * Leaves only the values inside the interval in the series.
      * Two-pass: count matching points, then copy into exact-sized arrays.
      */
-    private static void filterAndSetArrays(TimeSeries timeSeries, long[] ts, double[] vals, long begin, long end) {
-        boolean needsFilter = begin > 0 || end > 0;
-
-        if (!needsFilter) {
-            timeSeries.setSortedArrays(ts, vals);
+    private static void cutToInterval(TimeSeries timeSeries, long begin, long end) {
+        if (begin <= 0 && end <= 0) {
             return;
         }
+
+        long[] ts = timeSeries.getTimestamps();
+        double[] vals = timeSeries.getValuesArray();
 
         // count matching points
         int count = 0;
@@ -518,11 +395,11 @@ public class MetricDataAccessServiceImpl implements MetricDataAccessService {
         }
 
         if (count == ts.length) {
-            timeSeries.setSortedArrays(ts, vals);
             return;
         }
 
         if (count == 0) {
+            timeSeries.clear();
             return;
         }
 

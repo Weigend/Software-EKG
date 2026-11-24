@@ -19,7 +19,7 @@ import io.softwareecg.awb.datasource.adapter.windows.WindowsMetric;
 import io.softwareecg.awb.datasource.adapter.windows.WindowsPlan;
 import io.softwareecg.awb.query.api.OpenInvestigationCommand;
 import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.events.SeriesDataWrittenEvent;
 import io.softwareecg.collector.source.prometheus.PrometheusException;
 import io.softwareecg.wfx.lookup.api.Lookup;
@@ -902,7 +902,7 @@ public class NewAnalysisDialogTest {
         volatile List<Group> groups = List.of(NODE, API);
         volatile int discoveries;
 
-        private final EkgRepository repository = mock(EkgRepository.class);
+        private final Repository repository = mock(Repository.class);
 
         FakeService() {
             super(null, null, null);
@@ -964,7 +964,7 @@ public class NewAnalysisDialogTest {
         }
 
         @Override
-        public EkgRepository getRepository() {
+        public Repository getRepository() {
             return repository;
         }
     }

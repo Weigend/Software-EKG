@@ -26,7 +26,6 @@ import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
 import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.repository.api.Repository;
-import io.softwareecg.awb.repository.port.search.facet.FacetParams;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -99,8 +98,7 @@ public class ChartHeaderBusinessProcess extends QueryDraft {
                     @Override
                     protected Collection<T> call() {
                         QuerySpec.Builder<QuerySpec> filterBuilder = new QuerySpec.Builder<>(
-                                ChartHeaderBusinessProcess.super.asQueryParams()
-                        ).withSort(FacetParams.FacetSort.LEXICOGRAPHIC);
+                                ChartHeaderBusinessProcess.super.asQueryParams());
 
                         return fetcher.apply(new MetricQuery(filterBuilder.build()));
                     }

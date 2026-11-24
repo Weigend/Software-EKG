@@ -9,7 +9,7 @@ import io.softwareecg.awb.datasource.adapter.prometheus.MetricExpression;
 import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
 import io.softwareecg.awb.projectcontext.spi.ProjectDataCollection;
 import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.projectcontext.model.CloudPlatformType;
 import io.softwareecg.awb.projectcontext.model.ProjectFlavor;
 import io.softwareecg.awb.repository.api.TimeSeriesWriteService;
@@ -66,7 +66,7 @@ public class DataCollectionServiceTest {
         });
         doAnswer(call -> projectNames.remove(call.<String>getArgument(0))).when(projects).deleteProjectByName(anyString());
 
-        EkgRepository repository = mock(EkgRepository.class);
+        Repository repository = mock(Repository.class);
         when(repository.getId()).thenReturn("local");
 
         SecretStore secretStore = new SecretStore() {

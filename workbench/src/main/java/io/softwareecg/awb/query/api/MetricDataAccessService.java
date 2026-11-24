@@ -51,7 +51,7 @@ public interface MetricDataAccessService {
      * other filter values for this dimension.
      *
      * @param query the filter query that will used to find the right set of facet that matches to the filter set.
-     * @return the facets based on the given query sorted in the way defined by the FacetParams.FacetSort property
+     * @return the facets based on the given query in alphabetical order
      */
     List<HostGroup> getHostGroups(MetricQuery query);
 
@@ -64,7 +64,7 @@ public interface MetricDataAccessService {
      * other filter values for this dimension.
      *
      * @param query the filter query that will used to find the right set of facet that matches to the filter set.
-     * @return the facets based on the given query sorted in the way defined by the FacetParams.FacetSort property
+     * @return the facets based on the given query in alphabetical order
      */
     List<Host> getHosts(MetricQuery query);
 
@@ -81,7 +81,7 @@ public interface MetricDataAccessService {
      * other filter values for this dimension.
      *
      * @param query the filter query that will used to find the right set of facet that matches to the filter set.
-     * @return the facets based on the given query sorted in the way defined by the FacetParams.FacetSort property
+     * @return the facets based on the given query in alphabetical order
      */
     List<Namespace> getNamespaces(MetricQuery query);
 
@@ -93,7 +93,7 @@ public interface MetricDataAccessService {
      * other filter values for this dimension.
      *
      * @param query the filter query that will used to find the right set of facet that matches to the filter set.
-     * @return the facets based on the given query sorted in the way defined by the FacetParams.FacetSort property
+     * @return the facets based on the given query in alphabetical order
      */
     List<Service> getServices(MetricQuery query);
 
@@ -105,7 +105,7 @@ public interface MetricDataAccessService {
      * other filter values for this dimension.
      *
      * @param query the filter query that will used to find the right set of facet that matches to the filter set.
-     * @return the facets based on the given query sorted in the way defined by the FacetParams.FacetSort property
+     * @return the facets based on the given query in alphabetical order
      */
     List<Pod> getPods(MetricQuery query);
 
@@ -117,7 +117,7 @@ public interface MetricDataAccessService {
      * other filter values for this dimension.
      *
      * @param query the filter query that will used to find the right set of facet that matches to the filter set.
-     * @return the facets based on the given query sorted in the way defined by the FacetParams.FacetSort property
+     * @return the facets based on the given query in alphabetical order
      */
     List<Container> getContainers(MetricQuery query);
 
