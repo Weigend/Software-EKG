@@ -74,6 +74,9 @@
         <dependency><groupId>org.controlsfx</groupId><artifactId>controlsfx</artifactId></dependency>
         <dependency><groupId>io.softwareecg.wfx</groupId><artifactId>wfx-all</artifactId></dependency>
         <dependency><groupId>com.github.afester.javafx</groupId><artifactId>FranzXaver</artifactId></dependency>
+        <!-- Xalan, which FranzXaver brings, does not work without it, and does not say so since 2.7.3:
+             the export of a chart to Excel ended in an empty file. -->
+        <dependency><groupId>xalan</groupId><artifactId>serializer</artifactId><scope>runtime</scope></dependency>
         <dependency><groupId>org.apache.xmlgraphics</groupId><artifactId>batik-dom</artifactId></dependency>
         <dependency><groupId>org.apache.xmlgraphics</groupId><artifactId>batik-anim</artifactId></dependency>
         <dependency><groupId>org.apache.xmlgraphics</groupId><artifactId>batik-bridge</artifactId></dependency>

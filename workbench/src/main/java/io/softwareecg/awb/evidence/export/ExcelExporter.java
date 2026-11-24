@@ -87,6 +87,9 @@ public class ExcelExporter {
 
     private void writeSeriesData(SXSSFWorkbook workbook, Sheet workSheet, List<ExcelExportSeriesData> seriesDataList) {
 
+        // one for all cells: a workbook can have 64,000 styles, and a chart has more points than that
+        CellStyle dateTimeStyle = createDateTimeStyle(workbook);
+
         boolean hasNextRow = true;
         int rowIndex = 0;
 
@@ -104,7 +107,7 @@ public class ExcelExporter {
                 XYChart.Data<Long, Double> dataPoint = seriesData.getDataAt(rowIndex);
 
                 if (dataPoint != null) {
-                    createDateTimeCell(workbook, seriesDataRow, columnIndex++, dataPoint.getXValue());
+                    createDateTimeCell(dateTimeStyle, seriesDataRow, columnIndex++, dataPoint.getXValue());
                     Cell valueCell = seriesDataRow.createCell(columnIndex++, CellType.NUMERIC);
                     valueCell.setCellValue(dataPoint.getYValue());
 
@@ -119,18 +122,15 @@ public class ExcelExporter {
     }
 
 
-    private void createDateTimeCell(SXSSFWorkbook workbook, Row row, int columnIndex, long timestamp) {
-
-        CreationHelper createHelper = workbook.getCreationHelper();
-
-        // we style the second cell as a date (and time).  It is important to
-        // create a new cell style from the workbook otherwise you can end up
-        // modifying the built in style and effecting not only this cell but other cells.
+    private static CellStyle createDateTimeStyle(SXSSFWorkbook workbook) {
         CellStyle cellStyle = workbook.createCellStyle();
-        cellStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd.mm.yyyy hh:mm:ss.000"));
-        Cell cell = row.createCell(columnIndex);
-        cell.setCellValue(new Date(timestamp));
-        cell.setCellStyle(cellStyle);
+        cellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat("dd.mm.yyyy hh:mm:ss.000"));
+        return cellStyle;
     }
 
+    private static void createDateTimeCell(CellStyle style, Row row, int columnIndex, long timestamp) {
+        Cell cell = row.createCell(columnIndex);
+        cell.setCellValue(new Date(timestamp));
+        cell.setCellStyle(style);
+    }
 }
