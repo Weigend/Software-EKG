@@ -38,27 +38,10 @@
         <argLine/>
     </properties>
 
-    <!-- Real deployment and extension boundaries only. The former 83-project reactor
-         represented implementation layers as artifacts; those layers now live as packages. -->
+    <!-- One module per product. The modules of the collector are real deployment and extension
+         boundaries and listed in its own POM; the parts of the workbench are packages. -->
     <modules>
-        <!-- The collector artifacts inherit their dependency management from this parent.
-             Keep it in the reactor so install/deploy publishes a usable consumer model. -->
-        <module>build/collector-parent</module>
-        <module>collector/core</module>
-        <module>collector/repositories/csv</module>
-        <module>collector/repositories/rdb</module>
-        <module>collector/repositories/solr</module>
-        <module>collector/repositories/elasticsearch</module>
-        <module>collector/sources/jmx</module>
-        <module>collector/sources/jolokia</module>
-        <module>collector/sources/log</module>
-        <module>collector/sources/mock</module>
-        <module>collector/sources/prometheus</module>
-        <module>collector/sources/unix</module>
-        <module>collector/sources/windows</module>
-        <module>collector/apps/cli</module>
-        <module>collector/apps/ui</module>
-        <module>collector/apps/jolokia-agent</module>
+        <module>collector</module>
         <module>workbench</module>
     </modules>
 

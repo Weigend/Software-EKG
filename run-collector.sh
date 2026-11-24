@@ -17,7 +17,7 @@ if [ "${1:-}" = "--no-build" ]; then
     shift
 else
     # from the root, so that Maven reads .mvn/jvm.config there
-    (cd "$ROOT" && mvn -q -pl collector/apps/cli -am package -DskipTests)
+    (cd "$ROOT" && mvn -q -f collector -pl apps/cli -am package -DskipTests)
 fi
 
 # Builds of several versions may lie next to each other. The last one is told by its jar: the

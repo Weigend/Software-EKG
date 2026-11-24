@@ -95,13 +95,13 @@ This repository is the consolidated variant of AWB, AWB-SDK and Collector. There
 | Directory | Purpose |
 | --- | --- |
 | `workbench` | One JavaFX application with UI, chart engine, importers, local storage and embedded collector |
+| `collector` | The collector as a product of its own, with its own `pom.xml`: modules, shared build configuration and distribution |
 | `collector/core` | Configuration, collector engine, SSH, storage and source contracts |
 | `collector/sources/*` | Data sources loaded via ServiceLoader, such as Prometheus, Unix, Windows, JMX and logs |
 | `collector/repositories/*` | CSV, Solr and Elasticsearch storage adapters including compression |
 | `collector/apps/cli` | Standalone collector and its distribution; headless unless its display is switched on |
 | `collector/apps/ui` | Display of the collector for a small touch screen: jobs, their state and values; off unless switched on (`--ui`) |
 | `collector/apps/jolokia-agent` | Jolokia agent as a WAR |
-| `build/collector-parent` | Shared internal build configuration of the collector modules |
 
 The historical mapping and the parts that were deliberately removed are documented in [docs/architecture/single-repository.md](docs/architecture/single-repository.md).
 
@@ -131,6 +131,10 @@ xvfb-run -a mvn test
 
 # fast build without tests
 mvn clean package -DskipTests
+
+# only the collector, or only the workbench with the modules of the collector it contains
+mvn -f collector clean package
+mvn -pl workbench -am clean package
 ```
 
 `.mvn/jvm.config` passes two JVM options to Maven so that Java 25 does not warn on every call

@@ -7,13 +7,34 @@
         <groupId>io.softwareecg</groupId>
         <artifactId>software-ekg</artifactId>
         <version>${revision}</version>
-        <relativePath>../../pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>io.softwareecg.collector</groupId>
     <artifactId>collector-parent</artifactId>
     <packaging>pom</packaging>
-    <name>Software-EKG Collector Build</name>
+    <name>Software-EKG Collector</name>
+    <description>Builds the collector: its modules and the distribution, without the workbench.</description>
+
+    <!-- mvn -f collector package builds the product; with -Pdist it gets a Java runtime and a ZIP.
+         The modules inherit their dependency management from here. -->
+    <modules>
+        <module>core</module>
+        <module>repositories/csv</module>
+        <module>repositories/rdb</module>
+        <module>repositories/solr</module>
+        <module>repositories/elasticsearch</module>
+        <module>sources/jmx</module>
+        <module>sources/jolokia</module>
+        <module>sources/log</module>
+        <module>sources/mock</module>
+        <module>sources/prometheus</module>
+        <module>sources/unix</module>
+        <module>sources/windows</module>
+        <module>apps/cli</module>
+        <module>apps/ui</module>
+        <module>apps/jolokia-agent</module>
+    </modules>
 
     <!--
     *************************************************************************************************************

@@ -33,7 +33,7 @@ Die Teile der Workbench erfüllen diese Kriterien nicht. Sie sind Komponenten in
 | Laufzeitklassen des AWB-SDK | `workbench` | interne Verträge der einzigen Anwendung |
 | SDK-Testsupport | `workbench/src/test` | Testfixture statt ausgeliefertem Produktartefakt |
 
-Der Reactor umfasst damit 17 Module beziehungsweise 18 Maven-Projekte einschließlich des Root-Projekts, statt zuvor 83 Projekten.
+Der Reactor umfasst damit 17 Module beziehungsweise 18 Maven-Projekte einschließlich des Root-Projekts, statt zuvor 83 Projekten. Jedes Produkt hat ein eigenes POM, `collector/pom.xml` und `workbench/pom.xml`; das Root-POM listet diese zwei.
 
 ## Bewusst nicht übernommen
 

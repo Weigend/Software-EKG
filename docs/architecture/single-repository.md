@@ -33,7 +33,7 @@ The parts of the workbench do not meet these criteria. They are components in pa
 | Runtime classes of the AWB-SDK | `workbench` | internal contracts of the only application |
 | SDK test support | `workbench/src/test` | test fixture instead of a shipped product artifact |
 
-The reactor thus comprises 17 modules, or 18 Maven projects including the root project, instead of 83 projects before.
+The reactor thus comprises 17 modules, or 18 Maven projects including the root project, instead of 83 projects before. Each product has a POM of its own, `collector/pom.xml` and `workbench/pom.xml`; the root POM lists these two.
 
 ## Deliberately not carried over
 

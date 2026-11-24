@@ -363,7 +363,7 @@ The released packages are built for Linux on x64, macOS and Windows. For a Raspb
 the Collector on the Pi itself, so that it gets the JavaFX for its processor:
 
 ```bash
-mvn -pl collector/apps/cli -am package -DskipTests
+mvn -f collector package -DskipTests
 ```
 
 It needs a Java 25 runtime for ARM, a 64 bit operating system with a desktop, and Maven. Set

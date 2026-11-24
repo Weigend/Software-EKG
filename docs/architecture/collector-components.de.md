@@ -43,6 +43,10 @@ Die Workbench ist ein Modul, und ihre Komponenten sind Pakete. Beim Collector is
 Grenzen sind **Maven-Module**, weil Quellen und Repositories Plugins sind, die zur Laufzeit gefunden
 werden. Eine eigene Quelle oder ein eigenes Repository ist ein JAR im Verzeichnis `lib`.
 
+`collector/pom.xml` listet die Module auf und enthält, was ihre Builds gemeinsam haben. Damit wird der
+Collector für sich gebaut: `mvn -f collector package`, mit `-Pdist` auch seine Java-Laufzeit und das
+ZIP.
+
 | Modul | Klassen | braucht | Inhalt |
 | --- | ---: | --- | --- |
 | `core` | 100 | – | Engine, Konfiguration, Verträge, SSH, die Quelle `calc` |
@@ -348,7 +352,7 @@ es der Compiler; innerhalb von `core` tut es nichts.
 
 ## Die Bilder erneuern
 
-1. Die JARs bauen: `mvn -o clean package -DskipTests`
+1. Die JARs bauen: `mvn -o -f collector clean package -DskipTests`
 2. Diese JARs zusammen in S202 öffnen: `core`, `apps/ui` und alle unter `sources` und `repositories`,
    jeweils `target/*-SNAPSHOT.jar` ohne `-sources` und `-tests`.
 3. **Depth** auf 0 setzen, **Refresh**, dann **File → Export Image…** (Strg+E): `level0.png`.

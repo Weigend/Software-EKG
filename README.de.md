@@ -95,13 +95,13 @@ Dieses Repository ist die konsolidierte Variante von AWB, AWB-SDK und Collector.
 | Verzeichnis | Zweck |
 | --- | --- |
 | `workbench` | Eine JavaFX-Anwendung mit UI, Chart Engine, Importern, lokaler Speicherung und eingebettetem Collector |
+| `collector` | Der Collector als eigenes Produkt mit eigener `pom.xml`: Module, gemeinsame Build-Konfiguration und Distribution |
 | `collector/core` | Konfiguration, Collector Engine, SSH, Speicher- und Source-Verträge |
 | `collector/sources/*` | Per ServiceLoader ladbare Datenquellen, etwa Prometheus, Unix, Windows, JMX und Logs |
 | `collector/repositories/*` | CSV-, Solr- und Elasticsearch-Speicheradapter einschließlich Kompression |
 | `collector/apps/cli` | Eigenständiger Collector und dessen Distribution; ohne Bildschirm, solange die Anzeige nicht eingeschaltet ist |
 | `collector/apps/ui` | Anzeige des Collectors für einen kleinen Touchscreen: Jobs, ihr Zustand und Werte; aus, solange nicht eingeschaltet (`--ui`) |
 | `collector/apps/jolokia-agent` | Jolokia-Agent als WAR |
-| `build/collector-parent` | Gemeinsame interne Build-Konfiguration der Collector-Module |
 
 Die historische Zuordnung und die bewusst entfernten Teile sind in [docs/architecture/single-repository.de.md](docs/architecture/single-repository.de.md) dokumentiert.
 
@@ -131,6 +131,10 @@ xvfb-run -a mvn test
 
 # schneller Build ohne Tests
 mvn clean package -DskipTests
+
+# nur der Collector, oder nur die Workbench mit den Modulen des Collectors, die sie enthält
+mvn -f collector clean package
+mvn -pl workbench -am clean package
 ```
 
 `.mvn/jvm.config` gibt Maven zwei JVM-Optionen mit, damit Java 25 nicht bei jedem Aufruf vor
