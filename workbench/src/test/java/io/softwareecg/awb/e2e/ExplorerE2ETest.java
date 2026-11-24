@@ -1,5 +1,13 @@
 package io.softwareecg.awb.e2e;
 
+import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.api.RepositoryService;
+import io.softwareecg.awb.uitoolkit.tree.api.AbstractItem;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.chart.XYChart;
@@ -10,18 +18,22 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import io.softwareecg.awb.uitoolkit.chart.ZoomableStackedChart;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * The explorer: what its tree opens, with the keyboard and by the way that leads to a metric.
+ * The explorer: what its tree opens, with the keyboard and by the way that leads to a metric, and
+ * what the menus of its nodes do.
  */
 class ExplorerE2ETest {
 
@@ -34,6 +46,14 @@ class ExplorerE2ETest {
         ImportDialog dialog = workbench.openImporter("EKG Collector Logs");
         dialog.projectName("Explorer").files(logs).importData(Duration.ofMinutes(2));
         workbench.project("Explorer").awaitPoints(330, Duration.ofSeconds(30));
+    }
+
+    /** A test that failed half way leaves no repository behind: an import of the next could go into it. */
+    @AfterEach
+    void removeAddedRepositories() {
+        RepositoryService service = workbench.embeddedRepository().getBoundedService(RepositoryService.class);
+        service.listEkgRepositories().stream().filter(repository -> !repository.isEmbedded())
+                .forEach(service::removeRepositoryWithProjects);
     }
 
     /**
@@ -79,7 +99,133 @@ class ExplorerE2ETest {
         awaitSeriesOfTheChart(1);
     }
 
+    /**
+     * A repository keeps its id when it is edited, because its projects refer to it. The dialog
+     * comes up with what is stored. The server of this one cannot be reached: none of it needs it.
+     */
+    @Test
+    void aRepositoryIsAddedEditedAndRemoved() {
+        Stage add = workbench.openDialog("Repository", "Add Repository...");
+        fill(add, "txtRepositoryName", "Measurements");
+        fill(add, "txtRepositoryUrl", "http://127.0.0.1:1/solr/ekgdata");
+        confirm(add, ButtonType.APPLY);
+        TreeItem<Object> added = node("Measurements");
+        EkgRepository stored = repository("Measurements");
+
+        Stage edit = workbench.openDialog("Edit Repository", () -> choose(added, "Edit Repository"));
+        workbench.screenshot(edit, "repository-edit-dialog");
+        assertThat(contentOf(edit, "txtRepositoryName")).isEqualTo("Measurements");
+        assertThat(contentOf(edit, "txtRepositoryUrl")).isEqualTo("http://127.0.0.1:1/solr/ekgdata");
+        fill(edit, "txtRepositoryName", "Measurements of the plant");
+        fill(edit, "txtRepositoryUrl", "http://127.0.0.1:1/solr/plant");
+        confirm(edit, ButtonType.APPLY);
+
+        TreeItem<Object> edited = node("Measurements of the plant");
+        EkgRepository changed = repository("Measurements of the plant");
+        assertThat(changed.getId()).as("id of the repository").isEqualTo(stored.getId());
+        assertThat(changed.getConnectionUrl()).isEqualTo("http://127.0.0.1:1/solr/plant");
+        assertThat(repositoryNames()).as("the repositories").doesNotContain("Measurements");
+
+        workbench.onFx(() -> {
+            choose(edited, "Remove from Explorer");
+            return null;
+        });
+        awaitGone("Measurements of the plant");
+        assertThat(repositoryNames()).doesNotContain("Measurements of the plant");
+    }
+
+    /** Deleting a project deletes its values too - its own, and nothing of the project beside it. */
+    @Test
+    void aProjectIsDeletedWithItsDataAndNothingElse() throws URISyntaxException {
+        Path logs = Path.of(ExplorerE2ETest.class.getClassLoader().getResource("e2e/collector").toURI());
+        workbench.openImporter("EKG Collector Logs").projectName("To be deleted").files(logs).importData(Duration.ofMinutes(2));
+        ImportedProject project = workbench.project("To be deleted");
+        project.awaitPoints(330, Duration.ofSeconds(30));
+        TreeItem<Object> item = node("Local Repository", "To be deleted");
+
+        workbench.onFx(() -> {
+            choose(item, "Delete project and its data");
+            return null;
+        });
+
+        workbench.awaitTrue("the project to be deleted", Duration.ofSeconds(30), () -> !project.exists());
+        project.awaitPoints(0, Duration.ofSeconds(30));
+        awaitGone("Local Repository", "To be deleted");
+        assertThat(workbench.project("Explorer").exists()).as("the project beside it").isTrue();
+        assertThat(workbench.project("Explorer").points()).as("the values of the project beside it").isEqualTo(330);
+    }
+
+    /** A group of bookmarks is created and deleted in the menus of its nodes. */
+    @Test
+    void aGroupOfBookmarksIsCreatedAndDeleted() {
+        TreeItem<Object> bookmarks = node("Local Repository", "Explorer", "Bookmarks");
+        Stage create = workbench.openDialog("Create Bookmark Group", () -> choose(bookmarks, "Create Bookmark Group"));
+        fill(create, "bookmarkGroupName", "Findings");
+        confirm(create, ButtonType.APPLY);
+        TreeItem<Object> group = node("Local Repository", "Explorer", "Bookmarks", "Findings");
+
+        Stage warning = workbench.openDialog("Delete Group", () -> choose(group, "Delete Group"));
+        confirm(warning, ButtonType.YES);
+        awaitGone("Local Repository", "Explorer", "Bookmarks", "Findings");
+    }
+
     // ---------------------------------------------------------------------------------------------
+
+    /** Chooses an entry of the menu of a node. To be called on the JavaFX thread. */
+    private static void choose(TreeItem<Object> item, String entry) {
+        tree().scrollTo(tree().getRow(item));
+        tree().layout();
+        ((AbstractItem<?>) (TreeItem<?>) item).getContextMenu().getItems().stream()
+                .filter(menuItem -> entry.equals(menuItem.getText())).findFirst()
+                .orElseThrow(() -> new AssertionError("The menu of '" + item.getValue() + "' has no entry '" + entry + "'"))
+                .fire();
+    }
+
+    private static void fill(Stage dialog, String field, String text) {
+        workbench.onFx(() -> {
+            Workbench.control(dialog, field, TextField.class).setText(text);
+            return null;
+        });
+    }
+
+    private static String contentOf(Stage dialog, String field) {
+        return workbench.onFx(() -> Workbench.control(dialog, field, TextField.class).getText());
+    }
+
+    /** Presses a button of a dialog once it can be pressed. */
+    private static void confirm(Stage dialog, ButtonType type) {
+        Button button = workbench.onFx(() -> (Button) ((DialogPane) dialog.getScene().getRoot()).lookupButton(type));
+        workbench.awaitTrue("'" + type.getText() + "' to be enabled", Duration.ofSeconds(10),
+                () -> workbench.onFx(() -> !button.isDisabled()));
+        workbench.onFx(() -> {
+            button.fire();
+            return null;
+        });
+        workbench.awaitTrue("the dialog to close", Duration.ofSeconds(10), () -> workbench.onFx(() -> !dialog.isShowing()));
+    }
+
+    private static List<EkgRepository> repositories() {
+        return workbench.embeddedRepository().getBoundedService(RepositoryService.class).listEkgRepositories();
+    }
+
+    private static List<String> repositoryNames() {
+        return repositories().stream().map(EkgRepository::getRepositoryName).toList();
+    }
+
+    private static EkgRepository repository(String name) {
+        return repositories().stream().filter(repository -> name.equals(repository.getRepositoryName())).findFirst()
+                .orElseThrow(() -> new AssertionError("No repository '" + name + "' is stored"));
+    }
+
+    /** Waits until the last node of a way is no longer there. */
+    private static void awaitGone(String... way) {
+        String name = way[way.length - 1];
+        TreeItem<Object> parent = node(Arrays.copyOf(way, way.length - 1));
+        workbench.awaitTrue("the node '" + name + "' to be gone", Duration.ofSeconds(30), () -> {
+            TreeItem<Object> current = way.length == 1 ? parent : node(Arrays.copyOf(way, way.length - 1));
+            return workbench.onFx(() -> current.getChildren().stream().noneMatch(child -> isNamed(child, name)));
+        });
+    }
 
     @SuppressWarnings("unchecked")
     private static TreeView<Object> tree() {

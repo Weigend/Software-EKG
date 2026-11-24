@@ -308,7 +308,7 @@ public class EkgRepositoryAdminController implements Initializable {
 
         // disable text field and according label for the Solr collection name if Solr Standalone is in use
         txtRepositoryIndexName.disableProperty().bind(javafx.beans.binding.Bindings.createBooleanBinding(
-                () -> viewModel.getRepositoryDbType().indexDisabled(),
+                () -> viewModel.getRepositoryDbType() != null && viewModel.getRepositoryDbType().indexDisabled(),
                 viewModel.repositoryDbTypeProperty()));
         lbRepositoryIndexName.disableProperty().bind(txtRepositoryIndexName.disableProperty());
 
