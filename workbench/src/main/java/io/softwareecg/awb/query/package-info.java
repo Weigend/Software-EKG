@@ -1,5 +1,6 @@
 /**
- * The query of a chart: what it asks for, how it is run against a repository, and how the series
- * it returns are transformed.
+ * Queries of time series. The other components use {@code api}; {@code spi} is implemented by those
+ * that have the values of remote projects. {@code execution} reads the series and {@code pipeline}
+ * transforms them.
  */
 package io.softwareecg.awb.query;

@@ -14,6 +14,7 @@ import java.util.function.BiPredicate;
 
 import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAnyPackage;
 import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.name;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
@@ -210,6 +211,14 @@ public class LayerArchitectureTest {
             onlyTheApiIsUsedFromOutside("bookmark");
 
     /**
+     * Die Aussenkante von query ist api, und spi fuer den, der die Werte entfernter Projekte liefert.
+     * Wie eine Abfrage laeuft und die Serien umgeformt werden, bleibt in der Komponente.
+     */
+    @ArchTest
+    static final ArchRule only_the_api_of_query_is_used_from_outside =
+            onlyTheApiIsUsedFromOutside("query");
+
+    /**
      * Die Pakete in einer Komponente: api kennt keines der anderen.
      */
     @ArchTest
@@ -218,17 +227,24 @@ public class LayerArchitectureTest {
     @ArchTest
     static final ArchRule packages_of_bookmark_must_be_free_of_cycles = packagesAreFreeOfCycles("bookmark");
 
+    @ArchTest
+    static final ArchRule packages_of_query_must_be_free_of_cycles = packagesAreFreeOfCycles("query");
+
+    /**
+     * api wird von anderen benutzt, spi von anderen implementiert: beides darf von aussen importiert
+     * werden, sonst nichts.
+     */
     private static ArchRule onlyTheApiIsUsedFromOutside(String component, String... exceptions) {
         String root = "io.softwareecg.awb." + component;
         DescribedPredicate<JavaClass> inside = resideInAPackage(root + "..")
-                .and(not(resideInAPackage(root + ".api..")));
+                .and(not(resideInAnyPackage(root + ".api..", root + ".spi..")));
         for (String exception : exceptions) {
             inside = inside.and(not(name(exception)));
         }
         return noClasses().that().resideOutsideOfPackage(root + "..")
                 // the generated injection module wires every bean and so knows all of them
                 .and().areNotAssignableTo(io.avaje.inject.spi.AvajeModule.class)
-                .should().dependOnClassesThat(inside.as("liegen in " + component + ", aber nicht in seiner api"))
+                .should().dependOnClassesThat(inside.as("liegen in " + component + ", aber nicht in seiner api oder spi"))
                 .because("was innen ist, muss sich aendern lassen, ohne die anderen anzufassen");
     }
 
