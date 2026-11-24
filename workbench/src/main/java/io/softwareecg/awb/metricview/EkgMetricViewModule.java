@@ -2,11 +2,9 @@ package io.softwareecg.awb.metricview;
 
 import io.softwareecg.awb.application.api.EkgApplicationController;
 import io.softwareecg.awb.application.api.events.BeforeRestoreDefaultLayoutEvent;
-import io.softwareecg.awb.uitoolkit.events.FinishEvent;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.Module;
-import io.softwareecg.wfx.platform.api.events.ProgressEvent;
 import jakarta.annotation.Priority;
 import jakarta.inject.Singleton;
 import javafx.scene.control.MenuItem;
@@ -19,29 +17,24 @@ import java.util.EventObject;
 @Singleton
 @Priority(200)
 @SuppressWarnings("unused")
-public class EkgMetricViewModule extends MetricViewModule implements Module {
+public class EkgMetricViewModule implements Module {
 
     @Override
+    public String getName() {
+        return "Software-EKG - Metric View";
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public void preload() {
+        ChartPanelManager chartPanelManager = Lookup.lookup(ChartPanelManager.class);
+        chartPanelManager.init();
+
         EventBus<EventObject> eventBus = Lookup.lookup(EventBus.class);
-        try {
-            // Force to execute all other preloaders
-            Thread.sleep(500);
-            eventBus.publish(new ProgressEvent("Start local Solr Server...", 0, this));
-
-            ChartPanelManager chartPanelManager = Lookup.lookup(ChartPanelManager.class);
-            chartPanelManager.init();
-            eventBus.subscribe(BeforeRestoreDefaultLayoutEvent.class, event -> {
-                chartPanelManager.removeAllDynamicChartPanels();
-                return false;
-            });
-            eventBus.publish(new ProgressEvent("Finished starting local Solr Server...", 1, this));
-
-            super.preload();
-        } catch (InterruptedException e) {
-            eventBus.publish(new FinishEvent(-1, this));
-            Thread.currentThread().interrupt();
-        }
+        eventBus.subscribe(BeforeRestoreDefaultLayoutEvent.class, event -> {
+            chartPanelManager.removeAllDynamicChartPanels();
+            return false;
+        });
     }
 
     @Override
@@ -51,5 +44,10 @@ public class EkgMetricViewModule extends MetricViewModule implements Module {
         newChart.setMnemonicParsing(false);
         newChart.setOnAction(e -> Lookup.lookup(ChartPanelManager.class).createNewChartPanel());
         appController.addWindowMenuItem(newChart);
+    }
+
+    @Override
+    public void stop() {
+        // nothing to end
     }
 }
