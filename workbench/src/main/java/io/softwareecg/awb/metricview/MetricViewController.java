@@ -27,9 +27,7 @@ import io.softwareecg.awb.query.api.OpenInvestigationCommand;
 import io.softwareecg.awb.query.api.ComputationSpec;
 import io.softwareecg.awb.query.api.QuerySpec;
 import io.softwareecg.awb.bookmark.api.BookmarkEvent;
-import io.softwareecg.awb.evidence.export.ExcelExportSeriesData;
-import io.softwareecg.awb.evidence.export.ExcelExporter;
-import io.softwareecg.awb.evidence.export.ScreenshotExportDialog;
+import io.softwareecg.awb.evidence.api.ChartExport;
 import io.softwareecg.awb.metricview.queryeditor.QueryEditorPort;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
@@ -54,12 +52,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.stage.FileChooser;
 import javafx.stage.Modality;
+import javafx.stage.Window;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
-import java.io.File;
 import java.net.URL;
 import io.softwareecg.awb.query.api.ComputedTimeSeriesResponse;
 import io.softwareecg.awb.query.api.MetricQueryService;
@@ -605,12 +602,12 @@ public class MetricViewController implements Initializable {
         // bind actions
         chartHeaderController.initButtonHandler(new HeaderButtonActions());
         btnExportToExcel.setOnAction(event -> {
-            exportChartToExcelSheet();
+            chartExport().exportAsExcel(windowOfTheChart(), zoomableStackedChart);
             chartActionsPanel.requestFocus();
         });
 
         btnExportToPNG.setOnAction(event -> {
-            exportChartToPngFile();
+            chartExport().exportAsImage(windowOfTheChart(), zoomableStackedChart);
             chartActionsPanel.requestFocus();
         });
 
@@ -784,55 +781,13 @@ public class MetricViewController implements Initializable {
         });
     }
 
-    /**
-     * Creates a screenshot of the StackableChart with it's current displayed series
-     * and write it as image file to the file system.
-     */
-    private void exportChartToPngFile() {
-        ScreenshotExportDialog screenshotExportDialog = new ScreenshotExportDialog(zoomableStackedChart);
-        screenshotExportDialog.showAndWait();
+    private static ChartExport chartExport() {
+        return Lookup.lookup(ChartExport.class);
     }
 
-    /**
-     * Exports the current graph data from (base) chart to an excel file the user can
-     * specify via FileChooser.
-     * The export will executed with blocking behavior, the UI didn't respond during that.
-     */
-    private void exportChartToExcelSheet() {
-
-        FileChooser chooser = new FileChooser();
-
-        chooser.setTitle("Choose the file for the Excel export");
-
-        chooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Excel files", "*.xlsx"),
-                new FileChooser.ExtensionFilter("All files", "*")
-        );
-
-        File chosenFile = chooser.showSaveDialog(null);
-
-        if (chosenFile == null) {
-            return;
-        }
-
-        List<ExcelExportSeriesData> seriesData = zoomableStackedChart
-                .getBaseChart()
-                .getAllSeries()
-                .stream()
-                .map(series -> new ExcelExportSeriesData(series.getName(), series.getData()))
-                .collect(Collectors.toList());
-
-        seriesData.addAll(
-                zoomableStackedChart
-                .getBackgroundCharts()
-                .stream()
-                .flatMap(chart -> chart.getAllSeries().stream())
-                .map(series -> new ExcelExportSeriesData(series.getName(), series.getData()))
-                .collect(Collectors.toList())
-        );
-
-        ExcelExporter exporter = new ExcelExporter(chosenFile);
-        exporter.createExcelSheetFromSeriesData(seriesData);
+    /** The main window, or the one the chart is shown in alone. */
+    private Window windowOfTheChart() {
+        return zoomableStackedChart.getScene().getWindow();
     }
 
     //=================================================================================================================

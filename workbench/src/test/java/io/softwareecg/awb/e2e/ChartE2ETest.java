@@ -1,6 +1,5 @@
 package io.softwareecg.awb.e2e;
 
-import io.softwareecg.awb.evidence.export.ScreenshotExportDialog;
 import io.softwareecg.awb.uitoolkit.chart.ChartColorStyle;
 import io.softwareecg.awb.uitoolkit.chart.ChartType;
 import io.softwareecg.awb.uitoolkit.chart.ZoomableStackedChart;
@@ -189,8 +188,7 @@ class ChartE2ETest {
     /** The dialog did not open in 7.4.0: its view and icons were not where its class is. */
     @Test
     void theDialogOfThePngExportOpens() {
-        ZoomableStackedChart chart = workbench.onFx(ChartE2ETest::stackedChart);
-        Stage dialog = workbench.openDialog("PNG export", () -> new ScreenshotExportDialog(chart).show());
+        Stage dialog = workbench.openDialog("PNG export", () -> ((Button) shown("btnExportToPNG")).fire());
         workbench.screenshot(dialog, "chart-png-export-dialog");
         assertThat(workbench.onFx(dialog::getTitle)).isEqualTo("Export Chart as Bitmap Image");
         workbench.close(dialog);

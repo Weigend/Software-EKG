@@ -109,8 +109,9 @@ public class ScreenshotExportController implements Initializable {
 
         initialDirectory = configStore.getConfigValue(DEFAULT_LOOKUP_DIR_KEY);
 
-        if (initialDirectory == null) {
-            initialDirectory = System.getenv("user.home") != null ? System.getenv("user.home"): ".";
+        // "." is what an earlier version stored, which looked for the home directory in the wrong place
+        if (initialDirectory == null || initialDirectory.equals(".")) {
+            initialDirectory = System.getProperty("user.home", ".");
             configStore.setConfigValue(DEFAULT_LOOKUP_DIR_KEY, initialDirectory);
         }
 
