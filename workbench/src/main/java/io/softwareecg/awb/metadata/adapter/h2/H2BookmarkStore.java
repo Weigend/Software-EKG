@@ -1,7 +1,6 @@
 package io.softwareecg.awb.metadata.adapter.h2;
 
 import io.softwareecg.awb.metadata.model.BookmarkGroupRow;
-import io.softwareecg.awb.metadata.model.MetricBookmarkRow;
 import io.softwareecg.awb.metadata.model.MetricQueryBookmarkRow;
 import io.softwareecg.awb.metadata.port.BookmarkStore;
 import jakarta.inject.Inject;
@@ -31,120 +30,6 @@ public class H2BookmarkStore implements BookmarkStore {
     @Inject
     public H2BookmarkStore(H2MetadataDataSource dataSource) {
         this.dataSource = dataSource;
-    }
-
-    // =========================================================================
-    // Metric Bookmarks
-    // =========================================================================
-
-    /**
-     * Lists metric bookmarks, optionally filtered by group id.
-     *
-     * @param bookmarkGroupId the group id to filter by, or null/blank for all
-     * @return list of MetricBookmarkRow instances
-     */
-    public List<MetricBookmarkRow> listBookmarks(String bookmarkGroupId) {
-        List<MetricBookmarkRow> result = new ArrayList<>();
-
-        String sql;
-        if (bookmarkGroupId != null && !bookmarkGroupId.isBlank()) {
-            sql = "SELECT * FROM metric_bookmarks WHERE bookmark_group_id = ? ORDER BY name DESC";
-        } else {
-            sql = "SELECT * FROM metric_bookmarks ORDER BY name DESC";
-        }
-
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            if (bookmarkGroupId != null && !bookmarkGroupId.isBlank()) {
-                stmt.setString(1, bookmarkGroupId);
-            }
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    result.add(mapBookmarkRow(rs));
-                }
-            }
-
-        } catch (SQLException e) {
-            LOGGER.error("Failed to list bookmarks from H2", e);
-        }
-
-        return result;
-    }
-
-    /**
-     * Lists metric bookmarks filtered by project name.
-     *
-     * @param projectName the project name to filter by
-     * @return list of MetricBookmarkRow instances for the given project
-     */
-    public List<MetricBookmarkRow> listBookmarksByProject(String projectName) {
-        List<MetricBookmarkRow> result = new ArrayList<>();
-        String sql = "SELECT * FROM metric_bookmarks WHERE project_name = ? ORDER BY name DESC";
-
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, projectName);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    result.add(mapBookmarkRow(rs));
-                }
-            }
-
-        } catch (SQLException e) {
-            LOGGER.error("Failed to list bookmarks by project from H2", e);
-        }
-
-        return result;
-    }
-
-    /**
-     * Inserts a new metric bookmark.
-     *
-     * @param row the bookmark to insert
-     */
-    public void insertBookmark(MetricBookmarkRow row) {
-        if (row.id == null || row.id.isBlank()) {
-            row.id = UUID.randomUUID().toString();
-        }
-
-        String sql = "INSERT INTO metric_bookmarks (id, name, bookmark_group_id, command_protocol, project_name) " +
-                "VALUES (?, ?, ?, ?, ?)";
-
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, row.id);
-            stmt.setString(2, row.name);
-            stmt.setString(3, row.bookmarkGroupId);
-            stmt.setString(4, row.commandProtocol);
-            stmt.setString(5, row.projectName);
-
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new IllegalStateException("Failed to insert bookmark into H2", e);
-        }
-    }
-
-    /**
-     * Deletes a metric bookmark by its id.
-     *
-     * @param id the bookmark id
-     */
-    public void deleteBookmark(String id) {
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("DELETE FROM metric_bookmarks WHERE id = ?")) {
-
-            stmt.setString(1, id);
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new IllegalStateException("Failed to delete bookmark from H2", e);
-        }
     }
 
     // =========================================================================
@@ -339,16 +224,6 @@ public class H2BookmarkStore implements BookmarkStore {
         } catch (SQLException e) {
             throw new IllegalStateException("Failed to delete bookmark group from H2", e);
         }
-    }
-
-    private MetricBookmarkRow mapBookmarkRow(ResultSet rs) throws SQLException {
-        MetricBookmarkRow r = new MetricBookmarkRow();
-        r.id = rs.getString("id");
-        r.name = rs.getString("name");
-        r.bookmarkGroupId = rs.getString("bookmark_group_id");
-        r.commandProtocol = rs.getString("command_protocol");
-        r.projectName = rs.getString("project_name");
-        return r;
     }
 
     private MetricQueryBookmarkRow mapQueryBookmarkRow(ResultSet rs) throws SQLException {

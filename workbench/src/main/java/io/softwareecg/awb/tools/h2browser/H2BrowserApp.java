@@ -40,7 +40,7 @@ public class H2BrowserApp extends Application {
             "project_dimension_aliases",
             "repositories",
             "bookmark_groups",
-            "metric_bookmarks"
+            "metric_query_bookmarks"
     };
 
     /** Maps table name to the column used for project-based filtering. */
@@ -51,7 +51,7 @@ public class H2BrowserApp extends Application {
         FILTER_COLUMNS.put("project_dimension_aliases", "project_name");
         FILTER_COLUMNS.put("repositories", "according_project_name");
         FILTER_COLUMNS.put("bookmark_groups", "project_name");
-        FILTER_COLUMNS.put("metric_bookmarks", "project_name");
+        FILTER_COLUMNS.put("metric_query_bookmarks", "project_name");
     }
 
     private static final int CLOB_TRUNCATE_LENGTH = 100;

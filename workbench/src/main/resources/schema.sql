@@ -63,20 +63,6 @@ CREATE INDEX IF NOT EXISTS idx_bg_project ON bookmark_groups(project_name);
 -- Default-Gruppe fuer Bookmarks ohne explizite Gruppenzuordnung
 MERGE INTO bookmark_groups (id, name) KEY(id) VALUES ('_BOOKMARK_GLOBAL_', 'Global');
 
-CREATE TABLE IF NOT EXISTS metric_bookmarks (
-    id VARCHAR(36) DEFAULT RANDOM_UUID() PRIMARY KEY,
-    name VARCHAR(255),
-    bookmark_group_id VARCHAR(36),
-    command_protocol CLOB,
-    project_name VARCHAR(255),
-    CONSTRAINT fk_mb_group FOREIGN KEY (bookmark_group_id)
-        REFERENCES bookmark_groups(id) ON DELETE CASCADE,
-    CONSTRAINT fk_mb_project FOREIGN KEY (project_name)
-        REFERENCES projects(name) ON DELETE CASCADE
-);
-CREATE INDEX IF NOT EXISTS idx_mb_group ON metric_bookmarks(bookmark_group_id);
-CREATE INDEX IF NOT EXISTS idx_mb_project ON metric_bookmarks(project_name);
-
 CREATE TABLE IF NOT EXISTS metric_query_bookmarks (
     id VARCHAR(36) DEFAULT RANDOM_UUID() PRIMARY KEY,
     name VARCHAR(255),

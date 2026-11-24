@@ -3,12 +3,10 @@ package io.softwareecg.awb.bookmark;
 import io.softwareecg.awb.bookmark.api.MetricsBookmarkService;
 
 import io.softwareecg.awb.metadata.model.BookmarkGroupRow;
-import io.softwareecg.awb.metadata.model.MetricBookmarkRow;
 import io.softwareecg.awb.metadata.model.MetricQueryBookmarkRow;
 import io.softwareecg.awb.metadata.port.BookmarkStore;
 import io.softwareecg.awb.bookmark.model.Bookmark;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
-import io.softwareecg.awb.bookmark.model.MetricBookmark;
 import io.softwareecg.awb.bookmark.model.MetricQueryBookmark;
 import io.avaje.inject.External;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
@@ -39,15 +37,8 @@ public class MetricsBookmarkServiceImpl implements MetricsBookmarkService {
     }
 
     // =========================================================================
-    // MetricBookmark actions
+    // Bookmark actions
     // =========================================================================
-
-    @Override
-    public List<MetricBookmark> getMetricBookmarks(String bookmarkGroupId) {
-        return bookmarkStore.listBookmarks(bookmarkGroupId).stream()
-                .map(MetricsBookmarkServiceImpl::toMetricBookmark)
-                .collect(Collectors.toList());
-    }
 
     @Override
     public List<MetricQueryBookmark> getMetricQueryBookmarks(String bookmarkGroupId) {
@@ -62,20 +53,12 @@ public class MetricsBookmarkServiceImpl implements MetricsBookmarkService {
             bookmarkStore.insertQueryBookmark(toQueryBookmarkRow(queryBookmark));
             return;
         }
-        if (bookmark instanceof MetricBookmark metricBookmark) {
-            bookmarkStore.insertBookmark(toBookmarkRow(metricBookmark));
-            return;
-        }
         LOGGER.warn("Unsupported bookmark type for H2 persistence: {}", bookmark.getClass().getName());
     }
 
     @Override
     public void deleteBookmark(Bookmark bookmark) {
-        if (bookmark instanceof MetricQueryBookmark) {
-            bookmarkStore.deleteQueryBookmark(bookmark.getId());
-        } else {
-            bookmarkStore.deleteBookmark(bookmark.getId());
-        }
+        bookmarkStore.deleteQueryBookmark(bookmark.getId());
     }
 
     // =========================================================================
@@ -111,26 +94,6 @@ public class MetricsBookmarkServiceImpl implements MetricsBookmarkService {
     // =========================================================================
     // mapping helpers
     // =========================================================================
-
-    private static MetricBookmark toMetricBookmark(MetricBookmarkRow row) {
-        return new MetricBookmark.Builder()
-                .withCommandProtocol(row.commandProtocol)
-                .withProject(row.projectName)
-                .withId(row.id)
-                .withName(row.name)
-                .withBookmarkGroupId(row.bookmarkGroupId)
-                .build();
-    }
-
-    private static MetricBookmarkRow toBookmarkRow(MetricBookmark bookmark) {
-        MetricBookmarkRow row = new MetricBookmarkRow();
-        row.id = bookmark.getId();
-        row.name = bookmark.getName();
-        row.bookmarkGroupId = bookmark.getBookmarkGroupId();
-        row.commandProtocol = bookmark.getSerializedCommandProtocol();
-        row.projectName = bookmark.getProject();
-        return row;
-    }
 
     private static BookmarkGroup toBookmarkGroup(BookmarkGroupRow row) {
         BookmarkGroup group = new BookmarkGroup(row.name, row.id);

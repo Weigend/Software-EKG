@@ -21,7 +21,6 @@ import io.softwareecg.awb.query.model.SeriesSmoothingGranularity;
 import io.softwareecg.awb.query.model.SeriesSmoothingType;
 import io.softwareecg.awb.bookmark.api.MetricsBookmarkService;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
-import io.softwareecg.awb.bookmark.model.MetricBookmark;
 import io.softwareecg.awb.bookmark.model.MetricQueryBookmark;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.query.api.OpenInvestigationCommand;
@@ -77,15 +76,13 @@ import io.softwareecg.awb.metricview.command.ChartCommand;
 import io.softwareecg.awb.metricview.command.ChartCommandProcessor;
 import io.softwareecg.awb.metricview.command.ChartDataFetchParameters;
 import io.softwareecg.awb.metricview.command.ChartDataService;
-import io.softwareecg.awb.metricview.command.CommandProtocol;
-import io.softwareecg.awb.metricview.command.CommandProtocolManager;
 /**
  * Controller that manages the whole MetricAnalyser analytics pane that contains the
  * EKG chart as primary component and filter header, chart legend and panel with
  * additional actions.
  *
  * This controller knows as single point of knowledge how to wire all these components
- * correctly and also handles command of Bookmarks scripts using a dedicate CommandProcessor.
+ * correctly and passes the commands of the chart to a dedicated ChartCommandProcessor.
  *
  * @since 30.08.2018
  */
@@ -290,7 +287,6 @@ public class MetricViewController implements Initializable {
      */
     public void dispose() {
         dataFollowPause.stop();
-        commandProcessor.shutdown();
     }
 
     /**
@@ -504,7 +500,6 @@ public class MetricViewController implements Initializable {
      */
     public void updateByBookmarkEvent(BookmarkEvent event) {
 
-        // Handle query-based bookmarks: execute query with stored filter parameters
         if (event.getBookmark() instanceof MetricQueryBookmark queryBookmark) {
             zoomableStackedChart.getController().clearAll();
             chartHeaderController.setRepository(event.getSourceRepository());
@@ -547,48 +542,7 @@ public class MetricViewController implements Initializable {
                     );
                 }
             }
-            return;
         }
-
-        // Handle classic bookmarks: replay serialized command protocol
-        if (!(event.getBookmark() instanceof MetricBookmark metricBookmark)) {
-            return;
-        }
-
-        zoomableStackedChart.getController().clearAll();
-
-        chartHeaderController.setRepository(event.getSourceRepository());
-        chartHeaderController.setQueryContext(new QuerySpec(), event.getOpeningMode());
-        viewModel.setEkgRepository(event.getSourceRepository());
-
-        CommandProtocol protocol = CommandProtocol.createFromString(metricBookmark.getSerializedCommandProtocol());
-
-        // delegate the whole command protocol to execute. The specified callback will set the
-        // filters/context parameters of the filter header
-        commandProcessor.executeProtocol(protocol, () -> {
-            String fetchParametersAsString = protocol.getLastSerializedChartLoadParameter();
-
-            if (StringUtils.isBlank(fetchParametersAsString)) {
-                LOGGER.error("there is no serialized ChartDataFetchParameters available in command protocol " +
-                        "served by the bookmark. This is unexpected.");
-                return;
-            }
-
-            ChartDataFetchParameters fetchParameter = CommandProtocolManager.deserializeChartFetchParams(fetchParametersAsString);
-
-            // set context / filters to the analytic workbench
-            Platform.runLater(() -> {
-                viewModel.suppressEventHandling(true); // we need this otherwise various service calls will follow
-
-                viewModel.setBaseChartFilterParams(fetchParameter.getQueryFilterParams());
-                viewModel.setBaseChartComputeParams(fetchParameter.getQueryComputeParams());
-
-                chartHeaderController.setQueryContext(fetchParameter.getQueryFilterParams(), OpeningMode.UPDATE);
-                chartHeaderController.setComputeParameters(fetchParameter.getQueryComputeParams());
-
-                viewModel.suppressEventHandling(false);
-            });
-        });
     }
 
     //=================================================================================================================

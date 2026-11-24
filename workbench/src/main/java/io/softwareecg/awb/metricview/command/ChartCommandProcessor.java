@@ -7,17 +7,12 @@ import io.avaje.inject.External;
 import io.avaje.inject.Prototype;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.events.ProgressEvent;
-import io.softwareecg.awb.runtime.logging.EkgLogger;
 import jakarta.inject.Inject;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.scene.paint.Color;
-import org.slf4j.Logger;
 
 import java.util.EventObject;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -29,20 +24,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  * view. As one shared instance, the view opened last took over the commands of all others -
  * whatever any view asked for was drawn into that one chart.
  *
- * Getting each command this processor will be responsible for the following topics:
- * - log each command and it's call arguments via CommandProtocolManager
- * - delegate commands to the according target controllers or services
- * - replay a given command protocol and ensure that it works with the asynchronous JavaFX API
- *
  * @since 30.08.2018
  */
 @Prototype
 public class ChartCommandProcessor {
-
-    /**
-     * The logger used by this class to log errors or special events
-     */
-    private static final Logger LOGGER = EkgLogger.get();
 
     /**
      * The service that will used to fetch the chart data and that will called
@@ -55,23 +40,6 @@ public class ChartCommandProcessor {
      * process to change the state of the chart.
      */
     private StackedChartController chartController;
-
-    /**
-     * The protocol manager that will used to log the commands like a Logger implementation
-     * that writes a log file.
-     */
-    private final CommandProtocolManager commandProtocolManager = new CommandProtocolManager(new CommandProtocol());
-
-    /**
-     * An single threaded executor that is used to replay a given
-     * command protocol in an asynchronous way.
-     */
-    private final ExecutorService protocolExecutorService = Executors.newSingleThreadExecutor(runnable -> {
-        // a daemon: a view that was not closed properly must not keep the application from ending
-        Thread thread = new Thread(runnable, "chart-commands");
-        thread.setDaemon(true);
-        return thread;
-    });
 
     /**
      * A thread safe boolean that will used to indicate that is service calls to
@@ -103,157 +71,9 @@ public class ChartCommandProcessor {
         this.eventBus = eventBus;
     }
 
-    /**
-     * Ends the work of this processor. Called by the chart view when it is closed.
-     * Shuts down the executor service gracefully.
-     */
-    public void shutdown() {
-        LOGGER.info("Shutting down ChartCommandProcessor executor service...");
-        protocolExecutorService.shutdown();
-        try {
-            if (!protocolExecutorService.awaitTermination(5, TimeUnit.SECONDS)) {
-                protocolExecutorService.shutdownNow();
-            }
-        } catch (InterruptedException e) {
-            protocolExecutorService.shutdownNow();
-            Thread.currentThread().interrupt();
-        }
-        LOGGER.info("ChartCommandProcessor executor service shut down complete");
-    }
-
     //================================================================================================================
     // command delegating function
     //================================================================================================================
-
-    /**
-     * Executes the given command on the target chart that can (optional) specified by the
-     * targetChartId parameter. According to the command type additional arguments will required
-     * and used than execute it.
-     *
-     * In contrast to the {@link ChartCommandProcessor#executeObjectArgCommand(ChartCommand, String, Object...)}
-     * method this one accepts only String parameters. Every domain object or specific data type has to specify
-     * in a appropriate representation. For example a JavaFX Color class should given as the #xxxxxx color code.
-     *
-     * Each call of this method will written to the command protocol and can playback any time.
-     *
-     * @param command a single {@link ChartCommand} to execute by this processor
-     * @param targetChartId (optional) the id of the chart
-     * @param argument (optional) one or more String-arguments that will used then execute the command
-     */
-    public void executeStringArgCommand(ChartCommand command, String targetChartId, String ... argument) {
-
-        if (Platform.isFxApplicationThread()) {
-            if (asyncCallDepth.get() > 1) {
-                return;
-            }
-
-            asyncCallDepth.incrementAndGet();
-        }
-
-        try {
-
-            switch (command) {
-
-                case LOAD_BASE_CHART_DATA:
-                    CommandValidator.checkMultipleValueArray(command, argument, 2,
-                            "Serialized:" + ChartDataFetchParameters.class.getName() + ", Boolean(Block) ");
-                    loadChartData(CommandProtocolManager.deserializeChartFetchParams(argument[0]), Boolean.valueOf(argument[1]));
-                    commandProtocolManager.logStrCommand(command, targetChartId, argument);
-                    break;
-
-                case PUSH_BASE_TO_BG:
-                    CommandValidator.checkSingleValueArray(command, argument, "newChartId");
-                    pushToBackground(argument[0]);
-                    commandProtocolManager.logStrCommand(command, targetChartId, argument);
-                    break;
-
-                case CHANGE_CHART_COLOR:
-                    CommandValidator.checkSingleValueArray(command, argument, "rgbColorCode");
-                    CommandValidator.checkTargetChartId(command, targetChartId);
-                    // color code must have 2-6 hex chars
-                    changeChartColor(targetChartId, Color.web(argument[0]));
-                    commandProtocolManager.logStrCommand(command, targetChartId, argument);
-                    break;
-
-                case CHANGE_SERIES_COLOR:
-                    CommandValidator.checkMultipleValueArray(command, argument, 2,
-                            "SeriesName," + Color.class.getName());
-                    changeSeriesColor(targetChartId, argument[0], Color.web(argument[1]));
-                    commandProtocolManager.logStrCommand(command, targetChartId, argument);
-                    break;
-
-                case CLEAR_ALL:
-                    CommandValidator.checkIsEmpty(command, argument);
-                    clearAll();
-                    commandProtocolManager.logCommand(command);
-                    break;
-
-                case SET_CHART_VISIBLE:
-                    CommandValidator.checkSingleValueArray(command, argument,   "isVisible");
-                    setChartVisible(targetChartId, Boolean.valueOf(argument[0]));
-                    commandProtocolManager.logStrCommand(command, targetChartId, argument);
-                    break;
-
-                case DELETE_BG_CHART:
-                    CommandValidator.checkIsEmpty(command, argument);
-                    CommandValidator.checkTargetChartId(command, targetChartId);
-                    deleteBackgroundChart(targetChartId);
-                    commandProtocolManager.logStrCommand(command, targetChartId);
-                    break;
-
-                case BRING_BG_TO_FRONT:
-                    CommandValidator.checkSingleValueArray(command, argument, "idOfTheChartPushedBack");
-                    CommandValidator.checkTargetChartId(command, targetChartId);
-                    chartController.bringBackgroundChartToFront(targetChartId, argument[0]);
-                    commandProtocolManager.logStrCommand(command, targetChartId, argument);
-                    break;
-
-                case DELETE_ALL_BG_CHARTS:
-                    CommandValidator.checkIsEmpty(command, argument);
-                    deleteAllBackgroundCharts();
-                    commandProtocolManager.logCommand(command);
-                    break;
-
-                case RELATIVE_COMBINE_TO_BASE:
-                    CommandValidator.checkSingleValueArray(command, argument, "interpolate(boolean)");
-                    combineBgChartsRelativeToBase(Boolean.valueOf(argument[0]));
-                    forceAlignYAxis();
-                    commandProtocolManager.logStrCommand(command, null, Boolean.valueOf(argument[0]).toString());
-                    break;
-
-                case CHANGE_CHART_TYPE:
-                    CommandValidator.checkSingleValueArray(command, argument, ChartType.class.getName());
-                    CommandValidator.checkTargetChartId(command, targetChartId);
-                    changeChartType(targetChartId, ChartType.valueOf(argument[0]));
-                    commandProtocolManager.logStrCommand(command, targetChartId, argument);
-                    break;
-
-                case FORCE_ALIGN_Y_AXIS:
-                    CommandValidator.checkIsEmpty(command, argument);
-                    forceAlignYAxis();
-                    commandProtocolManager.logCommand(command);
-                    break;
-
-                case FREE_ALIGN_Y_AXIS:
-                    CommandValidator.checkIsEmpty(command, argument);
-                    freeAlignYAxis();
-                    commandProtocolManager.logCommand(command);
-                    break;
-
-                default:
-                    throw new IllegalArgumentException("Unsupported command " + command);
-            }
-
-        } catch (IllegalArgumentException e) {
-            LOGGER.error("Error occurred trying to execute the command " + command, e);
-            throw e;
-
-        } finally {
-            if (Platform.isFxApplicationThread()) {
-                asyncCallDepth.decrementAndGet();
-            }
-        }
-    }
 
     /**
      * The shortcut for {@link ChartCommandProcessor#executeObjectArgCommand} that need less
@@ -283,11 +103,6 @@ public class ChartCommandProcessor {
      * targetChartId parameter. According to the command type additional arguments will required
      * and used than execute it.
      *
-     * In contrast to the {@link ChartCommandProcessor#executeStringArgCommand(ChartCommand, String, String...)}
-     * method this one accepts any type of parameters that can be domain objects or native data types.
-     *
-     * Each call of this method will written to the command protocol and can playback any time.
-     *
      * @param command a single {@link ChartCommand} to execute by this processor
      * @param targetChartId (optional) the id of the chart
      * @param argument (optional) additional arguments that will used then execute the command
@@ -312,15 +127,12 @@ public class ChartCommandProcessor {
 
                     CommandValidator.checkType(command, ChartDataFetchParameters.class, argument[0]);
                     loadChartData((ChartDataFetchParameters) argument[0], (boolean) argument[1]);
-                    String param = CommandProtocolManager.serializeQueryParams((ChartDataFetchParameters) argument[0]);
-                    commandProtocolManager.logStrCommand(command, targetChartId, param, argument[1].toString());
                     break;
 
                 case PUSH_BASE_TO_BG:
                     CommandValidator.checkSingleValueArray(command, argument, "newChartId");
                     CommandValidator.checkType(command, String.class, argument[0]);
                     pushToBackground(argument[0].toString());
-                    commandProtocolManager.logStrCommand(command, targetChartId, argument[0].toString());
                     break;
 
                 case CHANGE_CHART_COLOR:
@@ -328,7 +140,6 @@ public class ChartCommandProcessor {
                     CommandValidator.checkTargetChartId(command, targetChartId);
                     CommandValidator.checkType(command, Color.class, argument[0]);
                     changeChartColor(targetChartId, (Color) argument[0]);
-                    commandProtocolManager.logStrCommand(command, targetChartId, argument[0].toString());
                     break;
 
                 case CHANGE_SERIES_COLOR:
@@ -337,33 +148,28 @@ public class ChartCommandProcessor {
                     CommandValidator.checkType(command, String.class, argument[0]);
                     CommandValidator.checkType(command, Color.class, argument[1]);
                     changeSeriesColor(targetChartId, argument[0].toString(), (Color) argument[1]);
-                    commandProtocolManager.logStrCommand(command, targetChartId, argument[0].toString(), argument[1].toString());
                     break;
 
                 case CLEAR_ALL:
                     CommandValidator.checkIsEmpty(command, argument);
                     clearAll();
-                    commandProtocolManager.logCommand(command);
                     break;
 
                 case SET_CHART_VISIBLE:
                     CommandValidator.checkSingleValueArray(command, argument, "isVisible");
                     CommandValidator.checkType(command, Boolean.class, argument[0]);
                     setChartVisible(targetChartId, (boolean) argument[0]);
-                    commandProtocolManager.logStrCommand(command, targetChartId, Boolean.valueOf((boolean) argument[0]).toString());
                     break;
 
                 case DELETE_ALL_BG_CHARTS:
                     CommandValidator.checkIsEmpty(command, argument);
                     deleteAllBackgroundCharts();
-                    commandProtocolManager.logCommand(command);
                     break;
 
                 case DELETE_BG_CHART:
                     CommandValidator.checkIsEmpty(command, argument);
                     CommandValidator.checkTargetChartId(command, targetChartId);
                     deleteBackgroundChart(targetChartId);
-                    commandProtocolManager.logStrCommand(command, targetChartId);
                     break;
 
                 case BRING_BG_TO_FRONT:
@@ -371,19 +177,16 @@ public class ChartCommandProcessor {
                     CommandValidator.checkTargetChartId(command, targetChartId);
                     CommandValidator.checkType(command, String.class, argument[0]);
                     chartController.bringBackgroundChartToFront(targetChartId, argument[0].toString());
-                    commandProtocolManager.logStrCommand(command, targetChartId, argument[0].toString());
                     break;
 
                 case RELATIVE_COMBINE_TO_BASE:
                     CommandValidator.checkSingleValueArray(command, argument, "interpolate");
                     CommandValidator.checkType(command, Boolean.class, argument[0]);
                     combineBgChartsRelativeToBase((Boolean) argument[0]);
-                    commandProtocolManager.logStrCommand(command, null, Boolean.valueOf((boolean) argument[0]).toString());
                     break;
 
                 case ABSOLUTE_COMBINE_TO_BASE:
                     combineBgChartsAbsoluteToBase();
-                    commandProtocolManager.logCommand(command);
                     break;
 
                 case CHANGE_CHART_TYPE:
@@ -391,19 +194,16 @@ public class ChartCommandProcessor {
                     CommandValidator.checkTargetChartId(command, targetChartId);
                     CommandValidator.checkType(command, ChartType.class, argument[0]);
                     changeChartType(targetChartId, (ChartType) argument[0]);
-                    commandProtocolManager.logStrCommand(command, targetChartId, argument[0].toString());
                     break;
 
                 case FORCE_ALIGN_Y_AXIS:
                     CommandValidator.checkIsEmpty(command, argument);
                     forceAlignYAxis();
-                    commandProtocolManager.logCommand(command);
                     break;
 
                 case FREE_ALIGN_Y_AXIS:
                     CommandValidator.checkIsEmpty(command, argument);
                     freeAlignYAxis();
-                    commandProtocolManager.logCommand(command);
                     break;
 
                 default:
@@ -417,84 +217,10 @@ public class ChartCommandProcessor {
         }
     }
 
-    /**
-     * Executes the given command protocol by replay each single command in the protocol log.
-     * The execution will reset the whole chart state first (synchronous) and then executes
-     * the commands asynchronously. So the method call will return immediately.
-     *
-     * The replay of the command protocol will logged by the current protocol in use. So if
-     * further change will done the effective new log is the old one + the following actions.
-     *
-     * @param commandProtocol a CommandProtocol instance to replay
-     * @param callback a callback that will executed then the execution of the protocol has finished
-     */
-    public void executeProtocol(CommandProtocol commandProtocol, Runnable callback) {
-
-        // reset the chart state so it is virgin
-        chartController.clearAll();
-
-        // delete the current command protocol because it is obsolete
-        getCommandProtocol().reset();
-
-        // delegate the execution of the log to a dedicated thread
-        protocolExecutorService.submit(() -> {
-            try {
-                AtomicBoolean blockSync = new AtomicBoolean(false);
-
-                for (ProtocolRecord record : commandProtocol.getAllRecords()) {
-
-                    // sometimes the continuous execution of commands cause failure in the chart
-                    // the reasons are unclear but add a little sleep here prevent this in the most cases
-                    sleepQuietly(100);
-
-                    if (record.getCommand() == ChartCommand.LOAD_BASE_CHART_DATA) {
-
-                        while (blockSync.get()) {
-                            sleepQuietly(100);
-                        }
-
-                        executeStringArgCommand(record.getCommand(), record.getTargetChartId(),
-                                record.getArgument()[0], Boolean.TRUE.toString());
-
-                    } else {
-                        while (blockSync.get()) {
-                            sleepQuietly(100);
-                        }
-
-                        blockSync.set(true);
-                        Platform.runLater(() -> {
-                            try {
-                                blockSync.set(true);
-                                executeStringArgCommand(record.getCommand(), record.getTargetChartId(), record.getArgument());
-                            } finally {
-                                blockSync.set(false);
-                            }
-                        });
-                    }
-                }
-
-                callback.run();
-
-            } catch (Throwable e) {
-                LOGGER.error("Exception occurred during replay of command protocol", e);
-            }
-        });
-    }
-
 
     //================================================================================================================
     // accessors as part of the public API
     //================================================================================================================
-
-    /**
-     * Returns the underlying {@link CommandProtocol} instance that will updated by this processor
-     * then commands are executed or read then the protocol itself will executed to playback previous actions.
-     *
-     * @return the underlying command protocol hold by this processor.
-     */
-    public CommandProtocol getCommandProtocol() {
-        return commandProtocolManager.getCommandProtocol();
-    }
 
     /**
      * Sets the whole StateChart that will bind to this command processor and is the

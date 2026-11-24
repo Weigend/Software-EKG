@@ -49,9 +49,7 @@ public class BookmarkItemBuilder <T extends RepositoryBaseItem>  extends Abstrac
             groupId = null;
         }
 
-        List<Bookmark> bookmarks = new ArrayList<>();
-        bookmarks.addAll(service.getMetricBookmarks(groupId));
-        bookmarks.addAll(service.getMetricQueryBookmarks(groupId));
+        List<Bookmark> bookmarks = new ArrayList<>(service.getMetricQueryBookmarks(groupId));
 
         // Filter by project: global node shows only bookmarks without project,
         // project node shows only bookmarks for that specific project

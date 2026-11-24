@@ -14,7 +14,6 @@ package io.softwareecg.awb.bookmark.api;
 
 import io.softwareecg.awb.bookmark.model.Bookmark;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
-import io.softwareecg.awb.bookmark.model.MetricBookmark;
 import io.softwareecg.awb.bookmark.model.MetricQueryBookmark;
 
 import java.util.List;
@@ -27,21 +26,8 @@ import java.util.List;
 public interface MetricsBookmarkService {
 
     // ------------------------------------------------------------------------------------------------------
-    // MetricBookmark actions
+    // MetricQueryBookmark actions
     // ------------------------------------------------------------------------------------------------------
-
-    /**
-     * Returns a sorted list of (metric) bookmarks that exists in the underlying repository
-     * and is related to the specified bookmark group.
-     * Depending on the group id the service will have the following behaviour:
-     *  - bookmarkGroupId == null or "" : the service will return any MetricBookmark that exists in the repository
-     *  - bookmarkGroupId == {@link BookmarkGroup#DEFAULT_GLOBAL_GROUP_ID } : the service will return all bookmark not assigned to a specific group
-     *  - bookmarkGroupId == CONCRETE ID : the service will return bookmarks that are assigned to the specified group with the CONCRETE ID
-     *
-     * @param bookmarkGroupId the unique id of the bookmark group the searched bookmarks belongs to
-     * @return a list of MetricBookmark instances that are assigned to the given group id (if specified)
-     */
-    List<MetricBookmark> getMetricBookmarks(String bookmarkGroupId);
 
     /**
      * Returns a sorted list of query-based bookmarks that are related to the specified bookmark group.
