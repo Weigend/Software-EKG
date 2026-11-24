@@ -153,20 +153,35 @@ public class QueryTimeSeriesToolTest {
     }
 
     @Test
-    public void atMostTwentySeriesAreGiven() throws Exception {
+    public void atMostFiftySeriesAreGiven() throws Exception {
         List<BinaryTimeSeries> parts = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 60; i++) {
             parts.add(part("host" + i, 1000, i));
         }
         stored(parts);
 
         JsonNode answer = ask("{\"project\": \"p\"}");
 
-        assertEquals(20, answer.get("series").size());
-        assertEquals(20, answer.get("series_returned").asInt());
-        assertEquals("more than 20", answer.get("total_series_found").asText());
+        assertEquals(50, answer.get("series").size());
+        assertEquals(50, answer.get("series_returned").asInt());
+        assertEquals("more than 50", answer.get("total_series_found").asText());
         assertTrue(answer.get("truncated").asBoolean());
         assertTrue(answer.get("hint").asText(), answer.get("hint").asText().contains("more specific filters"));
+    }
+
+    @Test
+    public void fiftySeriesAreAllOfThem() throws Exception {
+        List<BinaryTimeSeries> parts = new ArrayList<>();
+        for (int i = 0; i < 50; i++) {
+            parts.add(part("host" + i, 1000, i));
+        }
+        stored(parts);
+
+        JsonNode answer = ask("{\"project\": \"p\"}");
+
+        assertEquals(50, answer.get("total_series_found").asInt());
+        assertEquals(50, answer.get("series").size());
+        assertFalse(answer.has("truncated"));
     }
 
     @Test

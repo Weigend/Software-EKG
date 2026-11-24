@@ -35,7 +35,7 @@ public class ComputationSpec {
      * maximum number of series to display simultaneously in the chart.
      * Additional series beyond this limit will be truncated and the UI will indicate how many were omitted.
      */
-    private int maxDisplaySeries = 20;
+    private int maxDisplaySeries = 50;
 
 
     public SeriesSmoothingGranularity getSeriesSmoothingGranularity() {

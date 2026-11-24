@@ -32,7 +32,7 @@ public class QueryTimeSeriesTool implements AiTool {
     private static final Logger LOG = LoggerFactory.getLogger(QueryTimeSeriesTool.class);
     private static final int DEFAULT_MAX_POINTS = 100;
     private static final int HARD_MAX_POINTS = 200;
-    private static final int MAX_SERIES_RETURNED = 20;
+    private static final int MAX_SERIES_RETURNED = 50;
     private static final int QUERY_LIMIT = Integer.MAX_VALUE;
 
     /** The threshold of a query that leaves all values. */

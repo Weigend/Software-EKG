@@ -130,7 +130,7 @@ public class QueryDraft {
     /* --------------------------- other view component properties ------------------------------- */
 
     private final ObjectProperty<Integer> threshold = new SimpleObjectProperty<>(500);
-    private final ObjectProperty<Integer> maxDisplaySeries = new SimpleObjectProperty<>(20);
+    private final ObjectProperty<Integer> maxDisplaySeries = new SimpleObjectProperty<>(50);
     private final BooleanProperty expertMode = new SimpleBooleanProperty(false);
     private final BooleanProperty multiMetricMode = new SimpleBooleanProperty(false);
     private final BooleanProperty cloudMode = new SimpleBooleanProperty(false);
