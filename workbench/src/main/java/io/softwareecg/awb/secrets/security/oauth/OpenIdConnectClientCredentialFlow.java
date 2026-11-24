@@ -119,7 +119,7 @@ public class OpenIdConnectClientCredentialFlow {
 
         tokenExpirationTime = Instant.now().plusSeconds(token.getExpiresIn());
         accessToken = token;
-        LOGGER.info("Uses new access token {} valid until {}", accessToken.getAccessToken(), tokenExpirationTime);
+        LOGGER.info("Uses a new access token valid until {}", tokenExpirationTime);
     }
 
     /**
