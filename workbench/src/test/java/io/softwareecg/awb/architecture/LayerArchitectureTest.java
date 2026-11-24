@@ -158,6 +158,32 @@ public class LayerArchitectureTest {
                     .should().beInterfaces().orShould().beRecords().orShould().beEnums()
                     .because("Implementierungen und Registries gehoeren nicht in spi");
 
+    /**
+     * api und spi kommen mit sich selbst aus: wer sie benutzt, haengt sonst auch an der
+     * Implementierung dahinter. Meist ist es ein Parameter oder ein Rueckgabewert, der sie verraet.
+     */
+    @ArchTest
+    static final ArchRule an_api_or_spi_does_not_expose_the_implementation =
+            classes().that().resideInAnyPackage("io.softwareecg.awb.*.api..", "io.softwareecg.awb.*.spi..")
+                    .should(dependOnNothingInsideTheirComponent())
+                    .because("was innen ist, muss sich aendern lassen, ohne die anderen anzufassen");
+
+    private static ArchCondition<JavaClass> dependOnNothingInsideTheirComponent() {
+        return new ArchCondition<>("in ihrer Komponente nur api und spi kennen") {
+            @Override
+            public void check(JavaClass type, ConditionEvents events) {
+                for (Dependency dependency : type.getDirectDependenciesFromSelf()) {
+                    JavaClass target = dependency.getTargetClass().getBaseComponentType();
+                    if (target.getPackageName().startsWith("io.softwareecg.awb")
+                            && componentOf(target).equals(componentOf(type))
+                            && !resideInAnyPackage("io.softwareecg.awb.*.api..", "io.softwareecg.awb.*.spi..").test(target)) {
+                        events.add(SimpleConditionEvent.violated(type, dependency.getDescription()));
+                    }
+                }
+            }
+        };
+    }
+
     private static ArchCondition<JavaClass> beImplementedOnlyIn(String place, BiPredicate<JavaClass, JavaClass> allowed) {
         return new ArchCondition<>("nur implementiert sein in " + place) {
             @Override
