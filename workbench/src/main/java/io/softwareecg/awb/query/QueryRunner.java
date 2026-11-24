@@ -266,4 +266,9 @@ public class QueryRunner implements MetricQueryService {
         return response;
     }
 
+    @Override
+    public void reduce(List<TimeSeries> series, int maxPoints) {
+        transformPipeline.simplify(series, maxPoints);
+    }
+
 }

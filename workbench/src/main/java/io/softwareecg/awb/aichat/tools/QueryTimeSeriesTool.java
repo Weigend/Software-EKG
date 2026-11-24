@@ -4,14 +4,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.softwareecg.awb.query.api.ComputedTimeSeriesResponse;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
+import io.softwareecg.awb.query.api.MetricQueryService;
+import io.softwareecg.awb.query.model.ComputationSpec;
 import io.softwareecg.awb.timeseries.dimension.NamedValueEntity;
 import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.QuerySpec;
-import io.softwareecg.awb.query.model.TimeSeriesQuery;
-import io.softwareecg.awb.query.model.TimeSeriesQueryResponse;
-import io.softwareecg.awb.query.pipeline.simplification.SimplificationService;
-import io.softwareecg.awb.query.pipeline.simplification.algorithms.DouglasPeuckerSimplificationService;
 import io.softwareecg.awb.timeseries.TimeSeries;
 import io.softwareecg.awb.timeseries.Value;
 import org.slf4j.Logger;
@@ -20,8 +19,7 @@ import org.slf4j.LoggerFactory;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.function.Supplier;
@@ -38,23 +36,24 @@ public class QueryTimeSeriesTool implements AiTool {
     private static final int MAX_SERIES_RETURNED = 20;
     private static final int QUERY_LIMIT = Integer.MAX_VALUE;
 
+    /** The threshold of a query that leaves all values. */
+    private static final int ALL_VALUES = -1;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final SimplificationService simplificationService = new DouglasPeuckerSimplificationService();
     private final Supplier<MetricDataAccessService> metricServiceSupplier;
+    private final Supplier<MetricQueryService> queryServiceSupplier;
     private final ChartContextProvider contextProvider;
     private final Supplier<ZoneId> timeZone;
-
-    public QueryTimeSeriesTool(Supplier<MetricDataAccessService> metricServiceSupplier, ChartContextProvider contextProvider) {
-        this(metricServiceSupplier, contextProvider, ZoneId::systemDefault);
-    }
 
     /**
      * @param timeZone the time zone the times of the answer are given in: that of the chart,
      *                 so that the times the assistant names are those of the axis beside it
      */
-    public QueryTimeSeriesTool(Supplier<MetricDataAccessService> metricServiceSupplier, ChartContextProvider contextProvider,
-                               Supplier<ZoneId> timeZone) {
+    public QueryTimeSeriesTool(Supplier<MetricDataAccessService> metricServiceSupplier,
+                               Supplier<MetricQueryService> queryServiceSupplier,
+                               ChartContextProvider contextProvider, Supplier<ZoneId> timeZone) {
         this.metricServiceSupplier = metricServiceSupplier;
+        this.queryServiceSupplier = queryServiceSupplier;
         this.contextProvider = contextProvider;
         this.timeZone = timeZone;
     }
@@ -136,7 +135,8 @@ public class QueryTimeSeriesTool implements AiTool {
             // The AI typically only knows the metric name from list_available_data facets,
             // but the time series query needs both to match documents.
             MetricDataAccessService service = metricServiceSupplier.get();
-            if (service == null) {
+            MetricQueryService queries = queryServiceSupplier.get();
+            if (service == null || queries == null) {
                 return "{\"error\": \"No repository connection available. The user must open a project first.\"}";
             }
 
@@ -180,16 +180,20 @@ public class QueryTimeSeriesTool implements AiTool {
             }
 
             QuerySpec params = builder.build();
-            TimeSeriesQuery query = new TimeSeriesQuery(params, QUERY_LIMIT);
-            query.setCursorId(TimeSeriesQuery.INITIAL_CURSOR_ID);
-            TimeSeriesQueryResponse response = service.queryTimeSeriesData(query);
+            ComputationSpec compute = new ComputationSpec();
+            compute.setThreshold(ALL_VALUES);
+            compute.setMaxDisplaySeries(MAX_SERIES_RETURNED);
+            ComputedTimeSeriesResponse response = queries.getComputedTimeSeries(params, compute, QUERY_LIMIT);
 
+            if (response.hasErrorPayload()) {
+                throw new IllegalStateException(response.getOccurredError().getMessage(), response.getOccurredError());
+            }
             if (response.isRequestAborted()) {
-                return "{\"error\": \"Query matched " + response.getTotalHits() + " series, too many to process. " +
-                        "Narrow your query by specifying host, metric, measurement, or process filters.\"}";
+                return "{\"error\": \"The data could not be loaded: the source of the project cannot be reached, " +
+                        "or the query was cancelled.\"}";
             }
 
-            if (response.getTotalHits() == 0 && hasText(args, "metric")) {
+            if (response.getTimeSeries().isEmpty() && hasText(args, "metric")) {
                 String metricName = args.get("metric").asText();
                 return "{\"total_series_found\": 0, \"series\": [], " +
                         "\"hint\": \"No data found for metric '" + metricName.replace("\"", "'") + "'. " +
@@ -198,7 +202,7 @@ public class QueryTimeSeriesTool implements AiTool {
                         "Do NOT guess metric names from general knowledge.\"}";
             }
 
-            return formatResponse(response.getData(), maxPoints, response.getTotalHits(), includeValues);
+            return formatResponse(response, queries, maxPoints, includeValues);
 
         } catch (Exception e) {
             LOG.error("Error executing query_timeseries tool", e);
@@ -206,68 +210,76 @@ public class QueryTimeSeriesTool implements AiTool {
         }
     }
 
-    private String formatResponse(Collection<TimeSeries> seriesList, int maxPoints, long totalHits, boolean includeValues) {
+    private String formatResponse(ComputedTimeSeriesResponse response, MetricQueryService queries,
+                                  int maxPoints, boolean includeValues) {
         try {
             ObjectNode result = objectMapper.createObjectNode();
             ZoneId zone = timeZone.get();
-            result.put("total_series_found", totalHits);
+            List<TimeSeries> seriesList = response.getTimeSeries();
+            boolean truncated = response.hasSeriesTruncated();
+            if (truncated) {
+                // the query ends when there are enough of them, so nobody knows how many there are
+                result.put("total_series_found", "more than " + seriesList.size());
+            } else {
+                result.put("total_series_found", seriesList.size());
+            }
             result.put("time_zone", zone.getId());
 
-            // Limit to MAX_SERIES_RETURNED
-            List<TimeSeries> limited = new ArrayList<>(seriesList);
-            boolean truncated = limited.size() > MAX_SERIES_RETURNED;
-            if (truncated) {
-                limited = limited.subList(0, MAX_SERIES_RETURNED);
-            }
-
-            result.put("series_returned", limited.size());
+            result.put("series_returned", seriesList.size());
             if (truncated) {
                 result.put("truncated", true);
-                result.put("hint", "Only first " + MAX_SERIES_RETURNED + " of " + seriesList.size() + " series shown. Use more specific filters.");
+                result.put("hint", "Only the first " + seriesList.size() + " series shown. Use more specific filters.");
             }
 
-            // Simplify using Douglas-Peucker (preserves peaks and valleys)
-            simplificationService.simplify(limited, maxPoints);
-
             ArrayNode seriesArray = result.putArray("series");
-            for (TimeSeries ts : limited) {
+            for (TimeSeries ts : seriesList) {
                 ObjectNode seriesNode = seriesArray.addObject();
                 seriesNode.put("host", ts.getHost());
                 seriesNode.put("metric", ts.getMetricName());
                 seriesNode.put("measurement", ts.getMeasurement());
                 seriesNode.put("process", ts.getProcess());
 
-                List<Value> values = ts.getValues();
-                seriesNode.put("points", values.size());
+                long[] timestamps = ts.getTimestamps();
+                seriesNode.put("points", timestamps.length);
 
-                if (!values.isEmpty()) {
-                    seriesNode.put("start_time", formatEpoch(values.get(0).getTimestamp(), zone));
-                    seriesNode.put("end_time", formatEpoch(values.get(values.size() - 1).getTimestamp(), zone));
+                if (timestamps.length > 0) {
+                    seriesNode.put("start_time", formatEpoch(timestamps[0], zone));
+                    seriesNode.put("end_time", formatEpoch(timestamps[timestamps.length - 1], zone));
 
-                    DoubleSummaryStatistics stats = values.stream()
-                            .mapToDouble(Value::getValue)
-                            .summaryStatistics();
+                    // of all values: those that show the course are not typical of them
+                    DoubleSummaryStatistics stats = Arrays.stream(ts.getValuesArray()).summaryStatistics();
 
                     ObjectNode statsNode = seriesNode.putObject("stats");
                     statsNode.put("min", round(stats.getMin()));
                     statsNode.put("max", round(stats.getMax()));
                     statsNode.put("avg", round(stats.getAverage()));
                     statsNode.put("count", stats.getCount());
+                }
+            }
 
-                    if (includeValues) {
-                        ArrayNode valuesArray = seriesNode.putArray("values");
-                        for (Value v : values) {
-                            ArrayNode point = valuesArray.addArray();
-                            point.add(formatEpoch(v.getTimestamp(), zone));
-                            point.add(round(v.getValue()));
-                        }
-                    }
+            if (includeValues) {
+                // preserves peaks and valleys
+                queries.reduce(seriesList, maxPoints);
+                for (int i = 0; i < seriesList.size(); i++) {
+                    addValues((ObjectNode) seriesArray.get(i), seriesList.get(i), zone);
                 }
             }
 
             return objectMapper.writeValueAsString(result);
         } catch (Exception e) {
             return "{\"error\": \"Failed to format response: " + e.getMessage() + "\"}";
+        }
+    }
+
+    private static void addValues(ObjectNode seriesNode, TimeSeries series, ZoneId zone) {
+        if (series.getPointCount() == 0) {
+            return;
+        }
+        ArrayNode valuesArray = seriesNode.putArray("values");
+        for (Value v : series.getValues()) {
+            ArrayNode point = valuesArray.addArray();
+            point.add(formatEpoch(v.getTimestamp(), zone));
+            point.add(round(v.getValue()));
         }
     }
 

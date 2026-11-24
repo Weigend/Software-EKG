@@ -17,6 +17,7 @@ import io.softwareecg.awb.aichat.tools.SshCommandTool;
 import io.softwareecg.awb.query.model.SeriesCombineMode;
 import io.softwareecg.awb.query.model.SeriesSmoothingType;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
+import io.softwareecg.awb.query.api.MetricQueryService;
 import io.softwareecg.awb.query.model.ComputationSpec;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.metricview.ChartPanelManager;
@@ -85,7 +86,8 @@ public class AiChatController implements Initializable {
         List<AiTool> tools = List.of(
                 new GetCurrentContextTool(contextProvider),
                 new ListMetricsTool(this::resolveMetricDataAccessService),
-                new QueryTimeSeriesTool(this::resolveMetricDataAccessService, contextProvider, this::chartTimeZone),
+                new QueryTimeSeriesTool(this::resolveMetricDataAccessService, this::resolveMetricQueryService,
+                        contextProvider, this::chartTimeZone),
                 new SshCommandTool(this::showSshApprovalDialog)
         );
         this.agentLoop = new AgentLoop(client, tools, SystemPrompts.DEFAULT);
@@ -106,6 +108,11 @@ public class AiChatController implements Initializable {
     private MetricDataAccessService resolveMetricDataAccessService() {
         MetricViewController controller = resolveActiveChartController();
         return controller != null ? controller.getMetricDataAccessService() : null;
+    }
+
+    private MetricQueryService resolveMetricQueryService() {
+        MetricViewController controller = resolveActiveChartController();
+        return controller != null ? controller.getMetricQueryService() : null;
     }
 
     private String buildCurrentContextJson() {

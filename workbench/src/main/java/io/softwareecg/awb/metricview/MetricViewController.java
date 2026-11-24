@@ -183,10 +183,6 @@ public class MetricViewController implements Initializable {
     }
 
     /**
-     * Returns the MetricDataAccessService bound to the current repository.
-     * This instance has a properly initialized RepositoryClient, unlike the CDI default bean.
-     */
-    /**
      * @return the time zone the chart shows its times in, chosen at its lower left corner
      */
     public java.time.ZoneId getTimeZone() {
@@ -194,9 +190,20 @@ public class MetricViewController implements Initializable {
         return (chosen != null ? chosen : ChartTimeZone.getDefaultTimeZone()).getTimeZone();
     }
 
+    /**
+     * @return what the repository of this view holds; {@code null} if there is none or it cannot be reached
+     */
     public MetricDataAccessService getMetricDataAccessService() {
         if (viewModel.getEkgRepository() == null) return null;
         return viewModel.getEkgRepository().getBoundedService(MetricDataAccessService.class);
+    }
+
+    /**
+     * @return the queries of the repository of this view; {@code null} if there is none or it cannot be reached
+     */
+    public MetricQueryService getMetricQueryService() {
+        if (viewModel.getEkgRepository() == null) return null;
+        return viewModel.getEkgRepository().getBoundedService(MetricQueryService.class);
     }
 
     /**

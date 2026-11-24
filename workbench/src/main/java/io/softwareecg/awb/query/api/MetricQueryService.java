@@ -2,6 +2,9 @@ package io.softwareecg.awb.query.api;
 
 import io.softwareecg.awb.query.model.ComputationSpec;
 import io.softwareecg.awb.query.model.QuerySpec;
+import io.softwareecg.awb.timeseries.TimeSeries;
+
+import java.util.List;
 
 /**
  * This interface represents series that can use to fetch and compute time series from the repositories.
@@ -24,5 +27,13 @@ public interface MetricQueryService {
      */
     ComputedTimeSeriesResponse getComputedTimeSeries(QuerySpec filterParams,
                                                      ComputationSpec computeParams, int metricLimit);
+
+    /**
+     * Reduces every series to the points that show its course.
+     *
+     * @param series    the series; they are changed
+     * @param maxPoints how many points of a series are left at most
+     */
+    void reduce(List<TimeSeries> series, int maxPoints);
 
 }
