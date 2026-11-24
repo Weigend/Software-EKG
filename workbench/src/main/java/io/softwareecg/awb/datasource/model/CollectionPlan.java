@@ -2,7 +2,6 @@ package io.softwareecg.awb.datasource.model;
 
 import java.util.List;
 
-import io.softwareecg.awb.datasource.adapter.collector.CollectorConfigCompiler;
 /**
  * What the user decided when connecting a data source to an analysis: where the data comes from
  * and what is collected. Every kind of source has its own plan - a Prometheus server is one
@@ -10,6 +9,16 @@ import io.softwareecg.awb.datasource.adapter.collector.CollectorConfigCompiler;
  * end in a configuration for the collector.
  */
 public interface CollectionPlan {
+
+    /**
+     * The environment variable a stand-alone collector reads the password or token from.
+     */
+    String SECRET_ENVIRONMENT_VARIABLE = "EKG_SOURCE_SECRET";
+
+    /**
+     * What stands in the configuration in place of the password or token.
+     */
+    String SECRET_PLACEHOLDER = "${ENV:" + SECRET_ENVIRONMENT_VARIABLE + "}";
 
     /**
      * @return the name of the analysis; becomes the project in the AWB
@@ -33,7 +42,7 @@ public interface CollectionPlan {
 
     /**
      * Compiles the plan to a collector configuration. The configuration never contains the
-     * secret, only the placeholder {@link CollectorConfigCompiler#SECRET_PLACEHOLDER}.
+     * secret, only the placeholder {@link #SECRET_PLACEHOLDER}.
      *
      * @param projectName the name of the project as it is stored
      */

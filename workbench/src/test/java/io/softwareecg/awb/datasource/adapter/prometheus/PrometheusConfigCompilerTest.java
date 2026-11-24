@@ -1,5 +1,6 @@
 package io.softwareecg.awb.datasource.adapter.prometheus;
 
+import io.softwareecg.awb.datasource.model.CollectionPlan;
 import io.softwareecg.awb.datasource.adapter.collector.CollectorConfigCompiler;
 import io.softwareecg.collector.config.CollectorConfiguration;
 import io.softwareecg.collector.config.CollectorConfigurations;
@@ -33,7 +34,7 @@ public class PrometheusConfigCompilerTest {
 
         String yaml = PrometheusConfigCompiler.toYaml(plan);
         assertFalse("the password never goes into the configuration", yaml.contains("s3cr"));
-        assertTrue(yaml.contains(CollectorConfigCompiler.SECRET_PLACEHOLDER));
+        assertTrue(yaml.contains(CollectionPlan.SECRET_PLACEHOLDER));
 
         // the embedded collector gets the secret filled in, in memory
         CollectorConfiguration config = CollectorConfigurations.fromString(CollectorConfigCompiler.withSecret(yaml, "s3cr&t"));
@@ -131,7 +132,7 @@ public class PrometheusConfigCompilerTest {
 
         String exported = CollectorConfigCompiler.asYaml(stored);
         assertFalse(CollectorConfigurations.isLegacyXml(exported));
-        assertTrue(exported.contains(CollectorConfigCompiler.SECRET_PLACEHOLDER));
+        assertTrue(exported.contains(CollectionPlan.SECRET_PLACEHOLDER));
         assertEquals(CollectorConfigurations.read(stored), CollectorConfigurations.read(exported));
 
         String moved = PrometheusConfigCompiler.withConnection(stored, "http://new.example:9090", null, false);

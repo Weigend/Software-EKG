@@ -12,6 +12,7 @@ import com.tngtech.archunit.lang.SimpleConditionEvent;
 
 import java.util.function.BiPredicate;
 
+import static com.tngtech.archunit.base.DescribedPredicate.alwaysTrue;
 import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.assignableTo;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.belongTo;
@@ -318,6 +319,17 @@ public class LayerArchitectureTest {
                     .should().dependOnClassesThat()
                     .resideInAPackage("io.softwareecg.awb.repository.adapter..")
                     .because("Repository-Typen werden ueber TimeSeriesRepositoryProvider beschrieben");
+
+    /**
+     * Jede Art von Datenquelle hat ihr Paket unter datasource.adapter. Was sie gemeinsam haben, steht
+     * in model oder im Paket des Collectors.
+     */
+    @ArchTest
+    static final ArchRule kinds_of_data_sources_must_not_know_each_other =
+            slices().matching("io.softwareecg.awb.datasource.adapter.(*)..").should().notDependOnEachOther()
+                    .ignoreDependency(resideInAPackage("io.softwareecg.awb.datasource.adapter.collector.."), alwaysTrue())
+                    .ignoreDependency(alwaysTrue(), resideInAPackage("io.softwareecg.awb.datasource.adapter.collector.."))
+                    .because("eine Art von Datenquelle muss sich hinzufuegen und entfernen lassen, ohne eine andere anzufassen");
 
     @ArchTest
     static final ArchRule datasource_spi_must_not_know_ui_or_adapters =

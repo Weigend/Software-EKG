@@ -1,6 +1,6 @@
 package io.softwareecg.awb.datasource.adapter.windows;
 
-import io.softwareecg.awb.datasource.adapter.ssh.SshPlan;
+import io.softwareecg.awb.datasource.model.HostAddress;
 import io.softwareecg.collector.config.CollectorConfiguration;
 import io.softwareecg.collector.config.CollectorConfigurations;
 import io.softwareecg.collector.dt.ClassicCollectorJobConfiguration;
@@ -41,7 +41,7 @@ public class WindowsPlanTest {
 
     @Test
     public void thePlanIsMultipliedOutByTheCollector() throws Exception {
-        WindowsPlan plan = new WindowsPlan("Zoo & <Co>", "windows-servers", SshPlan.parseHosts("srv-[01-03]"),
+        WindowsPlan plan = new WindowsPlan("Zoo & <Co>", "windows-servers", HostAddress.parseAll("srv-[01-03]"),
                 List.of("java", "sqlservr"),
                 List.of(WindowsMetric.CPU_USAGE, WindowsMetric.MEMORY_AVAILABLE, WindowsMetric.NETWORK_RECEIVE),
                 List.of(WindowsMetric.PROCESS_CPU, WindowsMetric.PROCESS_MEMORY),
@@ -93,7 +93,7 @@ public class WindowsPlanTest {
 
     @Test
     public void theInstanceOfACounterNamesItsSeriesInEveryLanguage() throws Exception {
-        WindowsPlan plan = new WindowsPlan("Zoo", "windows", SshPlan.parseHosts("localhost"), List.of(),
+        WindowsPlan plan = new WindowsPlan("Zoo", "windows", HostAddress.parseAll("localhost"), List.of(),
                 List.of(WindowsMetric.NETWORK_TRANSMIT), List.of(), List.of(), Duration.ofSeconds(15));
         MetricDefinition metric = CollectorConfigurations.fromString(plan.toCollectorConfig("Zoo"))
                 .getClassicCollectorJobConfiguration().get(0).getMetricDefinitions()[0];
@@ -110,7 +110,7 @@ public class WindowsPlanTest {
 
     @Test
     public void withoutProcessesOnlyTheHostsAreRead() throws Exception {
-        WindowsPlan plan = new WindowsPlan("Zoo", "windows", SshPlan.parseHosts("localhost"), List.of(),
+        WindowsPlan plan = new WindowsPlan("Zoo", "windows", HostAddress.parseAll("localhost"), List.of(),
                 List.of(WindowsMetric.CPU_USAGE), List.of(WindowsMetric.PROCESS_CPU), List.of(), Duration.ofSeconds(5));
 
         assertEquals(1, plan.jobCount());
@@ -124,13 +124,13 @@ public class WindowsPlanTest {
 
         assertFalse("no host, nothing to collect", new WindowsPlan("Zoo", "windows", List.of(), List.of(),
                 List.of(WindowsMetric.CPU_USAGE), List.of(), List.of(), Duration.ofSeconds(5)).isComplete());
-        assertFalse("nothing selected, nothing to collect", new WindowsPlan("Zoo", "windows", SshPlan.parseHosts("localhost"),
+        assertFalse("nothing selected, nothing to collect", new WindowsPlan("Zoo", "windows", HostAddress.parseAll("localhost"),
                 List.of("java"), List.of(), List.of(), List.of(), Duration.ofSeconds(5)).isComplete());
     }
 
     @Test
     public void countersAloneAreAPlan() throws Exception {
-        WindowsPlan plan = new WindowsPlan("Zoo", "windows", SshPlan.parseHosts("localhost"), List.of(),
+        WindowsPlan plan = new WindowsPlan("Zoo", "windows", HostAddress.parseAll("localhost"), List.of(),
                 List.of(), List.of(), List.of("\\Memory\\Cache Bytes"), Duration.ofSeconds(5));
 
         assertTrue(plan.isComplete());

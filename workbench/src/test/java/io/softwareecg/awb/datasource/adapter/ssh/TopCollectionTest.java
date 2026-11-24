@@ -1,5 +1,6 @@
 package io.softwareecg.awb.datasource.adapter.ssh;
 
+import io.softwareecg.awb.datasource.model.HostAddress;
 import io.softwareecg.awb.datasource.adapter.collector.ProjectSeriesOutput;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.TimeSeriesWriteService;
@@ -44,7 +45,7 @@ public class TopCollectionTest {
     public void thisMachineIsCollectedUnderTheNamesOfTheAnalysis() throws Exception {
         Assume.assumeTrue("needs the Unix command top", new File("/usr/bin/top").exists() || new File("/bin/top").exists());
 
-        SshPlan plan = new SshPlan("Zoo", "linux", SshPlan.parseHosts("localhost"), null, null,
+        SshPlan plan = new SshPlan("Zoo", "linux", HostAddress.parseAll("localhost"), null, null,
                 List.of("java"),     // this test runs in one
                 List.of(TopMetric.CPU_USAGE, TopMetric.LOAD_1M, TopMetric.MEMORY_USED_PERCENT, TopMetric.SWAP_USED_PERCENT),
                 List.of(TopMetric.PROCESS_CPU, TopMetric.PROCESS_MEMORY), Duration.ofSeconds(1));

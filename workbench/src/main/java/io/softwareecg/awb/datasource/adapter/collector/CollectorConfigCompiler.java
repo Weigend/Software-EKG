@@ -1,5 +1,6 @@
 package io.softwareecg.awb.datasource.adapter.collector;
 
+import io.softwareecg.awb.datasource.model.CollectionPlan;
 import io.softwareecg.collector.config.CollectorConfigurations;
 import io.softwareecg.collector.config.model.CollectorConfig;
 import io.softwareecg.collector.config.model.Host;
@@ -16,21 +17,11 @@ import java.util.Map;
  * stand-alone collector on another machine.
  * <p>
  * It never contains the password or token. In its place stands the placeholder
- * {@link #SECRET_PLACEHOLDER}, which a stand-alone collector resolves from the environment
- * variable {@value #SECRET_ENVIRONMENT_VARIABLE}. For the embedded collector the AWB fills the
+ * {@link CollectionPlan#SECRET_PLACEHOLDER}, which a stand-alone collector resolves from the environment
+ * variable {@value CollectionPlan#SECRET_ENVIRONMENT_VARIABLE}. For the embedded collector the AWB fills the
  * secret in from its secret store, in memory only ({@link #withSecret(String, String)}).
  */
 public final class CollectorConfigCompiler {
-
-    /**
-     * The environment variable a stand-alone collector reads the password or token from.
-     */
-    public static final String SECRET_ENVIRONMENT_VARIABLE = "EKG_SOURCE_SECRET";
-
-    /**
-     * What stands in the configuration in place of the password or token.
-     */
-    public static final String SECRET_PLACEHOLDER = "${ENV:" + SECRET_ENVIRONMENT_VARIABLE + "}";
 
     private CollectorConfigCompiler() {
     }
@@ -69,6 +60,6 @@ public final class CollectorConfigCompiler {
     }
 
     private static String filled(String password, String secret) {
-        return password == null ? null : password.replace(SECRET_PLACEHOLDER, secret);
+        return password == null ? null : password.replace(CollectionPlan.SECRET_PLACEHOLDER, secret);
     }
 }

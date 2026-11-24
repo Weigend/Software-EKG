@@ -1,6 +1,6 @@
 package io.softwareecg.awb.datasource.adapter.windows;
 
-import io.softwareecg.awb.datasource.adapter.ssh.SshPlan;
+import io.softwareecg.awb.datasource.model.HostAddress;
 import io.softwareecg.collector.config.CollectorConfigurations;
 import io.softwareecg.collector.config.model.CollectorConfig;
 import io.softwareecg.collector.config.model.CollectorDef;
@@ -76,7 +76,7 @@ public final class WindowsConfigCompiler {
         }
 
         List<Host> hosts = new ArrayList<>();
-        for (SshPlan.Host host : plan.hosts()) {
+        for (HostAddress host : plan.hosts()) {
             hosts.add(new Host(host.name(), host.address(), null, null));
         }
 

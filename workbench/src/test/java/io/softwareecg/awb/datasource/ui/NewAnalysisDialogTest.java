@@ -1,5 +1,6 @@
 package io.softwareecg.awb.datasource.ui;
 
+import io.softwareecg.awb.datasource.model.HostAddress;
 import io.softwareecg.awb.datasource.adapter.prometheus.PrometheusPlan;
 import io.softwareecg.awb.datasource.spi.AnalysisSourceDefinition;
 import io.softwareecg.awb.datasource.spi.AnalysisSourceOption;
@@ -290,7 +291,7 @@ public class NewAnalysisDialogTest {
         SshPlan plan = (SshPlan) service.startedAny.get(0);
         assertEquals("Databases", plan.projectName());
         assertEquals("linux", plan.hostGroup());
-        assertEquals(List.of("db-01", "db-02", "db-03"), plan.hosts().stream().map(SshPlan.Host::name).collect(Collectors.toList()));
+        assertEquals(List.of("db-01", "db-02", "db-03"), plan.hosts().stream().map(HostAddress::name).collect(Collectors.toList()));
         assertEquals("monitor", plan.username());
         assertEquals("no password: the SSH key is used", null, plan.password());
         assertEquals(List.of("java", "nginx"), plan.processes());
@@ -396,7 +397,7 @@ public class NewAnalysisDialogTest {
         WindowsPlan plan = (WindowsPlan) service.startedAny.get(0);
         assertEquals("Windows Servers", plan.projectName());
         assertEquals("windows", plan.hostGroup());
-        assertEquals(List.of("srv-01", "srv-02", "srv-03"), plan.hosts().stream().map(SshPlan.Host::name).collect(Collectors.toList()));
+        assertEquals(List.of("srv-01", "srv-02", "srv-03"), plan.hosts().stream().map(HostAddress::name).collect(Collectors.toList()));
         assertEquals("the program is named as the counters name it", List.of("java", "sqlservr"), plan.processes());
         assertEquals(8, plan.systemMetrics().size());
         assertFalse(plan.systemMetrics().contains(WindowsMetric.CPU_QUEUE));
@@ -940,7 +941,7 @@ public class NewAnalysisDialogTest {
         }
 
         @Override
-        public List<SshDiscovery.HostCheck> inspectHosts(List<SshPlan.Host> hosts, String username, String password) {
+        public List<SshDiscovery.HostCheck> inspectHosts(List<HostAddress> hosts, String username, String password) {
             inspectedAs = username + "/" + password;
             return hosts.stream().map(host -> host.name().equals("db-02")
                     ? new SshDiscovery.HostCheck(host, false, "Connection refused", List.of())
@@ -955,7 +956,7 @@ public class NewAnalysisDialogTest {
         }
 
         @Override
-        public List<WindowsDiscovery.HostCheck> inspectWindowsHosts(List<SshPlan.Host> hosts) {
+        public List<WindowsDiscovery.HostCheck> inspectWindowsHosts(List<HostAddress> hosts) {
             return hosts.stream().map(host -> host.name().equals("srv-02")
                     ? new WindowsDiscovery.HostCheck(host, false, "is the service 'Remote Registry' running?", List.of())
                     : new WindowsDiscovery.HostCheck(host, true, null, List.of(

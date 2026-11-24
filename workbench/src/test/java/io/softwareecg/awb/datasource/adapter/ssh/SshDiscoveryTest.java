@@ -1,5 +1,6 @@
 package io.softwareecg.awb.datasource.adapter.ssh;
 
+import io.softwareecg.awb.datasource.model.HostAddress;
 import io.softwareecg.awb.datasource.adapter.ssh.SshDiscovery.HostCheck;
 import io.softwareecg.awb.datasource.adapter.ssh.SshDiscovery.ProcessCandidate;
 import org.junit.Assume;
@@ -57,7 +58,7 @@ public class SshDiscoveryTest {
     public void thisMachineIsReadWithoutSsh() {
         Assume.assumeTrue("needs the Unix command top", new File("/usr/bin/top").exists() || new File("/bin/top").exists());
 
-        List<HostCheck> checks = SshDiscovery.inspect(SshPlan.parseHosts("localhost"), null, null);
+        List<HostCheck> checks = SshDiscovery.inspect(HostAddress.parseAll("localhost"), null, null);
 
         assertEquals(1, checks.size());
         assertTrue(checks.get(0).problem(), checks.get(0).reachable());

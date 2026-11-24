@@ -1,5 +1,6 @@
 package io.softwareecg.awb.datasource.adapter.prometheus;
 
+import io.softwareecg.awb.datasource.model.CollectionPlan;
 import io.softwareecg.awb.datasource.adapter.collector.CollectorConfigCompiler;
 import io.softwareecg.collector.config.CollectorConfigurations;
 import io.softwareecg.collector.config.model.CollectorConfig;
@@ -81,6 +82,6 @@ public final class PrometheusConfigCompiler {
     private static HostGroup server(String url, String username, boolean withSecret) {
         return new HostGroup(null, null, List.of(new Host("prometheus", url,
                 username == null || username.isBlank() ? null : username,
-                withSecret ? CollectorConfigCompiler.SECRET_PLACEHOLDER : null)));
+                withSecret ? CollectionPlan.SECRET_PLACEHOLDER : null)));
     }
 }

@@ -1,7 +1,7 @@
 package io.softwareecg.awb.datasource.ui;
 
+import io.softwareecg.awb.datasource.model.CollectionPlan;
 import io.softwareecg.awb.metadata.api.CollectionSourceEvent;
-import io.softwareecg.awb.datasource.adapter.collector.CollectorConfigCompiler;
 import io.softwareecg.awb.datasource.NewAnalysisService;
 import io.softwareecg.awb.datasource.model.DataSourceInfo;
 import io.softwareecg.awb.datasource.model.DataSourceInfo.State;
@@ -366,7 +366,7 @@ public class DataSourcesDialog extends Dialog<Void> {
                     message.setStyle("");
                     message.setText("Exported to " + file + ". It contains no credentials: a collector reads the "
                             + "password or token from the environment variable "
-                            + CollectorConfigCompiler.SECRET_ENVIRONMENT_VARIABLE + ".");
+                            + CollectionPlan.SECRET_ENVIRONMENT_VARIABLE + ".");
                 });
             } catch (IOException | RuntimeException e) {
                 Platform.runLater(() -> problem(new IllegalStateException("Could not export: " + e.getMessage(), e)));

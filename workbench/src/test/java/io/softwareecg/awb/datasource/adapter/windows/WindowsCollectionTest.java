@@ -1,7 +1,7 @@
 package io.softwareecg.awb.datasource.adapter.windows;
 
+import io.softwareecg.awb.datasource.model.HostAddress;
 import io.softwareecg.awb.datasource.adapter.collector.ProjectSeriesOutput;
-import io.softwareecg.awb.datasource.adapter.ssh.SshPlan;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.TimeSeriesWriteService;
 import io.softwareecg.awb.timeseries.TimeSeries;
@@ -59,7 +59,7 @@ public class WindowsCollectionTest {
     public void thisMachineIsLookedAt() {
         assumeCounters();
 
-        List<WindowsDiscovery.HostCheck> checks = WindowsDiscovery.inspect(SshPlan.parseHosts("localhost"));
+        List<WindowsDiscovery.HostCheck> checks = WindowsDiscovery.inspect(HostAddress.parseAll("localhost"));
 
         assertEquals(1, checks.size());
         assertTrue(checks.get(0).problem(), checks.get(0).reachable());
@@ -74,7 +74,7 @@ public class WindowsCollectionTest {
     public void thisMachineIsCollectedUnderTheNamesOfTheAnalysis() throws Exception {
         assumeCounters();
 
-        WindowsPlan plan = new WindowsPlan("Zoo", "windows", SshPlan.parseHosts("localhost"),
+        WindowsPlan plan = new WindowsPlan("Zoo", "windows", HostAddress.parseAll("localhost"),
                 List.of("java"),     // this test runs in one
                 List.of(WindowsMetric.CPU_USAGE, WindowsMetric.MEMORY_AVAILABLE, WindowsMetric.MEMORY_COMMITTED,
                         WindowsMetric.DISK_FREE, WindowsMetric.TASKS_TOTAL),

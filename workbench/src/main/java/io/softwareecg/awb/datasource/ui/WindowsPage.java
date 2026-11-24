@@ -1,7 +1,7 @@
 package io.softwareecg.awb.datasource.ui;
 
+import io.softwareecg.awb.datasource.model.HostAddress;
 import io.softwareecg.awb.datasource.NewAnalysisService;
-import io.softwareecg.awb.datasource.adapter.ssh.SshPlan;
 import io.softwareecg.awb.datasource.adapter.windows.WindowsDiscovery.HostCheck;
 import io.softwareecg.awb.datasource.adapter.windows.WindowsDiscovery.ProcessCandidate;
 import io.softwareecg.awb.datasource.adapter.windows.WindowsMetric;
@@ -276,8 +276,8 @@ final class WindowsPage {
     // what the page holds
     //=================================================================================================================
 
-    private List<SshPlan.Host> hosts() {
-        return SshPlan.parseHosts(hostsField.getText());
+    private List<HostAddress> hosts() {
+        return HostAddress.parseAll(hostsField.getText());
     }
 
     /** The processes to watch: the ticked ones and the ones named by hand. */
@@ -389,7 +389,7 @@ final class WindowsPage {
     //=================================================================================================================
 
     private void checkHosts() {
-        List<SshPlan.Host> hosts = hosts();
+        List<HostAddress> hosts = hosts();
         if (hosts.isEmpty()) {
             return;
         }
@@ -486,9 +486,9 @@ final class WindowsPage {
         return metric.seriesName().replace("_per_second", "/s").replace("_percent", " %").replace('_', ' ');
     }
 
-    private static String shorten(List<SshPlan.Host> hosts) {
+    private static String shorten(List<HostAddress> hosts) {
         if (hosts.size() <= 4) {
-            return String.join(", ", hosts.stream().map(SshPlan.Host::name).toList());
+            return String.join(", ", hosts.stream().map(HostAddress::name).toList());
         }
         return hosts.get(0).name() + ", " + hosts.get(1).name() + " ... " + hosts.get(hosts.size() - 1).name();
     }

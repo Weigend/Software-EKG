@@ -1,6 +1,7 @@
 package io.softwareecg.awb.datasource.adapter.ssh;
 
-import io.softwareecg.awb.datasource.adapter.collector.CollectorConfigCompiler;
+import io.softwareecg.awb.datasource.model.CollectionPlan;
+import io.softwareecg.awb.datasource.model.HostAddress;
 import io.softwareecg.collector.config.CollectorConfigurations;
 import io.softwareecg.collector.config.model.CollectorConfig;
 import io.softwareecg.collector.config.model.CollectorDef;
@@ -68,12 +69,12 @@ public final class SshConfigCompiler {
         }
 
         List<Host> hosts = new ArrayList<>();
-        for (SshPlan.Host host : plan.hosts()) {
+        for (HostAddress host : plan.hosts()) {
             hosts.add(new Host(host.name(), host.address(), null, null));
         }
         HostGroup hostGroup = new HostGroup(
                 plan.username() == null || plan.username().isBlank() ? null : plan.username(),
-                plan.password() == null || plan.password().isBlank() ? null : CollectorConfigCompiler.SECRET_PLACEHOLDER,
+                plan.password() == null || plan.password().isBlank() ? null : CollectionPlan.SECRET_PLACEHOLDER,
                 hosts);
 
         return CollectorConfigurations.toYaml(new CollectorConfig(plan.projectName(), metricGroups, processGroups,

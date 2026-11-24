@@ -1,5 +1,6 @@
 package io.softwareecg.awb.datasource.adapter.ssh;
 
+import io.softwareecg.awb.datasource.model.HostAddress;
 import io.softwareecg.awb.datasource.adapter.collector.CollectorConfigCompiler;
 import io.softwareecg.collector.config.CollectorConfiguration;
 import io.softwareecg.collector.config.CollectorConfigurations;
@@ -17,31 +18,8 @@ import static org.junit.Assert.assertTrue;
 public class SshPlanTest {
 
     @Test
-    public void hostsAreReadAsTheUserTypesThem() {
-        List<SshPlan.Host> hosts = SshPlan.parseHosts("db-01, db-02:2222\n web=10.0.0.7 ; db-01  localhost");
-
-        assertEquals(List.of("db-01", "db-02", "web", "localhost"),
-                hosts.stream().map(SshPlan.Host::name).collect(Collectors.toList()));
-        assertEquals("the port stays with the address", "db-02:2222", hosts.get(1).address());
-        assertEquals("10.0.0.7", hosts.get(2).address());
-        assertTrue(hosts.get(3).isLocal());
-        assertFalse(hosts.get(0).isLocal());
-        assertTrue(SshPlan.parseHosts("  ").isEmpty());
-    }
-
-    @Test
-    public void aRangeIsWrittenOut() {
-        assertEquals(List.of("db-01", "db-02", "db-03"),
-                SshPlan.parseHosts("db-[01-03]").stream().map(SshPlan.Host::name).collect(Collectors.toList()));
-        assertEquals(List.of("node8", "node9", "node10"),
-                SshPlan.parseHosts("node[8-10]").stream().map(SshPlan.Host::name).collect(Collectors.toList()));
-        assertEquals("a range the wrong way round is taken as it is", List.of("x[5-1]"),
-                SshPlan.parseHosts("x[5-1]").stream().map(SshPlan.Host::name).collect(Collectors.toList()));
-    }
-
-    @Test
     public void thePlanIsMultipliedOutByTheCollector() throws Exception {
-        SshPlan plan = new SshPlan("Zoo & <Co>", "db-servers", SshPlan.parseHosts("db-[01-03]"), "monitor", "s3cr&t",
+        SshPlan plan = new SshPlan("Zoo & <Co>", "db-servers", HostAddress.parseAll("db-[01-03]"), "monitor", "s3cr&t",
                 List.of("java", "postgres"),
                 List.of(TopMetric.CPU_USAGE, TopMetric.LOAD_1M, TopMetric.MEMORY_USED_PERCENT),
                 List.of(TopMetric.PROCESS_CPU, TopMetric.PROCESS_MEMORY), Duration.ofSeconds(15));
@@ -86,7 +64,7 @@ public class SshPlanTest {
 
     @Test
     public void withoutProcessesOnlyTheHostsAreRead() throws Exception {
-        SshPlan plan = new SshPlan("Zoo", "linux", SshPlan.parseHosts("localhost"), null, null, List.of(),
+        SshPlan plan = new SshPlan("Zoo", "linux", HostAddress.parseAll("localhost"), null, null, List.of(),
                 List.of(TopMetric.CPU_USAGE), List.of(TopMetric.PROCESS_CPU), Duration.ofSeconds(5));
 
         assertEquals(1, plan.jobCount());

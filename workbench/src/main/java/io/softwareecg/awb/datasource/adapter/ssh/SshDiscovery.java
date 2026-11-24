@@ -1,5 +1,6 @@
 package io.softwareecg.awb.datasource.adapter.ssh;
 
+import io.softwareecg.awb.datasource.model.HostAddress;
 import io.softwareecg.collector.source.unix.UnixSourceConfig;
 import io.softwareecg.collector.source.unix.executor.CommandExecutor;
 import io.softwareecg.collector.source.unix.executor.local.SyncLocalExecutor;
@@ -47,7 +48,7 @@ public final class SshDiscovery {
      * @param problem   why not, {@code null} if it could
      * @param processes the processes running there, the busiest first
      */
-    public record HostCheck(SshPlan.Host host, boolean reachable, String problem, List<ProcessCandidate> processes) {
+    public record HostCheck(HostAddress host, boolean reachable, String problem, List<ProcessCandidate> processes) {
     }
 
     /**
@@ -68,7 +69,7 @@ public final class SshDiscovery {
      * @param password the password, or {@code null} to log in with the SSH key
      * @return one result per host, in the order given
      */
-    public static List<HostCheck> inspect(List<SshPlan.Host> hosts, String username, String password) {
+    public static List<HostCheck> inspect(List<HostAddress> hosts, String username, String password) {
         if (hosts.isEmpty()) {
             return List.of();
         }
@@ -79,7 +80,7 @@ public final class SshDiscovery {
         });
         try {
             List<Future<HostCheck>> running = new ArrayList<>();
-            for (SshPlan.Host host : hosts) {
+            for (HostAddress host : hosts) {
                 running.add(pool.submit(() -> inspect(host, username, password)));
             }
             List<HostCheck> result = new ArrayList<>();
@@ -102,7 +103,7 @@ public final class SshDiscovery {
         }
     }
 
-    private static HostCheck inspect(SshPlan.Host host, String username, String password) {
+    private static HostCheck inspect(HostAddress host, String username, String password) {
         UnixSourceConfig config = new UnixSourceConfig();
         Matcher port = DEFAULT_PORT.matcher(host.address());
         config.setHost(port.matches() ? port.group(1) : host.address());

@@ -1,7 +1,7 @@
 package io.softwareecg.awb.datasource.adapter.windows;
 
+import io.softwareecg.awb.datasource.model.HostAddress;
 import io.softwareecg.awb.datasource.model.CollectionPlan;
-import io.softwareecg.awb.datasource.adapter.ssh.SshPlan;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  *                       {@code \Memory\Cache Bytes}, with wildcards {@code \LogicalDisk(*)\% Free Space}
  * @param interval       the time between two values
  */
-public record WindowsPlan(String projectName, String hostGroup, List<SshPlan.Host> hosts, List<String> processes,
+public record WindowsPlan(String projectName, String hostGroup, List<HostAddress> hosts, List<String> processes,
                           List<WindowsMetric> systemMetrics, List<WindowsMetric> processMetrics,
                           List<String> counters, Duration interval) implements CollectionPlan {
 
@@ -105,7 +105,7 @@ public record WindowsPlan(String projectName, String hostGroup, List<SshPlan.Hos
     @Override
     public String endpoint() {
         if (hosts.size() <= 3) {
-            return hosts.stream().map(SshPlan.Host::name).collect(Collectors.joining(", "));
+            return hosts.stream().map(HostAddress::name).collect(Collectors.joining(", "));
         }
         return hosts.get(0).name() + " ... " + hosts.get(hosts.size() - 1).name() + " (" + hosts.size() + " hosts)";
     }

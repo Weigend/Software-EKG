@@ -1,5 +1,6 @@
 package io.softwareecg.awb.datasource;
 
+import io.softwareecg.awb.datasource.model.HostAddress;
 import io.softwareecg.awb.repository.api.Repository;
 import io.avaje.inject.External;
 import io.softwareecg.awb.metadata.api.CollectionSourceEvent;
@@ -9,7 +10,6 @@ import io.softwareecg.awb.secrets.api.SecretStore;
 import io.softwareecg.awb.repository.api.Embedded;
 import io.softwareecg.awb.datasource.adapter.prometheus.PrometheusDiscovery;
 import io.softwareecg.awb.datasource.adapter.ssh.SshDiscovery;
-import io.softwareecg.awb.datasource.adapter.ssh.SshPlan;
 import io.softwareecg.awb.datasource.adapter.windows.WindowsDiscovery;
 import io.softwareecg.awb.datasource.adapter.prometheus.PrometheusEnvironment;
 import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
@@ -143,7 +143,7 @@ public class NewAnalysisService implements ProjectDataCollection {
      * @param password the password, or {@code null} to log in with the SSH key
      * @return one result per host; a host that cannot be read says why
      */
-    public List<SshDiscovery.HostCheck> inspectHosts(List<SshPlan.Host> hosts, String username, String password) {
+    public List<SshDiscovery.HostCheck> inspectHosts(List<HostAddress> hosts, String username, String password) {
         return SshDiscovery.inspect(hosts, username, password);
     }
 
@@ -163,7 +163,7 @@ public class NewAnalysisService implements ProjectDataCollection {
      *
      * @return one result per host; a host that cannot be read says why
      */
-    public List<WindowsDiscovery.HostCheck> inspectWindowsHosts(List<SshPlan.Host> hosts) {
+    public List<WindowsDiscovery.HostCheck> inspectWindowsHosts(List<HostAddress> hosts) {
         return WindowsDiscovery.inspect(hosts);
     }
 
@@ -410,7 +410,7 @@ public class NewAnalysisService implements ProjectDataCollection {
     /**
      * @return the collector configuration of a source, to run it in a stand-alone collector.
      *         It contains no credentials: the password or token is expected in the environment
-     *         variable {@value CollectorConfigCompiler#SECRET_ENVIRONMENT_VARIABLE}.
+     *         variable {@value CollectionPlan#SECRET_ENVIRONMENT_VARIABLE}.
      */
     public String exportCollectorConfig(String sourceId) {
         return CollectorConfigCompiler.asYaml(require(sourceId).config);

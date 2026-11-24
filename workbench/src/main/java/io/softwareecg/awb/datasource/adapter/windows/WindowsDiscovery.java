@@ -1,6 +1,6 @@
 package io.softwareecg.awb.datasource.adapter.windows;
 
-import io.softwareecg.awb.datasource.adapter.ssh.SshPlan;
+import io.softwareecg.awb.datasource.model.HostAddress;
 import io.softwareecg.collector.source.wincount.WindowsCounterProbe;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public final class WindowsDiscovery {
      * @param problem   why not, {@code null} if they could
      * @param processes the processes running there, the biggest first
      */
-    public record HostCheck(SshPlan.Host host, boolean reachable, String problem, List<ProcessCandidate> processes) {
+    public record HostCheck(HostAddress host, boolean reachable, String problem, List<ProcessCandidate> processes) {
     }
 
     /**
@@ -74,7 +74,7 @@ public final class WindowsDiscovery {
      *
      * @return one result per host, in the order given
      */
-    public static List<HostCheck> inspect(List<SshPlan.Host> hosts) {
+    public static List<HostCheck> inspect(List<HostAddress> hosts) {
         if (hosts.isEmpty()) {
             return List.of();
         }
@@ -85,7 +85,7 @@ public final class WindowsDiscovery {
         });
         try {
             List<Future<HostCheck>> running = new ArrayList<>();
-            for (SshPlan.Host host : hosts) {
+            for (HostAddress host : hosts) {
                 running.add(pool.submit(() -> inspect(host)));
             }
             List<HostCheck> result = new ArrayList<>();
@@ -107,7 +107,7 @@ public final class WindowsDiscovery {
         }
     }
 
-    private static HostCheck inspect(SshPlan.Host host) {
+    private static HostCheck inspect(HostAddress host) {
         try {
             List<String> counters = WindowsCounterProbe.expand(host.address(), PROCESS_MEMORY);
             if (counters.isEmpty()) {
