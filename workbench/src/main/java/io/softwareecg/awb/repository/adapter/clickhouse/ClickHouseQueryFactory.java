@@ -2,13 +2,13 @@ package io.softwareecg.awb.repository.adapter.clickhouse;
 
 import io.softwareecg.awb.repository.adapter.clickhouse.expression.ClickHouseExpressionRenderer;
 import io.softwareecg.awb.repository.adapter.clickhouse.util.ClickHouseObjectBinder;
-import io.softwareecg.awb.repository.port.search.expr.Expression;
-import io.softwareecg.awb.repository.port.search.facet.FacetParams;
-import io.softwareecg.awb.repository.port.search.ExportParams;
-import io.softwareecg.awb.repository.port.search.SearchParams;
-import io.softwareecg.awb.repository.port.search.SortField;
-import io.softwareecg.awb.repository.schema.EkgSchemaField;
-import io.softwareecg.awb.repository.schema.Field;
+import io.softwareecg.awb.repository.persistence.search.expr.Expression;
+import io.softwareecg.awb.repository.persistence.search.facet.FacetParams;
+import io.softwareecg.awb.repository.persistence.search.ExportParams;
+import io.softwareecg.awb.repository.persistence.search.SearchParams;
+import io.softwareecg.awb.repository.persistence.search.SortField;
+import io.softwareecg.awb.repository.persistence.schema.EkgSchemaField;
+import io.softwareecg.awb.repository.persistence.schema.Field;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

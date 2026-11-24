@@ -39,9 +39,9 @@ public class LayerArchitectureTest {
                             "io.softwareecg.awb.datasource.model..",
                             "io.softwareecg.awb.metadata.model..",
                             "io.softwareecg.awb.projectcontext.model..",
-                            "io.softwareecg.awb.repository.model..",
-                            "io.softwareecg.awb.repository.schema..",
-                            "io.softwareecg.awb.repository.spi..",
+                            "io.softwareecg.awb.repository.connection..",
+                            "io.softwareecg.awb.repository.persistence..",
+                            "io.softwareecg.awb.repository.series..",
                             "io.softwareecg.awb.timeseries..",
                             "io.softwareecg.awb..port..",
                             "io.softwareecg.awb.query..")
@@ -62,7 +62,7 @@ public class LayerArchitectureTest {
                             "io.softwareecg.awb.repository.api..",
                             "io.softwareecg.awb.projectcontext.api..",
                             "io.softwareecg.awb.query.api..",
-                            "io.softwareecg.awb.repository.port..")
+                            "io.softwareecg.awb.repository.persistence..")
                     .should().dependOnClassesThat().resideInAnyPackage(
                             "io.softwareecg.awb..bl..",
                             "io.softwareecg.awb..ui..")
@@ -197,12 +197,11 @@ public class LayerArchitectureTest {
                             "io.softwareecg.awb.repository..")
                     .and().areNotAssignableTo(io.avaje.inject.spi.AvajeModule.class)
                     .should().dependOnClassesThat().haveFullyQualifiedName(
-                            "io.softwareecg.awb.repository.api.EkgRepository")
+                            "io.softwareecg.awb.repository.connection.EkgRepository")
                     .orShould().dependOnClassesThat().resideInAnyPackage(
-                            "io.softwareecg.awb.repository.port..",
-                            "io.softwareecg.awb.repository.schema..",
+                            "io.softwareecg.awb.repository.persistence..",
                             "io.softwareecg.awb.repository.adapter..",
-                            "io.softwareecg.awb.repository.search..")
+                            "io.softwareecg.awb.repository.series..")
                     .because("Ansichten brauchen einen Zugang zum Repository, nicht seine Verbindung");
 
     @ArchTest

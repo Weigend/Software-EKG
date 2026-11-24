@@ -14,8 +14,6 @@ package io.softwareecg.awb.projectcontext.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.softwareecg.awb.projectcontext.model.CloudPlatformType;
-import io.softwareecg.awb.projectcontext.model.ProjectFlavor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;

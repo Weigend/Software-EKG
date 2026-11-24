@@ -1,7 +1,7 @@
 package io.softwareecg.awb.repository.adapter.clickhouse.util;
 
-import io.softwareecg.awb.repository.schema.EkgSchemaField;
-import io.softwareecg.awb.repository.schema.FieldReader;
+import io.softwareecg.awb.repository.persistence.schema.EkgSchemaField;
+import io.softwareecg.awb.repository.persistence.schema.FieldReader;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 

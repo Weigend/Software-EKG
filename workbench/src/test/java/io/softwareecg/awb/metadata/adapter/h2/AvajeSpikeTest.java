@@ -13,11 +13,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-import io.softwareecg.awb.metadata.adapter.h2.H2BookmarkStore;
-import io.softwareecg.awb.metadata.adapter.h2.H2DimensionAliasStore;
-import io.softwareecg.awb.metadata.adapter.h2.H2MetadataDataSource;
-import io.softwareecg.awb.metadata.adapter.h2.H2ProjectStore;
-import io.softwareecg.awb.metadata.adapter.h2.H2RepositoryConfigStore;
 /**
  * Verifies the Avaje Inject setup for awb-da-h2.
  *

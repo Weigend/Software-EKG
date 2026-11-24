@@ -5,9 +5,9 @@
 package io.softwareecg.awb.repository.adapter.solr;
 
 import io.avaje.inject.External;
-import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.repository.spi.TimeSeriesRepositoryProvider;
-import io.softwareecg.awb.repository.model.EkgRepositoryDbType;
+import io.softwareecg.awb.repository.connection.EkgRepository;
+import io.softwareecg.awb.repository.connection.TimeSeriesRepositoryProvider;
+import io.softwareecg.awb.repository.connection.EkgRepositoryDbType;
 import io.softwareecg.awb.secrets.model.ResourceAuthType;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;

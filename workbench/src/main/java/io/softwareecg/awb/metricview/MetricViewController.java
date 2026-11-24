@@ -3,7 +3,7 @@ package io.softwareecg.awb.metricview;
 import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
 import io.softwareecg.awb.repository.api.Repository;
-import io.softwareecg.awb.repository.events.SeriesDataWrittenEvent;
+import io.softwareecg.awb.repository.api.SeriesDataWrittenEvent;
 import io.softwareecg.wfx.platform.api.EventSubscriber;
 import javafx.scene.chart.ValueAxis;
 import java.util.Objects;

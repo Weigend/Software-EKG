@@ -23,7 +23,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import io.softwareecg.awb.uitoolkit.bindings.Bindings;
 /**
  * Unit test for the {@link Bindings}.
  *

@@ -7,7 +7,6 @@ import java.time.ZoneId;
 
 import static org.junit.Assert.assertEquals;
 
-import io.softwareecg.awb.aichat.tools.QueryTimeSeriesTool;
 /**
  * The assistant names times as the chart beside it shows them: in the time zone of the chart,
  * not in that of the computer.

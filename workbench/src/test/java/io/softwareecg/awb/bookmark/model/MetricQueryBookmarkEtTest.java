@@ -12,7 +12,6 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.bookmark.model;
 
-import io.softwareecg.awb.bookmark.model.MetricQueryBookmark;
 import org.junit.Test;
 
 import java.util.Stack;

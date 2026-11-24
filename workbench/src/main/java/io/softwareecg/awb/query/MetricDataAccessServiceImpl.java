@@ -14,7 +14,7 @@ import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.query.model.TimeSeriesQuery;
 import io.softwareecg.awb.query.model.TimeSeriesQueryResponse;
 import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.repository.model.TimeSeriesImportSource;
+import io.softwareecg.awb.repository.api.TimeSeriesImportSource;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.RepositoryException;
 import io.softwareecg.awb.repository.api.SeriesFilter;

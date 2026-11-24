@@ -8,7 +8,6 @@ import java.time.ZoneId;
 
 import static org.junit.Assert.assertEquals;
 
-import io.softwareecg.awb.uitoolkit.chart.axis.DateAxis;
 /**
  * The axis of a chart is replaced by a copy of itself when the type of the chart changes. The
  * copy shows the times as the original did: in the time zone chosen for the chart.

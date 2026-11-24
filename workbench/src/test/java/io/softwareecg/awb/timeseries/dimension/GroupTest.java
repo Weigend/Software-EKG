@@ -12,7 +12,6 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.timeseries.dimension;
 
-import io.softwareecg.awb.timeseries.dimension.MetricGroup;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

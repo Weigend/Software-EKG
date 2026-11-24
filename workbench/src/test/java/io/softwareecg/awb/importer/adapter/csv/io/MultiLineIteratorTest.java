@@ -21,7 +21,6 @@ import java.util.regex.Pattern;
 
 import static org.junit.Assert.*;
 
-import io.softwareecg.awb.importer.adapter.csv.io.MultiLineIterator;
 /**
  */
 public class MultiLineIteratorTest {

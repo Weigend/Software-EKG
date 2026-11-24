@@ -1,11 +1,11 @@
 package io.softwareecg.awb.repository.adapter.solr;
 
 import io.softwareecg.awb.repository.adapter.solr.util.SolrClientCacheFactory;
-import io.softwareecg.awb.repository.port.TimeSeriesRepository;
-import io.softwareecg.awb.repository.spi.TimeSeriesRepositoryProvider;
-import io.softwareecg.awb.repository.spi.RepositoryTypeDescriptor;
-import io.softwareecg.awb.repository.port.TimeSeriesAdmin;
-import io.softwareecg.awb.repository.spi.TimeSeriesAdminProvider;
+import io.softwareecg.awb.repository.persistence.TimeSeriesRepository;
+import io.softwareecg.awb.repository.connection.TimeSeriesRepositoryProvider;
+import io.softwareecg.awb.repository.connection.RepositoryTypeDescriptor;
+import io.softwareecg.awb.repository.persistence.TimeSeriesAdmin;
+import io.softwareecg.awb.repository.persistence.TimeSeriesAdminProvider;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.apache.solr.client.solrj.SolrClient;

@@ -1,12 +1,12 @@
 package io.softwareecg.awb.repository.ui.admin;
 
 import io.softwareecg.awb.uitoolkit.bindings.StaticBoolProperty;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.connection.EkgRepository;
 import io.softwareecg.awb.repository.connection.RepositoryConfiguration;
-import io.softwareecg.awb.repository.events.EditRepositoryRequest;
-import io.softwareecg.awb.repository.spi.RepositoryTypeDescriptor;
-import io.softwareecg.awb.repository.service.RepositoryTypeRegistry;
-import io.softwareecg.awb.repository.spi.TimeSeriesRepositoryProvider;
+import io.softwareecg.awb.repository.api.EditRepositoryRequest;
+import io.softwareecg.awb.repository.connection.RepositoryTypeDescriptor;
+import io.softwareecg.awb.repository.connection.RepositoryTypeRegistry;
+import io.softwareecg.awb.repository.connection.TimeSeriesRepositoryProvider;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.awb.secrets.model.ResourceAuthType;

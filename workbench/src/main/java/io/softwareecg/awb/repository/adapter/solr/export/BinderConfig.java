@@ -1,6 +1,6 @@
 package io.softwareecg.awb.repository.adapter.solr.export;
 
-import io.softwareecg.awb.repository.schema.FieldReader;
+import io.softwareecg.awb.repository.persistence.schema.FieldReader;
 
 import java.lang.reflect.Field;
 import java.util.*;

@@ -12,7 +12,6 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.application;
 
-import io.softwareecg.awb.application.ApplicationBootstrap;
 import io.softwareecg.awb.application.api.events.BeforeRestoreDefaultLayoutEvent;
 import io.softwareecg.awb.application.about.AboutDialogController;
 import io.softwareecg.awb.uitoolkit.events.FinishEvent;

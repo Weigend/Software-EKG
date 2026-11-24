@@ -13,10 +13,6 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import io.softwareecg.awb.datasource.adapter.prometheus.MetricExpression;
-import io.softwareecg.awb.datasource.adapter.prometheus.MetricProfile;
-import io.softwareecg.awb.datasource.adapter.prometheus.PrometheusEnvironment;
-import io.softwareecg.awb.datasource.adapter.prometheus.WildcardPattern;
 public class MetricProfileTest {
 
     @Test

@@ -10,7 +10,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import io.softwareecg.awb.importer.adapter.owid.CsvHelper;
 class CsvHelperTest {
 
     private static final List<String> EXPECTED_HEADERS =  List.of("iso_code", "continent", "location", "date");

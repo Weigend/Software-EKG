@@ -1,13 +1,13 @@
 package io.softwareecg.awb.repository.adapter.elasticsearch.util;
 
 import co.elastic.clients.elasticsearch._types.mapping.Property;
-import io.softwareecg.awb.repository.schema.EkgSchemaField;
+import io.softwareecg.awb.repository.persistence.schema.EkgSchemaField;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static io.softwareecg.awb.repository.adapter.elasticsearch.util.FieldType.*;
-import static io.softwareecg.awb.repository.schema.EkgSchemaField.*;
+import static io.softwareecg.awb.repository.persistence.schema.EkgSchemaField.*;
 
 /**
  * The Software EKG schema definition as code.

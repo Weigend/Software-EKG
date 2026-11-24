@@ -19,7 +19,6 @@ import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-import io.softwareecg.awb.application.EkgVersionInfo;
 /**
  * Unit test for the {@link EkgVersionInfo}.
  *

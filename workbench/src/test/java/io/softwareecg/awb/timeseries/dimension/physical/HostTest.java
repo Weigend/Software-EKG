@@ -12,7 +12,6 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.timeseries.dimension.physical;
 
-import io.softwareecg.awb.timeseries.dimension.physical.Host;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

@@ -6,14 +6,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import io.softwareecg.awb.repository.port.search.expr.AndExpression;
-import io.softwareecg.awb.repository.port.search.expr.ExactFilterExpression;
-import io.softwareecg.awb.repository.port.search.expr.Expression;
-import io.softwareecg.awb.repository.port.search.expr.FullTextFilterExpression;
-import io.softwareecg.awb.repository.port.search.expr.NotExpression;
-import io.softwareecg.awb.repository.port.search.expr.OrExpression;
-import io.softwareecg.awb.repository.port.search.expr.RangeFilterExpression;
-import io.softwareecg.awb.repository.port.search.expr.WildcardFilterExpression;
+import io.softwareecg.awb.repository.persistence.search.expr.AndExpression;
+import io.softwareecg.awb.repository.persistence.search.expr.ExactFilterExpression;
+import io.softwareecg.awb.repository.persistence.search.expr.Expression;
+import io.softwareecg.awb.repository.persistence.search.expr.FullTextFilterExpression;
+import io.softwareecg.awb.repository.persistence.search.expr.NotExpression;
+import io.softwareecg.awb.repository.persistence.search.expr.OrExpression;
+import io.softwareecg.awb.repository.persistence.search.expr.RangeFilterExpression;
+import io.softwareecg.awb.repository.persistence.search.expr.WildcardFilterExpression;
 /**
  * Renders {@link Expression}s into ClickHouse SQL WHERE clause fragments.
  *

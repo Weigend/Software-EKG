@@ -10,7 +10,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import io.softwareecg.awb.uitoolkit.chart.ChartColorStyle;
 /**
  * Which colour a new series gets.
  */

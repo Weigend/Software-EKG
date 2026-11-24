@@ -21,7 +21,6 @@ import java.lang.reflect.Modifier;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import io.softwareecg.awb.runtime.logging.EkgLogger;
 /**
  * The Class EkgLoggerTest.
  *

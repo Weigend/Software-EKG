@@ -20,7 +20,7 @@ import io.softwareecg.awb.datasource.adapter.windows.WindowsPlan;
 import io.softwareecg.awb.query.api.OpenInvestigationCommand;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.repository.api.Repository;
-import io.softwareecg.awb.repository.events.SeriesDataWrittenEvent;
+import io.softwareecg.awb.repository.api.SeriesDataWrittenEvent;
 import io.softwareecg.collector.source.prometheus.PrometheusException;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.lookup.api.LookupStrategy;

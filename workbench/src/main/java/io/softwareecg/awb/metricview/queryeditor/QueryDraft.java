@@ -31,7 +31,7 @@ import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.timeseries.dimension.FilterDimension;
-import io.softwareecg.awb.repository.model.TimeSeriesImportSource;
+import io.softwareecg.awb.repository.api.TimeSeriesImportSource;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 

@@ -1,7 +1,6 @@
 package io.softwareecg.awb.projectcontext.ui.management;
 
 import io.softwareecg.awb.application.api.EkgApplicationController;
-import io.softwareecg.awb.projectcontext.ui.management.CreateProjectDialog;
 import io.softwareecg.awb.projectcontext.ui.ProjectBar;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.platform.api.Module;

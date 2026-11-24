@@ -14,8 +14,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import io.softwareecg.awb.datasource.adapter.ssh.SshDiscovery;
-import io.softwareecg.awb.datasource.adapter.ssh.SshPlan;
 public class SshDiscoveryTest {
 
     private static final String TOP = """

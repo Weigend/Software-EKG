@@ -1,11 +1,11 @@
 package io.softwareecg.awb.explorer.items;
 
 import io.avaje.inject.BeanScope;
-import io.softwareecg.awb.repository.port.TimeSeriesRepository;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.persistence.TimeSeriesRepository;
+import io.softwareecg.awb.repository.connection.EkgRepository;
 import io.softwareecg.awb.repository.api.RepositoryException;
 import io.softwareecg.awb.repository.api.RepositoryService;
-import io.softwareecg.awb.repository.schema.EkgSchemaField;
+import io.softwareecg.awb.repository.persistence.schema.EkgSchemaField;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.lookup.api.LookupStrategy;

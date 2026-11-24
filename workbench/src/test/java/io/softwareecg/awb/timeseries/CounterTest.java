@@ -12,8 +12,6 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.timeseries;
 
-import io.softwareecg.awb.timeseries.Counter;
-import io.softwareecg.awb.timeseries.Value;
 import org.junit.Test;
 
 import java.time.Instant;

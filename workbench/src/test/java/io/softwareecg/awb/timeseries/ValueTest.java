@@ -12,7 +12,6 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.timeseries;
 
-import io.softwareecg.awb.timeseries.Value;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.*;

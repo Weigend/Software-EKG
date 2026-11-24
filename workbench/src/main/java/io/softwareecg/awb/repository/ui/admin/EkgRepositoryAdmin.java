@@ -13,8 +13,8 @@
 package io.softwareecg.awb.repository.ui.admin;
 
 import afester.javafx.svg.SvgLoader;
-import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.repository.events.EditRepositoryRequest;
+import io.softwareecg.awb.repository.connection.EkgRepository;
+import io.softwareecg.awb.repository.api.EditRepositoryRequest;
 import io.softwareecg.awb.runtime.resources.CdiFxmlLoader;
 import io.softwareecg.awb.runtime.resources.ViewLoadResult;
 import javafx.scene.Group;

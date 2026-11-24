@@ -7,7 +7,7 @@ import io.softwareecg.awb.query.api.OpenInvestigationCommand;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.repository.api.Repository;
-import io.softwareecg.awb.repository.events.SeriesDataWrittenEvent;
+import io.softwareecg.awb.repository.api.SeriesDataWrittenEvent;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.EventBusListener;
 import javafx.application.Platform;

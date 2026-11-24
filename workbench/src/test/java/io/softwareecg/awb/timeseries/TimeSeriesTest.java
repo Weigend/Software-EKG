@@ -15,9 +15,6 @@
 package io.softwareecg.awb.timeseries;
 
 
-import io.softwareecg.awb.timeseries.Counter;
-import io.softwareecg.awb.timeseries.TimeSeries;
-import io.softwareecg.awb.timeseries.Value;
 import org.junit.Before;
 import org.junit.Test;
 

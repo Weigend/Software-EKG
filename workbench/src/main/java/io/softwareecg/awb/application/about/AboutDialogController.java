@@ -12,7 +12,6 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.application.about;
 
-import io.softwareecg.awb.application.about.VersionInfo;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import jakarta.inject.Inject;
 import javafx.event.ActionEvent;

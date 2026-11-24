@@ -1,14 +1,14 @@
 package io.softwareecg.awb.repository.adapter.solr;
 
 import io.softwareecg.awb.repository.adapter.solr.expression.SolrExpressionRenderer;
-import io.softwareecg.awb.repository.port.search.expr.Expression;
-import io.softwareecg.awb.repository.port.search.facet.FacetParams;
-import io.softwareecg.awb.repository.port.search.ExportParams;
-import io.softwareecg.awb.repository.port.search.SearchParams;
-import io.softwareecg.awb.repository.port.search.SortField;
-import io.softwareecg.awb.repository.schema.EkgSchemaField;
-import io.softwareecg.awb.repository.schema.Field;
-import io.softwareecg.awb.repository.schema.FieldReader;
+import io.softwareecg.awb.repository.persistence.search.expr.Expression;
+import io.softwareecg.awb.repository.persistence.search.facet.FacetParams;
+import io.softwareecg.awb.repository.persistence.search.ExportParams;
+import io.softwareecg.awb.repository.persistence.search.SearchParams;
+import io.softwareecg.awb.repository.persistence.search.SortField;
+import io.softwareecg.awb.repository.persistence.schema.EkgSchemaField;
+import io.softwareecg.awb.repository.persistence.schema.Field;
+import io.softwareecg.awb.repository.persistence.schema.FieldReader;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.common.params.CommonParams;
 

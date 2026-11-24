@@ -1,7 +1,5 @@
 package io.softwareecg.awb.repository.connection;
 
-import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.repository.model.EkgRepositoryDbType;
 import io.softwareecg.awb.secrets.model.ResourceAuthType;
 
 import java.util.List;

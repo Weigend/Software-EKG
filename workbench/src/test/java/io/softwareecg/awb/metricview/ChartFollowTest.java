@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-import io.softwareecg.awb.metricview.ChartFollow;
 public class ChartFollowTest {
 
     private static final long T = 1_795_000_000_000L;

@@ -23,7 +23,6 @@ import static io.softwareecg.awb.uitoolkit.bindings.ConversionBidirectionalBindi
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
-import io.softwareecg.awb.uitoolkit.bindings.ConversionBidirectionalBinding;
 /**
  * Unit test for the {@link ConversionBidirectionalBinding}.
  *

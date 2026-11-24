@@ -14,7 +14,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeTrue;
 
-import io.softwareecg.awb.secrets.adapter.file.FileSecretStore;
 public class FileSecretStoreTest {
 
     @Rule

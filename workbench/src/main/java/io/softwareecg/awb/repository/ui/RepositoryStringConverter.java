@@ -13,7 +13,7 @@
 package io.softwareecg.awb.repository.ui;
 
 import io.softwareecg.awb.uitoolkit.converter.UniversalStringConverter;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.connection.EkgRepository;
 import org.apache.commons.lang3.NotImplementedException;
 
 /**

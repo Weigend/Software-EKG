@@ -9,7 +9,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import io.softwareecg.awb.datasource.adapter.prometheus.WildcardPattern;
 public class WildcardPatternTest {
 
     private static final List<String> HOSTS = List.of("db-01", "db-02", "DB-10", "web-01", "web-02", "batch");

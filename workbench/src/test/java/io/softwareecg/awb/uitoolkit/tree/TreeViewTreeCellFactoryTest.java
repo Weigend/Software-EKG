@@ -18,8 +18,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
-import io.softwareecg.awb.uitoolkit.tree.KeyNavigationHandler;
-import io.softwareecg.awb.uitoolkit.tree.TreeViewTreeCellFactory;
 /**
  * A right-click must open the context menu of the item shown in the clicked row -
  * also on the first click after the row got another item. Otherwise an action such as

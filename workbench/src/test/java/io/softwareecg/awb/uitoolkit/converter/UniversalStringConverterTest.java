@@ -18,8 +18,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import io.softwareecg.awb.uitoolkit.converter.Converter;
-import io.softwareecg.awb.uitoolkit.converter.UniversalStringConverter;
 /**
  * Unit test for the {@link UniversalStringConverter}.
  *

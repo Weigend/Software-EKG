@@ -3,18 +3,18 @@ package io.softwareecg.awb.repository.adapter.elasticsearch;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.rest5_client.Rest5ClientTransport;
-import io.softwareecg.awb.repository.port.search.expr.ExactFilterExpression;
-import io.softwareecg.awb.repository.port.search.facet.FacetParams;
-import io.softwareecg.awb.repository.port.search.facet.FacetResult;
-import io.softwareecg.awb.repository.schema.PersistedField;
+import io.softwareecg.awb.repository.persistence.search.expr.ExactFilterExpression;
+import io.softwareecg.awb.repository.persistence.search.facet.FacetParams;
+import io.softwareecg.awb.repository.persistence.search.facet.FacetResult;
+import io.softwareecg.awb.repository.persistence.schema.PersistedField;
 import org.apache.hc.core5.http.HttpHost;
 import co.elastic.clients.transport.rest5_client.low_level.Rest5Client;
 
 import java.util.List;
 import java.util.UUID;
 
-import static io.softwareecg.awb.repository.schema.EkgSchemaField.PROJECT_NAME;
-import static io.softwareecg.awb.repository.schema.EkgSchemaField.TS_METRIC_NAME;
+import static io.softwareecg.awb.repository.persistence.schema.EkgSchemaField.PROJECT_NAME;
+import static io.softwareecg.awb.repository.persistence.schema.EkgSchemaField.TS_METRIC_NAME;
 
 /**
  * not a real test!!!!!

@@ -1,17 +1,17 @@
 package io.softwareecg.awb.repository.adapter;
 
 import java.util.List;
-import io.softwareecg.awb.repository.schema.EkgSchemaField;
-import io.softwareecg.awb.repository.schema.DocumentType;
-import io.softwareecg.awb.repository.port.DeleteParams;
+import io.softwareecg.awb.repository.persistence.schema.EkgSchemaField;
+import io.softwareecg.awb.repository.persistence.schema.DocumentType;
+import io.softwareecg.awb.repository.persistence.DeleteParams;
 import io.softwareecg.awb.repository.api.RepositoryException;
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.connection.EkgRepository;
 import io.softwareecg.awb.repository.api.SeriesSearch;
-import io.softwareecg.awb.repository.port.TimeSeriesRepository;
-import io.softwareecg.awb.repository.port.search.expr.ExprFactory;
-import io.softwareecg.awb.repository.search.StoredSeriesSearch;
-import io.softwareecg.awb.repository.spi.TimeSeriesRepositoryProvider;
-import io.softwareecg.awb.repository.model.EkgRepositoryDbType;
+import io.softwareecg.awb.repository.persistence.TimeSeriesRepository;
+import io.softwareecg.awb.repository.persistence.search.expr.ExprFactory;
+import io.softwareecg.awb.repository.series.StoredSeriesSearch;
+import io.softwareecg.awb.repository.connection.TimeSeriesRepositoryProvider;
+import io.softwareecg.awb.repository.connection.EkgRepositoryDbType;
 import io.softwareecg.awb.secrets.model.ResourceAuthType;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;

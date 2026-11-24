@@ -19,7 +19,6 @@ import java.io.File;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import io.softwareecg.awb.importer.adapter.csv.io.CsvFileHelper;
 /**
  * Test for the CSV File Helper.
  *

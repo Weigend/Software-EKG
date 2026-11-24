@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-import io.softwareecg.awb.datasource.adapter.prometheus.PrometheusDimensions;
 public class PrometheusDimensionsTest {
 
     @Test

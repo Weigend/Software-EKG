@@ -12,9 +12,9 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.repository.ui;
 
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.connection.EkgRepository;
 import io.softwareecg.awb.repository.connection.RepositoryConfiguration;
-import io.softwareecg.awb.repository.events.RepositoryConfigChangedEvent;
+import io.softwareecg.awb.repository.connection.RepositoryConfigChangedEvent;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.RepositorySelector;
 import io.softwareecg.wfx.lookup.api.Lookup;

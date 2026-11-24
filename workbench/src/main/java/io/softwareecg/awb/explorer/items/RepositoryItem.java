@@ -17,7 +17,7 @@ import io.softwareecg.awb.runtime.di.BeanProvider;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.RepositoryNotAvailableException;
 import io.softwareecg.awb.repository.api.RepositoryService;
-import io.softwareecg.awb.repository.events.EditRepositoryRequest;
+import io.softwareecg.awb.repository.api.EditRepositoryRequest;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.awb.repository.api.RepositoryException;
 import io.softwareecg.wfx.platform.api.EventBus;

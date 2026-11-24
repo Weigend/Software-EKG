@@ -1,9 +1,9 @@
 package io.softwareecg.awb.repository.adapter.solr.embedded;
 
 import io.softwareecg.awb.repository.adapter.solr.SolrRepositoryClientProvider;
-import io.softwareecg.awb.repository.port.TimeSeriesRepository;
-import io.softwareecg.awb.repository.spi.TimeSeriesRepositoryProvider;
-import io.softwareecg.awb.repository.spi.RepositoryTypeDescriptor;
+import io.softwareecg.awb.repository.persistence.TimeSeriesRepository;
+import io.softwareecg.awb.repository.connection.TimeSeriesRepositoryProvider;
+import io.softwareecg.awb.repository.connection.RepositoryTypeDescriptor;
 import io.softwareecg.awb.repository.api.Embedded;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;

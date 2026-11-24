@@ -21,7 +21,6 @@ import java.util.Locale;
 
 import static org.junit.Assert.*;
 
-import io.softwareecg.awb.importer.adapter.csv.io.CsvFormat;
 /**
  */
 public class CsvFormatTest {

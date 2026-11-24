@@ -1,6 +1,6 @@
 package io.softwareecg.awb.e2e;
 
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.connection.EkgRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
 import io.softwareecg.awb.repository.connection.RepositoryConfiguration;
 import io.softwareecg.awb.uitoolkit.tree.api.AbstractItem;

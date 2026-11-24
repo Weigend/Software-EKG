@@ -1,5 +1,7 @@
 package io.softwareecg.awb.repository.api;
 
+import io.softwareecg.awb.repository.connection.EkgRepository;
+
 
 /**
  * A repository as the other components see it: who it is, what it answers, and the services that

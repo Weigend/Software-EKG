@@ -1,8 +1,8 @@
 package io.softwareecg.awb.repository.ui;
 
-import io.softwareecg.awb.repository.api.EkgRepository;
+import io.softwareecg.awb.repository.connection.EkgRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
-import io.softwareecg.awb.repository.events.EditRepositoryRequest;
+import io.softwareecg.awb.repository.api.EditRepositoryRequest;
 import io.softwareecg.awb.repository.api.Embedded;
 import io.softwareecg.awb.repository.ui.admin.EkgRepositoryAdmin;
 import io.softwareecg.wfx.platform.api.EventBus;

@@ -1,6 +1,6 @@
 package io.softwareecg.awb.repository.adapter.solr.util;
 
-import io.softwareecg.awb.repository.schema.FieldReader;
+import io.softwareecg.awb.repository.persistence.schema.FieldReader;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.solr.common.SolrDocument;

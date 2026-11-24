@@ -19,7 +19,6 @@ import java.net.URI;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
-import io.softwareecg.awb.uitoolkit.converter.URIStringConverter;
 /**
  * Unit test for the {@link URIStringConverter}.
  *

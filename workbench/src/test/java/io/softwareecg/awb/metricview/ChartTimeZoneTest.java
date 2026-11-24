@@ -8,7 +8,6 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import io.softwareecg.awb.metricview.ChartTimeZone;
 /**
  * The time zones a chart offers, and the one it begins with.
  */

@@ -19,8 +19,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import io.softwareecg.awb.datasource.adapter.windows.WindowsMetric;
-import io.softwareecg.awb.datasource.adapter.windows.WindowsPlan;
 public class WindowsPlanTest {
 
     @Test

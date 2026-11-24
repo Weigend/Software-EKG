@@ -14,8 +14,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import io.softwareecg.awb.datasource.adapter.ssh.SshPlan;
-import io.softwareecg.awb.datasource.adapter.ssh.TopMetric;
 public class SshPlanTest {
 
     @Test
