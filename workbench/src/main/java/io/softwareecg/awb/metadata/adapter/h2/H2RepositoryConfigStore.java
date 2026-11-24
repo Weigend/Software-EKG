@@ -183,23 +183,6 @@ public class H2RepositoryConfigStore implements RepositoryConfigStore {
     }
 
     /**
-     * Deletes a repository by its id.
-     *
-     * @param id the repository id
-     */
-    public void deleteById(String id) {
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("DELETE FROM repositories WHERE id = ?")) {
-
-            stmt.setString(1, id);
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            LOGGER.warn("Failed to delete repository with id {} from H2", id, e);
-        }
-    }
-
-    /**
      * Deletes a target repository and the metadata of its projects in one transaction.
      * Aliases, bookmarks and import sources follow their project through the foreign keys.
      *

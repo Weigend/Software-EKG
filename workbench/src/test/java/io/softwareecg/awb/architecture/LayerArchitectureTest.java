@@ -84,8 +84,7 @@ public class LayerArchitectureTest {
                     .and().areNotAssignableTo(io.avaje.inject.spi.AvajeModule.class)
                     .should().dependOnClassesThat()
                     .resideInAnyPackage(
-                            "io.softwareecg.awb.application.about..",
-                            "io.softwareecg.awb.application.composition..")
+                            "io.softwareecg.awb.application.about..")
                     .because("Features muessen via application.api einklinken, nicht via Application-Interna");
 
     /**
@@ -311,8 +310,7 @@ public class LayerArchitectureTest {
     @ArchTest
     static final ArchRule metadata_clients_must_use_ports_instead_of_h2 =
             noClasses().that().resideOutsideOfPackages(
-                            "io.softwareecg.awb.metadata.adapter.h2..",
-                            "io.softwareecg.awb.application.composition..")
+                            "io.softwareecg.awb.metadata.adapter.h2..")
                     .and().areNotAssignableTo(io.avaje.inject.spi.AvajeModule.class)
                     .should().dependOnClassesThat()
                     .resideInAPackage("io.softwareecg.awb.metadata.adapter.h2..")

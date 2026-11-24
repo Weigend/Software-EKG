@@ -40,11 +40,6 @@ public interface RepositoryConfigStore {
     boolean update(RepositoryConfigRow row);
 
     /**
-     * Loescht eine Zeile ueber ihre ID.
-     */
-    void deleteById(String id);
-
-    /**
      * Deletes a target repository together with the metadata of all projects that are
      * stored for it - and with the projects their dimension aliases, bookmarks and import
      * sources. Either everything is deleted or nothing.
