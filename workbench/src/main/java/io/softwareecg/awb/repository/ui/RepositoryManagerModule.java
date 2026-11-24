@@ -49,7 +49,7 @@ public class RepositoryManagerModule implements Module {
         //           (see H2DataSource)
         // Touching them here shifts the cost into the visible preloader phase.
         repository.getRepositoryClient();
-        RepositoryService repoService = repository.getBoundedService(RepositoryService.class);
+        RepositoryService repoService = Lookup.lookup(RepositoryService.class);
         if (repoService != null) {
             repoService.listEkgRepositories();
         }

@@ -16,7 +16,6 @@ package io.softwareecg.awb.repository.service;
 import io.softwareecg.awb.metadata.model.RepositoryConfigRow;
 import io.softwareecg.awb.metadata.port.RepositoryConfigStore;
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.repository.port.TimeSeriesRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
 import io.softwareecg.awb.repository.events.RepositoryConfigChangedEvent;
 import io.softwareecg.awb.repository.model.EkgRepositoryDbType;
@@ -71,15 +70,6 @@ public class RepositoryDataAccessServiceImpl implements RepositoryService, Sourc
     public RepositoryDataAccessServiceImpl(Repository repository) {
         this.configStore = Lookup.lookup(RepositoryConfigStore.class);
         this.embeddedRepository = null;
-    }
-
-    //=================================================================================================================
-    // implementation of RepositoryClientAware interface (base of the RepositoryService)
-    //=================================================================================================================
-
-    @Override
-    public void initializeService(TimeSeriesRepository client) {
-        // no-op: H2 repository is initialized via CDI
     }
 
     //=================================================================================================================

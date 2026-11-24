@@ -21,6 +21,7 @@ import io.softwareecg.awb.uitoolkit.chart.ZoomableStackedChart;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import io.softwareecg.wfx.lookup.api.Lookup;
 
 import java.net.URISyntaxException;
 import java.nio.file.Path;
@@ -51,7 +52,7 @@ class ExplorerE2ETest {
     /** A test that failed half way leaves no repository behind: an import of the next could go into it. */
     @AfterEach
     void removeAddedRepositories() {
-        RepositoryService service = workbench.embeddedRepository().getBoundedService(RepositoryService.class);
+        RepositoryService service = Lookup.lookup(RepositoryService.class);
         service.listEkgRepositories().stream().filter(repository -> !repository.isEmbedded())
                 .forEach(service::removeRepositoryWithProjects);
     }
@@ -216,7 +217,7 @@ class ExplorerE2ETest {
     }
 
     private static List<EkgRepository> repositories() {
-        return workbench.embeddedRepository().getBoundedService(RepositoryService.class).listEkgRepositories();
+        return Lookup.lookup(RepositoryService.class).listEkgRepositories();
     }
 
     private static List<String> repositoryNames() {

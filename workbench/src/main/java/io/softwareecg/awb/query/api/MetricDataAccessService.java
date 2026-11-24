@@ -10,7 +10,6 @@ import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
 import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.TimeSeriesQuery;
 import io.softwareecg.awb.query.model.TimeSeriesQueryResponse;
-import io.softwareecg.awb.repository.spi.RepositoryClientAware;
 import io.softwareecg.awb.repository.api.RepositoryException;
 import io.softwareecg.awb.timeseries.TimeSeries;
 
@@ -31,7 +30,7 @@ import io.softwareecg.awb.timeseries.dimension.ProcessGroup;
  *
  * @since 18.08.2018
  */
-public interface MetricDataAccessService extends RepositoryClientAware {
+public interface MetricDataAccessService {
 
     /**
      * Deletes all time series from the repository that are assigned to the project

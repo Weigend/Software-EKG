@@ -18,14 +18,12 @@ import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.RepositoryNotAvailableException;
 import io.softwareecg.awb.repository.api.RepositoryService;
 import io.softwareecg.awb.repository.events.EditRepositoryRequest;
-import io.softwareecg.awb.repository.api.Embedded;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.awb.repository.api.RepositoryException;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.EventSubscriber;
 import io.softwareecg.wfx.platform.core.eventbus.AnnotationProcessor;
 import io.softwareecg.wfx.lookup.api.Lookup;
-import io.avaje.inject.External;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import javafx.application.Platform;
@@ -337,11 +335,11 @@ public class RepositoryItem extends RepositoryBaseItem {
     @Singleton
     public static class RemoveRepositoryHandler {
 
-        private final Repository embeddedEkgRepository;
+        private final RepositoryService repositoryService;
 
         @Inject
-        public RemoveRepositoryHandler(@External @Embedded Repository embeddedEkgRepository) {
-            this.embeddedEkgRepository = embeddedEkgRepository;
+        public RemoveRepositoryHandler(RepositoryService repositoryService) {
+            this.repositoryService = repositoryService;
         }
 
         /**
@@ -353,8 +351,7 @@ public class RepositoryItem extends RepositoryBaseItem {
          * @param repositoryItem the tree node of the repository to remove
          */
         public void remove(RepositoryItem repositoryItem) {
-            RepositoryService service = embeddedEkgRepository.getBoundedService(RepositoryService.class);
-            service.removeRepositoryWithProjects(repositoryItem.getRepository());
+            repositoryService.removeRepositoryWithProjects(repositoryItem.getRepository());
 
             repositoryItem.dispose();
 

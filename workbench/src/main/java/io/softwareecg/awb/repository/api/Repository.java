@@ -1,6 +1,5 @@
 package io.softwareecg.awb.repository.api;
 
-import io.softwareecg.awb.repository.spi.RepositoryClientAware;
 
 /**
  * A repository as the other components see it: who it is, what it answers, and the services that
@@ -33,12 +32,12 @@ public interface Repository {
     boolean isEmbedded();
 
     /**
-     * Returns a service that works on the data of this repository.
+     * Returns a service that works on the data of this repository, and on no other.
      *
      * @param serviceInterface the service
      * @return the service, or {@code null} if the repository cannot be reached
      */
-    <T extends RepositoryClientAware> T getBoundedService(Class<T> serviceInterface);
+    <T> T getBoundedService(Class<T> serviceInterface);
 
     /**
      * Asks the repository whether it answers.

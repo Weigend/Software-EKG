@@ -100,10 +100,7 @@ public class RepositoryItemRemoveTest {
     @Before
     public void setUp() {
         repositoryService = mock(RepositoryService.class);
-        EkgRepository embedded = mock(EkgRepository.class);
-        when(embedded.getBoundedService(RepositoryService.class)).thenReturn(repositoryService);
-
-        removeHandler = new RepositoryItem.RemoveRepositoryHandler(embedded);
+        removeHandler = new RepositoryItem.RemoveRepositoryHandler(repositoryService);
         BEANS.put(RepositoryItem.RemoveRepositoryHandler.class, removeHandler);
     }
 

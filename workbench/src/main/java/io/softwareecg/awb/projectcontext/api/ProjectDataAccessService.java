@@ -1,7 +1,6 @@
 package io.softwareecg.awb.projectcontext.api;
 
 import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.repository.spi.RepositoryClientAware;
 
 import java.util.List;
 
@@ -13,7 +12,7 @@ import java.util.List;
  *
  * @since 23.06.2018
  */
-public interface ProjectDataAccessService extends RepositoryClientAware {
+public interface ProjectDataAccessService {
 
     /**
      * Return a list of all {@link Project} instances that exists in the EKG repository

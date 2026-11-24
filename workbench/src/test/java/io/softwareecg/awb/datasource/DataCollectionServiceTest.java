@@ -68,7 +68,6 @@ public class DataCollectionServiceTest {
 
         EkgRepository repository = mock(EkgRepository.class);
         when(repository.getId()).thenReturn("local");
-        when(repository.getBoundedService(ProjectDataAccessService.class)).thenReturn(projects);
 
         SecretStore secretStore = new SecretStore() {
             @Override
@@ -95,6 +94,11 @@ public class DataCollectionServiceTest {
                 }
                 startedWith.add(configuration);
                 return new CollectorEngine(output, true);   // created, not running
+            }
+
+            @Override
+            protected ProjectDataAccessService projects() {
+                return projects;
             }
 
             @Override

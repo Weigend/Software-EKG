@@ -1,5 +1,6 @@
 package io.softwareecg.awb.query;
 
+import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.awb.query.api.ComputedTimeSeriesResponse;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.query.api.MetricQueryService;
@@ -63,9 +64,15 @@ public class QueryRunner implements MetricQueryService {
         this.transformPipeline = transformPipeline;
     }
 
-
-    @Override
-    public void initializeService(TimeSeriesRepository client) {
+    /**
+     * The one that works on a repository; {@link ServiceDiscovery} creates it. The bean of the
+     * injection stands for the class only.
+     *
+     * @param client the repository to query
+     */
+    @SuppressWarnings("unchecked")
+    public QueryRunner(TimeSeriesRepository client) {
+        this(Lookup.lookup(EventBus.class), Lookup.lookup(SeriesTransformPipeline.class));
         this.metricDataAccess = ServiceDiscovery.lookup(MetricDataAccessService.class, client);
     }
 

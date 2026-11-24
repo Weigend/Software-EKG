@@ -21,6 +21,7 @@ import io.softwareecg.awb.projectcontext.events.ShowProjectDataSourcesEvent;
 import io.softwareecg.awb.projectcontext.api.ProjectViewFlavorChangedEvent;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.repository.api.Repository;
+import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
 import io.softwareecg.wfx.platform.api.EventBus;
@@ -116,7 +117,7 @@ public class ProjectItem extends RepositoryBaseItem {
                             deleteTimeSeriesData(repository, project.getName());
 
                             // then delete project metadata from H2 (cascades to aliases, bookmarks, etc.)
-                            repository.getBoundedService(ProjectDataAccessService.class).deleteProjectByName(project.getName());
+                            ServiceDiscovery.lookup(ProjectDataAccessService.class, repository).deleteProjectByName(project.getName());
                         },
                         finishedEvent -> Lookup.lookup(EventBus.class)
                                 .publish(new ExplorerUpdateEvent(refreshTargetAfterDelete()))

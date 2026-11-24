@@ -12,7 +12,6 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.repository.api;
 
-import io.softwareecg.awb.repository.spi.RepositoryClientAware;
 
 import io.softwareecg.awb.repository.model.EkgRepositoryDbType;
 import io.softwareecg.awb.secrets.model.ResourceAuthType;
@@ -25,7 +24,7 @@ import java.util.List;
  *
  * @since 29.05.2015
  */
-public interface RepositoryService extends RepositoryClientAware {
+public interface RepositoryService {
 
     /**
      * Return a list with all configured EKG repositories.

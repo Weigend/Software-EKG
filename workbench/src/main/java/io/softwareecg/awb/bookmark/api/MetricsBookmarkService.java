@@ -16,7 +16,6 @@ import io.softwareecg.awb.bookmark.model.Bookmark;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
 import io.softwareecg.awb.bookmark.model.MetricBookmark;
 import io.softwareecg.awb.bookmark.model.MetricQueryBookmark;
-import io.softwareecg.awb.repository.spi.RepositoryClientAware;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ import java.util.List;
  * various methods to create, update, delete und query bookmarks.
  *
  */
-public interface MetricsBookmarkService extends RepositoryClientAware {
+public interface MetricsBookmarkService {
 
     // ------------------------------------------------------------------------------------------------------
     // MetricBookmark actions

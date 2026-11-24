@@ -106,7 +106,7 @@ public class CreateBookmarkDialog<T extends Bookmark> extends Dialog<BookmarkCre
                 handleKeyDownEnter();
             });
 
-            MetricsBookmarkService bookmarkService = repository.getBoundedService(MetricsBookmarkService.class);
+            MetricsBookmarkService bookmarkService = Lookup.lookup(MetricsBookmarkService.class);
             List<BookmarkGroup> bookmarkGroups = new ArrayList<>();
             bookmarkGroups.addAll(bookmarkService.getGlobalBookmarkGroups());
             if (projectName != null && !projectName.isBlank()) {

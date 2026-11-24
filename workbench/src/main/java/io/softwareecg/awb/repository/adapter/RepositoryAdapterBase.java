@@ -7,7 +7,6 @@ import io.softwareecg.awb.repository.port.DeleteParams;
 import io.softwareecg.awb.repository.api.RepositoryException;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.port.TimeSeriesRepository;
-import io.softwareecg.awb.repository.spi.RepositoryClientAware;
 import io.softwareecg.awb.repository.spi.TimeSeriesRepositoryProvider;
 import io.softwareecg.awb.repository.model.EkgRepositoryDbType;
 import io.softwareecg.awb.secrets.model.ResourceAuthType;
@@ -157,15 +156,14 @@ public abstract class RepositoryAdapterBase implements EkgRepository {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends RepositoryClientAware> T getBoundedService(Class<T> serviceInterface) {
+    public <T> T getBoundedService(Class<T> serviceInterface) {
         if (serviceCache.containsKey(serviceInterface)) {
             return (T) serviceCache.get(serviceInterface);
         }
 
         try {
-            T service = ServiceDiscovery.lookup(serviceInterface);
-            service.initializeService(getRepositoryClient());
-            service.setRepositoryId(getId());
+            // an instance of its own: the bean of the injection is the same for all repositories
+            T service = ServiceDiscovery.lookup(serviceInterface, getRepositoryClient());
             serviceCache.put(serviceInterface, service);
             return service;
 

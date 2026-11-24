@@ -5,6 +5,8 @@ import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
 import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.projectcontext.model.ProjectFlavor;
 import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
+import io.softwareecg.awb.query.api.MetricDataAccessService;
+import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 
 import java.util.List;
 
@@ -35,12 +37,12 @@ public class CommonItemBuilder extends ItemBuilder {
      */
     public static List<ProjectItem> buildProjectItems(RepositoryBaseItem parent, ProgressNotifier notifier) {
 
-        ProjectDataAccessService projectService = parent.getRepository().getBoundedService(ProjectDataAccessService.class);
-
-        if (projectService == null) {
+        // the projects are known without a connection, but what is in them is not
+        if (parent.getRepository().getBoundedService(MetricDataAccessService.class) == null) {
             return List.of();
         }
 
+        ProjectDataAccessService projectService = ServiceDiscovery.lookup(ProjectDataAccessService.class, parent.getRepository());
         List<Project> projectList = projectService.listProjects();
 
         return getItems(

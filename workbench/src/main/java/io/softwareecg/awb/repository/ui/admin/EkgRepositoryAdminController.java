@@ -4,7 +4,6 @@ import io.softwareecg.awb.uitoolkit.bindings.StaticBoolProperty;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
 import io.softwareecg.awb.repository.events.EditRepositoryRequest;
-import io.softwareecg.awb.repository.api.Embedded;
 import io.softwareecg.awb.repository.spi.RepositoryTypeDescriptor;
 import io.softwareecg.awb.repository.service.RepositoryTypeRegistry;
 import io.softwareecg.awb.repository.spi.TimeSeriesRepositoryProvider;
@@ -148,12 +147,11 @@ public class EkgRepositoryAdminController implements Initializable {
     // -------- internal types and event bus used to read/write config data and publish it to others -----------------
 
     /**
-     * EKG AWB internal types used to write the types
-     * configuration and to check for duplicates
+     * reads and writes the configuration of the repositories,
+     * and is asked for duplicates
      */
     @Inject
-    @Embedded
-    private EkgRepository repository;
+    private RepositoryService repositoryService;
 
     /**
      * EKG event bus used to notify other about new
@@ -302,7 +300,7 @@ public class EkgRepositoryAdminController implements Initializable {
         // reload the list of known types names every time the dialog will display
         repositoryAdminDialogPane.layoutBoundsProperty().addListener(observable -> {
             knownRepositoryNames.clear();
-            repository.getBoundedService(RepositoryService.class).listEkgRepositories()
+            repositoryService.listEkgRepositories()
                     .forEach(repository -> knownRepositoryNames.add(repository.getRepositoryName()));
         });
 
@@ -420,8 +418,6 @@ public class EkgRepositoryAdminController implements Initializable {
             return null;
         }
 
-        RepositoryService configService = repository.getBoundedService(RepositoryService.class);
-
         String reproConnectionUrl = viewModel.getRepositoryConnectionUrl();
 
         if (reproConnectionUrl.endsWith("/")
@@ -433,7 +429,7 @@ public class EkgRepositoryAdminController implements Initializable {
         // repository refer to that id and would drop out of the explorer if it changed.
         EkgRepository edited = getOldRepository();
         EkgRepository createdRepository = edited != null && !edited.isEmbedded()
-                ? configService.updateEkgRepository(
+                ? repositoryService.updateEkgRepository(
                         edited,
                         viewModel.getRepositoryName(),
                         reproConnectionUrl,
@@ -442,7 +438,7 @@ public class EkgRepositoryAdminController implements Initializable {
                         viewModel.getRepositoryAuthType(),
                         viewModel.getRepositoryAuthUsername(),
                         viewModel.getRepositoryAuthPassword())
-                : configService.addEkgRepository(
+                : repositoryService.addEkgRepository(
                         viewModel.getRepositoryName(),
                         reproConnectionUrl,
                         viewModel.getDbIndexName(),

@@ -6,7 +6,6 @@ import io.softwareecg.awb.metadata.model.ProjectRow;
 import io.softwareecg.awb.metadata.port.ProjectStore;
 import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
 import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.repository.port.TimeSeriesRepository;
 import io.softwareecg.awb.repository.api.Repository;
 import io.avaje.inject.External;
 import io.avaje.inject.Prototype;
@@ -51,20 +50,6 @@ public class ProjectDataAccessServiceImpl implements ProjectDataAccessService {
         if (repository != null) {
             this.repositoryId = repository.getId();
         }
-    }
-
-    /**
-     * Kept for compatibility with the getBoundedService pattern.
-     * The H2 repository is initialized via CDI, so no TimeSeriesRepository is needed.
-     */
-    @Override
-    public void initializeService(TimeSeriesRepository client) {
-        // no-op: H2 repository is initialized via CDI
-    }
-
-    @Override
-    public void setRepositoryId(String repositoryId) {
-        this.repositoryId = repositoryId;
     }
 
     //=================================================================================================================

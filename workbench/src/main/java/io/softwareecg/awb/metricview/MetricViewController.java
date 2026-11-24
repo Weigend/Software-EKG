@@ -516,7 +516,7 @@ public class MetricViewController implements Initializable {
             boolean isGlobalBookmark = queryBookmark.getProject() == null || queryBookmark.getProject().isBlank();
             String groupId = queryBookmark.getBookmarkGroupId();
             if (!isGlobalBookmark && groupId != null && !BookmarkGroup.DEFAULT_GLOBAL_GROUP_ID.equals(groupId)) {
-                MetricsBookmarkService bookmarkService = event.getSourceRepository().getBoundedService(MetricsBookmarkService.class);
+                MetricsBookmarkService bookmarkService = Lookup.lookup(MetricsBookmarkService.class);
                 isGlobalBookmark = bookmarkService.getGlobalBookmarkGroups().stream()
                         .anyMatch(g -> groupId.equals(g.getId()));
             }
@@ -993,7 +993,7 @@ public class MetricViewController implements Initializable {
             dialog.initOwner(chartHeaderController.getOwnerWindow());
 
             dialog.showAndWait().ifPresent(bookmarkResultContainer -> {
-                MetricsBookmarkService service = viewModel.getEkgRepository().getBoundedService(MetricsBookmarkService.class);
+                MetricsBookmarkService service = Lookup.lookup(MetricsBookmarkService.class);
 
                 BookmarkGroup bookmarkGroup = bookmarkResultContainer.getBookmarkGroup();
 

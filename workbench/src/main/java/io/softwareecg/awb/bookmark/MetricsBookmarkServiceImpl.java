@@ -10,7 +10,6 @@ import io.softwareecg.awb.bookmark.model.Bookmark;
 import io.softwareecg.awb.bookmark.model.BookmarkGroup;
 import io.softwareecg.awb.bookmark.model.MetricBookmark;
 import io.softwareecg.awb.bookmark.model.MetricQueryBookmark;
-import io.softwareecg.awb.repository.port.TimeSeriesRepository;
 import io.avaje.inject.External;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import io.softwareecg.wfx.lookup.api.Lookup;
@@ -37,11 +36,6 @@ public class MetricsBookmarkServiceImpl implements MetricsBookmarkService {
     @Inject
     public MetricsBookmarkServiceImpl(@External BookmarkStore bookmarkStore) {
         this.bookmarkStore = bookmarkStore;
-    }
-
-    @Override
-    public void initializeService(TimeSeriesRepository client) {
-        // no-op: H2 repository is initialized by DI
     }
 
     // =========================================================================

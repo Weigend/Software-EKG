@@ -369,16 +369,6 @@ public class MetricDataAccessServiceImpl implements MetricDataAccessService {
         }
     }
 
-    /**
-     * Initialize this services with a repository client that should used.
-     * This is necessary than the service is instantiated via CDI and doesn't has an initial client.
-     *
-     * @param client the repository client to use
-     */
-    public void initializeService(TimeSeriesRepository client) {
-        this.repositoryClient = client;
-    }
-
     /* ======================================== private helper ============================================= */
 
     private <T> List<T> queryFacets(QuerySpec queryParams, EkgSchemaField facetField,

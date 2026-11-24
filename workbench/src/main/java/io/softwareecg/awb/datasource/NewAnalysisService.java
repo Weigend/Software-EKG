@@ -180,7 +180,7 @@ public class NewAnalysisService implements ProjectDataCollection {
      */
     public Project startAnalysis(CollectionPlan plan) {
         validate(plan);
-        ProjectDataAccessService projects = repository.getBoundedService(ProjectDataAccessService.class);
+        ProjectDataAccessService projects = projects();
         String name = plan.projectName().trim();
         if (projects.listProjects().stream().anyMatch(project -> name.equalsIgnoreCase(project.getName()))) {
             throw new IllegalArgumentException("An analysis named '" + name + "' already exists.");
@@ -218,7 +218,7 @@ public class NewAnalysisService implements ProjectDataCollection {
      */
     public String addSource(CollectionPlan plan) {
         validate(plan);
-        ProjectDataAccessService projects = repository.getBoundedService(ProjectDataAccessService.class);
+        ProjectDataAccessService projects = projects();
         String name = projects.listProjects().stream().map(Project::getName)
                 .filter(existing -> existing.equalsIgnoreCase(plan.projectName().trim())).findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("There is no analysis named '" + plan.projectName() + "'."));
@@ -576,6 +576,11 @@ public class NewAnalysisService implements ProjectDataCollection {
      */
     protected TimeSeriesWriteService importService() {
         return ServiceDiscovery.lookup(TimeSeriesWriteService.class, repository);
+    }
+
+    /** @return the projects of the repository of the analyses. A seam for tests. */
+    protected ProjectDataAccessService projects() {
+        return ServiceDiscovery.lookup(ProjectDataAccessService.class, repository);
     }
 
     /**

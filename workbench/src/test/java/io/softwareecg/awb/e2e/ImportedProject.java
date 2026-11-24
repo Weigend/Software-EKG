@@ -5,6 +5,7 @@ import io.softwareecg.awb.timeseries.dimension.NamedValueEntity;
 import io.softwareecg.awb.query.model.MetricQuery;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
+import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 
 import io.softwareecg.awb.projectcontext.events.ProjectSelectedEvent;
 import io.softwareecg.awb.projectcontext.model.Project;
@@ -35,14 +36,14 @@ public final class ImportedProject {
 
     /** @return whether the Workbench knows the project */
     public boolean exists() {
-        return workbench.embeddedRepository().getBoundedService(ProjectDataAccessService.class)
+        return ServiceDiscovery.lookup(ProjectDataAccessService.class, workbench.embeddedRepository())
                 .listProjects().stream().anyMatch(project -> name.equals(project.getName()));
     }
 
     /** Selects the project, as a click on it in the explorer does, and waits for the project bar. */
     @SuppressWarnings("unchecked")
     public void select() {
-        Project project = workbench.embeddedRepository().getBoundedService(ProjectDataAccessService.class)
+        Project project = ServiceDiscovery.lookup(ProjectDataAccessService.class, workbench.embeddedRepository())
                 .listProjects().stream().filter(candidate -> name.equals(candidate.getName())).findFirst().orElseThrow();
         workbench.onFx(() -> {
             Lookup.lookup(EventBus.class).publish(new ProjectSelectedEvent(this, null, project,

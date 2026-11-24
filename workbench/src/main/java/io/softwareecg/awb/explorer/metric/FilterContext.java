@@ -5,6 +5,7 @@ import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.query.model.QuerySpec;
 import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
+import io.softwareecg.wfx.lookup.api.Lookup;
 
 import java.util.Objects;
 
@@ -95,10 +96,10 @@ public class FilterContext {
     }
 
     /**
-     * @return the bookmarks of the repository; {@code null} if it cannot be reached
+     * @return the bookmarks; they are stored in the workbench, so they are there without a connection
      */
     public MetricsBookmarkService bookmarks() {
-        return repository.getBoundedService(MetricsBookmarkService.class);
+        return Lookup.lookup(MetricsBookmarkService.class);
     }
 
     @Override

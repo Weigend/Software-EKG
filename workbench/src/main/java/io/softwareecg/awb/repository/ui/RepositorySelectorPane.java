@@ -15,13 +15,11 @@ package io.softwareecg.awb.repository.ui;
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
 import io.softwareecg.awb.repository.events.RepositoryConfigChangedEvent;
-import io.softwareecg.awb.repository.api.Embedded;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.RepositorySelector;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.platform.api.EventSubscriber;
 import io.softwareecg.awb.runtime.resources.CdiFxmlLoader;
-import io.avaje.inject.BeanScope;
 import io.avaje.inject.Prototype;
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
@@ -58,7 +56,7 @@ public class RepositorySelectorPane extends GridPane implements Initializable, R
 
     private final ObjectProperty<Repository> selectedRepository = new SimpleObjectProperty<>();
 
-    private EkgRepository repository;
+    private final RepositoryService repositoryService;
 
     @FXML
     private ComboBox<EkgRepository> cbRepositorySelection;
@@ -70,23 +68,22 @@ public class RepositorySelectorPane extends GridPane implements Initializable, R
     private RepositorySelectorPane repositorySelector;
 
     /**
-     * Initialize a new EkgRepository selector with the {@code @Embedded}
-     * EkgRepository. This is the constructor Avaje uses.
+     * Initialize a new EkgRepository selector. This is the constructor Avaje uses.
      */
     @Inject
-    public RepositorySelectorPane(@io.avaje.inject.External @Embedded EkgRepository repository) {
-        this.repository = repository;
+    public RepositorySelectorPane(RepositoryService repositoryService) {
+        this.repositoryService = repositoryService;
         CdiFxmlLoader.loadView("RepositorySelector.fxml", this, this);
     }
 
     /**
      * Constructor for FXML documents that use the selector as an element: the
-     * FXML loader creates such elements itself, without Avaje. The repository
+     * FXML loader creates such elements itself, without Avaje. The service
      * has to be there before the view is loaded, since loading the view calls
      * {@link #initialize(URL, ResourceBundle)}, which lists the repositories.
      */
     public RepositorySelectorPane() {
-        this(Lookup.lookup(BeanScope.class).get(EkgRepository.class, Embedded.class.getSimpleName()));
+        this(Lookup.lookup(RepositoryService.class));
     }
 
     @Override
@@ -116,19 +113,10 @@ public class RepositorySelectorPane extends GridPane implements Initializable, R
      */
     @EventSubscriber(eventClass = RepositoryConfigChangedEvent.class)
     public void repositoriesChanged() {
-        RepositoryService service = repository.getBoundedService(RepositoryService.class);
         repositories.clear();
 
-        if (service == null) {
-            // Service not yet available (e.g. repository client connection pending).
-            // The list will be refreshed on the next RepositoryConfigChangedEvent.
-            cbRepositorySelection.setValue(null);
-            cbRepositorySelection.setDisable(true);
-            return;
-        }
-
         Predicate<Repository> predicate = getFilter();
-        List<EkgRepository> repositoryList = service.listEkgRepositories();
+        List<EkgRepository> repositoryList = repositoryService.listEkgRepositories();
 
         repositoryList.stream().filter(predicate).forEach(repositories::add);
 
