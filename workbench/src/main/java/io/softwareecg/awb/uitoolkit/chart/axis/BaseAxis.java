@@ -13,6 +13,9 @@ import javafx.scene.chart.ValueAxis;
  */
 public abstract class BaseAxis<T extends Number> extends ValueAxis<T> implements SpawningAxis<T> {
 
+    /** In pixels. */
+    private static final double ROUNDING_ERROR = 1e-6;
+
     protected double overwriteUpperBound = Double.NaN;
 
     protected double overwriteLowerBound = Double.NaN;
@@ -32,6 +35,20 @@ public abstract class BaseAxis<T extends Number> extends ValueAxis<T> implements
      */
     public BaseAxis(double lowerBound, double upperBound) {
         super(lowerBound, upperBound);
+    }
+
+    /**
+     * A value at the end of the axis is exactly there. Its position is computed, and a rounding error
+     * beyond the end was enough to hide the tick and its label.
+     * <p>
+     * Here and not in {@link DateAxis}: JavaFX asks an axis of {@code Long} for the position of a
+     * {@code Double}, too, which fails as soon as a method expects a {@code Long}.
+     */
+    @Override
+    public double getDisplayPosition(T value) {
+        double position = super.getDisplayPosition(value);
+        double length = getSide() != null && getSide().isVertical() ? getHeight() : getWidth();
+        return Math.abs(position - length) < ROUNDING_ERROR ? length : position;
     }
 
     //=================================================================================================================
