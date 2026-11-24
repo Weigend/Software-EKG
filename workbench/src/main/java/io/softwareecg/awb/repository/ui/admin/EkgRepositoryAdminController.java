@@ -2,7 +2,7 @@ package io.softwareecg.awb.repository.ui.admin;
 
 import io.softwareecg.awb.uitoolkit.bindings.StaticBoolProperty;
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.repository.api.RepositoryService;
+import io.softwareecg.awb.repository.connection.RepositoryConfiguration;
 import io.softwareecg.awb.repository.events.EditRepositoryRequest;
 import io.softwareecg.awb.repository.spi.RepositoryTypeDescriptor;
 import io.softwareecg.awb.repository.service.RepositoryTypeRegistry;
@@ -151,7 +151,7 @@ public class EkgRepositoryAdminController implements Initializable {
      * and is asked for duplicates
      */
     @Inject
-    private RepositoryService repositoryService;
+    private RepositoryConfiguration configuration;
 
     /**
      * EKG event bus used to notify other about new
@@ -300,7 +300,7 @@ public class EkgRepositoryAdminController implements Initializable {
         // reload the list of known types names every time the dialog will display
         repositoryAdminDialogPane.layoutBoundsProperty().addListener(observable -> {
             knownRepositoryNames.clear();
-            repositoryService.listEkgRepositories()
+            configuration.listEkgRepositories()
                     .forEach(repository -> knownRepositoryNames.add(repository.getRepositoryName()));
         });
 
@@ -429,7 +429,7 @@ public class EkgRepositoryAdminController implements Initializable {
         // repository refer to that id and would drop out of the explorer if it changed.
         EkgRepository edited = getOldRepository();
         EkgRepository createdRepository = edited != null && !edited.isEmbedded()
-                ? repositoryService.updateEkgRepository(
+                ? configuration.updateEkgRepository(
                         edited,
                         viewModel.getRepositoryName(),
                         reproConnectionUrl,
@@ -438,7 +438,7 @@ public class EkgRepositoryAdminController implements Initializable {
                         viewModel.getRepositoryAuthType(),
                         viewModel.getRepositoryAuthUsername(),
                         viewModel.getRepositoryAuthPassword())
-                : repositoryService.addEkgRepository(
+                : configuration.addEkgRepository(
                         viewModel.getRepositoryName(),
                         reproConnectionUrl,
                         viewModel.getDbIndexName(),

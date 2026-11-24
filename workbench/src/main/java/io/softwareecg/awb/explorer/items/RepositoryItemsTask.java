@@ -44,7 +44,7 @@ public class RepositoryItemsTask {
      */
     public List<AbstractItem> getRepositoryItems() {
 
-        List<? extends Repository> repositories = repositoryService.listEkgRepositories();
+        List<Repository> repositories = repositoryService.listRepositories();
         return repositories
                 .stream()
                 .map(repository -> new RepositoryItem(repository.getRepositoryName(), true, repository))

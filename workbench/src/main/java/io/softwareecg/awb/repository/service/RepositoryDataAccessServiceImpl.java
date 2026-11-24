@@ -21,7 +21,7 @@ import io.softwareecg.awb.repository.events.RepositoryConfigChangedEvent;
 import io.softwareecg.awb.repository.model.EkgRepositoryDbType;
 import io.softwareecg.awb.repository.api.Embedded;
 import io.softwareecg.awb.repository.mapping.RepositoryMapper;
-import io.softwareecg.awb.repository.adapter.clickhouse.ClickHouseRepositoryNaming;
+import io.softwareecg.awb.repository.connection.RepositoryConfiguration;
 import io.softwareecg.awb.repository.model.RepositoryDefinition;
 import io.softwareecg.awb.repository.model.TimeSeriesImportSource;
 import io.softwareecg.awb.repository.api.Repository;
@@ -52,7 +52,7 @@ import static io.softwareecg.awb.runtime.events.ChangedEvent.Change.UPDATE;
  */
 @Singleton
 @SuppressWarnings("unused") // used via DI / Reflection
-public class RepositoryDataAccessServiceImpl implements RepositoryService, SourceRepositoryService {
+public class RepositoryDataAccessServiceImpl implements RepositoryService, RepositoryConfiguration, SourceRepositoryService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RepositoryDataAccessServiceImpl.class);
 
@@ -73,8 +73,13 @@ public class RepositoryDataAccessServiceImpl implements RepositoryService, Sourc
     }
 
     //=================================================================================================================
-    // implementation of the API defined by the RepositoryService interface itself
+    // implementation of the API defined by the RepositoryService and RepositoryConfiguration interfaces
     //=================================================================================================================
+
+    @Override
+    public List<Repository> listRepositories() {
+        return new ArrayList<>(listEkgRepositories());
+    }
 
     @Override
     public List<EkgRepository> listEkgRepositories() {
@@ -191,27 +196,13 @@ public class RepositoryDataAccessServiceImpl implements RepositoryService, Sourc
         row.id = id;
         row.name = name;
         row.url = connectionUrl;
-        row.dbIndexName = repositoryDbType == EkgRepositoryDbType.CLICKHOUSE_CLOUD
-                ? ClickHouseRepositoryNaming.resolveTableName(indexName, name, null)
-                : indexName;
+        row.dbIndexName = RepositoryMapper.storedIndexName(repositoryDbType, indexName, name);
         row.dbType = repositoryDbType.name();
         row.authType = resourceAuthType.toString();
         row.username = username;
         row.password = password;
         row.isImportSource = false;
         return row;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public void deleteRepository(String id) {
-        configStore.deleteById(id);
-        Lookup.lookup(EventBus.class).publish(new RepositoryConfigChangedEvent(null, DELETE, this));
-    }
-
-    @Override
-    public void deleteRepository(EkgRepository repository) {
-        deleteRepository(repository.getId());
     }
 
     @Override

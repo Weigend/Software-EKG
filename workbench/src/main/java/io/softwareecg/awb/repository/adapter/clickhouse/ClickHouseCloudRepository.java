@@ -109,5 +109,10 @@ public class ClickHouseCloudRepository extends RepositoryAdapterBase {
         public boolean isTypeSupported(EkgRepositoryDbType type) {
             return type == EkgRepositoryDbType.CLICKHOUSE_CLOUD;
         }
+
+        @Override
+        public String storedIndexName(String indexName, String repositoryName) {
+            return ClickHouseRepositoryNaming.resolveTableName(indexName, repositoryName, null);
+        }
     }
 }

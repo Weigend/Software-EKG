@@ -113,5 +113,16 @@ public interface EkgRepository extends Repository {
          * @return True if the types type is supported.
          */
         boolean isTypeSupported(EkgRepositoryDbType type);
+
+        /**
+         * The index name that is stored when a repository is added or changed.
+         *
+         * @param indexName what the user entered, may be blank
+         * @param repositoryName the name of the repository
+         * @return the name to store; what the user entered, unless the technology needs a name
+         */
+        default String storedIndexName(String indexName, String repositoryName) {
+            return indexName;
+        }
     }
 }

@@ -2,6 +2,7 @@ package io.softwareecg.awb.e2e;
 
 import io.softwareecg.awb.repository.api.EkgRepository;
 import io.softwareecg.awb.repository.api.RepositoryService;
+import io.softwareecg.awb.repository.connection.RepositoryConfiguration;
 import io.softwareecg.awb.uitoolkit.tree.api.AbstractItem;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -53,7 +54,7 @@ class ExplorerE2ETest {
     @AfterEach
     void removeAddedRepositories() {
         RepositoryService service = Lookup.lookup(RepositoryService.class);
-        service.listEkgRepositories().stream().filter(repository -> !repository.isEmbedded())
+        service.listRepositories().stream().filter(repository -> !repository.isEmbedded())
                 .forEach(service::removeRepositoryWithProjects);
     }
 
@@ -217,7 +218,7 @@ class ExplorerE2ETest {
     }
 
     private static List<EkgRepository> repositories() {
-        return Lookup.lookup(RepositoryService.class).listEkgRepositories();
+        return Lookup.lookup(RepositoryConfiguration.class).listEkgRepositories();
     }
 
     private static List<String> repositoryNames() {

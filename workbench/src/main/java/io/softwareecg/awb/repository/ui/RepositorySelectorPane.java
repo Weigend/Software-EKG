@@ -13,7 +13,7 @@
 package io.softwareecg.awb.repository.ui;
 
 import io.softwareecg.awb.repository.api.EkgRepository;
-import io.softwareecg.awb.repository.api.RepositoryService;
+import io.softwareecg.awb.repository.connection.RepositoryConfiguration;
 import io.softwareecg.awb.repository.events.RepositoryConfigChangedEvent;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.RepositorySelector;
@@ -56,7 +56,7 @@ public class RepositorySelectorPane extends GridPane implements Initializable, R
 
     private final ObjectProperty<Repository> selectedRepository = new SimpleObjectProperty<>();
 
-    private final RepositoryService repositoryService;
+    private final RepositoryConfiguration configuration;
 
     @FXML
     private ComboBox<EkgRepository> cbRepositorySelection;
@@ -71,8 +71,8 @@ public class RepositorySelectorPane extends GridPane implements Initializable, R
      * Initialize a new EkgRepository selector. This is the constructor Avaje uses.
      */
     @Inject
-    public RepositorySelectorPane(RepositoryService repositoryService) {
-        this.repositoryService = repositoryService;
+    public RepositorySelectorPane(RepositoryConfiguration configuration) {
+        this.configuration = configuration;
         CdiFxmlLoader.loadView("RepositorySelector.fxml", this, this);
     }
 
@@ -83,7 +83,7 @@ public class RepositorySelectorPane extends GridPane implements Initializable, R
      * {@link #initialize(URL, ResourceBundle)}, which lists the repositories.
      */
     public RepositorySelectorPane() {
-        this(Lookup.lookup(RepositoryService.class));
+        this(Lookup.lookup(RepositoryConfiguration.class));
     }
 
     @Override
@@ -116,7 +116,7 @@ public class RepositorySelectorPane extends GridPane implements Initializable, R
         repositories.clear();
 
         Predicate<Repository> predicate = getFilter();
-        List<EkgRepository> repositoryList = repositoryService.listEkgRepositories();
+        List<EkgRepository> repositoryList = configuration.listEkgRepositories();
 
         repositoryList.stream().filter(predicate).forEach(repositories::add);
 

@@ -61,6 +61,34 @@ public class RepositoryMapper {
      */
     public static EkgRepository buildRepository(RepositoryDefinition repositoryEntity) {
 
+        EkgRepository.Factory factory = factoryFor(repositoryEntity.getRepositoryType());
+
+        if (factory == null) {
+            return null;
+        }
+
+        return factory.getInstance(
+                repositoryEntity.getId(),
+                repositoryEntity.getName(),
+                repositoryEntity.getUrl(),
+                repositoryEntity.getDbIndexName(),
+                EkgRepositoryDbType.valueOf(repositoryEntity.getRepositoryTypeString()),
+                ResourceAuthType.valueOf(repositoryEntity.getAuthType()),
+                repositoryEntity.getUsername(),
+                repositoryEntity.getPassword());
+    }
+
+    /**
+     * @return the index name to store for a repository of the type, see
+     *         {@link EkgRepository.Factory#storedIndexName(String, String)}
+     */
+    public static String storedIndexName(EkgRepositoryDbType type, String indexName, String repositoryName) {
+        EkgRepository.Factory factory = factoryFor(type);
+        return factory == null ? indexName : factory.storedIndexName(indexName, repositoryName);
+    }
+
+    private static EkgRepository.Factory factoryFor(EkgRepositoryDbType type) {
+
         List<EkgRepository.Factory> repositoryFactories = Lookup.lookupAll(EkgRepository.Factory.class);
 
         if (repositoryFactories == null) {
@@ -69,16 +97,8 @@ public class RepositoryMapper {
         }
 
         for (EkgRepository.Factory factory : repositoryFactories) {
-            if (factory.isTypeSupported(repositoryEntity.getRepositoryType())) {
-                return factory.getInstance(
-                        repositoryEntity.getId(),
-                        repositoryEntity.getName(),
-                        repositoryEntity.getUrl(),
-                        repositoryEntity.getDbIndexName(),
-                        EkgRepositoryDbType.valueOf(repositoryEntity.getRepositoryTypeString()),
-                        ResourceAuthType.valueOf(repositoryEntity.getAuthType()),
-                        repositoryEntity.getUsername(),
-                        repositoryEntity.getPassword());
+            if (factory.isTypeSupported(type)) {
+                return factory;
             }
         }
 

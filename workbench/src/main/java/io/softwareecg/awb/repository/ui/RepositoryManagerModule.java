@@ -51,7 +51,7 @@ public class RepositoryManagerModule implements Module {
         repository.getRepositoryClient();
         RepositoryService repoService = Lookup.lookup(RepositoryService.class);
         if (repoService != null) {
-            repoService.listEkgRepositories();
+            repoService.listRepositories();
         }
     }
 
