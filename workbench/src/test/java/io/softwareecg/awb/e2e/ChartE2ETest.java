@@ -11,21 +11,35 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.StackedAreaChart;
 import javafx.scene.chart.XYChart;
+import javafx.application.Platform;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import io.softwareecg.awb.evidence.export.ExcelFileOfTheTest;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -192,6 +206,93 @@ class ChartE2ETest {
         workbench.screenshot(dialog, "chart-png-export-dialog");
         assertThat(workbench.onFx(dialog::getTitle)).isEqualTo("Export Chart as Bitmap Image");
         workbench.close(dialog);
+    }
+
+    /** The picture is written, in twice the size of the chart, and shows its line. */
+    @Test
+    void thePictureOfAChartIsSaved() throws IOException {
+        Path file = exportFile("chart.png");
+        Stage dialog = workbench.openDialog("PNG export", () -> ((Button) shown("btnExportToPNG")).fire());
+        workbench.onFx(() -> {
+            Workbench.control(dialog, "txtFilePath", TextField.class).setText(file.toString());
+            Button save = (Button) ((DialogPane) dialog.getScene().getRoot()).lookupButton(ButtonType.APPLY);
+            assertThat(save.isDisabled()).as("'Save' is disabled").isFalse();
+            Platform.runLater(save::fire);
+            return null;
+        });
+        workbench.awaitTrue("the dialog to close", Duration.ofSeconds(20), () -> workbench.onFx(() -> !dialog.isShowing()));
+
+        BufferedImage image = ImageIO.read(file.toFile());
+        assertThat(image).as("the picture").isNotNull();
+        // the label at the end of the time axis sticks out of the chart, the picture has all of it
+        int width = (int) (2 * workbench.onFx(() -> stackedChart().getWidth()));
+        int height = (int) (2 * workbench.onFx(() -> stackedChart().getHeight()));
+        assertThat(image.getWidth()).as("width").isBetween(width - 4, width + 150);
+        assertThat(image.getHeight()).as("height").isBetween(height - 4, height + 4);
+        Color line = workbench.onFx(() -> stackedChart().getBaseChart().getAllColoredSeries().get(0).getColor());
+        assertThat(pixelsLike(image, line)).as("pixels in the colour of the line, " + line).isGreaterThan(100);
+    }
+
+    /** The sheet has what the chart shows, with the chart in the background. Since 7.1.1 it was empty. */
+    @Test
+    void theValuesOfAChartAreSavedAsAnExcelSheet() throws Exception {
+        workbench.openChartInFront("Chart", "os", "\\Load\\one");
+        awaitInFront("\\Load\\one");
+        Path file = exportFile("chart.xlsx");
+        try (ExcelFileOfTheTest chosen = new ExcelFileOfTheTest(file)) {
+            workbench.onFx(() -> {
+                ((Button) shown("btnExportToExcel")).fire();
+                return null;
+            });
+        }
+
+        XYChart.Series<Long, Double> front = workbench.onFx(() -> stackedChart().getBaseChart().getAllSeries().get(0));
+        XYChart.Series<Long, Double> behind = workbench.onFx(() -> stackedChart().getBackgroundCharts().get(0).getAllSeries().get(0));
+        try (XSSFWorkbook workbook = new XSSFWorkbook(file.toFile())) {
+            Sheet sheet = workbook.getSheetAt(0);
+            assertThat(sheet.getRow(0).getCell(0).getStringCellValue()).isEqualTo("Date/Time - " + front.getName());
+            assertThat(sheet.getRow(0).getCell(2).getStringCellValue()).isEqualTo("Date/Time - " + behind.getName());
+            assertThat(front.getData().size()).as("points of the chart").isGreaterThan(10);
+            assertThat(columnOf(sheet, 0)).isEqualTo(front.getData().stream().map(point -> (double) point.getXValue()).toList());
+            assertThat(columnOf(sheet, 1)).isEqualTo(front.getData().stream().map(XYChart.Data::getYValue).toList());
+            assertThat(columnOf(sheet, 2)).isEqualTo(behind.getData().stream().map(point -> (double) point.getXValue()).toList());
+            assertThat(columnOf(sheet, 3)).isEqualTo(behind.getData().stream().map(XYChart.Data::getYValue).toList());
+        }
+    }
+
+    private static Path exportFile(String name) throws IOException {
+        Path file = Workbench.WORK.resolve("export").resolve(name);
+        Files.createDirectories(file.getParent());
+        Files.deleteIfExists(file);
+        return file;
+    }
+
+    /** The values of a column below the header; a time in milliseconds. */
+    private static List<Double> columnOf(Sheet sheet, int column) {
+        List<Double> values = new ArrayList<>();
+        for (int row = 1; row <= sheet.getLastRowNum(); row++) {
+            Cell cell = sheet.getRow(row).getCell(column);
+            if (cell != null) {
+                values.add(DateUtil.isCellDateFormatted(cell)
+                        ? (double) cell.getDateCellValue().getTime() : cell.getNumericCellValue());
+            }
+        }
+        return values;
+    }
+
+    private static long pixelsLike(BufferedImage image, Color colour) {
+        long found = 0;
+        for (int x = 0; x < image.getWidth(); x++) {
+            for (int y = 0; y < image.getHeight(); y++) {
+                java.awt.Color pixel = new java.awt.Color(image.getRGB(x, y));
+                if (Math.abs(pixel.getRed() - 255 * colour.getRed()) < 12
+                        && Math.abs(pixel.getGreen() - 255 * colour.getGreen()) < 12
+                        && Math.abs(pixel.getBlue() - 255 * colour.getBlue()) < 12) {
+                    found++;
+                }
+            }
+        }
+        return found;
     }
 
     private static String metricOfTheHeader() {

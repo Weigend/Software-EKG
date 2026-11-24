@@ -9,6 +9,7 @@ import javafx.stage.Window;
 
 import java.io.File;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -16,6 +17,12 @@ import java.util.stream.Stream;
  */
 @Singleton
 public class ChartExportImpl implements ChartExport {
+
+    /**
+     * Asks for the file of the sheet; {@code null} if there is to be none. A seam for tests, which
+     * cannot operate the dialog of the operating system.
+     */
+    Function<Window, File> excelFile = ChartExportImpl::askForExcelFile;
 
     @Override
     public void exportAsImage(Window owner, ZoomableStackedChart chart) {
@@ -27,17 +34,20 @@ public class ChartExportImpl implements ChartExport {
     /** The user interface does not respond while the sheet is written. */
     @Override
     public void exportAsExcel(Window owner, ZoomableStackedChart chart) {
+        File chosenFile = excelFile.apply(owner);
+        if (chosenFile != null) {
+            new ExcelExporter(chosenFile).createExcelSheetFromSeriesData(seriesOf(chart));
+        }
+    }
+
+    private static File askForExcelFile(Window owner) {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Choose the file for the Excel export");
         chooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Excel files", "*.xlsx"),
                 new FileChooser.ExtensionFilter("All files", "*")
         );
-
-        File chosenFile = chooser.showSaveDialog(owner);
-        if (chosenFile != null) {
-            new ExcelExporter(chosenFile).createExcelSheetFromSeriesData(seriesOf(chart));
-        }
+        return chooser.showSaveDialog(owner);
     }
 
     /** What the chart in front shows, then what those behind it show. */
