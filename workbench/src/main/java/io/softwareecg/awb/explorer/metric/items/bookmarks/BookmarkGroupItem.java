@@ -52,7 +52,7 @@ public class BookmarkGroupItem extends ContextAwareItem {
      */
     public BookmarkGroupItem(BookmarkGroup bookmarkGroup, FilterContext queryParams) {
         super(bookmarkGroup.getName(), queryParams);
-        super.setGraphic(getIconProvider().getBookmarkGroupItemIcon(this));
+        super.setGraphic(getIconProvider().getBookmarkGroupItemIcon());
         this.bookmarkGroup = bookmarkGroup;
 
         BeanProvider.injectFields(this);

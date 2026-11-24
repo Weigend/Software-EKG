@@ -58,7 +58,7 @@ public class BookmarkItem extends ContextAwareItem {
     public BookmarkItem(Bookmark bookmark, FilterContext context) {
         super(bookmark.getName(), context);
         super.setValue(bookmark.getName());
-        super.setGraphic(getIconProvider().getBookmarkItemIcon(this));
+        super.setGraphic(getIconProvider().getBookmarkItemIcon());
         BeanProvider.injectFields(this);
         this.bookmark = bookmark;
 

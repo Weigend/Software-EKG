@@ -1,10 +1,8 @@
 package io.softwareecg.awb.explorer.metric;
 
-import io.softwareecg.awb.explorer.icons.TreeIconsProviderRegistry;
+import io.softwareecg.awb.explorer.icons.TreeIcons;
 import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
 import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.wfx.lookup.api.Lookup;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * The base tree item class of all time series related tree items that
@@ -16,8 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 public abstract class ContextAwareItem extends RepositoryBaseItem {
 
     private final FilterContext filterContext;
-
-    protected TreeIconsProviderRegistry iconsProviderRegistry = Lookup.lookup(TreeIconsProviderRegistry.class);
 
     /**
      * Creates a new ContextAwareItem item based on the given context and the project
@@ -62,26 +58,9 @@ public abstract class ContextAwareItem extends RepositoryBaseItem {
     }
 
     /**
-     * Returns the MetricTreeIconsProvider that will server icons series specific tree nodes
-     * and the default tree nodes like the project.
-     *
-     * @return the MetricTreeIconsProvider that serves the correct icons for this branch of the explorer tree
+     * @return the icons of the tree
      */
-    protected MetricTreeIconsProvider getIconProvider() {
-
-        if (filterContext == null || filterContext.getQueryParameter() == null) {
-            return MetricTreeIconsProvider.DEFAULT;
-        }
-
-        Project project = filterContext.getQueryParameter().getProject();
-
-        if (project == null || StringUtils.isBlank(project.getImporterId())) {
-            return MetricTreeIconsProvider.DEFAULT;
-        }
-
-        MetricTreeIconsProvider provider = (MetricTreeIconsProvider)
-                iconsProviderRegistry.getTreeIconsProvider(project.getImporterId());
-
-        return provider == null ? MetricTreeIconsProvider.DEFAULT : provider;
+    protected TreeIcons getIconProvider() {
+        return TreeIcons.DEFAULT;
     }
 }

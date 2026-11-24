@@ -27,7 +27,7 @@ public class HostsRootItem extends ContextAwareItem {
      */
     public HostsRootItem(String aliasLabel, String defaultLabel, FilterContext context) {
         super(StringUtils.isNotBlank(aliasLabel) ? aliasLabel: defaultLabel, context);
-        super.setGraphic(getIconProvider().getHostGroupItemIcon(this));
+        super.setGraphic(getIconProvider().getHostGroupItemIcon());
     }
 
     @Override

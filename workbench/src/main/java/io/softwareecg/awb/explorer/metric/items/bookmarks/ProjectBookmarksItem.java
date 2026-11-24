@@ -40,7 +40,7 @@ public class ProjectBookmarksItem extends ContextAwareItem {
      */
     public ProjectBookmarksItem(String label, FilterContext context, String projectName) {
         super(label, context);
-        super.setGraphic(getIconProvider().getReproBookmarksItemIcon(this));
+        super.setGraphic(getIconProvider().getReproBookmarksItemIcon());
         BeanProvider.injectFields(this);
         this.eventBus = Lookup.lookup(EventBus.class);
         this.projectName = projectName;

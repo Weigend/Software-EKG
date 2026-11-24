@@ -32,7 +32,7 @@ public class MeasurementGroupItem extends ContextAwareItem {
         super(isNotBlank(getProject(context).getDimensionAliasMeasurement()) ?
                 getProject(context).getDimensionAliasMeasurement() : "Measurements", context);
 
-        super.setGraphic(getIconProvider().getMeasurementGroupItemIcon(this));
+        super.setGraphic(getIconProvider().getMeasurementGroupItemIcon());
     }
 
     @Override

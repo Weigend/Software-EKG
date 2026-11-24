@@ -18,6 +18,6 @@ public class PodItem extends ContextAwareItem {
      */
     public PodItem(String label, FilterContext context) {
         super(label, context);
-        super.setGraphic(getIconProvider().getPodItemIcon(this));
+        super.setGraphic(getIconProvider().getPodItemIcon());
     }
 }

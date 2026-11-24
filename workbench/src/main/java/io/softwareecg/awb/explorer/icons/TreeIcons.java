@@ -1,7 +1,5 @@
-package io.softwareecg.awb.explorer.metric;
+package io.softwareecg.awb.explorer.icons;
 
-import io.softwareecg.awb.uitoolkit.tree.api.AbstractItem;
-import io.softwareecg.awb.explorer.items.ProjectItem;
 import io.softwareecg.awb.projectcontext.model.CloudPlatformType;
 import io.softwareecg.awb.runtime.resources.CachingSvgLoader;
 import javafx.scene.Node;
@@ -9,89 +7,76 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- * The default implementation of the {@link MetricTreeIconsProvider} interface
- * that is optimized to the domain IT-systems and serves icons that will fits optimal to this context.
+ * The icons of the explorer's tree.
  *
  * @since 20.09.2018
  */
-public class DefaultTreeIconsProvider implements MetricTreeIconsProvider {
+public final class TreeIcons {
 
-    protected CachingSvgLoader cachingSvgLoader = new CachingSvgLoader().setDefaultScale(0.05);
+    public static final TreeIcons DEFAULT = new TreeIcons();
 
-    @Override
-    public Node getProjectItemIcon(ProjectItem item) {
+    private final CachingSvgLoader cachingSvgLoader = new CachingSvgLoader().setDefaultScale(0.05);
+
+    private TreeIcons() {
+    }
+
+    public Node getProjectItemIcon() {
         return createSvgIcon("/io/softwareecg/awb/explorer/metric/icons/project-icon3.svg");
     }
 
-    @Override
-    public Node getReproBookmarksItemIcon(ContextAwareItem item) {
+    public Node getReproBookmarksItemIcon() {
         return createSvgIcon("/io/softwareecg/awb/explorer/metric/icons/bookmark/bookmark-group-icon.svg");
     }
 
-    @Override
-    public Node getBookmarkItemIcon(ContextAwareItem item) {
+    public Node getBookmarkItemIcon() {
         return createSvgIcon("/io/softwareecg/awb/explorer/metric/icons/bookmark/bookmark-icon-2.svg");
     }
 
-    @Override
-    public Node getBookmarkGroupItemIcon(ContextAwareItem item) {
+    public Node getBookmarkGroupItemIcon() {
         return createSvgIcon("/io/softwareecg/awb/explorer/metric/icons/bookmark/bookmark-group-icon3.svg");
     }
 
-    @Override
-    public Node getMetricItemIcon(ContextAwareItem item) {
+    public Node getMetricItemIcon() {
         return createSvgIcon("/io/softwareecg/awb/explorer/metric/icons/series/logical/metric-icon.svg");
     }
 
-    @Override
-    public Node getMetricGroupItemIcon(ContextAwareItem item) {
+    public Node getMetricGroupItemIcon() {
         return createSvgIcon("/io/softwareecg/awb/explorer/metric/icons/series/logical/metric-icon.svg");
     }
 
-    @Override
-    public Node getCounterItemIcon(ContextAwareItem item) {
+    public Node getCounterItemIcon() {
         return createSvgIcon("/io/softwareecg/awb/explorer/metric/icons/series/logical/metric-icon.svg");
     }
 
-    @Override
-    public Node getMeasurementItemIcon(ContextAwareItem item) {
+    public Node getMeasurementItemIcon() {
         return createSvgIcon("/io/softwareecg/awb/explorer/metric/icons/series/measurements-icon.svg");
     }
 
-    @Override
-    public Node getMeasurementGroupItemIcon(ContextAwareItem item) {
+    public Node getMeasurementGroupItemIcon() {
         return createSvgIcon("/io/softwareecg/awb/explorer/metric/icons/series/measurements-icon.svg");
     }
 
-    @Override
-    public Node getHostGroupItemIcon(ContextAwareItem item) {
+    public Node getHostGroupItemIcon() {
         return createSvgIcon("/io/softwareecg/awb/explorer/metric/icons/series/physical/hosts-icon2.svg");
     }
 
-    @Override
-    public Node getHostItemIcon(ContextAwareItem item) {
+    public Node getHostItemIcon() {
         return createSvgIcon("/io/softwareecg/awb/explorer/metric/icons/series/physical/hosts-icon2.svg");
     }
 
-    @Override
-    public Node getProcessGroupItemIcon(ContextAwareItem item) {
+    public Node getProcessGroupItemIcon() {
         return createSvgIcon("/io/softwareecg/awb/explorer/metric/icons/series/process-icon2.svg");
     }
 
-    @Override
-    public Node getProcessItemIcon(ContextAwareItem item) {
+    public Node getProcessItemIcon() {
         return createSvgIcon("/io/softwareecg/awb/explorer/metric/icons/series/process-icon2.svg");
     }
 
-    @Override
-    public Node getContainerItemIcon(ContextAwareItem item) {
+    public Node getContainerItemIcon() {
         return createSvgIcon("/io/softwareecg/awb/explorer/metric/icons/series/logical/container-icon.svg");
     }
 
-    @Override
-    public Node getNamespaceGroupItemIcon(ContextAwareItem item) {
-        CloudPlatformType platformType = item.getProject().getCloudPlatformType();
-
+    public Node getNamespaceGroupItemIcon(CloudPlatformType platformType) {
         if (platformType == CloudPlatformType.OPEN_SHIFT) {
             return createSvgIcon("/io/softwareecg/awb/explorer/metric/icons/series/logical/openshift-icon.svg");
 
@@ -102,10 +87,7 @@ public class DefaultTreeIconsProvider implements MetricTreeIconsProvider {
         return createSvgIcon("/io/softwareecg/awb/explorer/metric/icons/series/logical/namespace-icon.svg");
     }
 
-    @Override
-    public Node getNamespaceItemIcon(ContextAwareItem item) {
-        CloudPlatformType platformType = item.getProject().getCloudPlatformType();
-
+    public Node getNamespaceItemIcon(CloudPlatformType platformType) {
         if (platformType == CloudPlatformType.OPEN_SHIFT) {
             return createSvgIcon("/io/softwareecg/awb/explorer/metric/icons/series/logical/openshift-icon.svg");
 
@@ -116,27 +98,19 @@ public class DefaultTreeIconsProvider implements MetricTreeIconsProvider {
         return createSvgIcon("/io/softwareecg/awb/explorer/metric/icons/series/logical/namespace-icon.svg");
     }
 
-    @Override
-    public Node getPodItemIcon(ContextAwareItem item) {
+    public Node getPodItemIcon() {
         return createSvgIcon("/io/softwareecg/awb/explorer/metric/icons/series/logical/pod-icon.svg");
     }
 
-    @Override
-    public Node getServiceGroupItemIcon(ContextAwareItem item) {
+    public Node getServiceGroupItemIcon() {
         return createSvgIcon("/io/softwareecg/awb/explorer/metric/icons/series/logical/service-icon.svg");
     }
 
-    @Override
-    public Node getServiceItemIcon(ContextAwareItem item) {
+    public Node getServiceItemIcon() {
         return createPngIcon("/io/softwareecg/awb/explorer/metric/icons/bookmark/bookmark.png");
     }
 
-    @Override
-    public Node getGenericItemIcon(AbstractItem treeItem) {
-        return createPngIcon("/io/softwareecg/awb/explorer/metric/icons/bookmark/bookmark.png");
-    }
-
-    protected Node createPngIcon(String path) {
+    private Node createPngIcon(String path) {
         ImageView icon = new ImageView(new Image(getClass().getResourceAsStream(path)));
         icon.setPreserveRatio(true);
         icon.setFitWidth(18);
@@ -144,7 +118,7 @@ public class DefaultTreeIconsProvider implements MetricTreeIconsProvider {
         return icon;
     }
 
-    protected Node createSvgIcon(String iconResourcePath) {
+    private Node createSvgIcon(String iconResourcePath) {
         return cachingSvgLoader.getSvgImage(iconResourcePath);
     }
 }

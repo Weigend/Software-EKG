@@ -48,7 +48,7 @@ public class MetricItem extends ContextAwareItem {
      */
     public MetricItem(Counter counter, FilterContext filterContext, QuerySpec queryParams) {
         super(counter.getCounterName(), filterContext);
-        super.setGraphic(getIconProvider().getMetricItemIcon(this));
+        super.setGraphic(getIconProvider().getMetricItemIcon());
         this.queryParams = queryParams;
 
 

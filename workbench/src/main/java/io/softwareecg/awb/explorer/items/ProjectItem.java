@@ -12,8 +12,7 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.explorer.items;
 
-import io.softwareecg.awb.explorer.icons.ExplorerTreeIconsProvider;
-import io.softwareecg.awb.explorer.icons.TreeIconsProviderRegistry;
+import io.softwareecg.awb.explorer.icons.TreeIcons;
 import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
 import io.softwareecg.awb.projectcontext.spi.ProjectDataCollection;
 import io.softwareecg.awb.projectcontext.events.ProjectDataCollectionChangedEvent;
@@ -62,8 +61,6 @@ public class ProjectItem extends RepositoryBaseItem {
     private ProjectViewFlavor activeViewFlavor = ProjectViewFlavor.PHYSICAL_VIEW;
 
 
-    protected TreeIconsProviderRegistry iconsProviderRegistry = Lookup.lookup(TreeIconsProviderRegistry.class);
-
     private static final DateTimeFormatter LAST_VALUE =
             DateTimeFormatter.ofPattern("dd.MM. HH:mm:ss").withZone(ZoneId.systemDefault());
 
@@ -90,15 +87,12 @@ public class ProjectItem extends RepositoryBaseItem {
     public ProjectItem(Project project, Repository repository) {
         super(project.getName(), repository);
 
-        ExplorerTreeIconsProvider provider = (ExplorerTreeIconsProvider) iconsProviderRegistry
-                .getTreeIconsProvider(project.getImporterId());
-
         this.project = project;
 
         // the icon, followed by a dot that tells whether data is being collected for the project
         collectionIndicator.setVisible(false);
         collectionIndicator.setManaged(false);
-        HBox graphic = new HBox(5, provider.getProjectItemIcon(this), collectionIndicator);
+        HBox graphic = new HBox(5, TreeIcons.DEFAULT.getProjectItemIcon(), collectionIndicator);
         graphic.setAlignment(Pos.CENTER_LEFT);
         super.setGraphic(graphic);
         setId(repository.getId() + "_" + project.getName());

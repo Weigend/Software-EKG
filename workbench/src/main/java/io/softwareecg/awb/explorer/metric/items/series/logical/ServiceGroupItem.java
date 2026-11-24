@@ -18,7 +18,7 @@ public class ServiceGroupItem extends ContextAwareItem {
      */
     public ServiceGroupItem(String label, FilterContext context) {
         super(label, context);
-        super.setGraphic(getIconProvider().getServiceGroupItemIcon(this));
+        super.setGraphic(getIconProvider().getServiceGroupItemIcon());
     }
 
     @Override

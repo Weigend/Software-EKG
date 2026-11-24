@@ -31,7 +31,7 @@ public class CounterItem extends ContextAwareItem {
     public CounterItem(FilterContext context) {
         super(isNotBlank(getProject(context).getDimensionAliasMetricGroup()) ?
                 getProject(context).getDimensionAliasMetricGroup() : "Metrics", context);
-        super.setGraphic(getIconProvider().getCounterItemIcon(this));
+        super.setGraphic(getIconProvider().getCounterItemIcon());
     }
 
     @Override

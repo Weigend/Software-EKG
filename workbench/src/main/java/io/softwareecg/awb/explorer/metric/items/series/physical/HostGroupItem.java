@@ -29,7 +29,7 @@ public class HostGroupItem extends ContextAwareItem {
      */
     public HostGroupItem(String label, FilterContext context) {
         super(label, context);
-        super.setGraphic(getIconProvider().getHostGroupItemIcon(this));
+        super.setGraphic(getIconProvider().getHostGroupItemIcon());
     }
 
     @Override

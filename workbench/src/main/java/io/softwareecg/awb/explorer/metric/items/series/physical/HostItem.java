@@ -29,6 +29,6 @@ public class HostItem extends ContextAwareItem {
      */
     public HostItem(String name, FilterContext context) {
         super(name, context);
-        super.setGraphic(getIconProvider().getHostItemIcon(this));
+        super.setGraphic(getIconProvider().getHostItemIcon());
     }
 }

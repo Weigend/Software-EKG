@@ -36,6 +36,6 @@ public class MeasurementItem extends ContextAwareItem {
      */
     public MeasurementItem(Measurement measurement, FilterContext context) {
         super(measurement.getName(), context);
-        super.setGraphic(getIconProvider().getMeasurementItemIcon(this));
+        super.setGraphic(getIconProvider().getMeasurementItemIcon());
     }
 }

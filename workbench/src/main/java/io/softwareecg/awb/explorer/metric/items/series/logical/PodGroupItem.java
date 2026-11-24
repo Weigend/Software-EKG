@@ -18,7 +18,7 @@ public class PodGroupItem extends ContextAwareItem {
      */
     public PodGroupItem(String label, FilterContext context) {
         super(label, context);
-        super.setGraphic(getIconProvider().getPodItemIcon(this));
+        super.setGraphic(getIconProvider().getPodItemIcon());
     }
 
     @Override

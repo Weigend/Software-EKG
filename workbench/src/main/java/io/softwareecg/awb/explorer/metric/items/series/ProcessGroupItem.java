@@ -30,7 +30,7 @@ public class ProcessGroupItem extends ContextAwareItem {
      */
     public ProcessGroupItem(String label, FilterContext context) {
         super(label, context);
-        super.setGraphic(getIconProvider().getProcessGroupItemIcon(this));
+        super.setGraphic(getIconProvider().getProcessGroupItemIcon());
     }
 
     @Override

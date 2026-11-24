@@ -19,12 +19,10 @@ import io.softwareecg.awb.uitoolkit.tree.api.ItemBuilderRegistry;
 import io.softwareecg.awb.uitoolkit.view.EkgView;
 import io.softwareecg.awb.runtime.module.EkgModule;
 import io.softwareecg.awb.runtime.module.ModuleException;
-import io.softwareecg.awb.explorer.icons.TreeIconsProviderRegistry;
 import io.softwareecg.awb.explorer.items.CommonItemBuilder;
 import io.softwareecg.awb.explorer.items.RepositoryItemsTask;
 import io.softwareecg.awb.explorer.items.RepositoryItem;
 import io.softwareecg.awb.explorer.metric.ItemBuilderManager;
-import io.softwareecg.awb.explorer.metric.MetricTreeIconsProvider;
 import io.softwareecg.wfx.lookup.api.Lookup;
 
 import java.io.IOException;
@@ -57,7 +55,6 @@ public class ExplorerModule implements EkgModule {
             registerDefaultTreeItemBuilders();
             // and for what is below a project: hosts, processes, metrics, bookmarks
             ItemBuilderManager.registerTreeItemBuilders();
-            Lookup.lookup(TreeIconsProviderRegistry.class).registerDefaultTreeIconProvider(MetricTreeIconsProvider.DEFAULT);
 
             // init the explorer view including the common controller
             ExplorerController controller = initExplorerView();

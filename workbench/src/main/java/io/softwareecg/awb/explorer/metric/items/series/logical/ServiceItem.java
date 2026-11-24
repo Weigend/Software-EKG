@@ -18,6 +18,6 @@ public class ServiceItem extends ContextAwareItem {
      */
     public ServiceItem(String label, FilterContext context) {
         super(label, context);
-        super.setGraphic(getIconProvider().getServiceItemIcon(this));
+        super.setGraphic(getIconProvider().getServiceItemIcon());
     }
 }

@@ -1,7 +1,5 @@
 package io.softwareecg.awb.importer;
 
-import io.softwareecg.awb.importer.spi.ImporterTreeIconProvider;
-import io.softwareecg.awb.importer.spi.TreeIconProviderPluginRegistry;
 import io.softwareecg.awb.projectcontext.spi.ProjectImporter;
 import io.softwareecg.awb.projectcontext.api.ProjectSelector;
 import io.softwareecg.awb.projectcontext.model.ProjectTimeSeriesType;
@@ -13,7 +11,6 @@ import io.softwareecg.awb.importer.spi.CloudViewFlavorSupport;
 import io.softwareecg.awb.importer.spi.LocalProjectSupport;
 import io.softwareecg.awb.importer.spi.SplitSourceProjectSupport;
 import io.softwareecg.awb.importer.ui.dialogs.ImportDialog;
-import io.softwareecg.awb.importer.ui.skins.DefaultImportTreeIconProvider;
 import io.softwareecg.wfx.extension.uiutils.MenuUtil;
 import io.softwareecg.wfx.platform.api.Module;
 import io.softwareecg.wfx.platform.api.exceptions.PlatformException;
@@ -82,8 +79,6 @@ public abstract class ImportModule implements Module, ProjectImporter {
 
         importDialog = getImportDialog();
         configureImportDialog(importDialog);
-
-        Lookup.lookup(TreeIconProviderPluginRegistry.class).registerImportTreeIconProvider(getImporterID(), getTreeIconProvider());
     }
 
     /**
@@ -132,10 +127,6 @@ public abstract class ImportModule implements Module, ProjectImporter {
 
     @Override
     public abstract String getImporterID();
-
-    public ImporterTreeIconProvider getTreeIconProvider() {
-        return new DefaultImportTreeIconProvider();
-    }
 
     public ProjectTimeSeriesType getSupportedProjectType() {
         return ProjectTimeSeriesType.DEFAULT;

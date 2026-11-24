@@ -32,6 +32,6 @@ public class ProcessItem extends ContextAwareItem {
      */
     public ProcessItem(Process process, FilterContext context) {
         super(process.getName(), context);
-        super.setGraphic(getIconProvider().getProcessItemIcon(this));
+        super.setGraphic(getIconProvider().getProcessItemIcon());
     }
 }

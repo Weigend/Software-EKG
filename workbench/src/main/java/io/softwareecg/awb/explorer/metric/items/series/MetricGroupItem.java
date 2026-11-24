@@ -30,6 +30,6 @@ public class MetricGroupItem extends ContextAwareItem {
      */
     public MetricGroupItem(MetricGroup metricGroup, FilterContext context) {
         super(metricGroup.getName(), context);
-        super.setGraphic(getIconProvider().getMetricGroupItemIcon(this));
+        super.setGraphic(getIconProvider().getMetricGroupItemIcon());
     }
 }

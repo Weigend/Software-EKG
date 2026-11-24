@@ -17,6 +17,6 @@ public class ContainerItem extends ContextAwareItem {
      */
     public ContainerItem(String label, FilterContext context) {
         super(label, context);
-        super.setGraphic(getIconProvider().getContainerItemIcon(this));
+        super.setGraphic(getIconProvider().getContainerItemIcon());
     }
 }

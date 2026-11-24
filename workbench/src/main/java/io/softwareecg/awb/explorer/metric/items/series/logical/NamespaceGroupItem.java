@@ -18,7 +18,7 @@ public class NamespaceGroupItem extends ContextAwareItem {
      */
     public NamespaceGroupItem(String label, FilterContext context) {
         super(label, context);
-        super.setGraphic(getIconProvider().getNamespaceGroupItemIcon(this));
+        super.setGraphic(getIconProvider().getNamespaceGroupItemIcon(getProject().getCloudPlatformType()));
     }
 
     @Override

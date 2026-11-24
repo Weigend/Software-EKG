@@ -38,7 +38,7 @@ public class ReproBookmarksItem extends ContextAwareItem {
      */
     public ReproBookmarksItem(String label, FilterContext context) {
         super(label, context);
-        super.setGraphic(getIconProvider().getReproBookmarksItemIcon(this));
+        super.setGraphic(getIconProvider().getReproBookmarksItemIcon());
         BeanProvider.injectFields(this);
         eventBus = Lookup.lookup(EventBus.class);
 

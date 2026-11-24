@@ -27,7 +27,7 @@ public class ProcessesRootItem extends ContextAwareItem {
      */
     public ProcessesRootItem(String aliasLabel, String defaultLabel, FilterContext context) {
         super(StringUtils.isNotBlank(aliasLabel) ? aliasLabel: defaultLabel, context);
-        super.setGraphic(getIconProvider().getProcessGroupItemIcon(this));
+        super.setGraphic(getIconProvider().getProcessGroupItemIcon());
     }
 
     @Override

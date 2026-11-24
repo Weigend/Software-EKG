@@ -20,6 +20,6 @@ public class NamespaceItem extends ContextAwareItem {
      */
     public NamespaceItem(Namespace namespace, FilterContext context) {
         super(namespace.getValueName(), context);
-        super.setGraphic(getIconProvider().getNamespaceItemIcon(this));
+        super.setGraphic(getIconProvider().getNamespaceItemIcon(getProject().getCloudPlatformType()));
     }
 }
