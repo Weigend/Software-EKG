@@ -233,6 +233,29 @@ public class LayerArchitectureTest {
             onlyTheApiIsUsedFromOutside("secrets");
 
     /**
+     * Die Aussenkante von metricview ist api. Wie ein Diagramm gesteuert wird, bleibt in der Komponente.
+     */
+    @ArchTest
+    static final ArchRule only_the_api_of_metricview_is_used_from_outside =
+            onlyTheApiIsUsedFromOutside("metricview");
+
+    /**
+     * Diese Komponenten hat niemand zu benutzen: sie haben eine Oberflaeche und hoeren auf Ereignisse.
+     * Was sie an Vertraegen fuer Erweiterungen haben, steht in spi.
+     */
+    @ArchTest
+    static final ArchRule explorer_is_not_used_from_outside = onlyTheApiIsUsedFromOutside("explorer");
+
+    @ArchTest
+    static final ArchRule importer_is_not_used_from_outside = onlyTheApiIsUsedFromOutside("importer");
+
+    @ArchTest
+    static final ArchRule datasource_is_not_used_from_outside = onlyTheApiIsUsedFromOutside("datasource");
+
+    @ArchTest
+    static final ArchRule aichat_is_not_used_from_outside = onlyTheApiIsUsedFromOutside("aichat");
+
+    /**
      * Die Pakete in einer Komponente: api kennt keines der anderen.
      */
     @ArchTest
@@ -249,6 +272,18 @@ public class LayerArchitectureTest {
 
     @ArchTest
     static final ArchRule packages_of_secrets_must_be_free_of_cycles = packagesAreFreeOfCycles("secrets");
+
+    @ArchTest
+    static final ArchRule packages_of_metricview_must_be_free_of_cycles = packagesAreFreeOfCycles("metricview");
+
+    @ArchTest
+    static final ArchRule packages_of_explorer_must_be_free_of_cycles = packagesAreFreeOfCycles("explorer");
+
+    @ArchTest
+    static final ArchRule packages_of_importer_must_be_free_of_cycles = packagesAreFreeOfCycles("importer");
+
+    @ArchTest
+    static final ArchRule packages_of_aichat_must_be_free_of_cycles = packagesAreFreeOfCycles("aichat");
 
     /**
      * api wird von anderen benutzt, spi von anderen implementiert: beides darf von aussen importiert
