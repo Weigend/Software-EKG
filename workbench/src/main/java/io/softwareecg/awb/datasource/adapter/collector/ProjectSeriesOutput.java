@@ -4,7 +4,6 @@ import io.softwareecg.awb.datasource.adapter.prometheus.PrometheusDimensions;
 import io.softwareecg.collector.source.prometheus.PrometheusCounterSource;
 import io.softwareecg.awb.repository.api.RepositoryException;
 import io.softwareecg.awb.repository.api.TimeSeriesWriteService;
-import io.softwareecg.awb.importer.model.SeriesData;
 import io.softwareecg.awb.timeseries.TimeSeries;
 import io.softwareecg.awb.timeseries.Value;
 import io.softwareecg.collector.config.CounterDescriptor;
@@ -309,7 +308,7 @@ public final class ProjectSeriesOutput implements RepositoryFactory {
             }
             try {
                 // one question first: where nothing is stored at all, no series needs to be asked for
-                boolean nothingStored = importService.resolveLastUpdate(new SeriesData(projectName, commonHostGroup(),
+                boolean nothingStored = importService.resolveLastUpdate(new TimeSeries(projectName, commonHostGroup(),
                         null, null, null, null, null, measurement, null, null, null, null)) <= 0;
                 for (int i = 0; i < ends.length; i++) {
                     if (ends[i] != UNKNOWN) {
@@ -345,8 +344,8 @@ public final class ProjectSeriesOutput implements RepositoryFactory {
             return root.getMessage() != null ? root.getMessage() : root.getClass().getSimpleName();
         }
 
-        private SeriesData series(SeriesDimensions dimension, List<Value> values) {
-            return new SeriesData(projectName, dimension.hostGroup(), dimension.host(), NONE, NONE, NONE, NONE,
+        private TimeSeries series(SeriesDimensions dimension, List<Value> values) {
+            return new TimeSeries(projectName, dimension.hostGroup(), dimension.host(), NONE, NONE, NONE, NONE,
                     measurement, dimension.processGroup(), dimension.process(), dimension.metricGroup(),
                     dimension.metric(), new ArrayList<>(values));
         }
