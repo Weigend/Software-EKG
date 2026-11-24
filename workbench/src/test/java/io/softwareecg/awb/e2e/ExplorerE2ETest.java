@@ -149,6 +149,22 @@ class ExplorerE2ETest {
         assertThat(repositoryNames()).doesNotContain("Measurements of the plant");
     }
 
+    /** The menu of the root asks for a repository in the same dialog as the menu of the window. */
+    @Test
+    void theMenuOfTheRootAddsARepository() {
+        TreeItem<Object> root = workbench.onFx(() -> tree().getRoot());
+        Stage add = workbench.openDialog("Add EKG Repository", () -> choose(root, "Add EKG Repository"));
+        assertThat(workbench.onFx(add::getTitle)).isEqualTo("Add EKG Repository");
+        assertThat(workbench.onFx(add::getOwner)).as("the owner of the dialog").isSameAs(workbench.mainStage());
+        assertThat(contentOf(add, "txtRepositoryName")).isNullOrEmpty();
+        fill(add, "txtRepositoryName", "From the root");
+        fill(add, "txtRepositoryUrl", "http://127.0.0.1:1/solr/ekgdata");
+        confirm(add, ButtonType.APPLY);
+
+        node("From the root");
+        assertThat(repositoryNames()).contains("From the root");
+    }
+
     /** Deleting a project deletes its values too - its own, and nothing of the project beside it. */
     @Test
     void aProjectIsDeletedWithItsDataAndNothingElse() throws URISyntaxException {

@@ -1,12 +1,10 @@
 package io.softwareecg.awb.repository.api;
 
-import io.softwareecg.awb.repository.connection.RepositoryConfigChangedEvent;
-
 import java.util.EventObject;
 
 /**
  * Asks for the dialog in which the configuration of a repository is edited. Nothing has changed
- * yet; when it has, {@link RepositoryConfigChangedEvent} says so.
+ * yet.
  *
  * @since 09.07.2018
  */

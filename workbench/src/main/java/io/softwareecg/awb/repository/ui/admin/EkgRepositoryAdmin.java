@@ -14,6 +14,7 @@ package io.softwareecg.awb.repository.ui.admin;
 
 import afester.javafx.svg.SvgLoader;
 import io.softwareecg.awb.repository.connection.EkgRepository;
+import io.softwareecg.awb.repository.api.AddRepositoryRequest;
 import io.softwareecg.awb.repository.api.EditRepositoryRequest;
 import io.softwareecg.awb.runtime.resources.CdiFxmlLoader;
 import io.softwareecg.awb.runtime.resources.ViewLoadResult;
@@ -21,6 +22,7 @@ import javafx.scene.Group;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import java.io.InputStream;
 
@@ -61,6 +63,12 @@ public class EkgRepositoryAdmin extends Dialog<EkgRepository> {
 
         Stage stage = (Stage) getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image(getClass().getResource("/ekg-app-icon2.png").toExternalForm()));
+    }
+
+    public boolean addRepository(AddRepositoryRequest event) {
+        initOwner((Window) event.getOwnerWindow());
+        show();
+        return true;
     }
 
     public boolean editRepository(EditRepositoryRequest event) {
