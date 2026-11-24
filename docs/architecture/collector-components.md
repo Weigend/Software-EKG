@@ -9,10 +9,11 @@ code of the Collector or writes a source or a repository for it. For the Workben
 
 The pictures are from [S202](https://github.com/Weigend/S202) 1.4.0, which reads the dependencies
 from the bytecode. Loaded are the JARs of all modules of the Collector together. State:
-7.6.0-SNAPSHOT, commit `9277c83`, 2026-11-24.
+7.6.0-SNAPSHOT, commit `f5d7178`, 2026-11-24.
 
 - [How to read the pictures](#how-to-read-the-pictures)
 - [Modules and contracts](#modules-and-contracts)
+- [The rules](#the-rules)
 - [Level 0: all top packages](#level-0-all-top-packages)
 - [Who needs whom](#who-needs-whom)
 - Core: [control](#control) · [config](#config) · [dt](#dt) · [source](#source) ·
@@ -80,6 +81,21 @@ Five contracts in `core` are found with `ServiceLoader`, registered in `META-INF
 The Workbench contains `core` and the sources `prometheus`, `unix` and `windows`, without the
 JavaScript engine `calc` needs. It writes what they collect into the repository of a project.
 
+## The rules
+
+Between the modules the compiler keeps the parts apart. `CollectorArchitectureTest` in `apps/cli`, where
+all modules come together, does it for the packages, with every build:
+
+| Rule | Reason |
+| --- | --- |
+| No package has a cycle of its parts, on any level | packages that need each other are in truth one |
+| Nobody needs a plugin | a source, a repository or the display can be added and removed |
+| Sources do not know each other, nor do repositories | the same; `archive` is made of CSV files, Solr and Elasticsearch share `rdb.api` |
+| A source knows neither engine nor storage, a repository neither engine nor sources | a source only reads, a repository only writes |
+| `dt`, `common` and `ssh` need nothing else | they are the foundations |
+| `config.impl`, `control.jobs`, `control.monitor`, `connector.nop` and `ssh.impl` are used by their own part only | they are inside |
+| Every plugin is registered | one that is not is not found, and nothing says so |
+
 ## Level 0: all top packages
 
 [![All top packages of the Collector in five layers](../images/collector-components/level0.png)](../images/collector-components/level0.png)
@@ -140,8 +156,8 @@ group.
 
 | Part | Content |
 | --- | --- |
-| (direct) | `CollectorCore` is the stand-alone Collector, `CollectorEngine` can be started and stopped and is what the Workbench uses; status and values for those who look; `CollectorFrontend` is the contract of a display |
-| `jobs` | the jobs for single hosts, for a cloud platform and beside a program (sidecar), and their state |
+| (direct) | `CollectorCore` is the stand-alone Collector, `CollectorEngine` can be started and stopped and is what the Workbench uses; status, state and values of the jobs for those who look; `CollectorFrontend` is the contract of a display |
+| `jobs` | the jobs for single hosts, for a cloud platform and beside a program (sidecar) |
 | `monitor` | starts and stops a Collector from a thread of its own |
 
 ## config
@@ -345,8 +361,7 @@ Report of 2026-11-24 for the state named above:
   against the layers.
 - **`CollectorConfig` and `HostGroup`** in `config.model` know each other.
 
-Differently from the Workbench, no test keeps watch over the packages of the Collector. Between the
-modules the compiler does; inside `core` nothing does.
+Both class cycles are inside one package and stay.
 
 ## Renewing the pictures
 

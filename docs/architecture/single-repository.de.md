@@ -69,7 +69,7 @@ Moduls war alles möglich.
 | Geschäftslogik | frei von JavaFX durch die Wahl der Abhängigkeiten | frei von JavaFX durch eine Regel, wie auch die Datenhaltung |
 | FXML und CSS | nicht geprüft | benutzen andere Komponenten nur über `api` und `spi` und finden ihre Dateien und Controller |
 
-Drei Tests prüfen das bei jedem Build:
+Drei Tests der Workbench prüfen das bei jedem Build:
 
 - **`LayerArchitectureTest`** (ArchUnit) prüft den Code: Außenkanten, Schichten, Zyklen, Techniken.
   Die generierten Module der Dependency Injection sind ausgenommen, weil sie alle Komponenten
@@ -85,9 +85,10 @@ kein Zugriff an einer `api` vorbei, kein Paketzyklus und vier Klassenzyklen inne
 bekannt sind und bleiben. S202 findet, wofür niemand eine Regel geschrieben hat, zum Beispiel ein Paket
 am falschen Ort; was es findet, wird zur Regel, wenn es nicht wiederkommen darf.
 
-Beim Collector sind weiterhin die Module die Grenzen. Seine Pakete beschreiben
-[die Komponenten des Collectors](collector-components.de.md), mit dem, was S202 dazu meldet; Regeln gibt
-es dafür noch nicht.
+Beim Collector sind weiterhin die Module die Grenzen, und `CollectorArchitectureTest` ergänzt Regeln für
+seine Pakete: keine Zyklen auf irgendeiner Ebene, niemand braucht ein Plugin, und jedes Plugin ist
+eingetragen. Sie stehen in [den Komponenten des Collectors](collector-components.de.md), mit dem, was S202
+meldet.
 
 Über die Struktur hinaus:
 

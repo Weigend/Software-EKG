@@ -9,10 +9,11 @@ gibt es [ein eigenes Dokument](workbench-components.de.md).
 
 Die Bilder stammen aus [S202](https://github.com/Weigend/S202) 1.4.0, das die Abhängigkeiten aus
 dem Bytecode liest. Geladen sind die JARs aller Module des Collectors zusammen. Stand:
-7.6.0-SNAPSHOT, Commit `9277c83`, 24.11.2026.
+7.6.0-SNAPSHOT, Commit `f5d7178`, 24.11.2026.
 
 - [So sind die Bilder zu lesen](#so-sind-die-bilder-zu-lesen)
 - [Module und Verträge](#module-und-verträge)
+- [Die Regeln](#die-regeln)
 - [Level 0: alle Top-Pakete](#level-0-alle-top-pakete)
 - [Wer wen braucht](#wer-wen-braucht)
 - Kern: [control](#control) · [config](#config) · [dt](#dt) · [source](#source) ·
@@ -82,6 +83,21 @@ Die Workbench enthält `core` und die Quellen `prometheus`, `unix` und `windows`
 JavaScript-Engine, die `calc` braucht. Sie schreibt, was diese sammeln, in das Repository eines
 Projekts.
 
+## Die Regeln
+
+Zwischen den Modulen hält der Compiler die Teile auseinander. Für die Pakete tut es
+`CollectorArchitectureTest` in `apps/cli`, wo alle Module zusammenkommen, bei jedem Build:
+
+| Regel | Grund |
+| --- | --- |
+| Kein Paket hat einen Zyklus seiner Teile, auf keiner Ebene | Pakete, die sich gegenseitig brauchen, sind in Wahrheit eines |
+| Niemand braucht ein Plugin | eine Quelle, ein Repository oder die Anzeige lässt sich hinzufügen und entfernen |
+| Quellen kennen einander nicht, Repositories auch nicht | dasselbe; `archive` besteht aus CSV-Dateien, Solr und Elasticsearch teilen sich `rdb.api` |
+| Eine Quelle kennt weder Engine noch Speicher, ein Repository weder Engine noch Quellen | eine Quelle liest nur, ein Repository schreibt nur |
+| `dt`, `common` und `ssh` brauchen nichts anderes | sie sind die Grundlagen |
+| `config.impl`, `control.jobs`, `control.monitor`, `connector.nop` und `ssh.impl` benutzt nur der eigene Teil | sie sind innen |
+| Jedes Plugin ist eingetragen | sonst wird es nicht gefunden, und nichts sagt das |
+
 ## Level 0: alle Top-Pakete
 
 [![Alle Top-Pakete des Collectors in fünf Schichten](../images/collector-components/level0.png)](../images/collector-components/level0.png)
@@ -142,8 +158,8 @@ Metrikgruppe.
 
 | Teil | Inhalt |
 | --- | --- |
-| (direkt) | `CollectorCore` ist der eigenständige Collector, `CollectorEngine` lässt sich starten und stoppen und wird von der Workbench benutzt; Status und Werte für alle, die zusehen; `CollectorFrontend` ist der Vertrag einer Anzeige |
-| `jobs` | die Jobs für einzelne Hosts, für eine Cloud-Plattform und neben einem Programm (Sidecar) und ihr Zustand |
+| (direkt) | `CollectorCore` ist der eigenständige Collector, `CollectorEngine` lässt sich starten und stoppen und wird von der Workbench benutzt; Status, Zustand und Werte der Jobs für alle, die zusehen; `CollectorFrontend` ist der Vertrag einer Anzeige |
+| `jobs` | die Jobs für einzelne Hosts, für eine Cloud-Plattform und neben einem Programm (Sidecar) |
 | `monitor` | startet und stoppt einen Collector aus einem eigenen Thread |
 
 ## config
@@ -347,8 +363,7 @@ Bericht vom 24.11.2026 für den oben genannten Stand:
   gegen die Schichten.
 - **`CollectorConfig` und `HostGroup`** in `config.model` kennen sich gegenseitig.
 
-Anders als bei der Workbench wacht kein Test über die Pakete des Collectors. Zwischen den Modulen tut
-es der Compiler; innerhalb von `core` tut es nichts.
+Beide Klassenzyklen liegen innerhalb eines Pakets und bleiben.
 
 ## Die Bilder erneuern
 

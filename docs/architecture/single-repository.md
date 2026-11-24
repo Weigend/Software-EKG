@@ -69,7 +69,7 @@ everything was possible.
 | Business logic | free of JavaFX by the choice of dependencies | free of JavaFX by rule, as the storage is |
 | FXML and CSS | not checked | use other components through `api` and `spi` only, and find their files and controllers |
 
-Three tests check this with every build:
+Three tests of the workbench check this with every build:
 
 - **`LayerArchitectureTest`** (ArchUnit) checks the code: outer edges, layers, cycles, technologies.
   The generated modules of the dependency injection are exempt because they wire all components
@@ -84,9 +84,9 @@ no access past an `api`, no package cycle, and four class cycles inside one pack
 known and stay. S202 finds what nobody wrote a rule for, for example a package in the wrong place;
 what it finds becomes a rule if it must not come back.
 
-In the collector the modules are still the boundaries. Its packages are described in
-[the components of the Collector](collector-components.md), with what S202 reports about them; there
-are no rules for them yet.
+In the collector the modules are still the boundaries, and `CollectorArchitectureTest` adds rules for
+its packages: no cycles on any level, nobody needs a plugin, and every plugin is registered. They are
+described in [the components of the Collector](collector-components.md), with what S202 reports.
 
 Beyond the structure:
 
