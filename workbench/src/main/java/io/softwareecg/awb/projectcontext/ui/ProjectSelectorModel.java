@@ -1,14 +1,11 @@
 package io.softwareecg.awb.projectcontext.ui;
 
 import com.google.common.collect.Lists;
-import io.softwareecg.awb.projectcontext.api.ProjectConfiguration;
-import io.softwareecg.awb.projectcontext.model.AliasMappingType;
-import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.projectcontext.model.ProjectType;
+import io.softwareecg.awb.projectcontext.api.Project;
 import io.softwareecg.awb.repository.api.Repository;
-import io.softwareecg.awb.projectcontext.model.CloudPlatformType;
-import io.softwareecg.awb.projectcontext.model.ProjectFlavor;
-import io.softwareecg.awb.metadata.model.AliasMappingDefinition;
+import io.softwareecg.awb.projectcontext.api.CloudPlatformType;
+import io.softwareecg.awb.projectcontext.api.ProjectFlavor;
+import io.softwareecg.awb.projectcontext.spi.AliasMappingDefinition;
 import io.softwareecg.awb.projectcontext.spi.AliasMappingProvider;
 import io.softwareecg.awb.timeseries.dimension.FilterDimension;
 import javafx.beans.InvalidationListener;
@@ -21,9 +18,9 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static io.softwareecg.awb.projectcontext.model.CloudPlatformType.NONE;
-import static io.softwareecg.awb.projectcontext.model.CloudPlatformType.OTHER;
-import static io.softwareecg.awb.projectcontext.model.ProjectFlavor.*;
+import static io.softwareecg.awb.projectcontext.api.CloudPlatformType.NONE;
+import static io.softwareecg.awb.projectcontext.api.CloudPlatformType.OTHER;
+import static io.softwareecg.awb.projectcontext.api.ProjectFlavor.*;
 import static javafx.collections.FXCollections.observableArrayList;
 
 /**

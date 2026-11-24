@@ -1,7 +1,5 @@
 package io.softwareecg.awb.projectcontext.api;
 
-import io.softwareecg.awb.projectcontext.model.CloudPlatformType;
-import io.softwareecg.awb.projectcontext.model.ProjectFlavor;
 
 /**
  * An interface that represents the ProjectView data model object of EKG workbench.

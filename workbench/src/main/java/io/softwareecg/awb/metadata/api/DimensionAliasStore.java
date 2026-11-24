@@ -1,6 +1,5 @@
-package io.softwareecg.awb.metadata.port;
+package io.softwareecg.awb.metadata.api;
 
-import io.softwareecg.awb.metadata.model.DimensionAliasRow;
 
 /**
  * Persistenz-Schnittstelle fuer Dimension-Alias-Mappings pro Projekt.

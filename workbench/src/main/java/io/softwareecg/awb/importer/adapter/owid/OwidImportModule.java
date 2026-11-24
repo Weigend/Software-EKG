@@ -1,8 +1,8 @@
 package io.softwareecg.awb.importer.adapter.owid;
 
 import io.softwareecg.awb.importer.adapter.owid.ui.OwidImportDialog;
-import io.softwareecg.awb.projectcontext.model.ProjectTimeSeriesType;
-import io.softwareecg.awb.metadata.model.AliasMappingDefinition;
+import io.softwareecg.awb.projectcontext.api.ProjectTimeSeriesType;
+import io.softwareecg.awb.projectcontext.spi.AliasMappingDefinition;
 import io.softwareecg.awb.projectcontext.spi.AliasMappingProvider;
 import io.softwareecg.awb.timeseries.dimension.FilterDimension;
 import io.softwareecg.awb.importer.ImportModule;

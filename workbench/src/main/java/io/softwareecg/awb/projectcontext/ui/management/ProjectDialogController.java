@@ -2,9 +2,9 @@ package io.softwareecg.awb.projectcontext.ui.management;
 
 import io.softwareecg.awb.uitoolkit.bindings.Bindings;
 import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
-import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.projectcontext.model.CloudPlatformType;
-import io.softwareecg.awb.projectcontext.model.ProjectFlavor;
+import io.softwareecg.awb.projectcontext.api.Project;
+import io.softwareecg.awb.projectcontext.api.CloudPlatformType;
+import io.softwareecg.awb.projectcontext.api.ProjectFlavor;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import io.softwareecg.awb.runtime.resources.CachingSvgLoader;
@@ -27,8 +27,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-import static io.softwareecg.awb.projectcontext.model.CloudPlatformType.NONE;
-import static io.softwareecg.awb.projectcontext.model.ProjectFlavor.CLASSIC;
+import static io.softwareecg.awb.projectcontext.api.CloudPlatformType.NONE;
+import static io.softwareecg.awb.projectcontext.api.ProjectFlavor.CLASSIC;
 
 /**
  * This controller implements the base control logic for

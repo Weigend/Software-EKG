@@ -2,13 +2,10 @@ package io.softwareecg.awb.projectcontext.ui;
 
 import afester.javafx.svg.SvgLoader;
 import io.softwareecg.awb.uitoolkit.bindings.Bindings;
-import io.softwareecg.awb.projectcontext.api.ProjectConfiguration;
 import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
-import io.softwareecg.awb.projectcontext.model.AliasMappingType;
-import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.projectcontext.model.ProjectType;
-import io.softwareecg.awb.projectcontext.model.CloudPlatformType;
-import io.softwareecg.awb.projectcontext.model.ProjectFlavor;
+import io.softwareecg.awb.projectcontext.api.Project;
+import io.softwareecg.awb.projectcontext.api.CloudPlatformType;
+import io.softwareecg.awb.projectcontext.api.ProjectFlavor;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 import io.softwareecg.awb.uitoolkit.controls.EkgComboBoxListViewSkin;
@@ -32,9 +29,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import static io.softwareecg.awb.projectcontext.model.AliasMappingType.EKG_STANDARD;
-import static io.softwareecg.awb.projectcontext.model.CloudPlatformType.NONE;
-import static io.softwareecg.awb.projectcontext.model.ProjectFlavor.*;
+import static io.softwareecg.awb.projectcontext.ui.AliasMappingType.EKG_STANDARD;
+import static io.softwareecg.awb.projectcontext.api.CloudPlatformType.NONE;
+import static io.softwareecg.awb.projectcontext.api.ProjectFlavor.*;
 import static io.softwareecg.awb.uitoolkit.controls.EkgComboBoxListViewSkin.CellBehaviorResource;
 import static javafx.collections.FXCollections.observableArrayList;
 

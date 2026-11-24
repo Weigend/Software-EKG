@@ -1,6 +1,5 @@
 package io.softwareecg.awb.projectcontext.api;
 
-import io.softwareecg.awb.projectcontext.model.Project;
 
 import java.util.List;
 
@@ -32,7 +31,7 @@ public interface ProjectDataAccessService {
      * @param searchRemoteProjects true if only project of type 'SPLIT_SOURCE_PROJECT' should returned,
      *                             false for project with time series data in EKG repositories
      *
-     * @see io.softwareecg.awb.projectcontext.model.ProjectType for further information
+     * @see io.softwareecg.awb.projectcontext.ui.ProjectType for further information
      * @return a list with zero or one project instance
      */
     List<Project> queryProjects(String projectName, boolean searchRemoteProjects);

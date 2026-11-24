@@ -8,7 +8,7 @@ import io.softwareecg.awb.timeseries.dimension.logical.Namespace;
 import io.softwareecg.awb.query.api.QuerySpec;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.series.logical.NamespaceItem;
-import io.softwareecg.awb.projectcontext.model.CloudPlatformType;
+import io.softwareecg.awb.projectcontext.api.CloudPlatformType;
 
 import java.util.List;
 

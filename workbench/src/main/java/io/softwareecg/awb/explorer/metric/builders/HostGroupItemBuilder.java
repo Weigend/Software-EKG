@@ -8,7 +8,7 @@ import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
 import io.softwareecg.awb.query.api.QuerySpec;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.series.physical.HostGroupItem;
-import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
+import io.softwareecg.awb.projectcontext.api.ProjectViewFlavor;
 
 import java.util.ArrayList;
 import java.util.List;

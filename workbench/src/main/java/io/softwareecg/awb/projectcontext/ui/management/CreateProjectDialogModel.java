@@ -1,6 +1,6 @@
 package io.softwareecg.awb.projectcontext.ui.management;
 
-import io.softwareecg.awb.projectcontext.model.Project;
+import io.softwareecg.awb.projectcontext.api.Project;
 import io.softwareecg.awb.repository.api.Repository;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;

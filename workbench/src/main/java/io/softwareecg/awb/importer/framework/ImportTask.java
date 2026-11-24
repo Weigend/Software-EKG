@@ -1,7 +1,7 @@
 package io.softwareecg.awb.importer.framework;
 
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
-import io.softwareecg.awb.projectcontext.model.TargetProjectConfig;
+import io.softwareecg.awb.projectcontext.api.TargetProjectConfig;
 import io.softwareecg.awb.repository.api.TimeSeriesWriteService;
 import io.softwareecg.awb.runtime.events.AwbErrorEvent;
 import io.softwareecg.awb.runtime.events.CancellableTaskEvent;

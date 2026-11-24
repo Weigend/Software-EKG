@@ -5,8 +5,8 @@ import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
 import io.softwareecg.awb.timeseries.dimension.logical.Namespace;
 import io.softwareecg.awb.explorer.metric.FilterContext;
 import io.softwareecg.awb.explorer.metric.items.series.logical.NamespaceGroupItem;
-import io.softwareecg.awb.projectcontext.model.CloudPlatformType;
-import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
+import io.softwareecg.awb.projectcontext.api.CloudPlatformType;
+import io.softwareecg.awb.projectcontext.api.ProjectViewFlavor;
 
 import java.util.List;
 

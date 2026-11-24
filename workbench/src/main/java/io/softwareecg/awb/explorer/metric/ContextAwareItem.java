@@ -2,7 +2,7 @@ package io.softwareecg.awb.explorer.metric;
 
 import io.softwareecg.awb.explorer.icons.TreeIcons;
 import io.softwareecg.awb.explorer.items.RepositoryBaseItem;
-import io.softwareecg.awb.projectcontext.model.Project;
+import io.softwareecg.awb.projectcontext.api.Project;
 
 /**
  * The base tree item class of all time series related tree items that

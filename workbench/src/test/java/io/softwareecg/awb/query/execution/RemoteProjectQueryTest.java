@@ -2,7 +2,7 @@ package io.softwareecg.awb.query.execution;
 
 import com.sun.net.httpserver.HttpServer;
 import io.softwareecg.awb.importer.adapter.prometheus.PrometheusImportModule;
-import io.softwareecg.awb.projectcontext.model.Project;
+import io.softwareecg.awb.projectcontext.api.Project;
 import io.softwareecg.awb.query.api.QuerySpec;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.SeriesPage;

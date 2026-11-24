@@ -1,7 +1,7 @@
 package io.softwareecg.awb.projectcontext.ui.management;
 
 import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
-import io.softwareecg.awb.projectcontext.model.Project;
+import io.softwareecg.awb.projectcontext.api.Project;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.runtime.events.ExplorerUpdateEvent;
 import io.softwareecg.wfx.platform.api.EventBus;

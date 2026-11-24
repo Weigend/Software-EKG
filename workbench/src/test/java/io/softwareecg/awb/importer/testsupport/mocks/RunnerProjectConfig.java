@@ -1,6 +1,6 @@
 package io.softwareecg.awb.importer.testsupport.mocks;
 
-import io.softwareecg.awb.projectcontext.model.TargetProjectConfig;
+import io.softwareecg.awb.projectcontext.api.TargetProjectConfig;
 
 /**
  * A extended TargetProjectConfig that just provides an

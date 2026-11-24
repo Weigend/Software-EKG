@@ -1,7 +1,5 @@
-package io.softwareecg.awb.metadata.port;
+package io.softwareecg.awb.metadata.api;
 
-import io.softwareecg.awb.metadata.model.BookmarkGroupRow;
-import io.softwareecg.awb.metadata.model.MetricQueryBookmarkRow;
 
 import java.util.List;
 

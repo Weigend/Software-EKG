@@ -12,7 +12,7 @@
 //______________________________________________________________________________
 package io.softwareecg.awb.metricview.queryeditor.converter;
 
-import io.softwareecg.awb.projectcontext.model.Project;
+import io.softwareecg.awb.projectcontext.api.Project;
 import javafx.util.StringConverter;
 
 /**

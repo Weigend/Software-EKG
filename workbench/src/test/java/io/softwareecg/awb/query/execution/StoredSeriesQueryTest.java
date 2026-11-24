@@ -4,7 +4,7 @@ import io.avaje.inject.BeanScope;
 import io.softwareecg.awb.datasource.model.RepositorySeriesEnds;
 import io.softwareecg.awb.datasource.model.SeriesDimensions;
 import io.softwareecg.awb.query.spi.RemoteSeriesSource;
-import io.softwareecg.awb.projectcontext.model.Project;
+import io.softwareecg.awb.projectcontext.api.Project;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.query.api.QuerySpec;
 import io.softwareecg.awb.repository.adapter.RepositoryAdapterBase;

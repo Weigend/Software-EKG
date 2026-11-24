@@ -1,4 +1,4 @@
-package io.softwareecg.awb.projectcontext.events;
+package io.softwareecg.awb.projectcontext.api;
 
 import java.util.EventObject;
 

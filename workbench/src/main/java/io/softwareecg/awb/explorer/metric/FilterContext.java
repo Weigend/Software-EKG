@@ -4,7 +4,7 @@ import io.softwareecg.awb.bookmark.api.MetricsBookmarkService;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.query.api.QuerySpec;
-import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
+import io.softwareecg.awb.projectcontext.api.ProjectViewFlavor;
 import io.softwareecg.wfx.lookup.api.Lookup;
 
 import java.util.Objects;

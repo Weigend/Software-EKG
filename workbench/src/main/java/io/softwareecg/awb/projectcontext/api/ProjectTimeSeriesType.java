@@ -1,4 +1,4 @@
-package io.softwareecg.awb.projectcontext.model;
+package io.softwareecg.awb.projectcontext.api;
 
 /**
  * This enum defines a set of time series types that

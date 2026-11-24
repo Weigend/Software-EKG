@@ -1,4 +1,4 @@
-package io.softwareecg.awb.metadata.model;
+package io.softwareecg.awb.metadata.api;
 
 /** Technology-independent persistence row for a bookmark group. */
 public class BookmarkGroupRow {

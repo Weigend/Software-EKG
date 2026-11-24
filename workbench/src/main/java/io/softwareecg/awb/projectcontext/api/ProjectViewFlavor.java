@@ -1,4 +1,4 @@
-package io.softwareecg.awb.projectcontext.model;
+package io.softwareecg.awb.projectcontext.api;
 
 import io.softwareecg.awb.runtime.NamedEnum;
 

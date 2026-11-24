@@ -1,9 +1,9 @@
-package io.softwareecg.awb.projectcontext.api;
+package io.softwareecg.awb.projectcontext.ui;
 
-import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.projectcontext.model.CloudPlatformType;
-import io.softwareecg.awb.projectcontext.model.ProjectFlavor;
-import io.softwareecg.awb.projectcontext.model.TargetProjectConfig;
+import io.softwareecg.awb.projectcontext.api.Project;
+import io.softwareecg.awb.projectcontext.api.CloudPlatformType;
+import io.softwareecg.awb.projectcontext.api.ProjectFlavor;
+import io.softwareecg.awb.projectcontext.api.TargetProjectConfig;
 
 import java.util.Objects;
 

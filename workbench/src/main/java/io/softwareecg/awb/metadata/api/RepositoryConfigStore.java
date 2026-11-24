@@ -1,8 +1,7 @@
-package io.softwareecg.awb.metadata.port;
+package io.softwareecg.awb.metadata.api;
 
 import java.util.List;
 
-import io.softwareecg.awb.metadata.model.RepositoryConfigRow;
 /**
  * Persistenz-Schnittstelle fuer Repository-Konfigurationen (EKG-Targets und
  * Importer-Quellen). Wird von DA-Adaptern (z.B. awb-da-h2) implementiert und

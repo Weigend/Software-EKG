@@ -13,8 +13,8 @@
 package io.softwareecg.awb.repository.connection;
 
 
-import io.softwareecg.awb.metadata.model.RepositoryConfigRow;
-import io.softwareecg.awb.metadata.port.RepositoryConfigStore;
+import io.softwareecg.awb.metadata.api.RepositoryConfigRow;
+import io.softwareecg.awb.metadata.api.RepositoryConfigStore;
 import io.softwareecg.awb.repository.api.RepositoryService;
 import io.softwareecg.awb.repository.api.Embedded;
 import io.softwareecg.awb.repository.api.TimeSeriesImportSource;

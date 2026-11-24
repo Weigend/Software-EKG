@@ -1,4 +1,4 @@
-package io.softwareecg.awb.projectcontext.model;
+package io.softwareecg.awb.projectcontext.api;
 
 /**
  * This POJO provides the user defined project settings that are

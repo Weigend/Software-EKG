@@ -1,6 +1,6 @@
 package io.softwareecg.awb.explorer.icons;
 
-import io.softwareecg.awb.projectcontext.model.CloudPlatformType;
+import io.softwareecg.awb.projectcontext.api.CloudPlatformType;
 import io.softwareecg.awb.runtime.resources.CachingSvgLoader;
 import javafx.scene.Node;
 import javafx.scene.image.Image;

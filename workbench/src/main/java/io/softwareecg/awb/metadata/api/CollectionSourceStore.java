@@ -1,10 +1,8 @@
-package io.softwareecg.awb.metadata.port;
+package io.softwareecg.awb.metadata.api;
 
-import io.softwareecg.awb.metadata.model.CollectionSourceEvent;
 
 import java.util.List;
 
-import io.softwareecg.awb.metadata.model.CollectionSourceRow;
 /**
  * Stores the data sources of the projects and the history of their state. The sources of a
  * project are deleted together with it.

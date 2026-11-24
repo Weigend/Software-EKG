@@ -1,8 +1,6 @@
-package io.softwareecg.awb.projectcontext.events;
+package io.softwareecg.awb.projectcontext.api;
 
-import io.softwareecg.awb.projectcontext.model.Project;
 import io.softwareecg.awb.repository.api.Repository;
-import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
 
 /**
  * Event Object that will use to communicate the switch from one project to another

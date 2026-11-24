@@ -1,6 +1,5 @@
-package io.softwareecg.awb.projectcontext.events;
+package io.softwareecg.awb.projectcontext.api;
 
-import io.softwareecg.awb.projectcontext.model.Project;
 
 import java.beans.PropertyChangeEvent;
 

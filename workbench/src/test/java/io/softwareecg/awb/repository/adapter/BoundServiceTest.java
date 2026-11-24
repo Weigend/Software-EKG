@@ -1,7 +1,7 @@
 package io.softwareecg.awb.repository.adapter;
 
 import io.avaje.inject.BeanScope;
-import io.softwareecg.awb.projectcontext.model.Project;
+import io.softwareecg.awb.projectcontext.api.Project;
 import io.softwareecg.awb.query.execution.MetricDataAccessServiceImpl;
 import io.softwareecg.awb.query.execution.QueryRunner;
 import io.softwareecg.awb.query.api.MetricDataAccessService;

@@ -1,6 +1,6 @@
 package io.softwareecg.awb.datasource.ui;
 
-import io.softwareecg.awb.metadata.model.CollectionSourceEvent;
+import io.softwareecg.awb.metadata.api.CollectionSourceEvent;
 import io.softwareecg.awb.datasource.adapter.collector.CollectorConfigCompiler;
 import io.softwareecg.awb.datasource.NewAnalysisService;
 import io.softwareecg.awb.datasource.model.DataSourceInfo;

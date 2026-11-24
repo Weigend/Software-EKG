@@ -28,7 +28,7 @@ import io.softwareecg.awb.timeseries.dimension.physical.Host;
 import io.softwareecg.awb.timeseries.dimension.physical.HostGroup;
 import io.softwareecg.awb.query.api.ComputationSpec;
 import io.softwareecg.awb.query.api.QuerySpec;
-import io.softwareecg.awb.projectcontext.model.Project;
+import io.softwareecg.awb.projectcontext.api.Project;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.timeseries.dimension.FilterDimension;
 import io.softwareecg.awb.repository.api.TimeSeriesImportSource;

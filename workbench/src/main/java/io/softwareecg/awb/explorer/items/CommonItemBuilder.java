@@ -2,9 +2,9 @@ package io.softwareecg.awb.explorer.items;
 
 import io.softwareecg.awb.uitoolkit.tree.api.ProgressNotifier;
 import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
-import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.projectcontext.model.ProjectFlavor;
-import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
+import io.softwareecg.awb.projectcontext.api.Project;
+import io.softwareecg.awb.projectcontext.api.ProjectFlavor;
+import io.softwareecg.awb.projectcontext.api.ProjectViewFlavor;
 import io.softwareecg.awb.query.api.MetricDataAccessService;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 

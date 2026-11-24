@@ -1,6 +1,5 @@
 package io.softwareecg.awb.projectcontext.spi;
 
-import io.softwareecg.awb.metadata.model.AliasMappingDefinition;
 
 /**
  * Interface that represents factory classes that provide

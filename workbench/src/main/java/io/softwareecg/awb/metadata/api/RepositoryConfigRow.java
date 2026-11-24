@@ -1,4 +1,4 @@
-package io.softwareecg.awb.metadata.model;
+package io.softwareecg.awb.metadata.api;
 
 /**
  * Data Transfer Object fuer eine Zeile in der Repository-Config-Tabelle.

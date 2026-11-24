@@ -1,7 +1,7 @@
 package io.softwareecg.awb.metadata.adapter.h2;
 
-import io.softwareecg.awb.metadata.model.DimensionAliasRow;
-import io.softwareecg.awb.metadata.port.DimensionAliasStore;
+import io.softwareecg.awb.metadata.api.DimensionAliasRow;
+import io.softwareecg.awb.metadata.api.DimensionAliasStore;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;

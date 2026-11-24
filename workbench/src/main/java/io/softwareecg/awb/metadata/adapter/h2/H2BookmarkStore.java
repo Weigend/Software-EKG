@@ -1,8 +1,8 @@
 package io.softwareecg.awb.metadata.adapter.h2;
 
-import io.softwareecg.awb.metadata.model.BookmarkGroupRow;
-import io.softwareecg.awb.metadata.model.MetricQueryBookmarkRow;
-import io.softwareecg.awb.metadata.port.BookmarkStore;
+import io.softwareecg.awb.metadata.api.BookmarkGroupRow;
+import io.softwareecg.awb.metadata.api.MetricQueryBookmarkRow;
+import io.softwareecg.awb.metadata.api.BookmarkStore;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;

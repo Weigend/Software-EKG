@@ -18,7 +18,7 @@ import io.softwareecg.awb.datasource.adapter.windows.WindowsDiscovery;
 import io.softwareecg.awb.datasource.adapter.windows.WindowsMetric;
 import io.softwareecg.awb.datasource.adapter.windows.WindowsPlan;
 import io.softwareecg.awb.query.api.OpenInvestigationCommand;
-import io.softwareecg.awb.projectcontext.model.Project;
+import io.softwareecg.awb.projectcontext.api.Project;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.SeriesDataWrittenEvent;
 import io.softwareecg.collector.source.prometheus.PrometheusException;

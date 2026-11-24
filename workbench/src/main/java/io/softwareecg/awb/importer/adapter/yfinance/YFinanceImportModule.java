@@ -1,7 +1,7 @@
 package io.softwareecg.awb.importer.adapter.yfinance;
 
 import io.softwareecg.awb.importer.adapter.yfinance.ui.YFinanceImportDialog;
-import io.softwareecg.awb.metadata.model.AliasMappingDefinition;
+import io.softwareecg.awb.projectcontext.spi.AliasMappingDefinition;
 import io.softwareecg.awb.projectcontext.spi.AliasMappingProvider;
 import io.softwareecg.awb.timeseries.dimension.FilterDimension;
 import io.softwareecg.awb.importer.ImportModule;

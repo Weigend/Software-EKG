@@ -17,7 +17,7 @@ import io.softwareecg.awb.timeseries.dimension.Metric;
 import io.softwareecg.awb.timeseries.dimension.MetricGroup;
 import io.softwareecg.awb.timeseries.dimension.Process;
 import io.softwareecg.awb.timeseries.dimension.physical.Host;
-import io.softwareecg.awb.projectcontext.model.Project;
+import io.softwareecg.awb.projectcontext.api.Project;
 import org.junit.Test;
 
 import java.time.Instant;

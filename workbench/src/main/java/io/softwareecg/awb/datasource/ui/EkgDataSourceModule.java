@@ -2,7 +2,7 @@ package io.softwareecg.awb.datasource.ui;
 
 import io.softwareecg.awb.application.api.EkgApplicationController;
 import io.softwareecg.awb.datasource.NewAnalysisService;
-import io.softwareecg.awb.projectcontext.events.ShowProjectDataSourcesEvent;
+import io.softwareecg.awb.projectcontext.api.ShowProjectDataSourcesEvent;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.platform.api.EventBus;
 import io.softwareecg.wfx.platform.api.Module;

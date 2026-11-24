@@ -1,4 +1,4 @@
-package io.softwareecg.awb.metadata.model;
+package io.softwareecg.awb.metadata.api;
 
 import java.time.Instant;
 

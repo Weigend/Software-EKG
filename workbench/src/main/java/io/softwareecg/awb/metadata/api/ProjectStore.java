@@ -1,8 +1,7 @@
-package io.softwareecg.awb.metadata.port;
+package io.softwareecg.awb.metadata.api;
 
 import java.util.List;
 
-import io.softwareecg.awb.metadata.model.ProjectRow;
 /**
  * Persistenz-Schnittstelle fuer Projekt-Metadaten.
  */

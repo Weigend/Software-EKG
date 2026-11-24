@@ -1,7 +1,7 @@
 package io.softwareecg.awb.metadata.adapter.h2;
 
-import io.softwareecg.awb.metadata.model.ProjectRow;
-import io.softwareecg.awb.metadata.port.ProjectStore;
+import io.softwareecg.awb.metadata.api.ProjectRow;
+import io.softwareecg.awb.metadata.api.ProjectStore;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;

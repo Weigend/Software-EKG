@@ -1,8 +1,5 @@
 package io.softwareecg.awb.projectcontext.api;
 
-import io.softwareecg.awb.projectcontext.events.ProjectPropertyChangeEvent;
-import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
 
 /**
  * An specialized ProjectPropertyChangeEvent that will used to communicate changes

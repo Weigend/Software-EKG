@@ -1,4 +1,4 @@
-package io.softwareecg.awb.metadata.model;
+package io.softwareecg.awb.projectcontext.spi;
 
 import io.softwareecg.awb.timeseries.dimension.FilterDimension;
 

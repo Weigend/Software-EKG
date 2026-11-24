@@ -6,9 +6,9 @@ import io.softwareecg.awb.query.api.QuerySpec;
 import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
 import io.softwareecg.awb.runtime.discovery.ServiceDiscovery;
 
-import io.softwareecg.awb.projectcontext.events.ProjectSelectedEvent;
-import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
+import io.softwareecg.awb.projectcontext.api.ProjectSelectedEvent;
+import io.softwareecg.awb.projectcontext.api.Project;
+import io.softwareecg.awb.projectcontext.api.ProjectViewFlavor;
 import io.softwareecg.wfx.lookup.api.Lookup;
 import io.softwareecg.wfx.platform.api.EventBus;
 import javafx.scene.control.Label;

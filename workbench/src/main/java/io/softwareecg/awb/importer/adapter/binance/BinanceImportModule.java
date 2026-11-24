@@ -1,7 +1,7 @@
 package io.softwareecg.awb.importer.adapter.binance;
 
 import io.softwareecg.awb.importer.adapter.binance.ui.BinanceImportDialog;
-import io.softwareecg.awb.metadata.model.AliasMappingDefinition;
+import io.softwareecg.awb.projectcontext.spi.AliasMappingDefinition;
 import io.softwareecg.awb.projectcontext.spi.AliasMappingProvider;
 import io.softwareecg.awb.timeseries.dimension.FilterDimension;
 import io.softwareecg.awb.importer.ImportModule;

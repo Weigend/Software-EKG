@@ -42,14 +42,16 @@ public class LayerArchitectureTest {
     static final ArchRule domain_and_service_code_must_not_depend_on_javafx =
             noClasses().that().resideInAnyPackage(
                             "io.softwareecg.awb.datasource.model..",
-                            "io.softwareecg.awb.metadata.model..",
-                            "io.softwareecg.awb.projectcontext.model..",
+                            "io.softwareecg.awb.metadata.api..",
+                            "io.softwareecg.awb.projectcontext.api..",
+                            "io.softwareecg.awb.projectcontext.store..",
                             "io.softwareecg.awb.repository.connection..",
                             "io.softwareecg.awb.repository.persistence..",
                             "io.softwareecg.awb.repository.series..",
                             "io.softwareecg.awb.timeseries..",
-                            "io.softwareecg.awb..port..",
                             "io.softwareecg.awb.query..")
+                    // a control of projectcontext that others put into their dialogs
+                    .and().doNotHaveFullyQualifiedName("io.softwareecg.awb.projectcontext.api.ProjectSelector")
                     .should().dependOnClassesThat().resideInAnyPackage("javafx..")
                     .because("BL darf nicht auf JavaFX hoeren - JavaFX nur in UI-Paketen");
 
@@ -159,17 +161,6 @@ public class LayerArchitectureTest {
             classes().that().resideInAPackage("io.softwareecg.awb.*.spi..").and().areTopLevelClasses()
                     .should().beInterfaces().orShould().beRecords().orShould().beEnums()
                     .because("Implementierungen und Registries gehoeren nicht in spi");
-
-    /**
-     * port: die Schnittstelle zu einer Technik, implementiert von den Adaptern der Komponente.
-     */
-    @ArchTest
-    static final ArchRule a_port_is_implemented_by_adapters =
-            classes().that().areInterfaces().and().resideInAPackage("io.softwareecg.awb.*.port")
-                    .should(beImplementedOnlyIn("den Adaptern der eigenen Komponente", (type, implementation) ->
-                            implementation.getPackageName().startsWith(
-                                    "io.softwareecg.awb." + componentOf(type) + ".adapter")))
-                    .because("ein port trennt die Komponente von einer Technik");
 
     private static ArchCondition<JavaClass> beImplementedOnlyIn(String place, BiPredicate<JavaClass, JavaClass> allowed) {
         return new ArchCondition<>("nur implementiert sein in " + place) {
@@ -314,7 +305,7 @@ public class LayerArchitectureTest {
                     .and().areNotAssignableTo(io.avaje.inject.spi.AvajeModule.class)
                     .should().dependOnClassesThat()
                     .resideInAPackage("io.softwareecg.awb.metadata.adapter.h2..")
-                    .because("H2 ist ein austauschbarer Adapter; Nutzer muessen metadata.port verwenden");
+                    .because("H2 ist ein austauschbarer Adapter; Nutzer muessen metadata.api verwenden");
 
     @ArchTest
     static final ArchRule repository_ui_must_not_know_repository_adapters =

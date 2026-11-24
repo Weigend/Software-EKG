@@ -9,8 +9,8 @@ import io.softwareecg.awb.timeseries.dimension.NamedValueEntity;
 import io.softwareecg.awb.query.api.QuerySpec;
 import io.softwareecg.awb.explorer.metric.ContextAwareItem;
 import io.softwareecg.awb.explorer.metric.FilterContext;
-import io.softwareecg.awb.projectcontext.model.Project;
-import io.softwareecg.awb.projectcontext.model.ProjectViewFlavor;
+import io.softwareecg.awb.projectcontext.api.Project;
+import io.softwareecg.awb.projectcontext.api.ProjectViewFlavor;
 import io.softwareecg.awb.runtime.logging.EkgLogger;
 import org.slf4j.Logger;
 

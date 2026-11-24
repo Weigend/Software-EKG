@@ -1,7 +1,7 @@
 package io.softwareecg.awb.metadata.adapter.h2;
 
-import io.softwareecg.awb.metadata.model.CollectionSourceEvent;
-import io.softwareecg.awb.metadata.model.CollectionSourceRow;
+import io.softwareecg.awb.metadata.api.CollectionSourceEvent;
+import io.softwareecg.awb.metadata.api.CollectionSourceRow;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

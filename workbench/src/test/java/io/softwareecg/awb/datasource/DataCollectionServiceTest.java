@@ -1,17 +1,17 @@
 package io.softwareecg.awb.datasource;
 
-import io.softwareecg.awb.metadata.model.CollectionSourceEvent;
-import io.softwareecg.awb.metadata.model.CollectionSourceRow;
-import io.softwareecg.awb.metadata.port.CollectionSourceStore;
+import io.softwareecg.awb.metadata.api.CollectionSourceEvent;
+import io.softwareecg.awb.metadata.api.CollectionSourceRow;
+import io.softwareecg.awb.metadata.api.CollectionSourceStore;
 import io.softwareecg.awb.secrets.api.SecretStore;
 import io.softwareecg.awb.datasource.model.DataSourceInfo.State;
 import io.softwareecg.awb.datasource.adapter.prometheus.MetricExpression;
 import io.softwareecg.awb.projectcontext.api.ProjectDataAccessService;
 import io.softwareecg.awb.projectcontext.spi.ProjectDataCollection;
-import io.softwareecg.awb.projectcontext.model.Project;
+import io.softwareecg.awb.projectcontext.api.Project;
 import io.softwareecg.awb.repository.api.Repository;
-import io.softwareecg.awb.projectcontext.model.CloudPlatformType;
-import io.softwareecg.awb.projectcontext.model.ProjectFlavor;
+import io.softwareecg.awb.projectcontext.api.CloudPlatformType;
+import io.softwareecg.awb.projectcontext.api.ProjectFlavor;
 import io.softwareecg.awb.repository.api.TimeSeriesWriteService;
 import io.softwareecg.collector.config.CollectorConfiguration;
 import io.softwareecg.collector.control.CollectorEngine;

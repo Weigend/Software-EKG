@@ -1,4 +1,4 @@
-package io.softwareecg.awb.metadata.model;
+package io.softwareecg.awb.metadata.api;
 
 /**
  * DTO fuer eine Zeile in der project_dimension_aliases-Tabelle.

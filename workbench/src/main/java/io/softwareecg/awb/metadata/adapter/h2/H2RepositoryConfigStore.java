@@ -1,7 +1,7 @@
 package io.softwareecg.awb.metadata.adapter.h2;
 
-import io.softwareecg.awb.metadata.model.RepositoryConfigRow;
-import io.softwareecg.awb.metadata.port.RepositoryConfigStore;
+import io.softwareecg.awb.metadata.api.RepositoryConfigRow;
+import io.softwareecg.awb.metadata.api.RepositoryConfigStore;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;

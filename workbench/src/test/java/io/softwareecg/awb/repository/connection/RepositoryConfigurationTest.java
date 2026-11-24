@@ -1,7 +1,7 @@
 package io.softwareecg.awb.repository.connection;
 
-import io.softwareecg.awb.metadata.model.RepositoryConfigRow;
-import io.softwareecg.awb.metadata.port.RepositoryConfigStore;
+import io.softwareecg.awb.metadata.api.RepositoryConfigRow;
+import io.softwareecg.awb.metadata.api.RepositoryConfigStore;
 import io.softwareecg.awb.repository.adapter.clickhouse.ClickHouseCloudRepository;
 import io.softwareecg.awb.repository.adapter.solr.SolrClassicRepository;
 import io.softwareecg.awb.repository.api.ResourceAuthType;

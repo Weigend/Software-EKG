@@ -4,7 +4,7 @@
 
 Metadata is everything the Workbench remembers besides the time series: projects, repository
 configurations, the data sources of an analysis, dimension aliases and bookmarks. It is reached
-only through five store interfaces in `io.softwareecg.awb.metadata.port`:
+only through five store interfaces in `io.softwareecg.awb.metadata.api`:
 
 | Store | Holds |
 | --- | --- |
@@ -20,7 +20,7 @@ other package from importing it.
 ## Steps
 
 1. **Implement all five stores** in `metadata.adapter.<database>` and map the rows of the database
-   to the records in `metadata.model`. A backend that implements only some of them is not
+   to the records in `metadata.api`. A backend that implements only some of them is not
    usable: the features expect one place for all metadata.
 2. **Own the schema.** The H2 adapter creates its tables from `schema.sql` on the classpath when
    the first connection opens, in `~/.ekg/metadata`. A new adapter brings its own schema,

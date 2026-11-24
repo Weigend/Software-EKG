@@ -1,6 +1,6 @@
 package io.softwareecg.awb.importer.framework;
 
-import io.softwareecg.awb.projectcontext.model.TargetProjectConfig;
+import io.softwareecg.awb.projectcontext.api.TargetProjectConfig;
 import io.softwareecg.awb.repository.api.TimeSeriesImportSource;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.TimeSeriesWriteService;

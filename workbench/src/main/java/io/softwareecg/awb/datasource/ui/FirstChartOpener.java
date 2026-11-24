@@ -5,7 +5,7 @@ import io.softwareecg.awb.datasource.model.CollectionPlan;
 import io.softwareecg.awb.datasource.model.SeriesDimensions;
 import io.softwareecg.awb.query.api.OpenInvestigationCommand;
 import io.softwareecg.awb.query.api.QuerySpec;
-import io.softwareecg.awb.projectcontext.model.Project;
+import io.softwareecg.awb.projectcontext.api.Project;
 import io.softwareecg.awb.repository.api.Repository;
 import io.softwareecg.awb.repository.api.SeriesDataWrittenEvent;
 import io.softwareecg.wfx.platform.api.EventBus;

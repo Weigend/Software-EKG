@@ -4,9 +4,9 @@ import io.softwareecg.awb.bookmark.api.Bookmark;
 import io.softwareecg.awb.bookmark.api.BookmarkContent;
 import io.softwareecg.awb.bookmark.api.MetricsBookmarkService;
 
-import io.softwareecg.awb.metadata.model.BookmarkGroupRow;
-import io.softwareecg.awb.metadata.model.MetricQueryBookmarkRow;
-import io.softwareecg.awb.metadata.port.BookmarkStore;
+import io.softwareecg.awb.metadata.api.BookmarkGroupRow;
+import io.softwareecg.awb.metadata.api.MetricQueryBookmarkRow;
+import io.softwareecg.awb.metadata.api.BookmarkStore;
 import io.softwareecg.awb.bookmark.api.BookmarkGroup;
 import io.softwareecg.awb.query.api.QuerySpec;
 import io.avaje.inject.External;
