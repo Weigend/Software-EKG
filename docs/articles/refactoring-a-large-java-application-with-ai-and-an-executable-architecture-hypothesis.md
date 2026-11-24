@@ -169,15 +169,14 @@ its legend too well. We replaced those with registries and narrow ports, and cal
 
 Then we asked a question the picture does not answer: are the components more cohesive than before?
 
-We took the classes that existed in both versions and measured, for each component, how many of its
-dependencies stay inside. The result was sobering. Explorer and importer had clearly gained.
-Repository had not:
+We measured each version on its own: for every component, how many of its dependencies
+stay inside. The result was sobering. Explorer and importer had clearly gained. Repository had not:
 
 | Component | Before | After the move | Now |
 | --- | --- | --- | --- |
-| Explorer | 14% | 45% | 45% |
-| Importer | 34% | 49% | 50% |
-| Repository | 18% | 20% | **55%** |
+| Explorer | 14% | 45% | **50%** |
+| Importer | 32% | 49% | 49% |
+| Repository | 22% | 23% | **63%** |
 
 There were also cycles between components. The old code had none. Our move had made one visible that
 used to hide inside `sdk`, and our follow-up work had added a second one, with a single class
@@ -228,6 +227,31 @@ The path of one capability shows the difference:
 *Today, with the same overlay. Every remaining arrow stays inside its component. Between components
 there is none.*
 
+## Then we stopped moving
+
+One question was left, and it came from the same person: why does every view have to know the whole
+repository?
+
+It did not. Each node of the explorer's tree was handed an object with the address of the repository,
+its client, and its password. Most nodes did nothing with it but pass it on to their children. What
+the code needed in the end was almost always one service.
+
+So this time no class changed its package. One interface, which had been there all along, got the few
+methods the views use, and the connection stayed inside the component. The context that every node
+receives anyway now offers the service. The explorer went from 87 dependencies on `repository` to 29.
+
+It is the only step that made the whole application more modular than it was at the start. The usual
+measure for that, modularity, counts how much denser the connections inside components are than
+chance would make them:
+
+| | Before | After the move | Repository reunited | Dependencies removed |
+| --- | --- | --- | --- | --- |
+| Modularity | 0.454 | 0.430 | 0.458 | **0.477** |
+| Cycles between components | 0 | 1 | 0 | 0 |
+
+Moving classes does not remove a dependency. It decides where you look for one. Once you can see it,
+you can ask whether it has to be there.
+
 ## What we got wrong, and what it did not fix
 
 We had already released the first result. In it, the dialog that exports a chart as a picture did not
@@ -237,14 +261,14 @@ that dialog, and the compiler does not look at file names in strings. The releas
 So the build checks more than it did. One test looks up every view, stylesheet, and icon that is
 written out in the sources. The architecture tests forbid cycles between components, keep the
 repository technologies apart, and check what `api`, `spi`, and `port` promise. We ran the checks
-for files, cycles, and interfaces against the versions that had the problem, to see them fail.
+for files, cycles, and interfaces against the versions that had the problem, to see them fail. And the
+end-to-end tests now open the dialogs and menus that nobody had opened: one of them found another
+error on its first run.
 
 Some things did not get better. Counted over the whole application, more dependencies cross component
 boundaries than before, partly because eighteen components have more boundaries than twelve.
 The metric view is still the least cohesive feature. And inside some components, packages depend on
-each other in circles, more of them now than before the last move.
-
-Moving classes does not remove a dependency. It decides where you look for one.
+each other in circles, more of them now than at the beginning.
 
 ## The method, in short
 
@@ -259,7 +283,8 @@ Nothing here is specific to Software-EKG or to Java:
 7. **Compare the result with the hypothesis.** The skeleton is a claim. The production JAR is the evidence.
 8. **Measure afterwards.** Count cycles and cohesion before and after. A layered picture does not show cohesion, and a cycle of one class reference is easy to overlook.
 9. **Look up what the compiler does not.** Views, stylesheets, icons, and scripts move too.
-10. **Ask the person who knows the product again at the end.** Whether a component holds one subject is not in the arrows.
+10. **Remove what only passes through.** Once the components are right, the gain is in fewer dependencies, not in better places for them.
+11. **Ask the person who knows the product again at the end.** Whether a component holds one subject is not in the arrows.
 
 ## What we would tell another team
 
