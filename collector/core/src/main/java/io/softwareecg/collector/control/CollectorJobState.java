@@ -1,4 +1,4 @@
-package io.softwareecg.collector.control.jobs;
+package io.softwareecg.collector.control;
 
 /**
  * A bean that defines possible states of job collector and hold

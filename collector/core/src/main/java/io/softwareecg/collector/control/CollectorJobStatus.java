@@ -1,6 +1,6 @@
 package io.softwareecg.collector.control;
 
-import io.softwareecg.collector.control.jobs.CollectorJobState.CollectorJobStateEnum;
+import io.softwareecg.collector.control.CollectorJobState.CollectorJobStateEnum;
 
 import java.time.Instant;
 

@@ -15,6 +15,7 @@
 //______________________________________________________________________________
 package io.softwareecg.collector.control.jobs;
 
+import io.softwareecg.collector.control.CollectorJobState;
 import io.softwareecg.collector.common.LoggerFactory;
 import io.softwareecg.collector.common.Registry;
 import io.softwareecg.collector.common.SleepUtil;

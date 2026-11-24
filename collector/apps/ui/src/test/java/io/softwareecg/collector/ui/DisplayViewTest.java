@@ -2,7 +2,7 @@ package io.softwareecg.collector.ui;
 
 import io.softwareecg.collector.control.CollectorJobValues;
 import io.softwareecg.collector.control.CollectorStatus;
-import io.softwareecg.collector.control.jobs.CollectorJobState.CollectorJobStateEnum;
+import io.softwareecg.collector.control.CollectorJobState.CollectorJobStateEnum;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;

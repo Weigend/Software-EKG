@@ -3,7 +3,7 @@ package io.softwareecg.collector.ui;
 import io.softwareecg.collector.control.CollectorJobStatus;
 import io.softwareecg.collector.control.CollectorJobValues;
 import io.softwareecg.collector.control.CollectorStatus;
-import io.softwareecg.collector.control.jobs.CollectorJobState.CollectorJobStateEnum;
+import io.softwareecg.collector.control.CollectorJobState.CollectorJobStateEnum;
 
 import java.time.Instant;
 import java.util.ArrayList;

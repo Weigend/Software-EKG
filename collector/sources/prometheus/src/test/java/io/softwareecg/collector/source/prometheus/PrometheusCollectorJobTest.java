@@ -5,7 +5,7 @@ import io.softwareecg.collector.config.CollectorConfigurations;
 import io.softwareecg.collector.control.CollectorEngine;
 import io.softwareecg.collector.control.CollectorJobStatus;
 import io.softwareecg.collector.control.CollectorStatus;
-import io.softwareecg.collector.control.jobs.CollectorJobState.CollectorJobStateEnum;
+import io.softwareecg.collector.control.CollectorJobState.CollectorJobStateEnum;
 import io.softwareecg.collector.dt.TimeSeriesHeader;
 import io.softwareecg.collector.repository.RepositoryFactory;
 import io.softwareecg.collector.repository.StaticTimeSeriesRepository;

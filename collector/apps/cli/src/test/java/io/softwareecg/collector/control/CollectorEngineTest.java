@@ -3,7 +3,7 @@ package io.softwareecg.collector.control;
 import io.softwareecg.collector.config.CollectorConfiguration;
 import io.softwareecg.collector.config.CounterDescriptor;
 import io.softwareecg.collector.config.CollectorConfigurations;
-import io.softwareecg.collector.control.jobs.CollectorJobState.CollectorJobStateEnum;
+import io.softwareecg.collector.control.CollectorJobState.CollectorJobStateEnum;
 import io.softwareecg.collector.dt.TimeSeriesHeader;
 import io.softwareecg.collector.repository.RepositoryFactory;
 import io.softwareecg.collector.repository.StaticTimeSeriesRepository;
