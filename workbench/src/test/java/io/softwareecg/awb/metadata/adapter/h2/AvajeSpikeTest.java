@@ -1,8 +1,10 @@
 package io.softwareecg.awb.metadata.adapter.h2;
 
 import io.avaje.inject.BeanScope;
+import javafx.application.Platform;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
@@ -30,6 +32,20 @@ public class AvajeSpikeTest {
 
     private String originalUserHome;
     private Path tempHome;
+
+    /**
+     * The scope builds the items of the explorer tree, and they create their context menu on
+     * the JavaFX thread. Without this the test depends on another test having started it.
+     */
+    @BeforeClass
+    public static void startToolkit() {
+        try {
+            Platform.startup(() -> { });
+        } catch (IllegalStateException alreadyRunning) {
+            // toolkit was started by another test in this JVM
+        }
+        Platform.setImplicitExit(false);
+    }
 
     @Before
     public void setUp() throws Exception {
