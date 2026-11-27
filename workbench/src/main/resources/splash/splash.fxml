@@ -7,23 +7,37 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 <?import java.net.URL?>
-<Pane maxHeight="492.0" maxWidth="680.0" prefHeight="482.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/8"
+<Pane maxHeight="460.0" maxWidth="690.0" minHeight="460.0" minWidth="690.0" prefHeight="460.0" prefWidth="690.0"
+      styleClass="splash" xmlns="http://javafx.com/javafx/8"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.softwareecg.wfx.platform.core.ProgressController">
 
     <stylesheets>
         <URL value="@splash.css"/>
     </stylesheets>
 
-    <ImageView id="splash.png" fitHeight="492.0" fitWidth="700.0" layoutX="-15.0" layoutY="-9.0">
-        <Image url="@../io/softwareecg/awb/application/about/logo-7.x.png"/>
+    <ImageView fitHeight="460.0" fitWidth="690.0" smooth="true">
+        <Image url="@software-ekg-splash-visual-blue-amber.png"/>
     </ImageView>
 
-    <Label id="splash-progress-text" fx:id="progressText" blendMode="HARD_LIGHT" layoutX="35.0" layoutY="390.0"
-           prefWidth="562.0" styleClass="splash-progress-text" text="Loading..." wrapText="true"/>
+    <TextFlow layoutX="40.0" layoutY="40.0">
+        <Text styleClass="splash-title" text="Software-EKG "/>
+        <Text styleClass="splash-title,splash-version" text="7.X"/>
+    </TextFlow>
+    <Label layoutX="43.0" layoutY="104.0" styleClass="splash-subtitle" text="AI-powered analysis &amp; reasoning"/>
 
-    <ProgressBar id="splash-progress-bar" fx:id="progressBar" layoutX="40.0" layoutY="414.0" prefWidth="360.0" prefHeight="6"
+    <Label fx:id="progressText" layoutX="40.0" layoutY="382.0" prefWidth="420.0"
+           styleClass="splash-progress-text" text="Loading..."/>
+
+    <ProgressBar fx:id="progressBar" layoutX="44.0" layoutY="412.0" prefWidth="320.0" prefHeight="6"
                  progress="0.01" styleClass="splash-progress-bar"/>
 
+    <TextFlow layoutX="560.0" layoutY="404.0">
+        <Text styleClass="splash-brand,splash-initial" text="W"/>
+        <Text styleClass="splash-brand" text="eigend"/>
+        <Text styleClass="splash-brand,splash-accent" text="."/>
+    </TextFlow>
 
 </Pane>

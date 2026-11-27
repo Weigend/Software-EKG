@@ -63,3 +63,32 @@
     -fx-translate-y: 410;
     -fx-translate-x: 500;
 }
+
+.about-title {
+    -fx-fill: white;
+    -fx-font-size: 54px;
+}
+
+.about-version {
+    -fx-font-weight: bold;
+}
+
+.about-subtitle {
+    -fx-text-fill: #a9cbe6;
+    -fx-font-size: 22px;
+}
+
+.about-brand {
+    -fx-fill: #1d3f66;
+    -fx-font-size: 26px;
+}
+
+.about-initial {
+    -fx-fill: #3184c8;
+    -fx-font-weight: bold;
+}
+
+.about-accent {
+    -fx-fill: #f5b942;
+    -fx-font-weight: bold;
+}

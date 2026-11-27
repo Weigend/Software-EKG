@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 <?import java.net.URL?>
 <Pane id="outerBorderPane" minHeight="510.0" prefWidth="765.0" snapToPixel="false"
@@ -15,9 +17,24 @@
         <URL value="@AboutDialog.css"/>
     </stylesheets>
 
-    <ImageView fx:id="ivAboutBanner" fitHeight="600.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" layoutX="-4"  >
-        <Image url="@logo-7.x-about.png"/>
+    <ImageView fx:id="ivAboutBanner" fitHeight="440.0" fitWidth="765.0" smooth="true">
+        <Image url="@../../../../../splash/software-ekg-splash-visual-blue-amber.png"/>
+        <viewport>
+            <Rectangle2D minX="0" minY="0" width="1200" height="690"/>
+        </viewport>
     </ImageView>
+
+    <TextFlow layoutX="45.0" layoutY="50.0">
+        <Text styleClass="about-title" text="Software-EKG "/>
+        <Text styleClass="about-title,about-version" text="7.X"/>
+    </TextFlow>
+    <Label layoutX="49.0" layoutY="126.0" styleClass="about-subtitle" text="AI-powered analysis &amp; reasoning"/>
+
+    <TextFlow layoutX="607.0" layoutY="455.0">
+        <Text styleClass="about-brand,about-initial" text="W"/>
+        <Text styleClass="about-brand" text="eigend"/>
+        <Text styleClass="about-brand,about-accent" text="."/>
+    </TextFlow>
 
     <Pane fx:id="ivFounderBannerWrapper" prefHeight="450.0" prefWidth="800.0" layoutX="-4" visible="false" >
         <ImageView fx:id="ivFounderBanner" pickOnBounds="true" preserveRatio="true"> </ImageView>
