@@ -45,7 +45,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>25</java.version>
-        <graaljs.version>25.0.2</graaljs.version>
+        <graaljs.version>25.5.5.0.3</graaljs.version>
     </properties>
 
     <!--
@@ -61,21 +61,21 @@
             <dependency>
                 <groupId>org.apache.sshd</groupId>
                 <artifactId>sshd-core</artifactId>
-                <version>2.14.0</version>
+                <version>2.20.1</version>
             </dependency>
 
             <!-- read write CSV files -->
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
-                <version>2.21.0</version>
+                <version>2.22.0</version>
             </dependency>
 
             <!-- StringUtils and many other useful helpers -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>3.19.0</version>
+                <version>3.22.0</version>
             </dependency>
 
             <dependency>
@@ -103,12 +103,12 @@
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
-                <version>1.2.13</version>
+                <version>1.6.8</version>
             </dependency>
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-core</artifactId>
-                <version>1.2.13</version>
+                <version>1.6.8</version>
             </dependency>
 
             <!-- GraalJS as JavaScript engine replacement for Nashorn (removed in Java 15+).
@@ -173,7 +173,7 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
-                <version>5.21.0</version>
+                <version>5.24.0</version>
                 <scope>test</scope>
             </dependency>
 
@@ -181,7 +181,7 @@
             <dependency>
                 <groupId>com.tngtech.archunit</groupId>
                 <artifactId>archunit</artifactId>
-                <version>1.4.1</version>
+                <version>1.5.1</version>
                 <scope>test</scope>
             </dependency>
 
@@ -248,31 +248,31 @@
                     <!-- used to create source-jars that will stored beside the artifacts -->
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>3.3.1</version>
+                    <version>3.4.0</version>
                 </plugin>
                 <plugin>
                     <!-- used to compile the jars -->
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.14.1</version>
+                    <version>3.16.0</version>
                 </plugin>
                 <plugin>
                     <!-- creating jars and test-jars -->
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.4.2</version>
+                    <version>3.5.1</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-antrun-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>3.2.0</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.5.4</version>
+                    <version>3.6.1</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.8.1</version>
+                    <version>3.11.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -294,7 +294,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.3.1</version>
+                <version>3.4.0</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
