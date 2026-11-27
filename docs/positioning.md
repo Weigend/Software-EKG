@@ -71,6 +71,9 @@ The picture shows the CPU load of the two WebLogic instances wls1 and wls2 on fi
 
 - The picture leads to the right node and to the right question. The answer is not in any time series; it takes knowledge of the architecture, here the fact that the client itself distributes the load.
 - The result of the analysis is therefore often not an answer but a well-founded question to the right people: this node, this period, this difference from the others – what distributes the load here? Without someone who knows the architecture, neither an SRE nor an AI gets any further.
+- The finding was real, but it was in no log, and operations had ignored it. The application kept running, if with odd response times, so the pressure was low.
+- Two independent load balancing mechanisms did not work here. That is what made the confusion so great: a change in one place did not fix the problem, it only changed it. This is where a recorder is needed, one that keeps the course of events, so that the right questions can be asked later.
+- The picture leads to two concrete tests: one for the WebLogic load balancer, which distributes onto wls1 and wls2 on a node, and one for the load balancer of the application in front of it, which has to distribute onto the nodes of the cluster.
 - Some of the questions can be narrowed down in the tool, the others only with logs, configuration and documentation. That is the work for the agent.
 - A language model that was given only an earlier version of this picture, with wls2 alone and without hourly means, recognised the weekly rhythm, the outlier and two plateaus at night. It could not reliably name the server from the colour of the line. In addition to the picture, an agent therefore needs a few key figures per series.
 

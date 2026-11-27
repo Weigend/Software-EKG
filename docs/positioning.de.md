@@ -71,6 +71,9 @@ Das Bild zeigt die CPU-Last der beiden WebLogic-Instanzen wls1 und wls2 auf fün
 
 - Das Bild führt zum richtigen Knoten und zur richtigen Frage. Die Antwort steht in keiner Zeitreihe; sie braucht Wissen über die Architektur, hier darüber, dass der Client selbst verteilt.
 - Das Ergebnis der Analyse ist deshalb oft keine Antwort, sondern eine begründete Frage an die richtigen Leute: dieser Knoten, dieser Zeitraum, dieser Unterschied zu den anderen – was verteilt hier die Last? Ohne jemanden, der die Architektur kennt, kommt weder ein SRE noch eine AI weiter.
+- Der Befund war real, stand aber in keinem Log, und der Betrieb hatte ihn ignoriert. Die Anwendung lief ja, wenn auch mit merkwürdigen Antwortzeiten; der Druck war entsprechend gering.
+- Hier haben zwei voneinander unabhängige Mechanismen der Lastverteilung nicht funktioniert. Das hat die Verwirrung so groß gemacht: Eine Anpassung an einer Stelle hat das Problem nicht behoben, sondern nur verändert. Genau hier braucht man einen Rekorder, der den Verlauf festhält, um später die richtigen Fragen stellen zu können.
+- Aus dem Bild folgen zwei konkrete Tests: einer für den WebLogic-Loadbalancer, der auf einem Knoten auf wls1 und wls2 verteilt, und einer für den Loadbalancer der Anwendung davor, der auf die Knoten des Clusters verteilen muss.
 - Ein Teil der Fragen lässt sich im Tool eingrenzen, der andere nur mit Logs, Konfiguration und Dokumentation. Das ist die Arbeit für den Agenten.
 - Ein Sprachmodell, dem nur eine frühere Fassung dieses Bilds vorlag, mit wls2 allein und ohne Stundenmittel, erkannte den Wochenrhythmus, den Ausreißer und zwei nächtliche Plateaus. Den Server konnte es anhand der Linienfarbe nicht sicher benennen. Zum Bild braucht ein Agent deshalb je Serie ein paar Kennzahlen.
 
