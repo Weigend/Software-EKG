@@ -46,9 +46,9 @@ Ein typischer Einsatz geht über organisatorische Grenzen. An großen verteilten
 
 ## Ein Beispiel
 
-![CPU des WebLogic-Prozesses auf elf Knoten eines Clusters, eine Woche im März 2015](images/beispiel-cpu-cluster-2015.png)
+![CPU des WebLogic-Prozesses auf zehn Knoten eines Clusters, eine Woche im März 2015](images/beispiel-cpu-cluster-2015.png)
 
-Das Bild zeigt die CPU-Last des WebLogic-Java-Prozesses auf elf Knoten eines Clusters über eine Woche im März 2015, per Wildcard in einer Ansicht.
+Das Bild zeigt die CPU-Last des WebLogic-Java-Prozesses auf zehn Knoten eines Clusters über eine Woche im März 2015, per Wildcard in einer Ansicht.
 
 **Was man sieht.** Die Anwendung wird nur tagsüber genutzt, von Montag bis Freitag. Nachts gibt es einzelne Spitzen, am Wochenende weniger. Und ein Server liegt die ganze Woche deutlich über den anderen.
 

@@ -20,9 +20,9 @@ vergleicht viele Systeme und zeichnet dann gezieltere Metriken auf oder grenzt Z
 und Prozesse immer weiter ein, bis der entscheidende Unterschied sichtbar wird. Es gibt keinen
 für immer festgelegten Monitoring-Katalog; welche Messwerte wichtig sind, bestimmt der Fall.
 
-![CPU-Last des WebLogic-Prozesses auf elf Knoten eines Clusters, eine Woche im März 2015](docs/images/beispiel-cpu-cluster-2015.png)
+![CPU-Last des WebLogic-Prozesses auf zehn Knoten eines Clusters, eine Woche im März 2015](docs/images/beispiel-cpu-cluster-2015.png)
 
-Das Bild zeigt die CPU-Last desselben Java-Prozesses auf elf Knoten eines Clusters über eine Woche. Man sieht, dass die Anwendung nur tagsüber von Montag bis Freitag genutzt wird und dass ein Server die ganze Woche deutlich über den anderen liegt. Warum das so ist, sagt das Bild nicht. Es liefert aber die drei Angaben, auf die es ankommt: welcher Server, welcher Zeitraum und womit man ihn vergleicht. Die Ursache war am Ende ein fehlerhaftes Load Balancing im Client; der ganze Fall steht in [docs/positioning.de.md](docs/positioning.de.md#ein-beispiel).
+Das Bild zeigt die CPU-Last desselben Java-Prozesses auf zehn Knoten eines Clusters über eine Woche. Man sieht, dass die Anwendung nur tagsüber von Montag bis Freitag genutzt wird und dass ein Server die ganze Woche deutlich über den anderen liegt. Warum das so ist, sagt das Bild nicht. Es liefert aber die drei Angaben, auf die es ankommt: welcher Server, welcher Zeitraum und womit man ihn vergleicht. Die Ursache war am Ende ein fehlerhaftes Load Balancing im Client; der ganze Fall steht in [docs/positioning.de.md](docs/positioning.de.md#ein-beispiel).
 
 ## Die Fragen, um die es geht
 

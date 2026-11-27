@@ -46,9 +46,9 @@ A typical assignment crosses organisational boundaries. Large distributed applic
 
 ## An example
 
-![CPU of the WebLogic process on eleven nodes of a cluster, one week in March 2015](images/beispiel-cpu-cluster-2015.png)
+![CPU of the WebLogic process on ten nodes of a cluster, one week in March 2015](images/beispiel-cpu-cluster-2015.png)
 
-The picture shows the CPU load of the WebLogic Java process on eleven nodes of a cluster over one week in March 2015, selected by wildcard into one view.
+The picture shows the CPU load of the WebLogic Java process on ten nodes of a cluster over one week in March 2015, selected by wildcard into one view.
 
 **What you see.** The application is only used during the day, from Monday to Friday. There are isolated peaks at night, fewer at the weekend. And one server stays well above the others all week.
 

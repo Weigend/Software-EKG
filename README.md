@@ -20,9 +20,9 @@ then records more specific metrics or narrows the time, systems and processes un
 difference becomes visible. It is not a permanently prescribed monitoring catalogue; what matters
 enough to record depends on the case.
 
-![CPU load of the WebLogic process on eleven nodes of a cluster, one week in March 2015](docs/images/beispiel-cpu-cluster-2015.png)
+![CPU load of the WebLogic process on ten nodes of a cluster, one week in March 2015](docs/images/beispiel-cpu-cluster-2015.png)
 
-The picture shows the CPU load of the same Java process on eleven nodes of a cluster over one week. You can see that the application is only used during the day from Monday to Friday, and that one server stays well above the others all week. The picture does not say why. It does give the three facts that matter: which server, which period, and what to compare it with. In the end the cause was faulty load balancing in the client; the whole case is described in [docs/positioning.md](docs/positioning.md#an-example).
+The picture shows the CPU load of the same Java process on ten nodes of a cluster over one week. You can see that the application is only used during the day from Monday to Friday, and that one server stays well above the others all week. The picture does not say why. It does give the three facts that matter: which server, which period, and what to compare it with. In the end the cause was faulty load balancing in the client; the whole case is described in [docs/positioning.md](docs/positioning.md#an-example).
 
 ## The questions it is about
 
