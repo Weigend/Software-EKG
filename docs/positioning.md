@@ -46,33 +46,33 @@ A typical assignment crosses organisational boundaries. Large distributed applic
 
 ## An example
 
-![CPU of the WebLogic process on ten nodes of a cluster, one week in March 2015](images/beispiel-cpu-cluster-2015.png)
+![Hourly means of the CPU load of the WebLogic instances wls1 and wls2 on five nodes of a cluster, 1 to 9 March 2015](images/beispiel-cpu-cluster-2015.png)
 
-The picture shows the CPU load of the WebLogic Java process on ten nodes of a cluster over one week in March 2015, selected by wildcard into one view.
+The picture shows the CPU load of the two WebLogic instances wls1 and wls2 on five nodes of a cluster from 1 to 9 March 2015, as hourly means, selected by wildcards into one view.
 
-**What you see.** The application is only used during the day, from Monday to Friday. There are isolated peaks at night, fewer at the weekend. And one server stays well above the others all week.
+**What you see.** The application is only used during the day, from Monday to Friday. The load is distributed wrongly on two levels. On Tuesday, wls2 on lpxsrv15 gets more than three times as much as wls1, from 8 to 20 o'clock on average 690 against 190 percent CPU: on that day the WebLogic load balancer does not distribute properly between the two instances. From Wednesday on both run level. But the node lpxsrv15 as a whole carries 36 to 59 percent of the CPU load of all ten nodes of the cluster on every day, and its instances do not come to rest at night and on Saturday either, when all others are at zero. The distribution in front of it, onto the nodes, is wrong all week.
 
-**What the picture does not say.** Why this is so. But it gives the three facts that matter: which server, which period, and what to compare it with, here the ten other nodes in the same period.
+**What the picture does not say.** Why this is so. But it gives the three facts that matter: which node, which period, and what to compare it with, here the other instances in the same period.
 
-**What is established beforehand.** The collector ensures that on every host the right WebLogic process is recorded under the same number. The lines are therefore comparable; a measurement error is ruled out as an explanation. Without this assurance, putting the curves on top of each other would be worthless.
+**What is established beforehand.** The collector ensures that on every host each WebLogic instance is recorded under the same name: wls1 as java, wls2 as java#1. The lines are therefore comparable; a measurement error is ruled out as an explanation. Without this assurance, putting the curves on top of each other would be worthless.
 
 **The questions that remain.**
 
 | Question | Where it can be checked |
 | --- | --- |
-| Does the server receive more load than the others? | In the tool, if requests or sessions per node are recorded; otherwise in the access logs |
-| Is the Java process sick, for example because of continuous GC or hanging threads? | Heap and GC curves in the tool; messages in the logs |
+| Does the node receive more load than the others? | In the tool, if requests or sessions per node are recorded; otherwise in the access logs |
+| Are the Java processes sick, for example because of continuous GC or hanging threads? | Heap and GC curves in the tool; messages in the logs |
 | Does the node have a special role, for example batch jobs or a singleton service? | Cluster configuration and scheduler |
 | Is the node set up differently, for example with a different release level or different start parameters? | Release plan and start parameters |
 
-**The resolution.** The cause was the load balancing in the client, a native Java application, which did not work properly. So the first question pointed in the right direction: the server did receive more load. But the cause was not on the servers, it was in the client.
+**The resolution.** The cause of the load on lpxsrv15 was the load balancing in the client, a native Java application, which did not work properly. So the first question pointed in the right direction: the node did receive more load. But the cause was not on the servers, it was in the client. The uneven split between wls1 and wls2 on Tuesday is a second finding, which lasted only one day.
 
 **What the example shows.**
 
-- The picture leads to the right server and to the right question. The answer is not in any time series; it takes knowledge of the architecture, here the fact that the client itself distributes the load.
-- The result of the analysis is therefore often not an answer but a well-founded question to the right people: this server, this period, this difference from the others – what distributes the load here? Without someone who knows the architecture, neither an SRE nor an AI gets any further.
+- The picture leads to the right node and to the right question. The answer is not in any time series; it takes knowledge of the architecture, here the fact that the client itself distributes the load.
+- The result of the analysis is therefore often not an answer but a well-founded question to the right people: this node, this period, this difference from the others – what distributes the load here? Without someone who knows the architecture, neither an SRE nor an AI gets any further.
 - Some of the questions can be narrowed down in the tool, the others only with logs, configuration and documentation. That is the work for the agent.
-- A language model that was given only this picture recognised the weekly rhythm, the outlier and two plateaus at night. It could not reliably name the server from the colour of the line. In addition to the picture, an agent therefore needs a few key figures per series.
+- A language model that was given only an earlier version of this picture, with wls2 alone and without hourly means, recognised the weekly rhythm, the outlier and two plateaus at night. It could not reliably name the server from the colour of the line. In addition to the picture, an agent therefore needs a few key figures per series.
 
 ## What this is based on technically
 

@@ -20,9 +20,9 @@ then records more specific metrics or narrows the time, systems and processes un
 difference becomes visible. It is not a permanently prescribed monitoring catalogue; what matters
 enough to record depends on the case.
 
-![CPU load of the WebLogic process on ten nodes of a cluster, one week in March 2015](docs/images/beispiel-cpu-cluster-2015.png)
+![Hourly means of the CPU load of the WebLogic instances wls1 and wls2 on five nodes of a cluster, 1 to 9 March 2015](docs/images/beispiel-cpu-cluster-2015.png)
 
-The picture shows the CPU load of the same Java process on ten nodes of a cluster over one week. You can see that the application is only used during the day from Monday to Friday, and that one server stays well above the others all week. The picture does not say why. It does give the three facts that matter: which server, which period, and what to compare it with. In the end the cause was faulty load balancing in the client; the whole case is described in [docs/positioning.md](docs/positioning.md#an-example).
+The picture shows the CPU load of the two WebLogic instances wls1 and wls2 on five nodes of a cluster, as hourly means from 1 to 9 March 2015. The application is only used during the day from Monday to Friday. Two faults in the distribution of the load can be seen. On Tuesday, wls2 on lpxsrv15 gets more than three times as much as wls1: the WebLogic load balancer does not distribute properly; from Wednesday on both instances run level. But the node lpxsrv15 as a whole carries several times as much as the others all week and does not come to rest at night or on Saturday either: the distribution in front of it, onto the nodes of the cluster, is wrong. The picture does not say why. It does give the three facts that matter: which node, which period, and what to compare it with. In the end the cause was faulty load balancing in the client; the whole case is described in [docs/positioning.md](docs/positioning.md#an-example).
 
 ## The questions it is about
 

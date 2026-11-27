@@ -20,9 +20,9 @@ vergleicht viele Systeme und zeichnet dann gezieltere Metriken auf oder grenzt Z
 und Prozesse immer weiter ein, bis der entscheidende Unterschied sichtbar wird. Es gibt keinen
 für immer festgelegten Monitoring-Katalog; welche Messwerte wichtig sind, bestimmt der Fall.
 
-![CPU-Last des WebLogic-Prozesses auf zehn Knoten eines Clusters, eine Woche im März 2015](docs/images/beispiel-cpu-cluster-2015.png)
+![Stundenmittel der CPU-Last der WebLogic-Instanzen wls1 und wls2 auf fünf Knoten eines Clusters, 1. bis 9. März 2015](docs/images/beispiel-cpu-cluster-2015.png)
 
-Das Bild zeigt die CPU-Last desselben Java-Prozesses auf zehn Knoten eines Clusters über eine Woche. Man sieht, dass die Anwendung nur tagsüber von Montag bis Freitag genutzt wird und dass ein Server die ganze Woche deutlich über den anderen liegt. Warum das so ist, sagt das Bild nicht. Es liefert aber die drei Angaben, auf die es ankommt: welcher Server, welcher Zeitraum und womit man ihn vergleicht. Die Ursache war am Ende ein fehlerhaftes Load Balancing im Client; der ganze Fall steht in [docs/positioning.de.md](docs/positioning.de.md#ein-beispiel).
+Das Bild zeigt die CPU-Last der beiden WebLogic-Instanzen wls1 und wls2 auf fünf Knoten eines Clusters, als Stundenmittel vom 1. bis 9. März 2015. Die Anwendung wird nur tagsüber von Montag bis Freitag genutzt. Zu sehen sind zwei Fehler in der Lastverteilung. Am Dienstag bekommt auf lpxsrv15 die Instanz wls2 mehr als das Dreifache von wls1: Der WebLogic-Loadbalancer verteilt nicht richtig; ab Mittwoch laufen beide Instanzen gleichauf. Der Knoten lpxsrv15 als Ganzes trägt aber die ganze Woche ein Vielfaches der anderen und kommt auch nachts und am Samstag nicht zur Ruhe: Die Verteilung davor, auf die Knoten des Clusters, stimmt nicht. Warum das so ist, sagt das Bild nicht. Es liefert aber die drei Angaben, auf die es ankommt: welcher Knoten, welcher Zeitraum und womit man ihn vergleicht. Die Ursache war am Ende ein fehlerhaftes Load Balancing im Client; der ganze Fall steht in [docs/positioning.de.md](docs/positioning.de.md#ein-beispiel).
 
 ## Die Fragen, um die es geht
 

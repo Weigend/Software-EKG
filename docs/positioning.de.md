@@ -46,33 +46,33 @@ Ein typischer Einsatz geht über organisatorische Grenzen. An großen verteilten
 
 ## Ein Beispiel
 
-![CPU des WebLogic-Prozesses auf zehn Knoten eines Clusters, eine Woche im März 2015](images/beispiel-cpu-cluster-2015.png)
+![Stundenmittel der CPU-Last der WebLogic-Instanzen wls1 und wls2 auf fünf Knoten eines Clusters, 1. bis 9. März 2015](images/beispiel-cpu-cluster-2015.png)
 
-Das Bild zeigt die CPU-Last des WebLogic-Java-Prozesses auf zehn Knoten eines Clusters über eine Woche im März 2015, per Wildcard in einer Ansicht.
+Das Bild zeigt die CPU-Last der beiden WebLogic-Instanzen wls1 und wls2 auf fünf Knoten eines Clusters vom 1. bis 9. März 2015, als Stundenmittel, per Wildcard in einer Ansicht.
 
-**Was man sieht.** Die Anwendung wird nur tagsüber genutzt, von Montag bis Freitag. Nachts gibt es einzelne Spitzen, am Wochenende weniger. Und ein Server liegt die ganze Woche deutlich über den anderen.
+**Was man sieht.** Die Anwendung wird nur tagsüber genutzt, von Montag bis Freitag. Die Last ist auf zwei Ebenen falsch verteilt. Am Dienstag bekommt auf lpxsrv15 die Instanz wls2 mehr als das Dreifache von wls1, von 8 bis 20 Uhr im Mittel 690 gegen 190 Prozent CPU: Der WebLogic-Loadbalancer verteilt an diesem Tag nicht richtig zwischen den beiden Instanzen. Ab Mittwoch laufen beide gleichauf. Der Knoten lpxsrv15 als Ganzes trägt aber an jedem Tag 36 bis 59 Prozent der CPU-Last aller zehn Knoten des Clusters, und seine Instanzen kommen auch nachts und am Samstag nicht zur Ruhe, wenn alle anderen bei null sind. Die Verteilung davor, auf die Knoten, stimmt die ganze Woche nicht.
 
-**Was das Bild nicht sagt.** Warum das so ist. Es liefert aber die drei Angaben, auf die es ankommt: welcher Server, welcher Zeitraum und womit man ihn vergleicht, hier mit den zehn anderen Knoten im selben Zeitraum.
+**Was das Bild nicht sagt.** Warum das so ist. Es liefert aber die drei Angaben, auf die es ankommt: welcher Knoten, welcher Zeitraum und womit man ihn vergleicht, hier mit den anderen Instanzen im selben Zeitraum.
 
-**Was vorab feststeht.** Der Collector stellt sicher, dass auf jedem Host der richtige WebLogic-Prozess unter derselben Nummer erfasst wird. Die Linien sind also vergleichbar; ein Messfehler scheidet als Erklärung aus. Ohne diese Zusicherung wäre das Übereinanderlegen wertlos.
+**Was vorab feststeht.** Der Collector stellt sicher, dass auf jedem Host jede WebLogic-Instanz unter demselben Namen erfasst wird: wls1 als java, wls2 als java#1. Die Linien sind also vergleichbar; ein Messfehler scheidet als Erklärung aus. Ohne diese Zusicherung wäre das Übereinanderlegen wertlos.
 
 **Die Fragen, die bleiben.**
 
 | Frage | Wo sie sich prüfen lässt |
 | --- | --- |
-| Bekommt der Server mehr Last als die anderen? | Im Tool, wenn Requests oder Sessions je Knoten erfasst sind; sonst in den Access-Logs |
-| Ist der Java-Prozess krank, etwa durch Dauer-GC oder hängende Threads? | Heap- und GC-Verlauf im Tool; Meldungen in den Logs |
+| Bekommt der Knoten mehr Last als die anderen? | Im Tool, wenn Requests oder Sessions je Knoten erfasst sind; sonst in den Access-Logs |
+| Sind die Java-Prozesse krank, etwa durch Dauer-GC oder hängende Threads? | Heap- und GC-Verlauf im Tool; Meldungen in den Logs |
 | Hat der Knoten eine Sonderrolle, etwa Batch-Jobs oder einen Singleton-Dienst? | Cluster-Konfiguration und Scheduler |
 | Ist der Knoten anders aufgesetzt, etwa mit anderem Release-Stand oder anderen Startparametern? | Release-Plan und Startparameter |
 
-**Die Auflösung.** Die Ursache war das Load Balancing im Client, einer nativen Java-Anwendung, das nicht richtig funktionierte. Die erste Frage traf also die Richtung: Der Server bekam mehr Last. Die Ursache lag aber nicht auf den Servern, sondern im Client.
+**Die Auflösung.** Die Ursache der Last auf lpxsrv15 war das Load Balancing im Client, einer nativen Java-Anwendung, das nicht richtig funktionierte. Die erste Frage traf also die Richtung: Der Knoten bekam mehr Last. Die Ursache lag aber nicht auf den Servern, sondern im Client. Die Schieflage zwischen wls1 und wls2 am Dienstag ist ein zweiter Befund, der nur einen Tag dauerte.
 
 **Was das Beispiel zeigt.**
 
-- Das Bild führt zum richtigen Server und zur richtigen Frage. Die Antwort steht in keiner Zeitreihe; sie braucht Wissen über die Architektur, hier darüber, dass der Client selbst verteilt.
-- Das Ergebnis der Analyse ist deshalb oft keine Antwort, sondern eine begründete Frage an die richtigen Leute: dieser Server, dieser Zeitraum, dieser Unterschied zu den anderen – was verteilt hier die Last? Ohne jemanden, der die Architektur kennt, kommt weder ein SRE noch eine AI weiter.
+- Das Bild führt zum richtigen Knoten und zur richtigen Frage. Die Antwort steht in keiner Zeitreihe; sie braucht Wissen über die Architektur, hier darüber, dass der Client selbst verteilt.
+- Das Ergebnis der Analyse ist deshalb oft keine Antwort, sondern eine begründete Frage an die richtigen Leute: dieser Knoten, dieser Zeitraum, dieser Unterschied zu den anderen – was verteilt hier die Last? Ohne jemanden, der die Architektur kennt, kommt weder ein SRE noch eine AI weiter.
 - Ein Teil der Fragen lässt sich im Tool eingrenzen, der andere nur mit Logs, Konfiguration und Dokumentation. Das ist die Arbeit für den Agenten.
-- Ein Sprachmodell, dem nur dieses Bild vorlag, erkannte den Wochenrhythmus, den Ausreißer und zwei nächtliche Plateaus. Den Server konnte es anhand der Linienfarbe nicht sicher benennen. Zum Bild braucht ein Agent deshalb je Serie ein paar Kennzahlen.
+- Ein Sprachmodell, dem nur eine frühere Fassung dieses Bilds vorlag, mit wls2 allein und ohne Stundenmittel, erkannte den Wochenrhythmus, den Ausreißer und zwei nächtliche Plateaus. Den Server konnte es anhand der Linienfarbe nicht sicher benennen. Zum Bild braucht ein Agent deshalb je Serie ein paar Kennzahlen.
 
 ## Worauf das technisch beruht
 
