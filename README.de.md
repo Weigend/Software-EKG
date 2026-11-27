@@ -10,9 +10,9 @@
 [![Latest release](https://img.shields.io/github/v/release/Weigend/Software-EKG)](https://github.com/Weigend/Software-EKG/releases/latest)
 [![License](https://img.shields.io/github/license/Weigend/Software-EKG)](LICENSE)
 
-> Mit dem Software-EKG sucht ein Analyst die Nadel im Heuhaufen.
+Das Software-EKG ist eine Workbench für die dynamische Analyse komplexer, verteilter Systeme: Zur Fehlersuche zeichnet es das Laufzeitverhalten ihrer Server, Prozesse und Anwendungen auf und legt die Verläufe übereinander. So werden Anomalien im Verbund erkennbar, die im Monitoring nicht auffallen, weil jedes System für sich unauffällig ist.
 
-Das Software-EKG ist eine Workbench für die vergleichende Analyse von Softwaresystemen. Der Name ist wörtlich gemeint: Wie ein EKG die Signale des Herzens über die Zeit aufzeichnet, zeichnet das Software-EKG gezielt die Messwerte der Systeme, Server und Anwendungen auf, die zusammen einen Anwendungscluster, ein verteiltes System oder einen Serververbund bilden. Legt man die Kurven übereinander, fällt auf, welche Komponente wann aus dem Takt gerät.
+Der Name ist wörtlich gemeint: Wie ein EKG die Signale des Herzens über die Zeit aufzeichnet, zeichnet das Software-EKG die Messwerte der Systeme auf, die zusammen einen Anwendungscluster, ein verteiltes System oder einen Serververbund bilden, und zeigt, welche Komponente wann aus dem Takt gerät.
 
 Es ist ein Experteninstrument für den *Software-Notarzt*: ein diagnostischer Rekorder, der für
 einen konkreten Einsatz zusammengestellt wird. Der Analyst beginnt mit einem groben Überblick,
