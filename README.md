@@ -112,7 +112,7 @@ The components and their structure are described, with pictures, for the [Workbe
 - JDK 25 with JavaFX 25 (for example Liberica Full JDK)
 - Maven 3.9 or newer
 - a display for JavaFX tests; in headless Linux environments `xvfb-run` works
-- WFX 1.4.1 in the local Maven repository
+- WFX 1.4.2 in the local Maven repository
 
 WFX is an independent UI framework and remains a normal external dependency. The matching version is installed once:
 

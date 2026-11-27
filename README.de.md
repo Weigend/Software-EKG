@@ -112,7 +112,7 @@ Die Komponenten und ihren Aufbau beschreiben, mit Bildern, die Dokumente zur [Wo
 - JDK 25 mit JavaFX 25 (zum Beispiel Liberica Full JDK)
 - Maven 3.9 oder neuer
 - ein Display für JavaFX-Tests; in headless Linux-Umgebungen funktioniert `xvfb-run`
-- WFX 1.4.1 im lokalen Maven-Repository
+- WFX 1.4.2 im lokalen Maven-Repository
 
 WFX ist ein eigenständiges UI-Framework und bleibt eine normale externe Abhängigkeit. Die passende Version wird einmalig installiert:
 

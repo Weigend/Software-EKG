@@ -28,7 +28,7 @@
 
         <solrVersion>9.10.1</solrVersion>
         <poiVersion>5.5.1</poiVersion>
-        <wfxVersion>1.4.1</wfxVersion>
+        <wfxVersion>1.4.2</wfxVersion>
         <slf4jVersion>2.0.17</slf4jVersion>
         <jacksonVersion>2.21.8</jacksonVersion>
         <java.version>25</java.version>
