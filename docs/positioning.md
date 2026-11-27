@@ -6,9 +6,7 @@ As of 23 November 2026. This document records what Software-EKG is for and what 
 
 ## Position
 
-> With Software-EKG, an analyst looks for the needle in the haystack.
-
-Software-EKG is a diagnostic recorder and workbench for the comparative long-term analysis of software systems. A software emergency doctor configures it for one concrete assignment, compares locally and away from the production systems, begins with a broad view and narrows systems, periods and metrics until the decisive difference is visible. Useful views are preserved as bookmarks and become evidence for findings in the presentation or document appropriate to the assignment. A built-in AI agent helps to check the analyst's hypotheses against logs, release plans and documentation.
+Software-EKG is a diagnostic recorder and workbench for the dynamic analysis of complex, distributed systems: for troubleshooting, it records the runtime behaviour of their servers, processes and applications and lays the curves on top of each other across days, weeks or releases. This reveals anomalies in the interplay of the systems that monitoring does not catch, because each system on its own looks normal. A software emergency doctor configures it for one concrete assignment, compares locally and away from the production systems, begins with a broad view and narrows systems, periods and metrics until the decisive difference is visible. Useful views are preserved as bookmarks and become evidence for findings in the presentation or document appropriate to the assignment. A built-in AI agent helps to check the analyst's hypotheses against logs, release plans and documentation.
 
 The core is comparison, not automatic anomaly detection. Experienced analysts find patterns they were not looking for, and many of them lie within all thresholds:
 

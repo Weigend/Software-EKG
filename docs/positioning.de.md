@@ -6,9 +6,7 @@ Stand: 23.11.2026. Dieses Dokument hält fest, wofür das Software-EKG da ist un
 
 ## Position
 
-> Mit dem Software-EKG sucht ein Analyst die Nadel im Heuhaufen.
-
-Das Software-EKG ist ein diagnostischer Rekorder und eine Workbench für die vergleichende Langzeitanalyse von Softwaresystemen. Ein Software-Notarzt stellt es für einen konkreten Einsatz zusammen, vergleicht lokal und abseits der Produktionssysteme, beginnt mit einem groben Überblick und grenzt Systeme, Zeiträume und Metriken ein, bis der entscheidende Unterschied sichtbar wird. Aussagekräftige Ansichten hält er als Bookmarks fest; sie werden zu Belegen für den Befund in der zum Einsatz passenden Präsentation oder Dokumentation. Ein eingebauter AI-Agent hilft ihm, seine Hypothesen anhand von Logs, Release-Plänen und Dokumentation zu prüfen.
+Das Software-EKG ist ein diagnostischer Rekorder und eine Workbench für die dynamische Analyse komplexer, verteilter Systeme: Zur Fehlersuche zeichnet es das Laufzeitverhalten ihrer Server, Prozesse und Anwendungen auf und legt die Verläufe über Tage, Wochen oder Releases übereinander. So werden Anomalien im Verbund erkennbar, die im Monitoring nicht auffallen, weil jedes System für sich unauffällig ist. Ein Software-Notarzt stellt es für einen konkreten Einsatz zusammen, vergleicht lokal und abseits der Produktionssysteme, beginnt mit einem groben Überblick und grenzt Systeme, Zeiträume und Metriken ein, bis der entscheidende Unterschied sichtbar wird. Aussagekräftige Ansichten hält er als Bookmarks fest; sie werden zu Belegen für den Befund in der zum Einsatz passenden Präsentation oder Dokumentation. Ein eingebauter AI-Agent hilft ihm, seine Hypothesen anhand von Logs, Release-Plänen und Dokumentation zu prüfen.
 
 Der Kern ist der Vergleich, nicht die automatische Erkennung von Anomalien. Erfahrene Analysten finden darin Muster, nach denen sie vorher nicht gesucht haben, und viele davon liegen innerhalb aller Grenzwerte:
 
